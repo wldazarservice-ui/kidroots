@@ -24,7 +24,6 @@ function saveProgress(p) {
 
 export default function App() {
   const [screen, setScreen] = useState('home')
-  const [region, setRegion] = useState(null)
   const [countryCode, setCountryCode] = useState(null)
   const [chapterIdx, setChapterIdx] = useState(null)
   const [step, setStep] = useState('intro')
@@ -97,19 +96,16 @@ export default function App() {
           padding: '8px 18px', borderRadius: 20,
           fontWeight: 900, fontSize: 16,
           fontFamily: 'Nunito, sans-serif',
-          animation: 'popIn 0.4s ease',
         }}>+{xpAnim} XP !</div>
       )}
-
       {screen === 'home'    && <HomeScreen {...shared} />}
       {screen === 'regions' && <RegionScreen {...shared} />}
       {screen === 'country' && country && <CountryScreen country={country} code={countryCode} {...shared} />}
-
       {screen === 'chapter' && chapter && step === 'intro' && (
         <ChapterIntro chapter={chapter} country={country} {...shared} />
       )}
       {screen === 'chapter' && chapter && step === 'cards' && (
-        <CardLevel chapter={chapter} country={country} {...shared} />
+        <CardLevel chapter={chapter} country={country} {...shared} onDone={nav.startQuiz} />
       )}
       {screen === 'chapter' && chapter && step === 'quiz' && (
         <QuizLevel chapter={chapter} country={country} onDone={nav.finishChapter} />
