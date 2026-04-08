@@ -2,8 +2,9 @@ import { COUNTRIES, REGIONS } from '../data/countries'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
+import { signOut } from '../auth'
 
-export default function HomeScreen({ lang, changeLang, progress, nav }) {
+export default function HomeScreen({ lang, changeLang, progress, nav, activeChild }) {
   const totalChapters = Object.values(COUNTRIES).reduce((acc, c) => acc + c.chapters.length, 0)
   const doneChapters = Object.keys(progress.done).length
   const pct = Math.round((doneChapters / totalChapters) * 100)
@@ -21,6 +22,22 @@ export default function HomeScreen({ lang, changeLang, progress, nav }) {
           <LangPicker lang={lang} onChange={changeLang} />
         </div>
       </div>
+
+      {activeChild && (
+        <div style={{ padding: '0 20px', display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+          <button className="btn-kid" onClick={nav.switchProfile}
+            style={{ background: 'rgba(255,255,255,0.08)', color: 'white', padding: '8px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 18 }}>{activeChild.avatar || '👦'}</span>
+            <span>{activeChild.name}</span>
+            <span style={{ opacity: 0.5, fontSize: 11 }}>▼</span>
+          </button>
+          <div style={{ flex: 1 }} />
+          <button className="btn-kid" onClick={() => signOut()} title="Deconnexion"
+            style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)', padding: '8px 10px', fontSize: 11 }}>
+            ⏻
+          </button>
+        </div>
+      )}
 
       <div style={{ padding: '10px 20px 30px' }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
