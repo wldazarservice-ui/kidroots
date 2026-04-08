@@ -1,7 +1,7 @@
 // Traduction runtime via l'API gratuite MyMemory + cache localStorage permanent.
 // Source : francais. Bambara (bm) non supporte → fallback francais.
 
-const CACHE_KEY = 'kidroots_tr_cache_v1'
+const CACHE_KEY = 'kidroots_tr_cache_v2'
 const SRC_LANG = 'fr'
 const UNSUPPORTED = new Set(['bm'])
 
@@ -37,6 +37,18 @@ function decode(s) {
     .replace(/&gt;/g, '>')
 }
 
+// Endpoint gratuit non officiel de Google Translate (gtx) — pas de cle, pas de quota pratique.
+// Reponse : [[["Hello","Bonjour",null,null,1], ...], ...]
+async function fetchGoogle(text, dst) {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${SRC_LANG}&tl=${dst}&dt=t&q=${encodeURIComponent(text)}`
+  const res = await fetch(url)
+  if (!res.ok) throw new Error('http ' + res.status)
+  const data = await res.json()
+  const segments = Array.isArray(data?.[0]) ? data[0] : []
+  const out = segments.map((s) => (Array.isArray(s) ? s[0] : '')).join('')
+  return out || ''
+}
+
 export async function translateString(text, dst) {
   if (!text || typeof text !== 'string') return text
   if (!isTranslatable(dst)) return text
@@ -47,16 +59,12 @@ export async function translateString(text, dst) {
 
   const promise = (async () => {
     try {
-      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${SRC_LANG}|${dst}`
-      const res = await fetch(url)
-      const json = await res.json()
-      const out = decode(json?.responseData?.translatedText) || text
-      // Eviter de cacher les erreurs de quota
-      if (out && !/MYMEMORY WARNING/i.test(out) && !/QUERY LENGTH LIMIT/i.test(out)) {
-        cache[key] = out
-        scheduleSave()
-      }
-      return out || text
+      const raw = await fetchGoogle(text, dst)
+      const out = decode(raw)
+      if (!out) return text
+      cache[key] = out
+      scheduleSave()
+      return out
     } catch {
       return text
     } finally {
