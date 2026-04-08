@@ -108,7 +108,7 @@ export default function App() {
         <CardLevel chapter={chapter} country={country} {...shared} onDone={nav.startQuiz} />
       )}
       {screen === 'chapter' && chapter && step === 'quiz' && (
-        <QuizLevel chapter={chapter} country={country} onDone={nav.finishChapter} />
+        <QuizLevel chapter={chapter} country={country} {...shared} onDone={nav.finishChapter} />
       )}
       {screen === 'result' && chapter && (
         <ResultScreen chapter={chapter} country={country} score={quizScore}

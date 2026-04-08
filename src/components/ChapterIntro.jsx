@@ -1,8 +1,11 @@
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
+import { useTranslatedObj } from '../useTranslated'
 
-export default function ChapterIntro({ chapter: ch, country: c, lang, changeLang, nav }) {
+export default function ChapterIntro({ chapter: chRaw, country: cRaw, lang, changeLang, nav }) {
+  const ch = useTranslatedObj(chRaw, lang)
+  const c = useTranslatedObj(cRaw, lang)
   const xp = ch.cards.length * 20 + ch.quiz.length * 30
   return (
     <div style={{ minHeight: '100vh', background: `linear-gradient(160deg,${ch.color},${c.dark})`, fontFamily: 'Nunito, sans-serif' }}>

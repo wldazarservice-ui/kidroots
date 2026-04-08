@@ -2,8 +2,11 @@ import { useState } from 'react'
 import { t } from '../i18n'
 import SpeakButton from './SpeakButton'
 import { ttsStop } from '../tts'
+import { useTranslatedObj } from '../useTranslated'
 
-export default function CardLevel({ chapter: ch, country: c, lang, nav, onDone }) {
+export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, onDone }) {
+  const ch = useTranslatedObj(chRaw, lang)
+  const c = useTranslatedObj(cRaw, lang)
   const [idx, setIdx] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [animKey, setAnimKey] = useState(0)

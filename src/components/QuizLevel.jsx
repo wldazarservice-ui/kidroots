@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import SpeakButton from './SpeakButton'
 import { ttsStop } from '../tts'
+import { useTranslatedObj } from '../useTranslated'
 
-export default function QuizLevel({ chapter: ch, country: c, lang, onDone }) {
+export default function QuizLevel({ chapter: chRaw, country: cRaw, lang, onDone }) {
+  const ch = useTranslatedObj(chRaw, lang)
+  const c = useTranslatedObj(cRaw, lang)
   const [qi, setQi] = useState(0)
   const [score, setScore] = useState(0)
   const [choice, setChoice] = useState(null)
@@ -10,34 +13,35 @@ export default function QuizLevel({ chapter: ch, country: c, lang, onDone }) {
   const [finished, setFinished] = useState(false)
   const [animKey, setAnimKey] = useState(0)
 
+  const q = qi < ch.quiz.length ? ch.quiz[qi] : null
+
   useEffect(() => {
     if (qi < ch.quiz.length) {
-      const q = ch.quiz[qi]
-      const all = [q.correct, q.wrong1, q.wrong2].filter(Boolean)
+      const cur = ch.quiz[qi]
+      const all = [cur.correct, cur.wrong1, cur.wrong2].filter(Boolean)
       setOpts([...all].sort(() => Math.random() - 0.5))
       setAnimKey(k => k + 1)
     } else if (!finished) {
       setFinished(true)
       onDone(score)
     }
-  }, [qi])
+  }, [qi, ch])
 
   const handleAnswer = (ans) => {
     if (choice) return
     ttsStop()
     setChoice(ans)
-    const q = ch.quiz[qi]
-    if (ans === q.correct) setScore(s => s + 1)
+    const cur = ch.quiz[qi]
+    if (ans === cur.correct) setScore(s => s + 1)
     setTimeout(() => { setQi(qi + 1); setChoice(null) }, 1600)
   }
 
-  if (finished || qi >= ch.quiz.length) return (
+  if (finished || qi >= ch.quiz.length || !q) return (
     <div style={{ minHeight:'100vh', background:ch.light, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Nunito,sans-serif' }}>
       <div style={{ fontSize:40, textAlign:'center', color:ch.color, fontWeight:900 }}>⏳ Calcul des resultats...</div>
     </div>
   )
 
-  const q = ch.quiz[qi]
   return (
     <div style={{ minHeight:'100vh', background:ch.light, padding:'18px 14px', fontFamily:'Nunito,sans-serif' }}>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>

@@ -1,6 +1,8 @@
 import { t } from '../i18n'
+import { useTranslatedObj } from '../useTranslated'
 
-export default function ResultScreen({ chapter: ch, country: c, score, hasNext, lang, nav }) {
+export default function ResultScreen({ chapter: chRaw, country: c, score, hasNext, lang, nav }) {
+  const ch = useTranslatedObj(chRaw, lang)
   const pct = Math.round((score / ch.quiz.length) * 100)
   const xp = ch.cards.length * 20 + ch.quiz.length * 30
 

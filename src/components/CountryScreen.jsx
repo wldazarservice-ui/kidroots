@@ -1,7 +1,9 @@
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
+import { useTranslatedObj } from '../useTranslated'
 
-export default function CountryScreen({ country: c, code, lang, changeLang, progress, nav }) {
+export default function CountryScreen({ country: cRaw, code, lang, changeLang, progress, nav }) {
+  const c = useTranslatedObj(cRaw, lang)
   const totalXP = c.chapters.reduce((acc, ch) => acc + ch.cards.length * 20 + ch.quiz.length * 30, 0)
   const earnedXP = c.chapters.filter(ch => progress.done[ch.id]).reduce((acc, ch) => acc + ch.cards.length * 20 + ch.quiz.length * 30, 0)
   const pct = totalXP > 0 ? Math.round((earnedXP / totalXP) * 100) : 0

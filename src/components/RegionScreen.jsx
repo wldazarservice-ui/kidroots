@@ -1,6 +1,7 @@
 import { REGIONS, COUNTRIES } from '../data/countries'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
+import { TText } from '../useTranslated'
 
 export default function RegionScreen({ lang, changeLang, progress, nav }) {
   return (
@@ -20,8 +21,8 @@ export default function RegionScreen({ lang, changeLang, progress, nav }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
               <div style={{ fontSize: 40 }}>{r.emoji}</div>
               <div>
-                <div style={{ fontSize: 20, fontWeight: 900, color: 'white' }}>{r.name}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>{r.countries.length} pays</div>
+                <div style={{ fontSize: 20, fontWeight: 900, color: 'white' }}><TText text={r.name} lang={lang} /></div>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 700 }}>{r.countries.length} <TText text="pays" lang={lang} /></div>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
@@ -35,7 +36,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav }) {
                     onMouseOver={e => e.currentTarget.style.transform = 'scale(1.06)'}
                     onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>
                     <div style={{ fontSize: 30 }}>{c.flag}</div>
-                    <div style={{ fontSize: 12, fontWeight: 900, color: 'white', marginTop: 4 }}>{c.name}</div>
+                    <div style={{ fontSize: 12, fontWeight: 900, color: 'white', marginTop: 4 }}><TText text={c.name} lang={lang} /></div>
                     {done && <div style={{ fontSize: 12, marginTop: 2 }}>⭐</div>}
                     {started && !done && <div style={{ fontSize: 10, color: '#FFD600', fontWeight: 700, marginTop: 2 }}>{t(lang, 'in_progress')}</div>}
                   </div>
