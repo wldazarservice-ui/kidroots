@@ -79,7 +79,7 @@ export default function QuizLevel({ chapter: chRaw, country: cRaw, lang, onDone 
         })}
       </div>
       {choice && (
-        <div style={{ marginTop:16, padding:'14px 16px', borderRadius:16, textAlign:'center', fontSize:16, fontWeight:900, background: choice===q.correct ? '#E8F5E9' : '#FFF3E0', color: choice===q.correct ? '#1B5E20' : '#E65100', boxShadow:'0 2px 8px rgba(0,0,0,0.06)' }}>
+        <div className="anim-slide-up" style={{ marginTop:16, padding:'14px 16px', borderRadius:16, textAlign:'center', fontSize:16, fontWeight:900, background: choice===q.correct ? '#E8F5E9' : '#FFF3E0', color: choice===q.correct ? '#1B5E20' : '#E65100', boxShadow:'0 2px 8px rgba(0,0,0,0.06)' }}>
           {choice===q.correct ? '🎉 Bravo !' : `✏️ La bonne réponse : ${q.correct}`}
         </div>
       )}
