@@ -2,10 +2,11 @@ import { REGIONS, COUNTRIES } from '../data/countries'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import { TText } from '../useTranslated'
+import { isDone } from '../levels'
 
 const INK = '#1A2A4F'
 
-export default function RegionScreen({ lang, changeLang, progress, nav, regionKey = 'africa', onRegion }) {
+export default function RegionScreen({ lang, changeLang, progress, nav, difficulty, regionKey = 'africa', onRegion }) {
   const r = REGIONS[regionKey] || REGIONS.africa
 
   return (
@@ -54,7 +55,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav, regionKe
       <div key={`grid-${regionKey}`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {r.countries.map((code, i) => {
           const c = COUNTRIES[code]
-          const doneCount = c.chapters.filter(ch => progress.done[ch.id]).length
+          const doneCount = c.chapters.filter(ch => isDone(progress, ch.id, difficulty)).length
           const done = doneCount === c.chapters.length
           return (
             <div key={code} className="anim-slide-up" style={{ animationDelay: `${i * 50}ms`, opacity: 0 }}>
@@ -68,7 +69,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav, regionKe
                 <div style={{ fontSize: 22, marginBottom: 8 }}>{c.hero?.emoji}</div>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
                   {c.chapters.map(ch => (
-                    <span key={ch.id} style={{ width: 14, height: 8, borderRadius: 4, background: progress.done[ch.id] ? c.color : '#ECEFF1' }} />
+                    <span key={ch.id} style={{ width: 14, height: 8, borderRadius: 4, background: isDone(progress, ch.id, difficulty) ? c.color : '#ECEFF1' }} />
                   ))}
                 </div>
               </button>

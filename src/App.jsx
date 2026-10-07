@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { COUNTRIES, REGIONS } from './data/countries'
 import { getLang, setLang } from './i18n'
+import { applyLevel, doneKey, defaultLevelForAge } from './levels'
+import { hasExpert, loadExpert } from './data/expert'
 import { useAuth } from './auth.jsx'
 import {
   ensureUserDoc,
@@ -10,6 +12,7 @@ import {
   loadChild,
   saveChildProgress,
   saveChildLang,
+  saveChildDifficulty,
   readLegacyProgress,
   clearLegacyProgress,
 } from './cloud'
@@ -22,6 +25,7 @@ import QuizLevel from './components/QuizLevel'
 import ResultScreen from './components/ResultScreen'
 import AuthScreen from './components/AuthScreen'
 import ChildPickerScreen from './components/ChildPickerScreen'
+import LevelPicker from './components/LevelPicker'
 
 function Spinner({ msg = 'Chargement...' }) {
   return (
@@ -49,7 +53,29 @@ export default function App() {
   const [xpAnim, setXpAnim] = useState(null)
   const [lang, setLangState] = useState(getLang)
 
-  const country = countryCode ? COUNTRIES[countryCode] : null
+  const [expert, setExpert] = useState({ code: null, data: null })
+  const [levelPickerOpen, setLevelPickerOpen] = useState(false)
+
+  const difficulty = activeChild?.difficulty || 'explorer'
+  const needsExpert = difficulty === 'expert' && countryCode && hasExpert(countryCode)
+  const expertReady = !needsExpert || expert.code === countryCode
+
+  // Charge les longues histoires du pays (niveau Grand explorateur)
+  useEffect(() => {
+    if (!needsExpert || expert.code === countryCode) return
+    let cancelled = false
+    loadExpert(countryCode)
+      .then((data) => { if (!cancelled) setExpert({ code: countryCode, data }) })
+      .catch((e) => console.error('Expert load error:', e))
+    return () => { cancelled = true }
+  }, [needsExpert, countryCode, expert.code])
+
+  // Objet stable (important pour la traduction qui depend de l'identite de l'objet)
+  const country = useMemo(() => {
+    if (!countryCode) return null
+    const base = COUNTRIES[countryCode]
+    return applyLevel(base, difficulty, expert.code === countryCode ? expert.data : null)
+  }, [countryCode, difficulty, expert])
   const chapter = country && chapterIdx !== null ? country.chapters[chapterIdx] : null
 
   // Charge le profil utilisateur + les enfants apres login
@@ -96,6 +122,15 @@ export default function App() {
     ? { xp: activeChild.xp || 0, level: activeChild.level || 1, done: activeChild.done || {} }
     : { xp: 0, level: 1, done: {} }
 
+  const changeDifficulty = async (d) => {
+    if (!user || !activeChild) return
+    setActiveChildState((c) => ({ ...c, difficulty: d }))
+    setKids((all) => all.map((k) => (k.id === activeChild.id ? { ...k, difficulty: d } : k)))
+    setLevelPickerOpen(false)
+    if (screen === 'chapter' || screen === 'result') setScreen('country')
+    await saveChildDifficulty(user.uid, activeChild.id, d).catch(console.error)
+  }
+
   const changeLang = useCallback((l) => {
     setLang(l)
     setLangState(l)
@@ -108,7 +143,7 @@ export default function App() {
     if (!user || !activeChild) return
     const newXP = (activeChild.xp || 0) + xp
     const newLevel = Math.floor(newXP / 300) + 1
-    const done = { ...(activeChild.done || {}), [chapterId]: true }
+    const done = { ...(activeChild.done || {}), [doneKey(chapterId, difficulty)]: true }
     const next = { xp: newXP, level: newLevel, done }
     setActiveChildState((c) => ({ ...c, ...next }))
     setKids((all) => all.map((k) => (k.id === activeChild.id ? { ...k, ...next } : k)))
@@ -190,9 +225,10 @@ export default function App() {
       }
     },
     switchProfile,
+    openLevelPicker: () => setLevelPickerOpen(true),
   }
 
-  const shared = { lang, changeLang, progress, nav, activeChild }
+  const shared = { lang, changeLang, progress, nav, activeChild, difficulty }
 
   // ── Auth gates ────────────────────────────────────────────────
   if (authLoading) return <Spinner msg="Demarrage..." />
@@ -206,10 +242,19 @@ export default function App() {
         onPick={handlePickChild}
         onCreate={handleCreateChild}
         hasLegacy={!!legacyToMigrate}
+        lang={lang}
         onMigrate={() => { /* noop : legacy already loaded, will be applied at create */ }}
       />
     )
   }
+  // Profil sans niveau de lecture : on le demande une fois
+  if (!activeChild.difficulty) {
+    return (
+      <LevelPicker lang={lang} age={activeChild.age} childName={(activeChild.name || '').split(' ')[0]}
+        value={defaultLevelForAge(activeChild.age || 6)} onPick={changeDifficulty} />
+    )
+  }
+  if (needsExpert && !expertReady && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
 
   return (
     <div style={{ minHeight: '100vh' }}>
@@ -221,6 +266,10 @@ export default function App() {
           fontWeight: 900, fontSize: 16,
           fontFamily: 'Nunito, sans-serif',
         }}>+{xpAnim} XP !</div>
+      )}
+      {levelPickerOpen && (
+        <LevelPicker lang={lang} age={activeChild.age} value={difficulty}
+          onPick={changeDifficulty} onClose={() => setLevelPickerOpen(false)} />
       )}
       {screen === 'home'    && <HomeScreen {...shared} />}
       {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}

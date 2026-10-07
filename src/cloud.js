@@ -42,6 +42,7 @@ export async function createChild(uid, data) {
     age: data.age || 5,
     avatar: data.avatar || '👦',
     lang: data.lang || 'fr',
+    difficulty: data.difficulty || null,
     xp: data.xp || 0,
     level: data.level || 1,
     done: data.done || {},
@@ -65,6 +66,13 @@ export async function saveChildProgress(uid, childId, progress) {
     xp: progress.xp,
     level: progress.level,
     done: progress.done,
+    updatedAt: serverTimestamp(),
+  })
+}
+
+export async function saveChildDifficulty(uid, childId, difficulty) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), {
+    difficulty,
     updatedAt: serverTimestamp(),
   })
 }

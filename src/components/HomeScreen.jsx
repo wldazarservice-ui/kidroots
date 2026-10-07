@@ -4,18 +4,22 @@ import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
 import { signOut } from '../auth'
+import { LEVELS, isDone, countryStats } from '../levels'
 
 const INK = '#1A2A4F'
 
-export default function HomeScreen({ lang, changeLang, progress, nav, activeChild }) {
-  const totalChapters = Object.values(COUNTRIES).reduce((acc, c) => acc + c.chapters.length, 0)
-  const doneChapters = Object.keys(progress.done).length
+export default function HomeScreen({ lang, changeLang, progress, nav, activeChild, difficulty }) {
+  const L = LEVELS[difficulty] || LEVELS.explorer
+  const allChapters = Object.values(COUNTRIES).flatMap(c => c.chapters)
+  const totalChapters = allChapters.length
+  const doneChapters = allChapters.filter(ch => isDone(progress, ch.id, difficulty)).length
+  const totalStories = Object.keys(COUNTRIES).reduce((a, code) => a + countryStats(code, difficulty).stories, 0)
   const pct = Math.round((doneChapters / totalChapters) * 100)
   const xpInLevel = progress.xp % 300
   const firstName = (activeChild?.name || '').split(' ')[0]
 
-  const countryStarted = (code) => COUNTRIES[code]?.chapters.some(ch => progress.done[ch.id])
-  const countryDone = (code) => COUNTRIES[code]?.chapters.every(ch => progress.done[ch.id])
+  const countryStarted = (code) => COUNTRIES[code]?.chapters.some(ch => isDone(progress, ch.id, difficulty))
+  const countryDone = (code) => COUNTRIES[code]?.chapters.every(ch => isDone(progress, ch.id, difficulty))
 
   return (
     <div className="home-sky" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', position: 'relative', overflow: 'hidden' }}>
@@ -61,6 +65,18 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             {t(lang, 'where_go')}
           </div>
         </div>
+
+        {/* Niveau de lecture */}
+        <button className="btn-kid" onClick={nav.openLevelPicker}
+          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, background: `linear-gradient(150deg, ${L.grad[0]}, ${L.grad[1]})`, color: 'white', borderRadius: 22, padding: '10px 14px', marginBottom: 12, textAlign: 'left', boxShadow: `0 5px 0 ${L.grad[1]}55` }}>
+          <span style={{ fontSize: 34 }}>{L.emoji}</span>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: 'block', fontSize: 11, fontWeight: 900, opacity: 0.85, textTransform: 'uppercase', letterSpacing: 0.5 }}>{t(lang, 'reading_level')}</span>
+            <span style={{ display: 'block', fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 19, fontWeight: 600, lineHeight: 1.15 }}>{t(lang, `lvl_${difficulty}`)}</span>
+            <span style={{ display: 'block', fontSize: 12, fontWeight: 800, opacity: 0.92 }}>📖 {totalStories} {t(lang, 'stories_word')}</span>
+          </span>
+          <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 999, padding: '6px 12px', fontSize: 13, fontWeight: 900 }}>✎</span>
+        </button>
 
         {/* Progression */}
         <div style={{ background: 'white', borderRadius: 24, padding: 14, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 8px 24px rgba(26,42,79,0.10)' }}>

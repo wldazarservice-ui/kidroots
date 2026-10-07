@@ -34,9 +34,9 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
   return (
     <div style={{ minHeight: '100vh', background: ch.light, padding: '18px 16px', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-        <div style={{ fontSize: 12, fontWeight: 900, color: ch.color }}>{c.flag} {idx + 1} / {ch.cards.length}</div>
-        <div style={{ display: 'flex', gap: 5 }}>
-          {ch.cards.map((_, i) => <div key={i} style={{ width: 24, height: 6, borderRadius: 3, background: i <= idx ? ch.color : '#ddd' }} />)}
+        <div style={{ fontSize: 13, fontWeight: 900, color: ch.color, whiteSpace: 'nowrap', marginRight: 12 }}>{c.flag} {idx + 1} / {ch.cards.length}</div>
+        <div style={{ display: 'flex', gap: 4, flex: 1, justifyContent: 'flex-end' }}>
+          {ch.cards.map((_, i) => <div key={i} style={{ flex: 1, maxWidth: 24, height: 6, borderRadius: 3, background: i <= idx ? ch.color : '#ddd' }} />)}
         </div>
       </div>
 
@@ -46,11 +46,14 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
         onClick={() => setRevealed(!revealed)}
         style={{ background: 'white', borderRadius: 28, padding: '28px 20px', textAlign: 'center', border: `4px solid ${revealed ? ch.color : '#eee'}`, minHeight: 280, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: `0 8px 24px ${ch.color}22`, transition: 'border 0.3s', marginBottom: 16, position: 'relative' }}>
         <div className="float" style={{ fontSize: 76, marginBottom: 14 }}>{card.emoji}</div>
-        <div style={{ fontSize: 22, fontWeight: 900, color: ch.color, marginBottom: 10 }}>{card.title}</div>
+        {card.date && (
+          <div style={{ display: 'inline-block', background: ch.color, color: 'white', borderRadius: 999, padding: '4px 12px', fontSize: 13, fontWeight: 900, marginBottom: 8 }}>📅 {card.date}</div>
+        )}
+        <div style={{ fontSize: 22, fontWeight: 900, color: ch.color, marginBottom: 10, lineHeight: 1.2 }}>{card.title}</div>
         {!revealed
           ? <div style={{ fontSize: 14, color: '#bbb', fontWeight: 700 }}>{t(lang, 'doc_tap')}</div>
           : <div style={{ animation: 'fadeUp 0.4s ease', width: '100%' }}>
-              <div style={{ fontSize: 14, color: '#333', fontWeight: 700, lineHeight: 1.75, marginBottom: 14, textAlign: 'left' }}>{card.text}</div>
+              <div style={{ fontSize: card.text.length > 300 ? 15 : 14, color: '#263238', fontWeight: 700, lineHeight: 1.75, marginBottom: 14, textAlign: 'left', whiteSpace: 'pre-line' }}>{card.text}</div>
               <div style={{ background: ch.light, borderRadius: 14, padding: '12px 14px', display: 'flex', gap: 10, textAlign: 'left', marginBottom: 14 }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
                 <div style={{ fontSize: 13, color: ch.color, fontWeight: 900, lineHeight: 1.5 }}>{card.fact}</div>
@@ -58,7 +61,7 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <SpeakButton
                   key={`card-${idx}`}
-                  text={[card.title, card.text, card.fact]}
+                  text={[card.date, card.title, card.text, card.fact]}
                   lang={lang}
                   color={ch.color}
                   size={52}

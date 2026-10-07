@@ -45,11 +45,11 @@ export default function QuizLevel({ chapter: chRaw, country: cRaw, lang, onDone 
   return (
     <div style={{ minHeight:'100vh', background:ch.light, padding:'18px 14px', fontFamily:'Nunito,sans-serif' }}>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-        <div style={{ fontSize:12, fontWeight:900, color:ch.color }}>{c.flag} Question {qi+1} / {ch.quiz.length}</div>
+        <div style={{ fontSize:12, fontWeight:900, color:ch.color, whiteSpace:'nowrap' }}>{c.flag} {qi+1} / {ch.quiz.length}</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <div style={{ background:'white', borderRadius:14, padding:'4px 10px', fontSize:12, fontWeight:900, color:ch.color, boxShadow:'0 2px 6px rgba(0,0,0,0.08)' }}>⭐ {score} / {qi}</div>
-          <div style={{ display:'flex', gap:5 }}>
-            {ch.quiz.map((_,i) => <div key={i} style={{ width:24, height:6, borderRadius:3, background:i<qi?ch.color:i===qi?'#FFC107':'#ddd' }} />)}
+          <div style={{ display:'flex', gap:4 }}>
+            {ch.quiz.map((_,i) => <div key={i} style={{ width:ch.quiz.length > 5 ? 12 : 24, height:6, borderRadius:3, background:i<qi?ch.color:i===qi?'#FFC107':'#ddd' }} />)}
           </div>
         </div>
       </div>
