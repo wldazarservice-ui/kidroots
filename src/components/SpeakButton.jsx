@@ -64,9 +64,10 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
         }}
         title={enabled ? 'Voix off ON' : 'Voix off OFF'}
         style={{
-          background: enabled ? color : 'rgba(255,255,255,0.18)',
-          color: 'white',
+          background: enabled ? color : 'white',
+          color: enabled ? 'white' : '#90A4AE',
           border: 'none',
+          minHeight: 34,
           borderRadius: 999,
           padding: '6px 12px',
           fontSize: 12,
@@ -76,7 +77,7 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
           alignItems: 'center',
           gap: 6,
           fontFamily: 'Nunito, sans-serif',
-          boxShadow: enabled ? `0 3px 10px ${color}55` : 'none',
+          boxShadow: enabled ? `0 3px 10px ${color}55` : '0 3px 10px rgba(26,42,79,0.12)',
         }}
       >
         {enabled ? '🔊' : '🔇'} {label || 'Voix'}

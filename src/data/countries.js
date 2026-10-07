@@ -1930,21 +1930,25 @@ export const COUNTRIES = {
 
 export const REGIONS = {
   africa: {
+    mascot: "🦁", grad: ["#FFB300", "#FF6F00"],
     name: 'Afrique', emoji: '🌍',
     color: '#FF6F00', bg: '#FFF8E1',
     countries: ['ML', 'SN', 'MA', 'NG', 'EG', 'ET', 'ZA']
   },
   europe: {
+    mascot: "🏰", grad: ["#42A5F5", "#3949AB"],
     name: 'Europe', emoji: '🌍',
     color: '#1565C0', bg: '#E3F2FD',
     countries: ['FR', 'DE', 'IT', 'GR']
   },
   asia: {
+    mascot: "🐼", grad: ["#26C6DA", "#00897B"],
     name: 'Asie', emoji: '🌏',
     color: '#00695C', bg: '#E0F2F1',
     countries: ['JP', 'CN', 'IN', 'TR']
   },
   americas: {
+    mascot: "🦜", grad: ["#EC407A", "#8E24AA"],
     name: 'Ameriques', emoji: '🌎',
     color: '#6A1B9A', bg: '#F3E5F5',
     countries: ['BR', 'MX', 'AR', 'PE', 'CA']

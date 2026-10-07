@@ -25,9 +25,9 @@ import ChildPickerScreen from './components/ChildPickerScreen'
 
 function Spinner({ msg = 'Chargement...' }) {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 14, background: 'linear-gradient(160deg,#0a0e1a 0%,#1a2744 50%,#0d3b6e 100%)', fontFamily: 'Nunito, sans-serif' }}>
-      <div style={{ fontSize: 56 }} className="float">🌍</div>
-      <div style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 700, fontSize: 14 }}>{msg}</div>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 14, background: 'linear-gradient(180deg,#BBE3FF 0%,#E3F4FF 40%,#FFF8E7 100%)', fontFamily: 'Nunito, sans-serif' }}>
+      <div style={{ fontSize: 72 }} className="float">🌍</div>
+      <div style={{ color: '#1A2A4F', fontWeight: 700, fontSize: 14 }}>{msg}</div>
     </div>
   )
 }
@@ -42,6 +42,7 @@ export default function App() {
 
   const [screen, setScreen] = useState('home')
   const [countryCode, setCountryCode] = useState(null)
+  const [regionKey, setRegionKey] = useState('africa')
   const [chapterIdx, setChapterIdx] = useState(null)
   const [step, setStep] = useState('intro')
   const [quizScore, setQuizScore] = useState(0)
@@ -157,8 +158,8 @@ export default function App() {
 
   const nav = {
     goHome: () => setScreen('home'),
-    goRegions: () => setScreen('regions'),
-    goCountry: (code) => { setCountryCode(code); setScreen('country') },
+    goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
+    goCountry: (code) => { setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
     goBack: () => {
       if (screen === 'country') setScreen('regions')
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
@@ -222,7 +223,7 @@ export default function App() {
         }}>+{xpAnim} XP !</div>
       )}
       {screen === 'home'    && <HomeScreen {...shared} />}
-      {screen === 'regions' && <RegionScreen {...shared} />}
+      {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}
       {screen === 'country' && country && <CountryScreen country={country} code={countryCode} {...shared} />}
       {screen === 'chapter' && chapter && step === 'intro' && (
         <ChapterIntro chapter={chapter} country={country} {...shared} />

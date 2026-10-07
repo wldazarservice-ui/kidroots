@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { LANGUAGES } from '../i18n'
 
-export default function LangPicker({ lang, onChange }) {
+export default function LangPicker({ lang, onChange, compact = false }) {
   const [open, setOpen] = useState(false)
   return (
     <div style={{ position: 'relative' }}>
       <button onClick={() => setOpen(!open)}
-        style={{ background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white', padding: '6px 12px', borderRadius: 14, cursor: 'pointer', fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span>{LANGUAGES[lang].flag}</span>
-        <span>{LANGUAGES[lang].name}</span>
-        <span style={{ fontSize: 10 }}>{open ? '▲' : '▼'}</span>
+        style={{ background: 'white', border: 'none', color: '#1A2A4F', padding: '6px 12px', minHeight: 34, borderRadius: 999, boxShadow: '0 3px 10px rgba(26,42,79,0.12)', cursor: 'pointer', fontFamily: 'Nunito, sans-serif', fontWeight: 900, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ fontSize: 18 }}>{LANGUAGES[lang].flag}</span>
+        {!compact && <span>{LANGUAGES[lang].name}</span>}
+        <span style={{ fontSize: 10, color: '#90A4AE' }}>{open ? '▲' : '▼'}</span>
       </button>
       {open && (
         <div style={{ position: 'absolute', top: '110%', right: 0, background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.25)', zIndex: 200, minWidth: 160 }}>

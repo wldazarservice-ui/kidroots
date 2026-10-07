@@ -170,3 +170,20 @@ body {
 .anim-wrong { animation: wrongShake 0.45s ease forwards; }
 .anim-glow { animation: glowPulse 2s ease-in-out infinite; }
 .card-flip-wrapper { perspective: 800px; }
+
+/* ── Accueil clair & colore ───────────────────────────── */
+.home-sky {
+  background:
+    radial-gradient(circle at 85% 8%, #FFF59D 0, rgba(255,245,157,0) 32%),
+    linear-gradient(180deg, #BBE3FF 0%, #E3F4FF 38%, #FFF8E7 100%);
+}
+@keyframes drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(26px); }
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+.drift { animation: drift 9s ease-in-out infinite; }
+.spin-slow { animation: spinSlow 24s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .float, .drift, .spin-slow, .anim-glow, .anim-pulse, .anim-bounce { animation: none !important; }
+}
