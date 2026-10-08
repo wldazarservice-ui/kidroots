@@ -91,6 +91,11 @@ export const isOwner = (user) => {
   return !!user?.email && user.email_verified !== false && owners.includes(user.email.toLowerCase())
 }
 
+// Acces offert (sans paiement) : emails listes dans la variable Netlify COMP_EMAILS (separes par des virgules).
+// L'email doit etre verifie (connexion Google, ou lien de verification), sinon n'importe qui pourrait s'inscrire avec.
+export const compEmails = () => (process.env.COMP_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean)
+export const isComp = (user) => !!user?.email && compEmails().includes(user.email.toLowerCase())
+
 export { FieldValue }
 
 export const json = (status, body) =>

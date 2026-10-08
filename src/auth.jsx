@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   signOut as fbSignOut,
   sendPasswordResetEmail,
+  sendEmailVerification,
 } from 'firebase/auth'
 import { auth, googleProvider } from './firebase'
 
@@ -33,3 +34,4 @@ export const signIn = (email, password) => signInWithEmailAndPassword(auth, emai
 export const googleSignIn = () => signInWithPopup(auth, googleProvider)
 export const signOut = () => fbSignOut(auth)
 export const resetPassword = (email) => sendPasswordResetEmail(auth, email)
+export const verifyEmail = (u) => sendEmailVerification(u)

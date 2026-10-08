@@ -12,7 +12,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, premium, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -141,7 +141,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               📱 Mes appareils
             </button>
           )}
-          {premium && (
+          {premium && account.kind !== 'subscription' && (
+            <div style={{ background: 'white', borderRadius: 18, padding: '12px', textAlign: 'center', fontSize: 15, fontWeight: 900, color: '#2E7D4F', boxShadow: '0 4px 12px rgba(46,158,91,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              ✅ {account.kind === 'gift' ? 'Accès illimité offert' : 'Accès illimité à vie'}
+            </div>
+          )}
+          {premium && account.kind === 'subscription' && (
             <button className="btn-kid soft" onClick={portal} disabled={portalBusy}
               style={{ width: '100%', background: 'white', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.12)' }}>
               💳 {portalBusy ? '…' : t(lang, 'manage_sub')}

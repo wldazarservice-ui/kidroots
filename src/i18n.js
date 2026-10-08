@@ -1,12 +1,12 @@
 // Systeme de traduction Mokalibo
+// Langues proposees pour le lancement. Les traductions bm / ar / pt restent dans UI
+// et peuvent etre reactivees en les ajoutant ici.
 export const LANGUAGES = {
   fr: { flag: '🇫🇷', name: 'Français' },
   en: { flag: '🇬🇧', name: 'English' },
   de: { flag: '🇩🇪', name: 'Deutsch' },
-  bm: { flag: '🇲🇱', name: 'Bamanankan' },
-  ar: { flag: '🇸🇦', name: 'العربية' },
-  pt: { flag: '🇧🇷', name: 'Português' },
 }
+export const isLang = (l) => !!LANGUAGES[l]
 
 export const UI = {
   fr: {
@@ -127,6 +127,7 @@ export const UI = {
     daily_left: "Aventures du jour",
     daily_unlimited: "Aventures illimitées",
     manage_sub: "Mon abonnement",
+    verify_sent: "📧 Vérifie ta boîte mail pour activer ton accès offert",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -246,6 +247,7 @@ export const UI = {
     daily_left: "Today's adventures",
     daily_unlimited: "Unlimited adventures",
     manage_sub: "My subscription",
+    verify_sent: "📧 Check your inbox to activate your gifted access",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -365,6 +367,7 @@ export const UI = {
     daily_left: "Abenteuer heute",
     daily_unlimited: "Unbegrenzte Abenteuer",
     manage_sub: "Mein Abo",
+    verify_sent: "📧 Bitte bestätige deine E-Mail, um den geschenkten Zugang zu aktivieren",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',
@@ -670,8 +673,14 @@ export const t = (lang, key, vars = {}) => {
 }
 
 const LANG_KEY = 'kidroots_lang'
+// Langue enregistree, sinon celle du navigateur (de / en), sinon le francais
 export const getLang = () => {
-  try { return localStorage.getItem(LANG_KEY) || 'fr' } catch { return 'fr' }
+  try {
+    const saved = localStorage.getItem(LANG_KEY)
+    if (isLang(saved)) return saved
+  } catch {}
+  const nav = (typeof navigator !== 'undefined' && navigator.language || '').slice(0, 2)
+  return isLang(nav) ? nav : 'fr'
 }
 export const setLang = (lang) => {
   try { localStorage.setItem(LANG_KEY, lang) } catch {}

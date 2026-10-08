@@ -50,6 +50,11 @@ export async function confirmCheckout(user, sessionId) {
   return !!data.premium
 }
 
+// Etat du compte cote serveur (abonnement, acces a vie, acces offert)
+export async function fetchAccountStatus(user) {
+  return call('/api/account-status', user)
+}
+
 // Espace client Stripe (changer de formule, factures, resilier)
 export async function openBillingPortal(user) {
   const data = await call('/api/billing-portal', user)

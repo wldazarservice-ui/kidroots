@@ -34,7 +34,13 @@ export default function AdminDashboard({ user, onClose }) {
       for (const [k, v] of Object.entries(ev)) sources[src][k] = (sources[src][k] || 0) + v
     }
   }
-  const maxVisits = Math.max(1, ...(data?.rows || []).map((r) => r.landing_view || 0))
+  // Tous les jours de la periode, y compris ceux sans visite
+  const byDay = Object.fromEntries((data?.rows || []).map((r) => [r.day, r]))
+  const allDays = Array.from({ length: days }, (_, i) => {
+    const d = new Date(Date.now() - (days - 1 - i) * 86400000).toISOString().slice(0, 10)
+    return byDay[d] || { day: d }
+  })
+  const maxVisits = Math.max(1, ...allDays.map((r) => r.landing_view || 0))
 
   const tile = (label, value, color = INK) => (
     <div style={{ background: 'white', borderRadius: 18, padding: '14px', boxShadow: '0 4px 14px rgba(26,42,79,0.07)' }}>
@@ -47,7 +53,7 @@ export default function AdminDashboard({ user, onClose }) {
     <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 650, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet sheet-wide"
         style={{ width: '100%', maxWidth: 420, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', padding: '20px 16px 26px', background: '#F4F7FB', fontFamily: 'Nunito, sans-serif', color: INK }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
           <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700 }}>📈 Tableau de bord</div>
           <select value={days} onChange={(e) => setDays(Number(e.target.value))}
             style={{ padding: '8px 10px', borderRadius: 12, border: '2px solid #E3EAF2', fontFamily: 'inherit', fontWeight: 800 }}>
@@ -59,6 +65,7 @@ export default function AdminDashboard({ user, onClose }) {
           <button className="btn-kid" onClick={onClose} style={{ background: '#E3EAF2', color: '#546E7A', width: 38, height: 38, borderRadius: '50%' }}>✕</button>
         </div>
 
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#78909C', marginBottom: 14 }}>🔒 Privé : visible uniquement par le propriétaire de Mokalibo. Chiffres de tout le site, anonymes.</div>
         {error && <div style={{ color: '#C62828', fontWeight: 800 }}>Erreur : {error}</div>}
         {!data && !error && <div style={{ textAlign: 'center', padding: 30, fontSize: 30 }}>⏳</div>}
         {data && (
@@ -90,7 +97,7 @@ export default function AdminDashboard({ user, onClose }) {
             <div style={{ background: 'white', borderRadius: 18, padding: 14, marginBottom: 14 }}>
               <div style={{ fontWeight: 900, marginBottom: 8 }}>Visites par jour</div>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 90 }}>
-                {data.rows.map((r) => (
+                {allDays.map((r) => (
                   <div key={r.day} title={`${r.day} : ${r.landing_view || 0} visites, ${r.purchase || 0} abonnés`}
                     style={{ flex: 1, height: `${Math.max(3, ((r.landing_view || 0) / maxVisits) * 100)}%`, background: r.purchase ? '#FF7A00' : '#43C27A', borderRadius: 4 }} />
                 ))}

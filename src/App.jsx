@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { COUNTRIES, REGIONS } from './data/countries'
-import { getLang, setLang, t } from './i18n'
+import { getLang, setLang, t, isLang } from './i18n'
 import { applyLevel, doneKey, defaultLevelForAge } from './levels'
 import { hasExpert, loadExpert } from './data/expert'
 import { useAuth } from './auth.jsx'
@@ -32,14 +32,14 @@ import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
 import { useUsageTracker, trackCountryVisit } from './stats'
 import ParentStats from './components/ParentStats'
-import { confirmCheckout, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
+import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
 import { isDone } from './levels'
 import LandingScreen from './components/LandingScreen'
 import DailyLimit from './components/DailyLimit'
 import AdminDashboard from './components/AdminDashboard'
 import { loadGuest, saveGuest, clearGuest } from './guest'
 import { track } from './track'
-import { signOut } from './auth'
+import { signOut, verifyEmail } from './auth'
 import { isStandalone } from './pwaInstall'
 
 function Spinner({ msg = 'Chargement...' }) {
@@ -78,6 +78,7 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [statsOpen, setStatsOpen] = useState(false)
   const [limitOpen, setLimitOpen] = useState(false)
+  const [account, setAccount] = useState({ kind: 'free' })
   const [adminOpen, setAdminOpen] = useState(false)
   // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
   const [guest, setGuest] = useState(loadGuest)
@@ -127,6 +128,16 @@ export default function App() {
         const ud = await ensureUserDoc(user)
         if (ud.isNew) track('signup')
         if (!cancelled) setPremium(!!ud.premium)
+        // Etat verifie par le serveur (acces offert, abonnement, acces a vie)
+        fetchAccountStatus(user).then((st) => {
+          if (cancelled) return
+          setPremium(!!st.premium)
+          setAccount(st)
+          if (st.needVerify && !sessionStorage.getItem('kidroots_verify_sent')) {
+            sessionStorage.setItem('kidroots_verify_sent', '1')
+            verifyEmail(user).then(() => { setToast('verify_sent'); setTimeout(() => setToast(null), 6000) }).catch(() => {})
+          }
+        }).catch((e) => console.error('Account status error:', e))
         // 5 appareils maximum par compte
         const reg = await registerDevice(user.uid)
         if (cancelled) return
@@ -146,7 +157,7 @@ export default function App() {
           if (cancelled) return
           if (ac) {
             setActiveChildState(ac)
-            if (ac.lang) {
+            if (isLang(ac.lang)) {
               setLangState(ac.lang)
               setLang(ac.lang)
             }
@@ -234,7 +245,7 @@ export default function App() {
       const ac = await loadChild(user.uid, childId)
       if (ac) {
         setActiveChildState(ac)
-        if (ac.lang) {
+        if (isLang(ac.lang)) {
           setLangState(ac.lang)
           setLang(ac.lang)
         }
@@ -370,6 +381,7 @@ export default function App() {
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
         premium={premium}
+        account={account}
         onOpenAdmin={isOwnerEmail(user.email) ? () => setAdminOpen(true) : null}
         onMigrate={() => { /* noop : legacy already loaded, will be applied at create */ }}
       />
