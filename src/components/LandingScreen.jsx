@@ -24,11 +24,14 @@ const TXT = {
     try_note: 'Sans compte · sans carte bancaire · 2 chapitres gratuits par jour',
     cont: '▶ Continuer avec {name}',
     signup: 'Créer un compte parent',
-    proof: ['🚫 Sans publicité', '🔒 Sans traceur', '🇪🇺 Conforme RGPD'],
+    proof: ['🚫 Sans publicité', '🔒 Sans traceur', '🇪🇺 Conforme RGPD', '💛 Pour la protection de l’enfance'],
     story_kicker: 'Pourquoi Mokalibo ?',
     story_q: '« Papa, c’est où le Mali ? »',
     story_text: "Un soir, mon fils m'a posé cette question. J'ai cherché une app qui raconte aux enfants l'histoire des pays, avec leurs héros, leurs dates et leurs cultures, et pas seulement celle de l'Europe. Je ne l'ai pas trouvée. Alors je l'ai créée.",
     story_sign: 'Walid, papa et créateur de Mokalibo',
+    mission_slogan: 'Apprendre le monde, protéger les enfants.',
+    mission_text: 'Les revenus de Mokalibo financent l’entretien et l’amélioration de l’application. Le reste est reversé à des associations de protection de l’enfance.',
+    mission_kicker: 'Notre engagement',
     how_title: 'Comment ça marche ?',
     how: [
       ['🌍', 'Choisis un pays', '{n} pays sur 5 continents, avec un guide enfant de chaque pays.'],
@@ -62,6 +65,7 @@ const TXT = {
     full_note: 'Commencez gratuitement, passez à la Formule Famille quand vous voulez.',
     faq_title: 'Questions fréquentes',
     faq: [
+      ['Où va l’argent des abonnements ?', 'Il finance d’abord l’entretien de l’application (serveurs, nouvelles histoires, nouveaux pays). Le reste est reversé à des associations de protection de l’enfance.'],
       ['C’est vraiment gratuit ?', 'Oui. Chaque enfant peut jouer 2 nouveaux chapitres par jour, dans tous les pays, sans limite de durée. La Formule Famille débloque des aventures illimitées pour 5 enfants.'],
       ['Comment résilier ?', 'En deux clics, dans l’app (« Mon abonnement ») ou sur la page « Verträge hier kündigen ». L’accès reste actif jusqu’à la fin de la période payée.'],
       ['Pour quel âge ?', 'De 4 à 12 ans. Vous choisissez un niveau de lecture pour chaque enfant, et vous pouvez le changer à tout moment.'],
@@ -88,11 +92,14 @@ const TXT = {
     try_note: 'No account · no card · 2 free chapters a day',
     cont: '▶ Continue with {name}',
     signup: 'Create a parent account',
-    proof: ['🚫 No ads', '🔒 No trackers', '🇪🇺 GDPR compliant'],
+    proof: ['🚫 No ads', '🔒 No trackers', '🇪🇺 GDPR compliant', '💛 Supporting child protection'],
     story_kicker: 'Why Mokalibo?',
     story_q: '“Dad, where is Mali?”',
     story_text: 'One evening my son asked me this question. I looked for an app that tells children the history of countries, with their heroes, dates and cultures, and not only Europe’s. I couldn’t find one. So I built it.',
     story_sign: 'Walid, dad and creator of Mokalibo',
+    mission_slogan: 'Learn the world, protect children.',
+    mission_text: 'Mokalibo’s revenue pays for running and improving the app. The rest is donated to child protection charities.',
+    mission_kicker: 'Our commitment',
     how_title: 'How does it work?',
     how: [
       ['🌍', 'Pick a country', '{n} countries on 5 continents, each with a kid guide from that country.'],
@@ -126,6 +133,7 @@ const TXT = {
     full_note: 'Start for free, upgrade to the Family Plan whenever you like.',
     faq_title: 'Frequently asked questions',
     faq: [
+      ['Where does the subscription money go?', 'First, it pays for running the app (servers, new stories, new countries). The rest is donated to child protection charities.'],
       ['Is it really free?', 'Yes. Every child can play 2 new chapters a day, in every country, with no time limit. The Family Plan unlocks unlimited adventures for 5 children.'],
       ['How do I cancel?', 'In two clicks, in the app (“My subscription”) or on the “Verträge hier kündigen” page. Access stays active until the end of the paid period.'],
       ['What age is it for?', 'Ages 4 to 12. You choose a reading level for each child and can change it at any time.'],
@@ -152,11 +160,14 @@ const TXT = {
     try_note: 'Ohne Konto · ohne Karte · 2 Gratis-Kapitel pro Tag',
     cont: '▶ Weiter mit {name}',
     signup: 'Elternkonto erstellen',
-    proof: ['🚫 Keine Werbung', '🔒 Kein Tracking', '🇪🇺 DSGVO-konform'],
+    proof: ['🚫 Keine Werbung', '🔒 Kein Tracking', '🇪🇺 DSGVO-konform', '💛 Für den Kinderschutz'],
     story_kicker: 'Warum Mokalibo?',
     story_q: '„Papa, wo ist Mali?“',
     story_text: 'Eines Abends stellte mir mein Sohn diese Frage. Ich suchte eine App, die Kindern die Geschichte der Länder erzählt, mit ihren Helden, Daten und Kulturen, und nicht nur die Europas. Ich fand keine. Also habe ich sie selbst gebaut.',
     story_sign: 'Walid, Papa und Gründer von Mokalibo',
+    mission_slogan: 'Die Welt entdecken, Kinder schützen.',
+    mission_text: 'Die Einnahmen von Mokalibo finanzieren Betrieb und Weiterentwicklung der App. Der Rest wird an Kinderschutz-Organisationen gespendet.',
+    mission_kicker: 'Unser Versprechen',
     how_title: 'So funktioniert es',
     how: [
       ['🌍', 'Wähle ein Land', '{n} Länder auf 5 Kontinenten, jeweils mit einem Kinder-Guide aus dem Land.'],
@@ -190,6 +201,7 @@ const TXT = {
     full_note: 'Kostenlos starten, jederzeit zum Familien-Abo wechseln.',
     faq_title: 'Häufige Fragen',
     faq: [
+      ['Wohin geht das Geld der Abos?', 'Zuerst in den Betrieb der App (Server, neue Geschichten, neue Länder). Der Rest wird an Kinderschutz-Organisationen gespendet.'],
       ['Ist es wirklich kostenlos?', 'Ja. Jedes Kind kann täglich 2 neue Kapitel spielen, in allen Ländern, ohne zeitliche Begrenzung. Das Familien-Abo schaltet unbegrenzte Abenteuer für 5 Kinder frei.'],
       ['Wie kündige ich?', 'Mit zwei Klicks in der App („Mein Abo“) oder über „Verträge hier kündigen“. Der Zugang bleibt bis zum Ende des bezahlten Zeitraums bestehen.'],
       ['Für welches Alter?', 'Von 4 bis 12 Jahren. Sie wählen für jedes Kind eine Lesestufe und können sie jederzeit ändern.'],
@@ -421,6 +433,16 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
       </section>
 
+        <section style={{ padding: '10px 16px 56px' }}>
+          <div className="lp-wrap reveal" style={{ maxWidth: 780 }}>
+            <div style={{ background: 'linear-gradient(135deg,#FFF0F3,#FFF8E7)', borderRadius: 32, padding: '30px 26px', textAlign: 'center', border: '3px solid #FFD6DE' }}>
+              <div style={{ fontSize: 50 }}>💛</div>
+              <div style={{ fontSize: 13, fontWeight: 900, color: '#D81B60', letterSpacing: 1, textTransform: 'uppercase', marginTop: 4 }}>{T.mission_kicker}</div>
+              <div style={{ fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, margin: '6px 0 12px', lineHeight: 1.15 }}>{T.mission_slogan}</div>
+              <p style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 700, color: '#37474F', margin: 0 }}>{T.mission_text}</p>
+            </div>
+          </div>
+        </section>
       </>)}
       {page === 'discover' && (<>
       {/* ── Comment ca marche ── */}
@@ -508,6 +530,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
               {T.full_items.map((it) => <div key={it} style={{ fontSize: 15, fontWeight: 800, padding: '5px 0' }}>✓ {it}</div>)}
               <button className="btn-kid soft" onClick={tryNow} style={{ ...primary, marginTop: 16, fontSize: 18 }}>{T.full_cta}</button>
               <div style={{ fontSize: 12, fontWeight: 800, opacity: 0.9, marginTop: 10, textAlign: 'center' }}>{T.full_note}</div>
+              <div style={{ fontSize: 12, fontWeight: 900, marginTop: 8, textAlign: 'center' }}>💛 {T.mission_slogan}</div>
             </div>
           </div>
         </div>

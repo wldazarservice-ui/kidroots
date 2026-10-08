@@ -241,6 +241,7 @@ export const UI = {
     pw_ref_gift: "🎁 1er mois offert grâce à ton parrainage",
     pw_ref_credit: "🎁 Tu as {n} mois offert(s) : il sera déduit automatiquement",
     lp_ami: "🎁 Une famille t'offre ton 1er mois de Formule Famille !",
+    pw_mission: "💛 Apprendre le monde, protéger les enfants : le reste de nos revenus va à la protection de l'enfance.",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -474,6 +475,7 @@ export const UI = {
     pw_ref_gift: "🎁 First month free thanks to your invitation",
     pw_ref_credit: "🎁 You have {n} free month(s): it will be deducted automatically",
     lp_ami: "🎁 A family is giving you your first month of the Family plan!",
+    pw_mission: "💛 Learn the world, protect children: what's left of our revenue goes to child protection.",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -707,6 +709,7 @@ export const UI = {
     pw_ref_gift: "🎁 Erster Monat gratis dank deiner Einladung",
     pw_ref_credit: "🎁 Du hast {n} Gratismonat(e): wird automatisch abgezogen",
     lp_ami: "🎁 Eine Familie schenkt dir den ersten Monat des Familien-Abos!",
+    pw_mission: "💛 Die Welt entdecken, Kinder schützen: Der Rest unserer Einnahmen geht an den Kinderschutz.",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',

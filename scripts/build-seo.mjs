@@ -127,6 +127,7 @@ function countryPage(code, c) {
   ${quiz.length ? `<h2>🎯 Petit quiz</h2>${quiz.map((q) => `<details><summary>${esc(q.q)}</summary><p style="margin-top:6px">✅ ${esc(q.correct)}</p></details>`).join('')}` : ''}
   <div class="cta"><div style="font-size:44px">🌍</div><h2 style="margin:6px 0 0;color:#fff">Ton enfant va adorer ${esc(name)}</h2>
   <p>Histoires lues à voix haute, quiz, passeport à tamponner et jeux. 2 histoires offertes chaque jour, sans compte et sans publicité.</p>
+  <p style="font-weight:900;color:#FFE082">💛 Apprendre le monde, protéger les enfants : le reste de nos revenus va à la protection de l'enfance.</p>
   <a class="btn" href="/">Essayer Mokalibo gratuitement</a></div>
   ${neighbours.length ? `<h2>${esc(reg.mascot || '🌍')} Autres pays à découvrir</h2><div class="grid">${neighbours.map((x) => `<a href="/histoire/${slugs[x]}/"><span>${COUNTRIES[x].flag}</span>${esc(COUNTRIES[x].name)}</a>`).join('')}</div>` : ''}
   <p style="margin-top:22px"><a href="/histoire/">← L'histoire des 195 pays du monde</a></p>`

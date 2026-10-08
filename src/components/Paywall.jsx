@@ -118,6 +118,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
         )}
 
         <div style={{ marginTop: 14, fontSize: 13, fontWeight: 800, color: '#3E6B4F', textAlign: 'center' }}>🎁 {t(lang, 'pw_free')}</div>
+        <div style={{ marginTop: 10, fontSize: 13, fontWeight: 800, color: '#D81B60', textAlign: 'center', lineHeight: 1.45 }}>{t(lang, 'pw_mission')}</div>
       </div>
     </div>
   )
