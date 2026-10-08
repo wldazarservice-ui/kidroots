@@ -7,8 +7,6 @@ export default function LegalFooter({ lang = getLang(), install = true }) {
   return (
     <div style={{ textAlign: 'center', padding: '22px 16px 26px', fontFamily: 'Nunito, sans-serif', fontSize: 12, position: 'relative', zIndex: 5 }}>
       {install && <div style={{ marginBottom: 14 }}><InstallButton lang={lang} /></div>}
-      <a href="/histoire/" style={link}>🌍 {lang === 'de' ? 'Geschichte der Länder' : lang === 'en' ? 'History of every country' : "L'histoire des 195 pays"}</a>
-      <span style={{ color: '#A5C2AE', margin: '0 8px' }}>·</span>
       <a href="/impressum" style={link}>{t(lang, 'legal_impressum')}</a>
       <span style={{ color: '#A5C2AE', margin: '0 8px' }}>·</span>
       <a href="/datenschutz" style={link}>{t(lang, 'legal_privacy')}</a>

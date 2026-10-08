@@ -161,20 +161,12 @@ function indexPage() {
   })
 }
 
-fs.mkdirSync(path.join(OUT, 'histoire'), { recursive: true })
-for (const code of codes) {
-  const c = await fullCountry(code)
-  const dir = path.join(OUT, 'histoire', slugs[code])
-  fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(path.join(dir, 'index.html'), countryPage(code, c))
-}
-fs.writeFileSync(path.join(OUT, 'histoire', 'index.html'), indexPage())
-
-const urls = [`${SITE}/`, `${SITE}/histoire/`, ...codes.map((c) => `${SITE}/histoire/${slugs[c]}/`), `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
+// Pages pays désactivées (le contenu des chapitres reste réservé à l'app)
+const urls = [`${SITE}/`, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
 </urlset>
 `)
-fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`)
-console.log(`SEO : ${codes.length} pages pays + index + sitemap (${urls.length} URL)`)
+fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /histoire/\n\nSitemap: ${SITE}/sitemap.xml\n`)
+console.log(`SEO : sitemap (${urls.length} URL), pages pays désactivées`)
