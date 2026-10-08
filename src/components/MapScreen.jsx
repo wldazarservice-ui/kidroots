@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { TText } from '../useTranslated'
 import { t } from '../i18n'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { passportStats } from '../explore'
@@ -20,12 +21,12 @@ export default function MapScreen({ lang, progress, nav }) {
     const reg = REGIONS[c.region]
     if (st.stamp) return reg.grad[1]
     if (st.visited) return reg.grad[0]
-    return '#FFFFFF'
+    return `${reg.grad[0]}66` // disponible : couleur claire du continent
   }
 
   const c = picked && COUNTRIES[picked]
   const st = picked && stats.states[picked]
-  const legend = [['#FF6F00', t(lang, 'map_stamp')], ['#FFB300', t(lang, 'map_visited')], ['#FFFFFF', t(lang, 'map_todo')], ['#E3E8EC', t(lang, 'map_not_yet')]]
+  const legend = [['#FF6F00', t(lang, 'map_stamp')], ['#FFB300', t(lang, 'map_visited')], ['#FFB30066', t(lang, 'map_todo')], ['#E3E8EC', t(lang, 'map_not_yet')]]
 
   return (
     <div className="home-sky screen-wide" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', paddingBottom: 30 }}>
@@ -56,6 +57,26 @@ export default function MapScreen({ lang, progress, nav }) {
             )}
           </div>
         )}
+
+        {/* Progression par continent : tampons obtenus sur pays disponibles */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10, marginTop: 18 }}>
+          {Object.entries(REGIONS).filter(([, r]) => r.countries.length).map(([key, r]) => {
+            const got = stats.byRegion[key] || 0
+            return (
+              <button key={key} className="btn-kid soft" onClick={() => nav.goRegions(key)}
+                style={{ background: 'white', borderRadius: 20, padding: '12px', textAlign: 'left', boxShadow: '0 4px 14px rgba(26,42,79,0.08)', color: INK }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 28 }}>{r.mascot}</span>
+                  <span style={{ flex: 1, minWidth: 0, fontSize: 15, fontWeight: 900 }}><TText text={r.name} lang={lang} /></span>
+                </div>
+                <div style={{ height: 10, borderRadius: 6, background: `${r.grad[0]}33`, overflow: 'hidden', margin: '8px 0 4px' }}>
+                  <div style={{ width: `${Math.max(3, (got / r.countries.length) * 100)}%`, height: '100%', background: `linear-gradient(90deg, ${r.grad[0]}, ${r.grad[1]})`, borderRadius: 6 }} />
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 900, color: r.grad[1] }}>🛂 {got} / {r.countries.length} {t(lang, 'countries_word')}</div>
+              </button>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
