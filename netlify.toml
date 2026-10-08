@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # La cle Web Firebase est publique par conception (securite assuree par les regles Firebase)
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyD2rOoIjILi0CsM3qVpghqwEKVcwoYSs9w"
+  SECRETS_SCAN_OMIT_PATHS = "dist/assets/*"
+
+# Le service worker ne doit jamais etre mis en cache par le navigateur
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
