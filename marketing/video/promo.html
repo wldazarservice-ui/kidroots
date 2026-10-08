@@ -54,7 +54,7 @@ const TXT = {
   fr: {
     hook: [['«', 'Papa,'], ['c’est', 'où'], ['le', '*Mali* ?', '»']],
     s2: [['Avec', '*Mokalibo*,'], ['il', 'le', 'sait.']], s2b: 'L’histoire du monde, racontée aux enfants',
-    s3: 'pays à explorer', s3b: 'Sur les 5 continents',
+    s3: 'pays à explorer', s3b: 'Tous les pays du monde !',
     s4: [['Des', 'histoires'], ['*vraies*']], s4b: 'lues à voix haute',
     s5: [['Un', '*quiz*'], ['à', 'chaque', 'chapitre']], s5b: '+190 XP',
     s6: [['Remplis', 'ton'], ['*passeport*']], s6b: 'Un tampon pour chaque pays',
@@ -66,7 +66,7 @@ const TXT = {
   en: {
     hook: [['“Dad,'], ['where', 'is'], ['*Mali*?”']],
     s2: [['With', '*Mokalibo*,'], ['they', 'know.']], s2b: 'World history, told for kids',
-    s3: 'countries to explore', s3b: 'Across all 5 continents',
+    s3: 'countries to explore', s3b: 'Every country in the world!',
     s4: [['*True*'], ['stories']], s4b: 'read aloud',
     s5: [['A', '*quiz*', 'in'], ['every', 'chapter']], s5b: '+190 XP',
     s6: [['Fill', 'your'], ['*passport*']], s6b: 'A stamp for every country',
@@ -78,7 +78,7 @@ const TXT = {
   de: {
     hook: [['„Papa,'], ['wo', 'liegt'], ['*Mali*?“']],
     s2: [['Mit', '*Mokalibo*'], ['weiß', 'er', 'es.']], s2b: 'Weltgeschichte, für Kinder erzählt',
-    s3: 'Länder zum Entdecken', s3b: 'Auf allen 5 Kontinenten',
+    s3: 'Länder zum Entdecken', s3b: 'Alle Länder der Welt!',
     s4: [['*Wahre*'], ['Geschichten']], s4b: 'zum Vorlesen',
     s5: [['Ein', '*Quiz*', 'in'], ['jedem', 'Kapitel']], s5b: '+190 XP',
     s6: [['Füll', 'deinen'], ['*Reisepass*']], s6b: 'Ein Stempel für jedes Land',
@@ -88,7 +88,7 @@ const TXT = {
     cta: 'Jetzt gratis testen', ctaSub: 'Ohne Konto · 2 Geschichten gratis pro Tag',
   },
 }[LANG]
-const COUNT = Number(new URLSearchParams(location.search).get('count') || 160)
+const COUNT = Number(new URLSearchParams(location.search).get('count') || 195)
 
 // ── maths ──
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x))
@@ -214,7 +214,7 @@ function countries(t) {
   bg('#43C27A', '#1E88E5', '#A5D6A7', '#E8F5E9', t)
   const n = Math.round(COUNT * eo(prog(t, 0.2, 2.2)))
   buildText('countries', `<div class="abs hl" style="left:0;right:0;top:120px"><div id="cnt" style="font-size:260px;color:#1E8E57;line-height:1">0</div><div style="font-size:84px;color:#1A2A4F">${TXT.s3}</div><div id="s3b" style="font-family:Nunito;font-size:46px;font-weight:900;color:#1A2A4F;margin-top:10px">${TXT.s3b}</div></div>`)
-  $('cnt').textContent = n + (n >= COUNT ? '+' : '')
+  $('cnt').textContent = n
   $('s3b').style.opacity = eo(prog(t, 1.4, 1.9))
   const p = eo5(prog(t, 0, 0.8))
   setPhone({ y: lerp(240, 110, p), ry: lerp(-10, 12, eio(prog(t, 0, 6))), rx: 8, s: 0.8 })
