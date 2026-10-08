@@ -7,22 +7,24 @@ import html, os
 COMPANY = {
     'owner': 'Walid Azar',
     'business': 'Azar Consulting (Einzelunternehmen)',
-    'street': '[Straße und Hausnummer]',
-    'city': '[PLZ] Wittlich',
+    'street': 'Zur Schweiz 3a, Whg. 3',
+    'city': '54516 Wittlich',
     'country': 'Deutschland',
-    'email': '[E-Mail-Adresse]',
-    'phone': '[Telefonnummer]',
+    'email': 'contact@azarconsulting.eu',
+    'phone': '+49 151 704 25620',
+    'web': 'https://azarconsulting.eu',
+    'widnr': 'DE462026365-00001',
     'app': 'Mokalibo',
     'site': 'https://mokalibo.com',
     'updated': '08.10.2026',
-    'authority': 'Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz',
+    'authority': 'Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz, poststelle@datenschutz.rlp.de',
 }
 
 C = {k: html.escape(v) for k, v in COMPANY.items()}
 OUT = os.path.join(os.path.dirname(__file__), '..', '..', 'public')
 
 ADDRESS = f"{C['owner']}<br>{C['business']}<br>{C['street']}<br>{C['city']}<br>{C['country']}"
-CONTACT = f"E-Mail : <a href=\"mailto:{C['email']}\">{C['email']}</a><br>Tel. : {C['phone']}"
+CONTACT = f"E-Mail : <a href=\"mailto:{C['email']}\">{C['email']}</a><br>Tel. : {C['phone']}<br>Web : <a href=\"{C['web']}\">{C['web']}</a>"
 
 PAGE = """<!doctype html>
 <html lang="de">
@@ -86,12 +88,15 @@ page('impressum.html', 'Impressum / Mentions légales', f"""
 <p>{CONTACT}</p>
 <h2>Umsatzsteuer</h2>
 <p>Kleinunternehmer gemäß § 19 UStG. Es wird keine Umsatzsteuer berechnet und ausgewiesen.</p>
+<p>Wirtschafts-Identifikationsnummer (W-IdNr.) gemäß § 139c AO : {C['widnr']}</p>
 <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
 <p>{C['owner']}, Anschrift wie oben.</p>
 <h2>Verbraucherstreitbeilegung</h2>
 <p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
 <h2>Haftung für Inhalte und Links</h2>
 <p>Die Inhalte von {C['app']} wurden mit großer Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Für Inhalte externer Links sind ausschließlich deren Betreiber verantwortlich.</p>
+<h2>Urheberrecht</h2>
+<p>Die Texte, Illustrationen und Lerninhalte von {C['app']} unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Anbieters.</p>
 """, f"""
 <h2>Éditeur (§ 5 DDG)</h2>
 <div class="card"><p>{ADDRESS}</p></div>
@@ -99,12 +104,15 @@ page('impressum.html', 'Impressum / Mentions légales', f"""
 <p>{CONTACT}</p>
 <h2>TVA</h2>
 <p>Petite entreprise au sens du § 19 UStG (Kleinunternehmer) : aucune TVA n'est facturée.</p>
+<p>Numéro d'identification économique (W-IdNr.) : {C['widnr']}</p>
 <h2>Responsable du contenu (§ 18 al. 2 MStV)</h2>
 <p>{C['owner']}, adresse ci-dessus.</p>
 <h2>Règlement des litiges de consommation</h2>
 <p>Nous ne sommes ni disposés ni tenus de participer à une procédure de règlement des litiges devant un organisme de médiation de la consommation.</p>
 <h2>Responsabilité</h2>
 <p>Les contenus de {C['app']} ont été rédigés avec le plus grand soin, sans garantie d'exactitude, d'exhaustivité ou d'actualité. Les sites externes liés relèvent de la seule responsabilité de leurs exploitants.</p>
+<h2>Droit d'auteur</h2>
+<p>Les textes, illustrations et contenus pédagogiques de {C['app']} sont protégés par le droit d'auteur allemand. Toute reproduction ou diffusion sans accord écrit est interdite.</p>
 """)
 
 # ───────────────────────── DATENSCHUTZ ─────────────────────────
