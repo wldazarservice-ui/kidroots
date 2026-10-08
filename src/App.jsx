@@ -444,7 +444,7 @@ export default function App() {
   if (((needsExpert && !expertReady) || !worldReady) && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }} key={`${screen}-${gameKey}-${countryCode}-${chapterIdx}-${step}`} className="screen-enter">
       {xpAnim && (
         <div style={{
           position: 'fixed', top: 60, right: 16, zIndex: 999,

@@ -299,3 +299,37 @@ body {
   .stamp-grid { grid-template-columns: repeat(5, 1fr); }
 }
 @media (min-width: 960px) { .stamp-grid { grid-template-columns: repeat(7, 1fr); } }
+
+/* ── Animations du site ─────────────────────────────── */
+/* Transition entre les écrans de l'app */
+@keyframes screenIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
+.screen-enter { animation: screenIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Apparition au défilement (page de présentation) */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-stagger > * { opacity: 0; transform: translateY(20px) scale(0.98); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal-stagger.in > * { opacity: 1; transform: none; }
+.reveal-stagger.in > *:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger.in > *:nth-child(3) { transition-delay: 0.16s; }
+.reveal-stagger.in > *:nth-child(4) { transition-delay: 0.24s; }
+.reveal-stagger.in > *:nth-child(5) { transition-delay: 0.32s; }
+.reveal-stagger.in > *:nth-child(6) { transition-delay: 0.4s; }
+.reveal-stagger.in > *:nth-child(n+7) { transition-delay: 0.48s; }
+
+/* Avion qui traverse le ciel */
+@keyframes flyAcross { 0% { transform: translateX(-15vw) translateY(0) rotate(-6deg); } 50% { transform: translateX(55vw) translateY(-18px) rotate(-2deg); } 100% { transform: translateX(115vw) translateY(4px) rotate(-6deg); } }
+.plane { position: absolute; left: 0; font-size: 34px; animation: flyAcross 16s linear infinite; pointer-events: none; z-index: 1; }
+
+/* Petits rebonds et brillances */
+@keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+.wiggle-hover:hover { animation: wiggle 0.5s ease; }
+@keyframes shine { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+.shine { background-image: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%) !important; background-size: 200% 100% !important; animation: shine 3.5s ease-in-out infinite; }
+@keyframes popIn2 { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+.pop-in { animation: popIn2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-enter, .plane, .pop-in, .shine { animation: none !important; }
+  .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

@@ -6,6 +6,7 @@ import { track } from '../track'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
 import { TText } from '../useTranslated'
+import { useReveal } from '../useReveal'
 
 const INK = '#1A2A4F'
 const FONT_TITLE = 'Fredoka, Nunito, sans-serif'
@@ -293,6 +294,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
   const [sheet, setSheet] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   useEffect(() => { track('landing_view', { once: true }) }, [])
+  useReveal([lang])
 
   const tryNow = () => (guest ? onResumeGuest() : setSheet(true))
   const tryLabel = guest ? T.cont.replace('{name}', guest.name) : T.try
@@ -308,6 +310,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
 
       {/* ── Heros ── */}
       <section className="home-sky" style={{ padding: '14px 16px 50px', position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden className="plane" style={{ top: 140 }}>✈️</div>
         <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 90, left: '6%', fontSize: 56, opacity: 0.9 }}>☁️</div>
         <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 260, right: '4%', fontSize: 46, opacity: 0.8, animationDelay: '-4s' }}>☁️</div>
         <div className="lp-wrap" style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'relative', zIndex: 2 }}>
@@ -321,11 +324,11 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
 
         <div className="lp-wrap lp-hero" style={{ position: 'relative', zIndex: 2 }}>
-          <div className="lp-hero-text">
+          <div className="lp-hero-text screen-enter">
             <h1 className="lp-h1" style={{ fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 40, lineHeight: 1.08, margin: '28px 0 14px', color: INK }}>{T.h1}</h1>
             <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.55, margin: '0 0 24px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
-              <button className="btn-kid soft" onClick={tryNow} style={primary}>{tryLabel}</button>
+              <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
               <button className="btn-kid soft" onClick={onSignup} style={secondary}>{T.signup}</button>
             </div>
             <div style={{ fontSize: 13, fontWeight: 800, color: '#607D8B', marginTop: 12 }}>{T.try_note}</div>
@@ -341,7 +344,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
 
       {/* ── Histoire du createur ── */}
       <section style={{ padding: '56px 16px' }}>
-        <div className="lp-wrap" style={{ maxWidth: 780 }}>
+        <div className="lp-wrap reveal" style={{ maxWidth: 780 }}>
           <div style={{ background: 'white', borderRadius: 32, padding: '30px 26px', boxShadow: '0 14px 40px rgba(26,42,79,0.08)', position: 'relative' }}>
             <div style={{ fontSize: 13, fontWeight: 900, color: '#FF6F00', letterSpacing: 1, textTransform: 'uppercase' }}>{T.story_kicker}</div>
             <div style={{ fontFamily: FONT_TITLE, fontSize: 34, fontWeight: 700, color: '#1E88E5', margin: '6px 0 14px', lineHeight: 1.15 }}>{T.story_q}</div>
@@ -357,8 +360,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
       {/* ── Comment ca marche ── */}
       <section style={{ padding: '10px 16px 56px' }}>
         <div className="lp-wrap">
-          <h2 style={h2}>{T.how_title}</h2>
-          <div className="lp-grid3">
+          <h2 className="reveal" style={h2}>{T.how_title}</h2>
+          <div className="lp-grid3 reveal-stagger">
             {T.how.map(([icon, title, text], i) => (
               <div key={title} style={{ background: 'white', borderRadius: 28, padding: '24px 20px', textAlign: 'center', boxShadow: '0 10px 28px rgba(26,42,79,0.07)', position: 'relative' }}>
                 <div style={{ position: 'absolute', top: 14, left: 16, width: 30, height: 30, borderRadius: '50%', background: '#2E9E5B', color: 'white', fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</div>
@@ -376,7 +379,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         <div className="lp-wrap" style={{ textAlign: 'center' }}>
           <h2 style={{ ...h2, marginBottom: 6 }}>{T.countries_title}</h2>
           <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 22 }}>{T.countries_sub}</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
+          <div className="reveal-stagger" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
             {allFlags.slice(0, 24).map((code) => (
               <div key={code} title={COUNTRIES[code].name} style={{ background: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
                 <div style={{ fontSize: 34, lineHeight: 1.1 }}>{COUNTRIES[code].flag}</div>
@@ -393,8 +396,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
       {/* ── Fonctionnalites ── */}
       <section style={{ padding: '56px 16px' }}>
         <div className="lp-wrap">
-          <h2 style={h2}>{T.feat_title}</h2>
-          <div className="lp-grid3">
+          <h2 className="reveal" style={h2}>{T.feat_title}</h2>
+          <div className="lp-grid3 reveal-stagger">
             {T.feats.map(([icon, title, text]) => (
               <div key={title} style={{ display: 'flex', gap: 14, background: 'white', borderRadius: 24, padding: '18px 18px', boxShadow: '0 8px 22px rgba(26,42,79,0.06)' }}>
                 <div style={{ fontSize: 30, width: 54, height: 54, borderRadius: 18, background: '#E8F8EA', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{icon}</div>
@@ -411,8 +414,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
       {/* ── Prix ── */}
       <section className="home-sky" style={{ padding: '56px 16px' }}>
         <div className="lp-wrap" style={{ maxWidth: 860 }}>
-          <h2 style={h2}>{T.price_title}</h2>
-          <div className="lp-grid2">
+          <h2 className="reveal" style={h2}>{T.price_title}</h2>
+          <div className="lp-grid2 reveal-stagger">
             <div style={{ background: 'white', borderRadius: 30, padding: '26px 22px', boxShadow: '0 10px 28px rgba(26,42,79,0.08)', display: 'flex', flexDirection: 'column' }}>
               <div style={{ fontSize: 18, fontWeight: 900, color: '#2E9E5B' }}>🎁 {T.free_name}</div>
               <div style={{ fontFamily: FONT_TITLE, fontSize: 46, fontWeight: 700, margin: '6px 0 12px' }}>0 €</div>
@@ -436,7 +439,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
       {/* ── FAQ ── */}
       <section style={{ padding: '56px 16px' }}>
         <div className="lp-wrap" style={{ maxWidth: 780 }}>
-          <h2 style={h2}>{T.faq_title}</h2>
+          <h2 className="reveal" style={h2}>{T.faq_title}</h2>
           {T.faq.map(([q, a], i) => (
             <div key={q} style={{ background: 'white', borderRadius: 20, marginBottom: 10, boxShadow: '0 4px 14px rgba(26,42,79,0.06)', overflow: 'hidden' }}>
               <button onClick={() => setOpenFaq(openFaq === i ? -1 : i)} aria-expanded={openFaq === i}
