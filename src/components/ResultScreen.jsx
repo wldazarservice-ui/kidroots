@@ -7,7 +7,7 @@ export default function ResultScreen({ chapter: chRaw, country: c, score, hasNex
   const xp = ch.cards.length * 20 + ch.quiz.length * 30
 
   return (
-    <div className="green-bg" style={{ minHeight: '100vh', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}>
+    <div className="green-bg screen-narrow" style={{ minHeight: '100vh', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ fontSize: 90, marginBottom: 12 }}>
         {pct === 100 ? '🏆' : pct >= 66 ? '⭐' : '📚'}
       </div>

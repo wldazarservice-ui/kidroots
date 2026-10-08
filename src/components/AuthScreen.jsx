@@ -1,3 +1,4 @@
+import LegalFooter from './LegalFooter'
 import { useState } from 'react'
 import { signIn, signUp, googleSignIn } from '../auth'
 
@@ -105,6 +106,7 @@ export default function AuthScreen() {
           Aucune publicité. Aucune donnée revendue.
         </div>
       </div>
+      <LegalFooter />
     </div>
   )
 }

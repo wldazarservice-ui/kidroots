@@ -19,7 +19,7 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
   }
 
   if (idx >= ch.cards.length) return (
-    <div className="green-bg" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, textAlign: 'center', fontFamily: 'Nunito, sans-serif' }}>
+    <div className="green-bg screen-narrow" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 24, textAlign: 'center', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ fontSize: 80, marginBottom: 16 }} className="float">🏆</div>
       <div style={{ fontSize: 26, fontWeight: 900, color: ch.color, marginBottom: 8 }}>{t(lang, 'docs_done')}</div>
       <div style={{ fontSize: 15, color: '#555', fontWeight: 700, marginBottom: 32 }}>{t(lang, 'docs_done_sub')}</div>
@@ -32,7 +32,7 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
 
   const card = ch.cards[idx]
   return (
-    <div className="green-bg" style={{ minHeight: '100vh', padding: '18px 16px', fontFamily: 'Nunito, sans-serif' }}>
+    <div className="green-bg screen-narrow" style={{ minHeight: '100vh', padding: '18px 16px', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
         <div style={{ fontSize: 13, fontWeight: 900, color: ch.color, whiteSpace: 'nowrap', marginRight: 12 }}>{c.flag} {idx + 1} / {ch.cards.length}</div>
         <div style={{ display: 'flex', gap: 4, flex: 1, justifyContent: 'flex-end' }}>

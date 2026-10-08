@@ -29,6 +29,8 @@ import LevelPicker from './components/LevelPicker'
 import Paywall from './components/Paywall'
 import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
+import { useUsageTracker, trackCountryVisit } from './stats'
+import ParentStats from './components/ParentStats'
 import { isCountryLocked, confirmCheckout, PAYWALL_ENABLED } from './premium'
 
 function Spinner({ msg = 'Chargement...' }) {
@@ -65,8 +67,11 @@ export default function App() {
   const [devicesOpen, setDevicesOpen] = useState(false)
   const [userReload, setUserReload] = useState(0)
   const [toast, setToast] = useState(null)
+  const [statsOpen, setStatsOpen] = useState(false)
 
   const difficulty = activeChild?.difficulty || 'explorer'
+  const inCountry = screen === 'country' || screen === 'chapter' || screen === 'result'
+  useUsageTracker(user?.uid, activeChild?.id, inCountry ? countryCode : null)
   const needsExpert = difficulty === 'expert' && countryCode && hasExpert(countryCode)
   const expertReady = !needsExpert || expert.code === countryCode
 
@@ -228,6 +233,7 @@ export default function App() {
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
     goCountry: (code) => {
       if (isCountryLocked(code, premium)) { setPaywallOpen(true); return }
+      if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
       setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
     goBack: () => {
       if (screen === 'country') setScreen('regions')
@@ -281,6 +287,7 @@ export default function App() {
     return (
       <>
       {devicesOpen && <DevicesManager user={user} onClose={() => setDevicesOpen(false)} />}
+      {statsOpen && <ParentStats user={user} lang={lang} onClose={() => setStatsOpen(false)} />}
       <ChildPickerScreen
         user={user}
         kids={kids}
@@ -289,6 +296,7 @@ export default function App() {
         hasLegacy={!!legacyToMigrate}
         lang={lang}
         onManageDevices={() => setDevicesOpen(true)}
+        onOpenStats={() => setStatsOpen(true)}
         onMigrate={() => { /* noop : legacy already loaded, will be applied at create */ }}
       />
       </>

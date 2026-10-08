@@ -11,7 +11,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
   const r = REGIONS[regionKey] || REGIONS.africa
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(180deg, ${r.bg} 0%, #FFFFFF 70%)`, fontFamily: 'Nunito, sans-serif', padding: '14px 16px 32px', transition: 'background 0.4s' }}>
+    <div className="screen-wide" style={{ minHeight: '100vh', background: `linear-gradient(180deg, ${r.bg} 0%, #FFFFFF 70%)`, fontFamily: 'Nunito, sans-serif', padding: '14px 16px 32px', transition: 'background 0.4s' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
         <button className="btn-kid" onClick={nav.goHome}
           style={{ background: 'white', color: INK, padding: '8px 14px', minHeight: 38, fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
@@ -53,7 +53,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
       </div>
 
       {/* Pays */}
-      <div key={`grid-${regionKey}`} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div key={`grid-${regionKey}`} className="country-grid">
         {r.countries.map((code, i) => {
           const c = COUNTRIES[code]
           const doneCount = c.chapters.filter(ch => isDone(progress, ch.id, difficulty)).length

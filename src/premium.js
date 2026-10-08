@@ -21,8 +21,8 @@ async function call(path, user, body) {
 }
 
 // Ouvre la page de paiement Stripe
-export async function startCheckout(user) {
-  const data = await call('/api/create-checkout', user)
+export async function startCheckout(user, { waiver } = {}) {
+  const data = await call('/api/create-checkout', user, { waiver: waiver === true })
   if (data.alreadyPremium) return { alreadyPremium: true }
   window.location.assign(data.url)
   return { redirected: true }

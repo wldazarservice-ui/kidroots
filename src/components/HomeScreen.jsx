@@ -4,6 +4,7 @@ import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
 import { signOut } from '../auth'
+import LegalFooter from './LegalFooter'
 import { LEVELS, isDone, countryStats } from '../levels'
 
 const INK = '#1A2A4F'
@@ -22,7 +23,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
   const countryDone = (code) => COUNTRIES[code]?.chapters.every(ch => isDone(progress, ch.id, difficulty))
 
   return (
-    <div className="home-sky" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', position: 'relative', overflow: 'hidden' }}>
+    <div className="home-sky screen-wide" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', position: 'relative', overflow: 'hidden' }}>
       {/* Decor */}
       <div aria-hidden style={{ position: 'absolute', top: 70, left: -10, fontSize: 54, opacity: 0.9 }} className="drift">☁️</div>
       <div aria-hidden style={{ position: 'absolute', top: 190, right: -14, fontSize: 44, opacity: 0.8, animationDelay: '-4s' }} className="drift">☁️</div>
@@ -108,7 +109,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         </div>
 
         {/* Continents */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 22 }}>
+        <div className="continent-grid" style={{ marginBottom: 22 }}>
           {Object.entries(REGIONS).map(([key, r], i) => {
             const started = r.countries.filter(countryStarted).length
             const done = r.countries.filter(countryDone).length
@@ -140,6 +141,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           {t(lang, 'play')}
         </button>
       </div>
+      <LegalFooter lang={lang} />
     </div>
   )
 }

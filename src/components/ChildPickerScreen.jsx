@@ -8,7 +8,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -41,7 +41,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   }
 
   return (
-    <div className="home-sky" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '18px 16px 28px' }}>
+    <div className="home-sky screen-narrow" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '18px 16px 28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
         <div>
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
@@ -112,6 +112,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             <button className="btn-kid" onClick={() => setCreating(true)}
               style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
               ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {MAX_CHILDREN})</span>
+            </button>
+          )}
+          {onOpenStats && kids.length > 0 && (
+            <button className="btn-kid" onClick={onOpenStats}
+              style={{ width: '100%', marginTop: 12, background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
+              📊 {t(lang, 'ps_open')}
             </button>
           )}
           {onManageDevices && (

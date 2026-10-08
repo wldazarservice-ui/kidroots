@@ -2,12 +2,12 @@
 // - Installation : met en cache la page, le manifest et tous les assets Vite references par index.html
 // - Navigation : reseau d'abord, repli sur la page en cache si hors-ligne
 // - /assets/* (fichiers hashes) : cache d'abord
-// - Autres ressources meme origine + Google Fonts : cache puis mise a jour en arriere-plan
+// - Autres ressources meme origine : cache puis mise a jour en arriere-plan
 // Les requetes Firebase / traduction (autres origines) ne sont jamais interceptees.
 
-const CACHE = 'kidroots-v2'
+const CACHE = 'mokalibo-v4'
 const SHELL = ['/', '/index.html', '/manifest.json', '/favicon.svg', '/icon-192.png', '/icon-512.png']
-const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com']
+const FONT_HOSTS = [] // polices auto-hebergees
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
@@ -33,14 +33,20 @@ self.addEventListener('activate', (event) => {
   })())
 })
 
+// Pages statiques (mentions legales...) : mises en cache sous leur propre adresse,
+// pour ne jamais remplacer la page de l'app.
+const isAppPage = (url) => url.pathname === '/' || url.pathname === '/index.html'
+
 async function networkFirst(request) {
   const cache = await caches.open(CACHE)
+  const url = new URL(request.url)
+  const key = isAppPage(url) ? '/' : url.pathname
   try {
     const res = await fetch(request)
-    if (res.ok) cache.put('/', res.clone())
+    if (res.ok && !res.redirected) cache.put(key, res.clone())
     return res
   } catch (e) {
-    return (await cache.match('/')) || (await cache.match('/index.html')) || Response.error()
+    return (await cache.match(key)) || (await cache.match('/')) || (await cache.match('/index.html')) || Response.error()
   }
 }
 

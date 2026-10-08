@@ -95,10 +95,10 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
     </div>
   )
 
-  if (!onClose) return <div className="green-bg" style={{ minHeight: '100vh' }}>{body}</div>
+  if (!onClose) return <div className="green-bg screen-narrow" style={{ minHeight: '100vh' }}>{body}</div>
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-      <div onClick={(e) => e.stopPropagation()} className="anim-slide-up green-bg"
+    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+      <div onClick={(e) => e.stopPropagation()} className="anim-slide-up green-bg sheet"
         style={{ width: '100%', maxWidth: 420, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0' }}>
         {body}
       </div>

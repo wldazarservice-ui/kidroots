@@ -9,19 +9,14 @@
 
 body {
   font-family: 'Nunito', Arial, sans-serif;
-  background: #F0F4FF;
+  background: #F7FDF6;
   min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  margin: 0;
 }
 
 #root {
   width: 100%;
-  max-width: 420px;
   min-height: 100vh;
-  background: white;
-  box-shadow: 0 0 40px rgba(0,0,0,0.1);
 }
 
 @keyframes bounce {
@@ -193,4 +188,32 @@ body {
   background:
     radial-gradient(circle at 90% 4%, #FFF59D 0, rgba(255,245,157,0) 28%),
     linear-gradient(180deg, #CDEFD6 0%, #E8F8EA 40%, #F7FDF6 100%);
+}
+
+
+/* ── Tablette & ordinateur ────────────────────────────── */
+/* Les ecrans gardent leur fond sur toute la largeur ; leur contenu est centre. */
+.screen-narrow > *:not([aria-hidden]) { max-width: 680px; margin-left: auto; margin-right: auto; }
+.screen-mid > *:not([aria-hidden])    { max-width: 860px; margin-left: auto; margin-right: auto; }
+.screen-wide > *:not([aria-hidden])   { max-width: 1120px; margin-left: auto; margin-right: auto; }
+
+.continent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.country-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stats-grid     { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+@media (min-width: 700px) {
+  .country-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .stats-grid   { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 960px) {
+  .continent-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .country-grid   { grid-template-columns: repeat(4, 1fr); }
+  .home-hero-row  { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; align-items: center; }
+}
+
+/* Fenetres (paywall, niveau, appareils) : panneau du bas sur mobile, fenetre centree sur grand ecran */
+@media (min-width: 700px) {
+  .sheet-backdrop { align-items: center !important; padding: 24px; }
+  .sheet { border-radius: 28px !important; max-width: 480px !important; }
+  .sheet.sheet-wide { max-width: 760px !important; }
 }

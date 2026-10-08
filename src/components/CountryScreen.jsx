@@ -23,7 +23,7 @@ export default function CountryScreen({ country: cRaw, lang, changeLang, progres
   const nQuiz = c.chapters.reduce((a, ch) => a + ch.nQuiz, 0)
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(180deg, ${c.bg} 0%, #FFFFFF 75%)`, fontFamily: 'Nunito, sans-serif' }}>
+    <div className="screen-mid" style={{ minHeight: '100vh', background: `linear-gradient(180deg, ${c.bg} 0%, #FFFFFF 75%)`, fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ padding: '14px 16px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
         <button className="btn-kid" onClick={nav.goRegions}
           style={{ background: 'white', color: INK, padding: '8px 14px', minHeight: 38, fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>{t(lang, 'back')}</button>

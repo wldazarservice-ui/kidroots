@@ -82,11 +82,11 @@ export default function LevelPicker({ lang, value, age, childName, onPick, onClo
   )
 
   if (!onClose) {
-    return <div className="home-sky" style={{ minHeight: '100vh' }}>{body}</div>
+    return <div className="home-sky screen-narrow" style={{ minHeight: '100vh' }}>{body}</div>
   }
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.45)', zIndex: 500, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-      <div onClick={e => e.stopPropagation()} className="anim-slide-up"
+    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.45)', zIndex: 500, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+      <div onClick={e => e.stopPropagation()} className="anim-slide-up sheet"
         style={{ background: 'linear-gradient(180deg,#E3F4FF,#FFF8E7)', width: '100%', maxWidth: 420, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0' }}>
         {body}
       </div>

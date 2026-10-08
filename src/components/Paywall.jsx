@@ -8,13 +8,14 @@ const INK = '#1A2A4F'
 // Ecran de deblocage (2 € a vie). Etape 1 : controle parental. Etape 2 : paiement Stripe.
 export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
   const [step, setStep] = useState('gate') // 'gate' | 'pay'
+  const [waiver, setWaiver] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
   const pay = async () => {
     setBusy(true); setError('')
     try {
-      const r = await startCheckout(user)
+      const r = await startCheckout(user, { waiver })
       if (r.alreadyPremium) onAlreadyPremium?.()
     } catch (e) {
       console.error('Checkout error:', e)
@@ -27,8 +28,8 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
   const icons = ['🌍', '📚', '👨‍👩‍👧‍👦', '🚫']
 
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-      <div onClick={e => e.stopPropagation()} className="anim-slide-up green-bg"
+    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+      <div onClick={e => e.stopPropagation()} className="anim-slide-up green-bg sheet"
         style={{ width: '100%', maxWidth: 420, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button className="btn-kid" onClick={onClose} aria-label="Fermer"
@@ -60,12 +61,25 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
             question={(a, b) => t(lang, 'pw_gate_q', { a, b })} okLabel={t(lang, 'pw_gate_ok')} errorLabel={t(lang, 'pw_gate_err')} />
         ) : (
           <>
-            <button className="btn-kid" onClick={pay} disabled={busy}
-              style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '18px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #1F7A43', opacity: busy ? 0.7 : 1 }}>
+            <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', background: 'white', borderRadius: 16, padding: '12px 12px', marginBottom: 12, cursor: 'pointer', border: `3px solid ${waiver ? '#2E9E5B' : '#E3EAF2'}` }}>
+              <input type="checkbox" checked={waiver} onChange={(e) => setWaiver(e.target.checked)}
+                style={{ width: 22, height: 22, marginTop: 2, accentColor: '#2E9E5B', flexShrink: 0 }} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.5 }}>
+                {t(lang, 'pw_waiver')}{' '}
+                <a href="/agb" target="_blank" rel="noopener" style={{ color: '#2E7D4F', fontWeight: 900 }}>{t(lang, 'legal_terms')}</a>
+              </span>
+            </label>
+            <button className="btn-kid" onClick={pay} disabled={busy || !waiver}
+              style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '18px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #1F7A43', opacity: busy || !waiver ? 0.55 : 1 }}>
               {busy ? t(lang, 'pw_wait') : t(lang, 'pw_pay', { price: PRICE_LABEL })}
             </button>
             {error && <div style={{ marginTop: 10, fontSize: 14, fontWeight: 800, color: '#C62828', textAlign: 'center' }}>{error}</div>}
             <div style={{ marginTop: 10, fontSize: 12, fontWeight: 800, color: '#6B8F77', textAlign: 'center' }}>{t(lang, 'pw_secure')}</div>
+            <div style={{ marginTop: 6, fontSize: 11, fontWeight: 700, color: '#8DB39A', textAlign: 'center' }}>
+              <a href="/agb" target="_blank" rel="noopener" style={{ color: 'inherit' }}>{t(lang, 'legal_terms')}</a>{' · '}
+              <a href="/datenschutz" target="_blank" rel="noopener" style={{ color: 'inherit' }}>{t(lang, 'legal_privacy')}</a>{' · '}
+              <a href="/impressum" target="_blank" rel="noopener" style={{ color: 'inherit' }}>{t(lang, 'legal_impressum')}</a>
+            </div>
           </>
         )}
 

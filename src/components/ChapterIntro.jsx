@@ -10,7 +10,7 @@ export default function ChapterIntro({ chapter: chRaw, country: cRaw, lang, chan
   const c = useTranslatedObj(cRaw, lang)
   const xp = ch.cards.length * 20 + ch.quiz.length * 30
   return (
-    <div className="green-bg" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif' }}>
+    <div className="green-bg screen-narrow" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ padding: '14px 16px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
         <button className="btn-kid" onClick={nav.goBack}
           style={{ background: 'white', color: INK, padding: '8px 14px', minHeight: 38, fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>{t(lang, 'back')}</button>
