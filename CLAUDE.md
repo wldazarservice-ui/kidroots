@@ -81,3 +81,11 @@ Ameriques : BR (Bresil), MX (Mexique)
 - GitHub repo : wldazarservice-ui/kidroots (a creer)
 - Netlify : connecter le repo, build command: npm run build, publish: dist
 - PWA : manifest.json deja configure dans public/
+
+## Paiement (2 € a vie par compte parent)
+- Gratuit : le Mali (`FREE_COUNTRIES` dans `src/premium.js`). Le reste se debloque avec un paiement unique Stripe.
+- Interrupteur : `VITE_PAYWALL_ENABLED=true` dans Netlify (variable de build : redeployer apres changement). Desactive = tout gratuit.
+- Fonctions Netlify : `netlify/functions/` (create-checkout, confirm-checkout, stripe-webhook), helper commun `netlify/lib/shared.mjs`.
+- Le flag `premium` est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).
+- Variables Netlify requises : voir `.env.example`. Garder `firebase-admin` en v13 (v14 plante sur Netlify : jose ESM).
+- Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).
