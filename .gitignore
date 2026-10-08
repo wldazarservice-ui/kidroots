@@ -31,3 +31,4 @@ pnpm-debug.log*
 
 marketing/video/out/
 marketing/video/node_modules/
+marketing/video/shots/

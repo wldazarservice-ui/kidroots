@@ -8,7 +8,7 @@ const lang = process.argv[2] || 'fr'
 const seconds = Number(process.argv[3] || 60)
 const FPS = 30
 const dir = path.dirname(new URL(import.meta.url).pathname)
-const out = path.join(dir, 'out', `mokalibo_${lang}${seconds < 60 ? '_test' : ''}.mp4`)
+const out = path.join(dir, 'out', `${process.env.NAME || 'mokalibo'}_${lang}${seconds < 60 ? '_test' : ''}.mp4`)
 
 const browser = await puppeteer.launch({
   executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -17,13 +17,13 @@ const browser = await puppeteer.launch({
 })
 const page = await browser.newPage()
 await page.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 1 })
-await page.goto(`file://${dir}/scene.html?lang=${lang}`, { waitUntil: 'networkidle0' })
-await page.evaluate(() => window.fontsReady())
+await page.goto(`file://${dir}/${process.env.PAGE || "scene.html"}?lang=${lang}`, { waitUntil: 'networkidle0' })
+await page.evaluate(() => (window.ready || window.fontsReady)())
 
 const ff = spawn('ffmpeg', [
   '-hide_banner', '-loglevel', 'error', '-y',
   '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
-  '-i', path.join(dir, 'out', 'music.wav'),
+  '-i', path.join(dir, 'out', process.env.MUSIC || 'music.wav'),
   '-map', '0:v', '-map', '1:a', '-shortest',
   '-c:v', 'libx264', '-preset', 'medium', '-crf', '20', '-pix_fmt', 'yuv420p', '-r', String(FPS),
   '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', out,
