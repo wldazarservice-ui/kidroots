@@ -16,3 +16,10 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["firebase-admin"]
+
+# Ancienne adresse -> domaine officiel
+[[redirects]]
+  from = "https://kidroots.netlify.app/*"
+  to = "https://mokalibo.com/:splat"
+  status = 301
+  force = true

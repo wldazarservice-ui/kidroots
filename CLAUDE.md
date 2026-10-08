@@ -80,6 +80,8 @@ Ameriques : BR (Bresil), MX (Mexique)
 ## Deploy
 - GitHub repo : wldazarservice-ui/kidroots (a creer)
 - Netlify : connecter le repo, build command: npm run build, publish: dist
+- Domaine officiel : https://mokalibo.com (achete sur Netlify, www et kidroots.netlify.app redirigent dessus)
+- Webhook Stripe : https://mokalibo.com/api/stripe-webhook
 - PWA : manifest.json deja configure dans public/
 
 ## Paiement (2 € a vie par compte parent)
