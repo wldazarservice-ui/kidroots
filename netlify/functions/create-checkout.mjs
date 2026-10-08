@@ -1,5 +1,5 @@
 // Cree une session de paiement Stripe (2 € a vie) pour le compte parent connecte
-import { stripe, verifyUser, db, json, PRICE_CENTS } from './_shared.mjs'
+import { stripe, verifyUser, db, json, PRICE_CENTS } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })

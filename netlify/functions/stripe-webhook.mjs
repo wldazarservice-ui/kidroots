@@ -1,5 +1,5 @@
 // Notification Stripe (source de verite) : debloque le compte quand le paiement est encaisse
-import { stripe, grantPremium, json } from './_shared.mjs'
+import { stripe, grantPremium, json } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })

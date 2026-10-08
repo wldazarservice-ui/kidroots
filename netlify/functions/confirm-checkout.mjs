@@ -1,5 +1,5 @@
 // Au retour de Stripe : verifie la session et debloque le compte sans attendre le webhook
-import { stripe, verifyUser, grantPremium, json } from './_shared.mjs'
+import { stripe, verifyUser, grantPremium, json } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
