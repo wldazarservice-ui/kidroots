@@ -1,0 +1,113 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@700;800;900&family=Noto+Color+Emoji&display=block" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+body{font-family:Nunito,'Noto Color Emoji',sans-serif;color:#1A2A4F;position:relative;-webkit-font-smoothing:antialiased}
+.e{font-family:'Noto Color Emoji';line-height:1;display:inline-block}
+.abs{position:absolute}
+.bg{position:absolute;inset:0}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.title{font-family:Fredoka,sans-serif;font-weight:700;line-height:1.05;letter-spacing:-1px}
+.hi{color:#fff;background:#FF6F00;border-radius:.2em;padding:0 .15em}
+.kicker{display:inline-block;font-weight:900;font-size:34px;letter-spacing:2px;text-transform:uppercase;padding:12px 26px;border-radius:999px;background:#1A2A4F;color:#fff}
+.card{background:#fff;border-radius:48px;box-shadow:0 24px 60px rgba(16,30,70,.16)}
+.phone{position:absolute;width:420px;height:909px;border-radius:66px;background:#111318;box-shadow:inset 0 0 0 2px #3A3F4A,inset 0 0 0 8px #050608,0 40px 80px rgba(16,24,48,.35)}
+.phone .scr{position:absolute;left:16px;top:16px;right:16px;bottom:16px;border-radius:52px;overflow:hidden;background:#FFF8EC}
+.phone .scr img{width:100%;display:block}
+.phone .isl{position:absolute;left:50%;top:30px;width:120px;height:34px;margin-left:-60px;border-radius:20px;background:#000}
+.footer{position:absolute;left:0;right:0;bottom:48px;display:flex;align-items:center;justify-content:center;gap:18px}
+.logo{font-family:Fredoka;font-weight:700;font-size:56px;background:#fff;border-radius:999px;padding:6px 34px 10px;box-shadow:0 10px 26px rgba(0,0,0,.12)}
+.url{font-weight:900;font-size:34px;color:#1A2A4F;background:rgba(255,255,255,.85);border-radius:999px;padding:12px 26px}
+.li{display:flex;align-items:center;gap:18px;font-size:36px;font-weight:900;margin:20px 0;line-height:1.2}
+.li .e{font-size:50px;flex-shrink:0}
+.opt{display:flex;align-items:center;gap:26px;font-family:Fredoka;font-weight:700;font-size:58px;padding:30px 40px;margin:22px 0}
+</style></head>
+<body><div id="root"></div>
+<script>
+const P = [
+ // 1 Lancement
+ {bg:['#FFE082','#FFB74D','#FFF3E0'], kind:'phone', shot:'home', kicker:'Nouveau', title:'L’histoire du monde, <span class="hi">racontée</span> aux enfants', items:[['📖','Histoires vraies'],['🔊','Lues à voix haute'],['🎯','Quiz et jeux']]},
+ // 2 Origine
+ {bg:['#1E3A8A','#3949AB','#0B1E4A'], dark:true, kind:'quote', emoji:'🌍', title:'« Papa, c’est où le <span class="hi">Mali</span> ? »', text:'Une question de mon fils. Aucune app ne racontait l’histoire de tous les pays aux enfants. Alors j’ai créé Mokalibo.', sign:'Walid, papa et créateur'},
+ // 3 Fait : Mansa Moussa
+ {bg:['#FFD54F','#FF8A65','#FFF8E1'], kind:'fact', kicker:'Le savais-tu ?', emoji:'👑', flag:'🇲🇱', title:'Le roi souvent dit le plus riche de l’histoire était malien', text:'Mansa Moussa, empereur du Mali, avait tant d’or que lors de son voyage à La Mecque, en 1324, il en a distribué partout sur son passage !'},
+ // 4 Niveaux
+ {bg:['#81D4FA','#CE93D8','#E3F2FD'], kind:'phone', shot:'levels', kicker:'De 4 à 12 ans', title:'<span class="hi">3 niveaux</span> de lecture', items:[['🐣','Petit explorateur · 4-5 ans'],['🦊','Explorateur · 6-7 ans'],['🦉','Grand explorateur · 8-12 ans']]},
+ // 5 Fait : Vatican
+ {bg:['#FFF59D','#FFCC80','#FFFDE7'], kind:'fact', kicker:'Le savais-tu ?', emoji:'⛪', flag:'🇻🇦', title:'Le plus petit pays du monde tient dans une ville', text:'Le Vatican est entièrement dans Rome. On peut le traverser à pied en une vingtaine de minutes !'},
+ // 6 Quiz
+ {bg:['#B39DDB','#80DEEA','#EDE7F6'], kind:'phone', shot:'quiz_ok', kicker:'Apprendre en jouant', title:'Un <span class="hi">quiz</span> à chaque chapitre', items:[['✅','3 questions par chapitre'],['⭐','Des étoiles et de l’XP'],['🔓','Le chapitre suivant se débloque']]},
+ // 7 Question (engagement)
+ {bg:['#80CBC4','#4FC3F7','#E0F7FA'], kind:'question', kicker:'Quiz du jour', title:'Quel pays fête le Nouvel An en premier ?', opts:[['🅰️','Kiribati'],['🅱️','Le Japon'],['🅲️','La Nouvelle-Zélande']], note:'Réponds en commentaire 👇'},
+ // 8 Passeport
+ {bg:['#9FA8DA','#80DEEA','#E8EAF6'], kind:'phone', shot:'passport', kicker:'Collectionne', title:'Remplis ton <span class="hi">passeport</span>', items:[['🛂','Un tampon par pays terminé'],['🏅','18 badges à gagner'],['🗺️','La carte se colore']]},
+ // 9 Fait : Uruguay
+ {bg:['#90CAF9','#A5D6A7','#E3F2FD'], kind:'fact', kicker:'Le savais-tu ?', emoji:'⚽', flag:'🇺🇾', title:'La 1re Coupe du monde a été gagnée par l’Uruguay', text:'En 1930, l’Uruguay a organisé et gagné la toute première Coupe du monde de football, à Montevideo.'},
+ // 10 Carte et jeux
+ {bg:['#FFAB91','#FFE082','#FFF3E0'], kind:'phone', shot:'games', kicker:'Des jeux malins', title:'Carte du monde et <span class="hi">jeux</span>', items:[['🧭','Chasse au trésor sur la carte'],['🧩','Memory des drapeaux'],['🦁','Animaux et monuments']]},
+ // 11 Parents
+ {bg:['#A5D6A7','#90CAF9','#F1F8E9'], kind:'list', kicker:'Pour les parents', title:'Pensé pour <span class="hi">vous</span> aussi', items:[['🚫','Aucune publicité'],['🔒','Aucun traceur, conforme RGPD'],['⏱️','Limite de temps d’écran'],['👨‍👩‍👧‍👦','Jusqu’à 5 enfants'],['📊','Statistiques parents']]},
+ // 12 Fait : moka
+ {bg:['#BCAAA4','#FFCC80','#EFEBE9'], kind:'fact', kicker:'Le savais-tu ?', emoji:'☕', flag:'🇾🇪', title:'Le mot « moka » vient du Yémen', text:'Le café a d’abord été préparé au Yémen. Il partait du port de Mocha vers le monde entier.'},
+ // 13 Une histoire
+ {bg:['#FFCC80','#F48FB1','#FFF3E0'], kind:'phone', shot:'card1_open', kicker:'Des histoires vraies', title:'Des cartes à <span class="hi">découvrir</span>', items:[['📅','Des dates et des personnages'],['💡','Une anecdote à chaque carte'],['🔊','Tout est lu à voix haute']]},
+ // 14 Fait : Mongolie
+ {bg:['#EF9A9A','#FFE082','#FFEBEE'], kind:'fact', kicker:'Le savais-tu ?', emoji:'🐎', flag:'🇲🇳', title:'En Mongolie, il y a plus de chevaux que d’habitants', text:'Les enfants mongols apprennent à monter à cheval dès 3 ou 4 ans. Pendant la fête du Naadam, ils font même des courses !'},
+ // 15 Offre
+ {bg:['#FFD54F','#FF7043','#FFF8E1'], kind:'offer', kicker:'Essai gratuit', title:'Commence le voyage <span class="hi">gratuitement</span>', free:['Tous les pays','2 nouvelles histoires par jour','Sans compte, sans carte bancaire'], plan:'Formule Famille : 3,99 € / mois ou 29,99 € / an · 5 enfants'},
+]
+
+const i = Number(new URLSearchParams(location.search).get('i') || 1) - 1
+const p = P[i]
+const ink = p.dark ? '#FFFFFF' : '#1A2A4F'
+let h = `<div class="bg" style="background:${p.bg[2]}"></div>
+ <div class="blob" style="width:760px;height:760px;left:-200px;top:-160px;background:${p.bg[0]}"></div>
+ <div class="blob" style="width:720px;height:720px;right:-220px;bottom:120px;background:${p.bg[1]}"></div>`
+if (p.dark) h = `<div class="bg" style="background:linear-gradient(180deg,${p.bg[2]},${p.bg[1]})"></div><div class="blob" style="width:700px;height:700px;left:-200px;top:-120px;background:${p.bg[0]}"></div>`
+
+const kicker = p.kicker ? `<div class="kicker" style="${p.dark ? 'background:#FFC400;color:#1A2A4F' : ''}">${p.kicker}</div>` : ''
+
+if (p.kind === 'phone') {
+  h += `<div class="abs" style="left:64px;top:90px;width:500px">${kicker}
+    <div class="title" style="font-size:74px;margin-top:28px;color:${ink}">${p.title}</div>
+    <div style="margin-top:36px">${p.items.map(([e, t]) => `<div class="li"><span class="e">${e}</span><span>${t}</span></div>`).join('')}</div></div>
+    <div class="phone" style="right:44px;top:210px;transform:rotate(4deg) scale(0.94)"><div class="scr"><img src="../video/shots/fr/${p.shot}.png"></div><div class="isl"></div></div>`
+}
+if (p.kind === 'fact') {
+  h += `<div class="abs" style="left:70px;right:70px;top:100px;text-align:center">${kicker}</div>
+    <div class="abs" style="left:50%;top:330px;transform:translate(-50%,-50%)"><div style="position:relative;width:330px;height:330px;border-radius:50%;background:#fff;box-shadow:0 30px 60px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center"><span class="e" style="font-size:200px">${p.emoji}</span><span class="e" style="position:absolute;right:-20px;bottom:10px;font-size:110px">${p.flag}</span></div></div>
+    <div class="abs title" style="left:70px;right:70px;top:540px;text-align:center;font-size:82px">${p.title}</div>
+    <div class="abs card" style="left:90px;right:90px;top:820px;padding:44px 50px;font-size:42px;font-weight:800;line-height:1.4;text-align:center;color:#37474F">${p.text}</div>`
+}
+if (p.kind === 'quote') {
+  h += `<div class="abs" style="left:50%;top:300px;transform:translate(-50%,-50%)"><span class="e" style="font-size:280px">${p.emoji}</span></div>
+    <div class="abs title" style="left:60px;right:60px;top:520px;text-align:center;font-size:104px;color:#fff">${p.title}</div>
+    <div class="abs" style="left:110px;right:110px;top:800px;text-align:center;font-size:44px;font-weight:800;line-height:1.45;color:#C5CAE9">${p.text}</div>
+    <div class="abs" style="left:0;right:0;top:1060px;text-align:center;font-size:38px;font-weight:900;color:#FFC400">— ${p.sign}</div>`
+}
+if (p.kind === 'question') {
+  h += `<div class="abs" style="left:70px;right:70px;top:110px;text-align:center">${kicker}</div>
+    <div class="abs title" style="left:70px;right:70px;top:240px;text-align:center;font-size:92px">${p.title}</div>
+    <div class="abs" style="left:110px;right:110px;top:560px">${p.opts.map(([e, t]) => `<div class="card opt"><span class="e" style="font-size:64px">${e}</span>${t}</div>`).join('')}</div>
+    <div class="abs" style="left:0;right:0;top:1120px;text-align:center;font-size:46px;font-weight:900">${p.note}</div>`
+}
+if (p.kind === 'list') {
+  h += `<div class="abs" style="left:70px;right:70px;top:100px;text-align:center">${kicker}<div class="title" style="font-size:100px;margin-top:30px">${p.title}</div></div>
+    <div class="abs" style="left:110px;right:110px;top:440px">${p.items.map(([e, t]) => `<div class="card" style="display:flex;align-items:center;gap:30px;padding:26px 40px;margin:20px 0;font-size:46px;font-weight:900"><span class="e" style="font-size:66px">${e}</span>${t}<span style="margin-left:auto;width:62px;height:62px;border-radius:50%;background:#2E9E5B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px">✓</span></div>`).join('')}</div>`
+}
+if (p.kind === 'offer') {
+  h += `<div class="abs" style="left:70px;right:70px;top:100px;text-align:center">${kicker}<div class="title" style="font-size:96px;margin-top:30px">${p.title}</div></div>
+    <div class="abs card" style="left:100px;right:100px;top:470px;padding:44px 56px">${p.free.map((t) => `<div style="font-size:48px;font-weight:900;margin:16px 0">✅ ${t}</div>`).join('')}</div>
+    <div class="abs" style="left:100px;right:100px;top:860px;background:linear-gradient(135deg,#FF9A1F,#FF6F00);color:#fff;border-radius:40px;padding:36px 50px;font-size:42px;font-weight:900;line-height:1.35;text-align:center;box-shadow:0 20px 40px rgba(255,111,0,.35)">⭐ ${p.plan}</div>`
+}
+h += `<div class="footer"><span class="logo"><span style="color:#FF7A00">Moka</span><span style="color:#1E88E5">libo</span></span><span class="url">mokalibo.com</span></div>`
+document.getElementById('root').innerHTML = h
+window.ready = async () => {
+  await document.fonts.ready
+  await document.fonts.load('100px "Noto Color Emoji"', document.body.innerText)
+  await Promise.all([...document.images].map((im) => im.decode().catch(() => {})))
+  return true
+}
+</script></body></html>
