@@ -7,8 +7,8 @@ import { getFirestore, FieldValue } from 'firebase-admin/firestore'
 // Formule Famille (5 enfants, 5 appareils) : abonnement mensuel ou annuel.
 // Doit correspondre a PLANS dans src/premium.js
 export const PLANS = {
-  month: { cents: 399, interval: 'month', label: 'Mokalibo Famille — mensuel' },
-  year: { cents: 2999, interval: 'year', label: 'Mokalibo Famille — annuel' },
+  month: { cents: 199, interval: 'month', label: 'Mokalibo Famille — mensuel' },
+  year: { cents: 1499, interval: 'year', label: 'Mokalibo Famille — annuel' },
 }
 
 let stripeClient

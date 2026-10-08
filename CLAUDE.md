@@ -92,7 +92,7 @@ Ameriques : BR (Bresil), MX (Mexique)
 ## Modele economique (freemium + Formule Famille)
 - Gratuit : tous les pays, 2 NOUVEAUX chapitres par jour et par enfant (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
 - Essai sans compte : profil local `kidroots_guest` (`src/guest.js`), progression recopiee dans `kidroots_v3_progress` pour etre transferee a la creation du compte.
-- Formule Famille : abonnement Stripe 3,99 €/mois ou 29,99 €/an (`PLANS` dans `src/premium.js` ET `netlify/lib/shared.mjs`). Anciens achats « a vie » conserves (premium sans subscriptionId).
+- Formule Famille : abonnement Stripe 1,99 €/mois ou 14,99 €/an (`PLANS` dans `src/premium.js` ET `netlify/lib/shared.mjs`). Anciens achats « a vie » conserves (premium sans subscriptionId).
 - Interrupteur : `VITE_PAYWALL_ENABLED=true` dans Netlify (variable de build). Desactive = tout illimite.
 - Fonctions Netlify (`netlify/functions/`) : create-checkout, confirm-checkout, stripe-webhook (checkout.session.completed, customer.subscription.updated/deleted, invoice.paid), billing-portal, cancel-request (Kuendigungsbutton § 312k BGB, page `public/kuendigen.html`), delete-account, track (compteurs anonymes `metrics/AAAA-MM-JJ`), metrics (tableau de bord proprietaire, `OWNER_EMAILS`).
 - Le flag `premium` (et subscriptionId, stripeCustomerId...) est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).

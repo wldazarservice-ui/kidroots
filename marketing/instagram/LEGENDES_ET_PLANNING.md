@@ -189,7 +189,7 @@ Commencez le voyage gratuitement 🚀
 ✅ 2 nouvelles histoires par jour
 ✅ Sans compte, sans carte bancaire
 
-Et pour des aventures illimitées : la Formule Famille à 3,99 €/mois ou 29,99 €/an, pour 5 enfants ⭐
+Et pour des aventures illimitées : la Formule Famille à 1,99 €/mois ou 14,99 €/an, pour 5 enfants ⭐
 
 👉 mokalibo.com (lien dans la bio)
 

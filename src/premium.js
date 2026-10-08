@@ -3,8 +3,8 @@
 // Les montants doivent correspondre a PLANS dans netlify/lib/shared.mjs.
 export const DAILY_FREE_CHAPTERS = 2
 export const PLANS = {
-  month: { cents: 399, label: '3,99 €' },
-  year: { cents: 2999, label: '29,99 €', perMonth: '2,50 €', savePct: 37 },
+  month: { cents: 199, label: '1,99 €' },
+  year: { cents: 1499, label: '14,99 €', perMonth: '1,25 €', savePct: 37 },
 }
 export const PRICE_LABEL = PLANS.month.label
 
