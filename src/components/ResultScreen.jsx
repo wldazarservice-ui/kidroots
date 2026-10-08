@@ -7,11 +7,11 @@ export default function ResultScreen({ chapter: chRaw, country: c, score, hasNex
   const xp = ch.cards.length * 20 + ch.quiz.length * 30
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(160deg,${ch.light},white)`, padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}>
+    <div className="green-bg" style={{ minHeight: '100vh', padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontFamily: 'Nunito, sans-serif' }}>
       <div style={{ fontSize: 90, marginBottom: 12 }}>
         {pct === 100 ? '🏆' : pct >= 66 ? '⭐' : '📚'}
       </div>
-      <div style={{ fontFamily: 'Fredoka One, sans-serif', fontSize: 28, color: ch.color, marginBottom: 6 }}>
+      <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 32, color: ch.color, marginBottom: 6 }}>
         {pct === 100 ? t(lang, 'perfect') : pct >= 66 ? t(lang, 'excellent') : t(lang, 'goodjob')}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', gap: 6, fontSize: 34, margin: '14px 0' }}>
@@ -24,7 +24,7 @@ export default function ResultScreen({ chapter: chRaw, country: c, score, hasNex
         +{xp} {t(lang, 'xp_earned')}
       </div>
 
-      <div style={{ background: 'white', borderRadius: 20, padding: '16px 18px', marginBottom: 24, width: '100%', maxWidth: 320, border: `3px solid ${ch.color}22`, textAlign: 'left' }}>
+      <div style={{ background: 'white', borderRadius: 22, padding: '16px 18px', marginBottom: 24, width: '100%', maxWidth: 340, boxShadow: '0 8px 22px rgba(46,158,91,0.12)', textAlign: 'left' }}>
         <div style={{ fontSize: 12, fontWeight: 900, color: ch.color, marginBottom: 8 }}>{t(lang, 'you_learned')}</div>
         {ch.cards.slice(0, 3).map((card, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
@@ -47,11 +47,11 @@ export default function ResultScreen({ chapter: chRaw, country: c, score, hasNex
           </button>
         )}
         <button className="btn-kid" onClick={nav.goBack}
-          style={{ background: '#f0f0f0', color: '#555', padding: '14px', fontSize: 15 }}>
+          style={{ background: 'white', color: '#2E7D4F', padding: '14px', fontSize: 15, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
           {t(lang, 'see_chapters')}
         </button>
         <button className="btn-kid" onClick={nav.goHome}
-          style={{ background: 'rgba(0,0,0,0.05)', color: '#888', padding: '12px', fontSize: 14 }}>
+          style={{ background: 'rgba(46,158,91,0.12)', color: '#2E7D4F', padding: '12px', fontSize: 14 }}>
           {t(lang, 'home')}
         </button>
       </div>

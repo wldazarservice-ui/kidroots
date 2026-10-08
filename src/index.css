@@ -187,3 +187,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .float, .drift, .spin-slow, .anim-glow, .anim-pulse, .anim-bounce { animation: none !important; }
 }
+
+/* ── Thème vert clair (connexion, chapitres) ──────────── */
+.green-bg {
+  background:
+    radial-gradient(circle at 90% 4%, #FFF59D 0, rgba(255,245,157,0) 28%),
+    linear-gradient(180deg, #CDEFD6 0%, #E8F8EA 40%, #F7FDF6 100%);
+}

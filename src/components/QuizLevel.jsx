@@ -37,13 +37,13 @@ export default function QuizLevel({ chapter: chRaw, country: cRaw, lang, onDone 
   }
 
   if (finished || qi >= ch.quiz.length || !q) return (
-    <div style={{ minHeight:'100vh', background:ch.light, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Nunito,sans-serif' }}>
-      <div style={{ fontSize:40, textAlign:'center', color:ch.color, fontWeight:900 }}>⏳ Calcul des resultats...</div>
+    <div className="green-bg" style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Nunito,sans-serif' }}>
+      <div style={{ fontSize:40, textAlign:'center', color:ch.color, fontWeight:900 }}>⏳</div>
     </div>
   )
 
   return (
-    <div style={{ minHeight:'100vh', background:ch.light, padding:'18px 14px', fontFamily:'Nunito,sans-serif' }}>
+    <div className="green-bg" style={{ minHeight:'100vh', padding:'18px 14px', fontFamily:'Nunito,sans-serif' }}>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
         <div style={{ fontSize:12, fontWeight:900, color:ch.color, whiteSpace:'nowrap' }}>{c.flag} {qi+1} / {ch.quiz.length}</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
