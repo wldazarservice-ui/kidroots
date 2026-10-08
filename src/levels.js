@@ -5,7 +5,8 @@ import { hasExpert } from './data/expert'
 export const LEVELS = {
   mini: {
     emoji: '🐣', ages: '4-5', grad: ['#FFD54F', '#FFA000'], color: '#FF8F00',
-    cardsPerChapter: 3, quizPerChapter: 2,
+    // Version courte : environ 60 % des histoires (au moins 2) et 2 questions par chapitre
+    cards: (n) => Math.max(2, Math.ceil(n * 0.6)), quizPerChapter: 2,
   },
   explorer: {
     emoji: '🦊', ages: '6-7', grad: ['#4FC3F7', '#1E88E5'], color: '#1E88E5',
@@ -31,7 +32,7 @@ export function applyLevel(country, difficulty, expertData) {
     const L = LEVELS.mini
     return {
       ...country,
-      chapters: country.chapters.map(ch => ({ ...ch, cards: ch.cards.slice(0, L.cardsPerChapter), quiz: ch.quiz.slice(0, L.quizPerChapter) })),
+      chapters: country.chapters.map(ch => ({ ...ch, cards: ch.cards.slice(0, L.cards(ch.cards.length)), quiz: ch.quiz.slice(0, L.quizPerChapter) })),
     }
   }
   if (difficulty === 'expert' && expertData) {
@@ -53,7 +54,7 @@ export function countryStats(code, difficulty) {
   const quiz = c.chapters.reduce((a, ch) => a + ch.quiz.length, 0)
   if (difficulty === 'mini') {
     return {
-      stories: c.chapters.reduce((a, ch) => a + Math.min(ch.cards.length, LEVELS.mini.cardsPerChapter), 0),
+      stories: c.chapters.reduce((a, ch) => a + Math.min(ch.cards.length, LEVELS.mini.cards(ch.cards.length)), 0),
       quiz: c.chapters.reduce((a, ch) => a + Math.min(ch.quiz.length, LEVELS.mini.quizPerChapter), 0),
     }
   }
@@ -61,11 +62,10 @@ export function countryStats(code, difficulty) {
   return { stories: cards, quiz }
 }
 
-// Moyenne par pays pour comparer les niveaux
+// Chiffres réels par pays pour comparer les niveaux (moyenne + plus petit / plus grand pays)
 export function levelAverages(difficulty) {
-  const codes = Object.keys(COUNTRIES)
-  const pool = difficulty === 'expert' ? codes.filter(hasExpert) : codes
-  const list = (pool.length ? pool : codes).map(code => countryStats(code, difficulty))
+  const list = Object.keys(COUNTRIES).map(code => countryStats(code, difficulty))
   const avg = (k) => Math.round(list.reduce((a, s) => a + s[k], 0) / list.length)
-  return { stories: avg('stories'), quiz: avg('quiz') }
+  const range = (k) => [Math.min(...list.map(s => s[k])), Math.max(...list.map(s => s[k]))]
+  return { stories: avg('stories'), quiz: avg('quiz'), storiesRange: range('stories'), quizRange: range('quiz') }
 }

@@ -214,7 +214,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
                   <span style={{ fontSize: 30 }}>{L.emoji}</span>
                   <span style={{ flex: 1, minWidth: 0 }}>
                     <span style={{ display: 'block', fontSize: 15, fontWeight: 900, color: INK }}>{t(lang, `lvl_${k}`)} <span style={{ color: '#90A4AE', fontWeight: 800, fontSize: 12 }}>· {L.ages} ans</span></span>
-                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.stories} {t(lang, 'stories_word')} · 🎯 {s.quiz} {t(lang, 'questions_word')} {t(lang, 'per_country')}</span>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.storiesRange[0] === s.storiesRange[1] ? s.stories : `${s.storiesRange[0]}–${s.storiesRange[1]}`} {t(lang, 'stories_word')} · 🎯 {s.quizRange[0] === s.quizRange[1] ? s.quiz : `${s.quizRange[0]}–${s.quizRange[1]}`} {t(lang, 'questions_word')} {t(lang, 'per_country')}</span>
                   </span>
                   <span style={{ width: 22, height: 22, borderRadius: '50%', border: `3px solid ${active ? L.color : '#CFD8DC'}`, background: active ? L.color : 'white', color: 'white', fontSize: 12, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{active ? '✓' : ''}</span>
                 </button>

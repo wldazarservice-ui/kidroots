@@ -51,15 +51,15 @@ export default function LevelPicker({ lang, value, age, childName, onPick, onClo
               </div>
               <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.45, margin: '8px 0 10px', opacity: active ? 0.95 : 0.75 }}>{t(lang, `lvl_${k}_desc`)}</div>
               {[
-                { icon: '📖', n: s.stories, max: maxStories, label: t(lang, 'stories_word') },
-                { icon: '🎯', n: s.quiz, max: maxQuiz, label: t(lang, 'questions_word') },
+                { icon: '📖', n: s.stories, max: maxStories, range: s.storiesRange, label: t(lang, 'stories_word') },
+                { icon: '🎯', n: s.quiz, max: maxQuiz, range: s.quizRange, label: t(lang, 'questions_word') },
               ].map(row => (
                 <div key={row.icon} style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
                   <span style={{ fontSize: 14, width: 18 }}>{row.icon}</span>
                   <div style={{ flex: 1, height: 10, borderRadius: 6, background: active ? 'rgba(255,255,255,0.3)' : '#ECEFF1', overflow: 'hidden' }}>
                     <div style={{ width: `${(row.n / row.max) * 100}%`, height: '100%', borderRadius: 6, background: active ? 'white' : L.color, transition: 'width 0.5s' }} />
                   </div>
-                  <span style={{ fontSize: 12, fontWeight: 900, minWidth: 92, textAlign: 'right' }}>{row.n} {row.label}</span>
+                  <span style={{ fontSize: 12, fontWeight: 900, minWidth: 92, textAlign: 'right' }}>{row.range[0] === row.range[1] ? row.range[0] : `${row.range[0]}–${row.range[1]}`} {row.label}</span>
                 </div>
               ))}
               <div style={{ fontSize: 11, fontWeight: 800, opacity: 0.7, textAlign: 'right', marginTop: 2 }}>{t(lang, 'per_country')}</div>
