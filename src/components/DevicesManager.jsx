@@ -83,7 +83,7 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
       </div>
 
       {!unlocked && devices?.some((d) => d.deviceId !== myId) && (
-        <ParentGate title="Réservé aux parents 👨‍👩‍👧" onPass={() => setUnlocked(true)} />
+        <ParentGate title="Réservé aux parents 🔐" onPass={() => setUnlocked(true)} />
       )}
       {error && <div style={{ marginTop: 10, fontSize: 14, fontWeight: 800, color: '#C62828', textAlign: 'center' }}>{error}</div>}
 

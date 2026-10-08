@@ -25,7 +25,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
   }
 
   const features = ['pw_f1', 'pw_f2', 'pw_f3', 'pw_f4']
-  const icons = ['🌍', '📚', '👨‍👩‍👧‍👦', '🚫']
+  const icons = ['🌍', '📚', '🧒', '🚫']
 
   return (
     <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>

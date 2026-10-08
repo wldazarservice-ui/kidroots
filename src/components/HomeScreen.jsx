@@ -52,24 +52,29 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
       </div>
 
       <div style={{ padding: '8px 18px 32px', position: 'relative', zIndex: 2 }}>
+        <div className="home-hero-row">
         {/* Hero */}
-        <div style={{ textAlign: 'center', marginBottom: 16 }}>
-          <div className="float" style={{ fontSize: 78, lineHeight: 1, margin: '0 0 4px', filter: 'drop-shadow(0 10px 14px rgba(21,101,192,0.25))' }}>🌍</div>
-          <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1, letterSpacing: 0.5 }}>
+        <div className="home-hero" style={{ textAlign: 'center', marginBottom: 16 }}>
+          <div className="float globe" style={{ fontSize: 78, lineHeight: 1, margin: '0 0 4px', filter: 'drop-shadow(0 10px 14px rgba(21,101,192,0.25))' }}>🌍</div>
+          <div>
+          <div className="logo" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1, letterSpacing: 0.5 }}>
             <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
           </div>
           {firstName && (
-            <div style={{ fontSize: 20, fontWeight: 900, color: INK, marginTop: 10 }}>
+            <div className="hello" style={{ fontSize: 20, fontWeight: 900, color: INK, marginTop: 10 }}>
               {t(lang, 'hello', { name: firstName })}
             </div>
           )}
-          <div style={{ fontSize: 15, color: '#546E7A', fontWeight: 700, marginTop: 4 }}>
+          <div className="sub" style={{ fontSize: 15, color: '#546E7A', fontWeight: 700, marginTop: 4 }}>
             {t(lang, 'where_go')}
+          </div>
           </div>
         </div>
 
+        <div className="home-side">
+
         {/* Niveau de lecture */}
-        <button className="btn-kid" onClick={nav.openLevelPicker}
+        <button className="btn-kid soft" onClick={nav.openLevelPicker}
           style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, background: `linear-gradient(150deg, ${L.grad[0]}, ${L.grad[1]})`, color: 'white', borderRadius: 22, padding: '10px 14px', marginBottom: 12, textAlign: 'left', boxShadow: `0 5px 0 ${L.grad[1]}55` }}>
           <span style={{ fontSize: 34 }}>{L.emoji}</span>
           <span style={{ flex: 1, minWidth: 0 }}>
@@ -81,7 +86,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         </button>
 
         {!premium && (
-          <button className="btn-kid" onClick={nav.openPaywall}
+          <button className="btn-kid soft" onClick={nav.openPaywall}
             style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, background: 'white', color: '#1A2A4F', borderRadius: 20, padding: '10px 14px', marginBottom: 12, textAlign: 'left', border: '3px dashed #FF9800' }}>
             <span style={{ fontSize: 26 }}>🔓</span>
             <span style={{ flex: 1, fontSize: 14, fontWeight: 900 }}>{t(lang, 'pw_banner')}</span>
@@ -109,6 +114,9 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           </div>
         </div>
 
+        </div>
+        </div>
+
         {/* Continents */}
         <div className="continent-grid" style={{ marginBottom: 22 }}>
           {Object.entries(REGIONS).map(([key, r], i) => {
@@ -116,14 +124,14 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             const done = r.countries.filter(countryDone).length
             return (
               <div key={key} className="anim-slide-up" style={{ animationDelay: `${i * 70}ms`, opacity: 0 }}>
-              <button className="btn-kid" onClick={() => nav.goRegions(key)}
+              <button className="btn-kid lift continent-card" onClick={() => nav.goRegions(key)}
                 style={{ width: '100%', height: '100%', background: `linear-gradient(150deg, ${r.grad[0]}, ${r.grad[1]})`, padding: '12px 8px', color: 'white', textAlign: 'center', borderRadius: 26, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', boxShadow: `0 8px 0 ${r.grad[1]}55, 0 12px 22px ${r.grad[1]}40`, position: 'relative', overflow: 'hidden' }}>
                 <div aria-hidden style={{ position: 'absolute', top: -18, right: -18, width: 70, height: 70, borderRadius: '50%', background: 'rgba(255,255,255,0.18)' }} />
-                <div className="float" style={{ fontSize: 46, lineHeight: 1.1, animationDelay: `${i * -0.6}s` }}>{r.mascot}</div>
-                <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 21, fontWeight: 600, margin: '6px 0 8px', textShadow: '0 2px 0 rgba(0,0,0,0.12)' }}>
+                <div className="float mascot" style={{ fontSize: 46, lineHeight: 1.1, animationDelay: `${i * -0.6}s` }}>{r.mascot}</div>
+                <div className="cname" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 21, fontWeight: 600, margin: '6px 0 8px', textShadow: '0 2px 0 rgba(0,0,0,0.12)' }}>
                   <TText text={r.name} lang={lang} />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', background: 'rgba(255,255,255,0.92)', borderRadius: 14, padding: '5px 6px', width: '100%', gap: 3 }}>
+                <div className="flags" style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', background: 'rgba(255,255,255,0.92)', borderRadius: 14, padding: '5px 6px', width: '100%', gap: 3 }}>
                   {r.countries.map(c => (
                     <span key={c} style={{ fontSize: r.countries.length > 5 ? 14 : 17, lineHeight: 1.2 }}>{COUNTRIES[c]?.flag}</span>
                   ))}
@@ -137,7 +145,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           })}
         </div>
 
-        <button className="btn-kid" onClick={() => nav.goRegions()}
+        <button className="btn-kid soft play-btn" onClick={() => nav.goRegions()}
           style={{ background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '20px', fontSize: 21, width: '100%', borderRadius: 26, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.45)' }}>
           {t(lang, 'play')}
         </button>

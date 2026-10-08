@@ -3,7 +3,7 @@ import { useState } from 'react'
 const rnd = () => 3 + Math.floor(Math.random() * 7) // 3..9
 
 // Controle parental : une multiplication a resoudre avant une action reservee aux adultes
-export default function ParentGate({ onPass, title = 'Demande à un parent 👨‍👩‍👧', question = (a, b) => `Combien font ${a} × ${b} ?`, okLabel = 'Valider', errorLabel = "Ce n'est pas ça. Demande à un adulte !" }) {
+export default function ParentGate({ onPass, title = 'Demande à un parent 🔐', question = (a, b) => `Combien font ${a} × ${b} ?`, okLabel = 'Valider', errorLabel = "Ce n'est pas ça. Demande à un adulte !" }) {
   const [gate, setGate] = useState(() => ({ a: rnd(), b: rnd() }))
   const [answer, setAnswer] = useState('')
   const [error, setError] = useState(false)

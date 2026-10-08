@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import LogoutIcon from './LogoutIcon'
+import LegalFooter from './LegalFooter'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelAverages } from '../levels'
@@ -42,7 +43,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   }
 
   return (
-    <div className="home-sky screen-narrow" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '18px 16px 28px' }}>
+    <div className="home-sky screen-mid" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '18px 16px 28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
         <div>
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
@@ -57,8 +58,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
       </div>
 
       <div style={{ textAlign: 'center', marginBottom: 18 }}>
-        <div style={{ fontSize: 56, marginBottom: 4 }} className="float">👨‍👩‍👧‍👦</div>
-        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 28, color: INK }}>
+        <div className="picker-hero" style={{ display: 'flex', justifyContent: 'center', gap: 4, fontSize: 46, marginBottom: 6 }}>
+          {['👧🏽', '🧒🏻', '👦🏿'].map((e, i) => (
+            <span key={e} className="float" style={{ animationDelay: `${i * -0.8}s`, filter: 'drop-shadow(0 6px 8px rgba(26,42,79,0.15))' }}>{e}</span>
+          ))}
+        </div>
+        <div className="picker-title" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 28, color: INK }}>
           {kids.length === 0 || creating ? 'Crée un profil' : 'Qui joue ?'}
         </div>
         <div style={{ fontSize: 14, color: '#607D8B', fontWeight: 700, marginTop: 4 }}>
@@ -81,13 +86,13 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
 
       {!creating && (
         <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 18 }}>
+          <div className="kids-grid" style={{ marginBottom: 18 }}>
             {kids.map((k) => {
               const L = LEVELS[k.difficulty]
               return (
-                <button key={k.id} className="btn-kid" onClick={() => onPick(k.id)}
+                <button key={k.id} className="btn-kid lift" onClick={() => onPick(k.id)}
                   style={{ background: 'white', borderRadius: 24, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left', boxShadow: '0 6px 0 #E3EAF2, 0 10px 20px rgba(26,42,79,0.08)' }}>
-                  <div style={{ fontSize: 40, width: 60, height: 60, borderRadius: 20, background: '#FFF3E0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{k.avatar || '👦'}</div>
+                  <div className="kid-avatar" style={{ fontSize: 40, width: 60, height: 60, borderRadius: 20, background: '#FFF3E0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{k.avatar || '👦'}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 20, fontWeight: 600, color: INK }}>{k.name}</div>
                     <div style={{ fontSize: 12, color: '#78909C', fontWeight: 800 }}>
@@ -105,33 +110,35 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             })}
           </div>
 
+          <div className="picker-actions">
           {full ? (
             <div style={{ background: 'white', borderRadius: 18, padding: '12px 14px', textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#607D8B' }}>
-              👨‍👩‍👧‍👦 {MAX_CHILDREN} / {MAX_CHILDREN} enfants : le maximum par compte est atteint.
+              🧒 {MAX_CHILDREN} / {MAX_CHILDREN} enfants : le maximum par compte est atteint.
             </div>
           ) : (
-            <button className="btn-kid" onClick={() => setCreating(true)}
+            <button className="btn-kid soft" onClick={() => setCreating(true)}
               style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
               ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {MAX_CHILDREN})</span>
             </button>
           )}
           {onOpenStats && kids.length > 0 && (
-            <button className="btn-kid" onClick={onOpenStats}
-              style={{ width: '100%', marginTop: 12, background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
+            <button className="btn-kid soft" onClick={onOpenStats}
+              style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
               📊 {t(lang, 'ps_open')}
             </button>
           )}
           {onManageDevices && (
-            <button className="btn-kid" onClick={onManageDevices}
-              style={{ width: '100%', marginTop: 12, background: 'white', color: '#2E7D4F', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
+            <button className="btn-kid soft" onClick={onManageDevices}
+              style={{ width: '100%', background: 'white', color: '#2E7D4F', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
               📱 Mes appareils
             </button>
           )}
+          </div>
         </>
       )}
 
       {creating && (
-        <form onSubmit={submitNew} style={{ background: 'white', borderRadius: 26, padding: 18, boxShadow: '0 10px 28px rgba(26,42,79,0.10)' }}>
+        <form onSubmit={submitNew} style={{ maxWidth: 600, background: 'white', borderRadius: 26, padding: 18, boxShadow: '0 10px 28px rgba(26,42,79,0.10)' }}>
           <div style={label}>Avatar</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, marginBottom: 16 }}>
             {AVATARS.map((a) => (
@@ -192,6 +199,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </form>
       )}
+      <LegalFooter lang={lang} />
     </div>
   )
 }
