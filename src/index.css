@@ -393,3 +393,8 @@ body {
   .lp-burger, .lp-menu-mobile { display: none !important; }
   .lp-login { display: inline-block; }
 }
+
+/* Fenêtres : hauteur de l'écran VISIBLE (barres du navigateur mobile comprises) */
+.sheet { max-height: 92vh !important; max-height: 92dvh !important; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.sheet::after { content: ''; display: block; flex-shrink: 0; height: env(safe-area-inset-bottom, 0px); }
+.full-dvh { height: 100vh; height: 100dvh; }

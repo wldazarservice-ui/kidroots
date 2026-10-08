@@ -75,7 +75,7 @@ export default function LevelPicker({ lang, value, age, childName, onPick, onClo
   )
 
   const panel = (
-    <div style={{ display: 'flex', flexDirection: 'column', maxHeight: '100%', fontFamily: 'Nunito, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, fontFamily: 'Nunito, sans-serif' }}>
       {header}
       <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>{list}</div>
       {footer}
@@ -84,7 +84,7 @@ export default function LevelPicker({ lang, value, age, childName, onPick, onClo
 
   if (!onClose) {
     return (
-      <div className="home-sky" style={{ height: '100dvh', minHeight: '100vh', display: 'flex', justifyContent: 'center' }}>
+      <div className="home-sky full-dvh" style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ width: '100%', maxWidth: 520, display: 'flex', flexDirection: 'column' }}>{panel}</div>
       </div>
     )
