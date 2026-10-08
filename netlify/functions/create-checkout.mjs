@@ -28,6 +28,10 @@ export default async (req) => {
     payment_intent_data: { metadata: { uid: user.uid } },
     customer_email: user.email || undefined,
     locale: 'auto',
+    // Kleinunternehmer (§ 19 UStG) : aucune TVA facturee. Mettre KLEINUNTERNEHMER=false dans Netlify si ce n'est plus le cas.
+    ...(process.env.KLEINUNTERNEHMER !== 'false' && {
+      custom_text: { submit: { message: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet. · TVA non applicable (§ 19 UStG, Kleinunternehmer).' } },
+    }),
     success_url: `${origin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/?checkout=cancel`,
   })
