@@ -5,8 +5,8 @@
 // - Autres ressources meme origine + Google Fonts : cache puis mise a jour en arriere-plan
 // Les requetes Firebase / traduction (autres origines) ne sont jamais interceptees.
 
-const CACHE = 'kidroots-v1'
-const SHELL = ['/', '/index.html', '/manifest.json', '/favicon.svg']
+const CACHE = 'kidroots-v2'
+const SHELL = ['/', '/index.html', '/manifest.json', '/favicon.svg', '/icon-192.png', '/icon-512.png']
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com']
 
 self.addEventListener('install', (event) => {
