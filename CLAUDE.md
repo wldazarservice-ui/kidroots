@@ -89,3 +89,4 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Le flag `premium` est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).
 - Variables Netlify requises : voir `.env.example`. Garder `firebase-admin` en v13 (v14 plante sur Netlify : jose ESM).
 - Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).
+- Limites par compte : 5 enfants (`users/{uid}/children/c1..c5`) et 5 appareils (`users/{uid}/devices/d1..d5`, id local `kidino_device_id`). Imposees par `firestore.rules` (emplacements fixes). Code : `src/devices.js`, `src/cloud.js` (createChild), `DevicesManager.jsx`.
