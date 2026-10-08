@@ -89,6 +89,18 @@ export async function saveChildDaily(uid, childId, daily) {
   await updateDoc(doc(db, 'users', uid, 'children', childId), { daily })
 }
 
+// Remise à zéro de la progression d'un enfant (histoires, XP, passeport, jeux). Les statistiques de temps sont gardées.
+export async function resetChildProgress(uid, childId) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), {
+    xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] }, updatedAt: serverTimestamp(),
+  })
+}
+
+// Scores des jeux (étoiles par jeu) : { hunt, animals, riddles, memory }
+export async function saveChildGames(uid, childId, games) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { games })
+}
+
 export async function saveChildLang(uid, childId, lang) {
   await updateDoc(doc(db, 'users', uid, 'children', childId), {
     lang,

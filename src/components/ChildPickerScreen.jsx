@@ -2,6 +2,7 @@ import { useState } from 'react'
 import LogoutIcon from './LogoutIcon'
 import LegalFooter from './LegalFooter'
 import DeleteAccount from './DeleteAccount'
+import ResetProgress from './ResetProgress'
 import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
@@ -12,7 +13,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, premium, account = {}, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -23,6 +24,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [busy, setBusy] = useState(false)
   const [createError, setCreateError] = useState('')
   const [deleting, setDeleting] = useState(false)
+  const [resetting, setResetting] = useState(false)
   const [portalBusy, setPortalBusy] = useState(false)
   const portal = async () => {
     setPortalBusy(true)
@@ -159,7 +161,11 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             </button>
           )}
           </div>
-          <div style={{ textAlign: 'center', marginTop: 18 }}>
+          <div style={{ textAlign: 'center', marginTop: 18, display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap' }}>
+            <button onClick={() => setResetting(true)}
+              style={{ background: 'none', border: 'none', color: '#E65100', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, textDecoration: 'underline', cursor: 'pointer' }}>
+              🔄 Réinitialiser la progression
+            </button>
             <button onClick={() => setDeleting(true)}
               style={{ background: 'none', border: 'none', color: '#90A4AE', fontFamily: 'inherit', fontWeight: 800, fontSize: 12, textDecoration: 'underline', cursor: 'pointer' }}>
               Supprimer mon compte
@@ -167,6 +173,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </>
       )}
+      {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}
       {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}
 
       {creating && (

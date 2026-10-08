@@ -288,3 +288,14 @@ body {
 .story-card { flex: 0 0 82%; scroll-snap-align: start; min-height: 170px; }
 @media (min-width: 700px) { .story-card { flex-basis: 46%; } }
 @media (min-width: 960px) { .story-card { flex-basis: 31.5%; } }
+
+/* Carte du monde */
+@keyframes mapPulse { 0%, 100% { fill-opacity: 1; } 50% { fill-opacity: 0.35; } }
+.map-pulse { animation: mapPulse 0.9s ease-in-out infinite; }
+.games-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.stamp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (min-width: 700px) {
+  .games-grid { grid-template-columns: 1fr 1fr; }
+  .stamp-grid { grid-template-columns: repeat(5, 1fr); }
+}
+@media (min-width: 960px) { .stamp-grid { grid-template-columns: repeat(7, 1fr); } }

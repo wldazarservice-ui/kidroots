@@ -15,6 +15,7 @@ import {
   saveChildLang,
   saveChildDifficulty,
   saveChildDaily,
+  saveChildGames,
   readLegacyProgress,
   clearLegacyProgress,
 } from './cloud'
@@ -36,6 +37,14 @@ import ParentStats from './components/ParentStats'
 import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
 import { isDone } from './levels'
 import LandingScreen from './components/LandingScreen'
+import PassportScreen from './components/PassportScreen'
+import MapScreen from './components/MapScreen'
+import GamesScreen from './components/GamesScreen'
+import HuntGame from './components/HuntGame'
+import MemoryGame from './components/MemoryGame'
+import ChoiceGame from './components/ChoiceGame'
+import StampToast from './components/StampToast'
+import { countryState } from './explore'
 import DailyLimit from './components/DailyLimit'
 import AdminDashboard from './components/AdminDashboard'
 import { loadGuest, saveGuest, clearGuest } from './guest'
@@ -79,6 +88,8 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [statsOpen, setStatsOpen] = useState(false)
   const [limitOpen, setLimitOpen] = useState(false)
+  const [gameKey, setGameKey] = useState(null)
+  const [newStamp, setNewStamp] = useState(null)
   const [account, setAccount] = useState({ kind: 'free' })
   const [adminOpen, setAdminOpen] = useState(false)
   // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
@@ -202,6 +213,9 @@ export default function App() {
       .catch((e) => console.error('Confirm checkout error:', e))
   }, [user])
 
+  // Chaque nouvel écran commence en haut de la page
+  useEffect(() => { window.scrollTo(0, 0) }, [screen, gameKey])
+
   // En mode essai, l'enfant actif est le profil local
   useEffect(() => {
     if (!user && guestPlaying && guest) setActiveChildState(guest)
@@ -314,6 +328,14 @@ export default function App() {
     return true
   }
 
+  // Résultat d'un jeu : étoiles cumulées par jeu (memory = nombre de parties gagnées)
+  const addGameResult = (key, stars) => {
+    if (!activeChild) return
+    const g = activeChild.games || {}
+    const games = { ...g, [key]: (g[key] || 0) + (key === 'memory' ? 1 : stars), stars: (g.stars || 0) + stars }
+    patchChild({ games }, () => saveChildGames(user.uid, activeChild.id, games))
+  }
+
   const logout = () => {
     if (isGuest) { setGuestPlaying(false); setActiveChildState(null); setScreen('home'); return }
     signOut()
@@ -334,6 +356,10 @@ export default function App() {
     startQuiz: () => setStep('quiz'),
     finishChapter: (score) => {
       const xp = chapter.cards.length * 20 + chapter.quiz.length * 30
+      // Pays terminé ? => nouveau tampon dans le passeport
+      const before = countryState(progress, countryCode).stamp
+      const after = countryState({ ...progress, done: { ...progress.done, [doneKey(chapter.id, difficulty)]: true } }, countryCode).stamp
+      if (after && !before) setTimeout(() => setNewStamp(countryCode), 900)
       addXP(xp, chapter.id)
       setQuizScore(score)
       setScreen('result')
@@ -348,6 +374,11 @@ export default function App() {
     },
     switchProfile,
     openLevelPicker: () => setLevelPickerOpen(true),
+    setDifficulty: (d) => changeDifficulty(d),
+    openPassport: () => setScreen('passport'),
+    openMap: () => setScreen('map'),
+    openGames: () => setScreen('games'),
+    openGame: (key) => { setGameKey(key); setScreen('game') },
     openPaywall: () => setPaywallOpen(true),
     logout,
   }
@@ -394,6 +425,7 @@ export default function App() {
         lang={lang}
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
+        onKidsReset={(ids) => setKids((all) => all.map((k) => (ids.includes(k.id) ? { ...k, xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] } } : k)))}
         premium={premium}
         account={account}
         onOpenAdmin={isOwnerEmail(user.email) ? () => setAdminOpen(true) : null}
@@ -440,7 +472,14 @@ export default function App() {
           {t(lang, toast)}
         </div>
       )}
+      {newStamp && <StampToast code={newStamp} lang={lang} onClose={() => setNewStamp(null)} onPassport={() => { setNewStamp(null); setScreen('passport') }} />}
       {screen === 'home'    && <HomeScreen {...shared} />}
+      {screen === 'passport' && <PassportScreen {...shared} />}
+      {screen === 'map'     && <MapScreen {...shared} />}
+      {screen === 'games'   && <GamesScreen {...shared} />}
+      {screen === 'game' && gameKey === 'hunt' && <HuntGame lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && gameKey === 'memory' && <MemoryGame lang={lang} difficulty={difficulty} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && (gameKey === 'animals' || gameKey === 'riddles') && <ChoiceGame key={gameKey} kind={gameKey} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
       {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}
       {screen === 'country' && country && <CountryScreen country={country} code={countryCode} {...shared} />}
       {screen === 'chapter' && chapter && step === 'intro' && (

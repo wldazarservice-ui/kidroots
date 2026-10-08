@@ -3,10 +3,11 @@ import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import { useTranslatedObj } from '../useTranslated'
 import { isDone, LEVELS } from '../levels'
+import DiscoverCards from './DiscoverCards'
 
 const INK = '#1A2A4F'
 
-export default function CountryScreen({ country: cRaw, lang, changeLang, progress, nav, difficulty }) {
+export default function CountryScreen({ country: cRaw, code, lang, changeLang, progress, nav, difficulty }) {
   // On ne traduit que la frise (pas les histoires, traduites a l'ouverture du chapitre)
   const light = useMemo(() => ({
     ...cRaw,
@@ -68,6 +69,8 @@ export default function CountryScreen({ country: cRaw, lang, changeLang, progres
             <div style={{ width: `${pct}%`, height: '100%', background: c.color, borderRadius: 8, transition: 'width 0.8s' }} />
           </div>
         </div>
+
+        <DiscoverCards code={code} lang={lang} color={c.color} />
 
         <div style={{ fontSize: 12, fontWeight: 900, color: '#78909C', letterSpacing: 1, marginBottom: 10 }}>
           {t(lang, 'timeline')}

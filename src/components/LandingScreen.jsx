@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { PLANS, DAILY_FREE_CHAPTERS } from '../premium'
 import { defaultLevelForAge } from '../levels'
@@ -15,7 +15,7 @@ const TXT = {
   fr: {
     login: 'Se connecter',
     h1: "L'histoire du monde, racontée aux enfants",
-    h1_sub: 'Des histoires vraies, des quiz et une voix qui lit tout à voix haute. 20 pays, 3 niveaux de lecture, de 4 à 12 ans.',
+    h1_sub: 'Des histoires vraies, des quiz et une voix qui lit tout à voix haute. {n} pays, 3 niveaux de lecture, de 4 à 12 ans.',
     try: '▶ Essayer gratuitement',
     try_note: 'Sans compte · sans carte bancaire · 2 chapitres gratuits par jour',
     cont: '▶ Continuer avec {name}',
@@ -27,7 +27,7 @@ const TXT = {
     story_sign: 'Walid, papa et créateur de Mokalibo',
     how_title: 'Comment ça marche ?',
     how: [
-      ['🌍', 'Choisis un pays', '20 pays sur 4 continents, avec un guide enfant de chaque pays.'],
+      ['🌍', 'Choisis un pays', '{n} pays sur 5 continents, avec un guide enfant de chaque pays.'],
       ['📖', 'Découvre son histoire', 'Des cartes illustrées avec des dates, des personnages et des anecdotes, lues à voix haute.'],
       ['⭐', 'Gagne des étoiles', 'Un quiz à la fin de chaque chapitre, des XP et des niveaux à débloquer.'],
     ],
@@ -37,11 +37,15 @@ const TXT = {
       ['🔊', 'Voix off', 'Chaque histoire et chaque question peuvent être lues à voix haute.'],
       ['🗣️', '6 langues', 'Français, anglais, allemand, arabe, portugais et bambara.'],
       ['📊', 'Espace parents', 'Temps passé et pays explorés, pour chaque enfant.'],
+      ['🛂', 'Passeport et badges', 'Un tampon pour chaque pays terminé et des badges à collectionner.'],
+      ['🗺️', 'Carte et chasse au trésor', 'Une carte du monde interactive pour retrouver les pays en jouant.'],
+      ['🦊', 'Animaux et monuments', "L'animal de chaque pays, comment le protéger, et des énigmes sur les monuments."],
+      ['🧩', 'Jeux de logique', 'Memory des drapeaux et quiz « Qui habite où ? ».'],
       ['👧', 'Toute la famille', "Jusqu'à 5 enfants et 5 appareils, chacun avec sa progression."],
       ['📱', 'Téléphone, tablette, ordi', "S'installe comme une app, sans store, et fonctionne hors-ligne."],
     ],
-    countries_title: '20 pays à explorer',
-    countries_sub: "D'autres pays arrivent bientôt.",
+    countries_title: '{n} pays à explorer',
+    countries_sub: 'Tous les pays du monde arrivent, chaque semaine de nouveaux.',
     price_title: 'Un prix simple, pour toujours',
     free_name: 'Gratuit',
     free_items: ['Tous les pays', '2 nouveaux chapitres par jour et par enfant', 'Les 3 niveaux, voix off et quiz'],
@@ -75,7 +79,7 @@ const TXT = {
   en: {
     login: 'Sign in',
     h1: 'World history, told for kids',
-    h1_sub: 'True stories, quizzes and a voice that reads everything aloud. 20 countries, 3 reading levels, ages 4 to 12.',
+    h1_sub: 'True stories, quizzes and a voice that reads everything aloud. {n} countries, 3 reading levels, ages 4 to 12.',
     try: '▶ Try it free',
     try_note: 'No account · no card · 2 free chapters a day',
     cont: '▶ Continue with {name}',
@@ -87,7 +91,7 @@ const TXT = {
     story_sign: 'Walid, dad and creator of Mokalibo',
     how_title: 'How does it work?',
     how: [
-      ['🌍', 'Pick a country', '20 countries on 4 continents, each with a kid guide from that country.'],
+      ['🌍', 'Pick a country', '{n} countries on 5 continents, each with a kid guide from that country.'],
       ['📖', 'Discover its history', 'Illustrated cards with dates, people and fun facts, read aloud.'],
       ['⭐', 'Earn stars', 'A quiz after every chapter, XP and levels to unlock.'],
     ],
@@ -97,11 +101,15 @@ const TXT = {
       ['🔊', 'Voice-over', 'Every story and every question can be read aloud.'],
       ['🗣️', '6 languages', 'French, English, German, Arabic, Portuguese and Bambara.'],
       ['📊', 'Parents area', 'Time spent and countries explored, for each child.'],
+      ['🛂', 'Passport and badges', 'A stamp for every country finished and badges to collect.'],
+      ['🗺️', 'Map and treasure hunt', 'An interactive world map to find countries while playing.'],
+      ['🦊', 'Animals and monuments', "Each country's animal, how to protect it, and monument riddles."],
+      ['🧩', 'Logic games', 'Flag memory and the “Who lives where?” quiz.'],
       ['👧', 'The whole family', 'Up to 5 children and 5 devices, each with their own progress.'],
       ['📱', 'Phone, tablet, computer', 'Installs like an app, no store needed, and works offline.'],
     ],
-    countries_title: '20 countries to explore',
-    countries_sub: 'More countries coming soon.',
+    countries_title: '{n} countries to explore',
+    countries_sub: 'Every country in the world is coming, new ones every week.',
     price_title: 'One simple price, forever',
     free_name: 'Free',
     free_items: ['Every country', '2 new chapters per day per child', 'All 3 levels, voice-over and quizzes'],
@@ -135,7 +143,7 @@ const TXT = {
   de: {
     login: 'Anmelden',
     h1: 'Die Geschichte der Welt, für Kinder erzählt',
-    h1_sub: 'Wahre Geschichten, Quizze und eine Stimme, die alles vorliest. 20 Länder, 3 Lesestufen, von 4 bis 12 Jahren.',
+    h1_sub: 'Wahre Geschichten, Quizze und eine Stimme, die alles vorliest. {n} Länder, 3 Lesestufen, von 4 bis 12 Jahren.',
     try: '▶ Kostenlos ausprobieren',
     try_note: 'Ohne Konto · ohne Karte · 2 Gratis-Kapitel pro Tag',
     cont: '▶ Weiter mit {name}',
@@ -147,7 +155,7 @@ const TXT = {
     story_sign: 'Walid, Papa und Gründer von Mokalibo',
     how_title: 'So funktioniert es',
     how: [
-      ['🌍', 'Wähle ein Land', '20 Länder auf 4 Kontinenten, jeweils mit einem Kinder-Guide aus dem Land.'],
+      ['🌍', 'Wähle ein Land', '{n} Länder auf 5 Kontinenten, jeweils mit einem Kinder-Guide aus dem Land.'],
       ['📖', 'Entdecke seine Geschichte', 'Illustrierte Karten mit Daten, Persönlichkeiten und Anekdoten, vorgelesen.'],
       ['⭐', 'Sammle Sterne', 'Ein Quiz nach jedem Kapitel, XP und Stufen zum Freischalten.'],
     ],
@@ -157,11 +165,15 @@ const TXT = {
       ['🔊', 'Vorlesefunktion', 'Jede Geschichte und jede Frage kann vorgelesen werden.'],
       ['🗣️', '6 Sprachen', 'Französisch, Englisch, Deutsch, Arabisch, Portugiesisch und Bambara.'],
       ['📊', 'Elternbereich', 'Nutzungszeit und entdeckte Länder für jedes Kind.'],
+      ['🛂', 'Pass und Abzeichen', 'Ein Stempel für jedes fertige Land und Abzeichen zum Sammeln.'],
+      ['🗺️', 'Karte und Schatzsuche', 'Eine interaktive Weltkarte, um Länder spielerisch zu finden.'],
+      ['🦊', 'Tiere und Denkmäler', 'Das Tier jedes Landes, wie man es schützt, und Rätsel zu Denkmälern.'],
+      ['🧩', 'Logikspiele', 'Flaggen-Memory und das Quiz „Wer wohnt wo?“.'],
       ['👧', 'Die ganze Familie', 'Bis zu 5 Kinder und 5 Geräte, jedes mit eigenem Fortschritt.'],
       ['📱', 'Handy, Tablet, Computer', 'Wie eine App installierbar, ohne Store, auch offline nutzbar.'],
     ],
-    countries_title: '20 Länder zum Entdecken',
-    countries_sub: 'Weitere Länder folgen bald.',
+    countries_title: '{n} Länder zum Entdecken',
+    countries_sub: 'Alle Länder der Welt kommen, jede Woche neue.',
     price_title: 'Ein einfacher Preis, für immer',
     free_name: 'Kostenlos',
     free_items: ['Alle Länder', '2 neue Kapitel pro Tag und Kind', 'Alle 3 Stufen, Vorlesen und Quizze'],
@@ -276,7 +288,8 @@ function GuestSheet({ T, onClose, onStart }) {
 
 // Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ, essai sans compte
 export default function LandingScreen({ lang, changeLang, guest, onStartGuest, onResumeGuest, onLogin, onSignup }) {
-  const T = TXT[lang] || TXT.en
+  const N = String(Object.keys(COUNTRIES).length)
+  const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || TXT.en).replaceAll('{n}', N)), [lang, N])
   const [sheet, setSheet] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   useEffect(() => { track('landing_view', { once: true }) }, [])
@@ -364,12 +377,15 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
           <h2 style={{ ...h2, marginBottom: 6 }}>{T.countries_title}</h2>
           <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 22 }}>{T.countries_sub}</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
-            {allFlags.map((code) => (
+            {allFlags.slice(0, 24).map((code) => (
               <div key={code} title={COUNTRIES[code].name} style={{ background: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
                 <div style={{ fontSize: 34, lineHeight: 1.1 }}>{COUNTRIES[code].flag}</div>
                 <div style={{ fontSize: 12, fontWeight: 900, color: INK }}><TText text={COUNTRIES[code].name} lang={lang} /></div>
               </div>
             ))}
+            {allFlags.length > 24 && (
+              <div style={{ background: '#2E9E5B', color: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_TITLE, fontSize: 22, fontWeight: 700 }}>+{allFlags.length - 24}</div>
+            )}
           </div>
         </div>
       </section>

@@ -7,20 +7,20 @@ import { TText } from '../useTranslated'
 import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
 import LegalFooter from './LegalFooter'
 import StoryBanners from './StoryBanners'
-import { LEVELS, isDone, countryStats } from '../levels'
+import { LEVELS, LEVEL_KEYS, isDone } from '../levels'
+import { passportStats } from '../explore'
 
 const INK = '#1A2A4F'
 
 export default function HomeScreen({ lang, changeLang, progress, nav, activeChild, difficulty, premium }) {
-  const L = LEVELS[difficulty] || LEVELS.explorer
   const allChapters = Object.values(COUNTRIES).flatMap(c => c.chapters)
   const totalChapters = allChapters.length
   const doneChapters = allChapters.filter(ch => isDone(progress, ch.id, difficulty)).length
-  const totalStories = Object.keys(COUNTRIES).reduce((a, code) => a + countryStats(code, difficulty).stories, 0)
   const pct = Math.round((doneChapters / totalChapters) * 100)
   const xpInLevel = progress.xp % 300
   const firstName = (activeChild?.name || '').split(' ')[0]
   const usedToday = Math.min(DAILY_FREE_CHAPTERS, todayIds(activeChild).length)
+  const stamps = passportStats(progress).stamps.length
 
   const countryStarted = (code) => COUNTRIES[code]?.chapters.some(ch => isDone(progress, ch.id, difficulty))
   const countryDone = (code) => COUNTRIES[code]?.chapters.every(ch => isDone(progress, ch.id, difficulty))
@@ -75,17 +75,55 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
 
         <div className="home-side">
 
-        {/* Niveau de lecture */}
-        <button className="btn-kid soft" onClick={nav.openLevelPicker}
-          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, background: `linear-gradient(150deg, ${L.grad[0]}, ${L.grad[1]})`, color: 'white', borderRadius: 22, padding: '10px 14px', marginBottom: 12, textAlign: 'left', boxShadow: `0 5px 0 ${L.grad[1]}55` }}>
-          <span style={{ fontSize: 34 }}>{L.emoji}</span>
-          <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: 'block', fontSize: 11, fontWeight: 900, opacity: 0.85, textTransform: 'uppercase', letterSpacing: 0.5 }}>{t(lang, 'reading_level')}</span>
-            <span style={{ display: 'block', fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 19, fontWeight: 600, lineHeight: 1.15 }}>{t(lang, `lvl_${difficulty}`)}</span>
-            <span style={{ display: 'block', fontSize: 12, fontWeight: 800, opacity: 0.92 }}>📖 {totalStories} {t(lang, 'stories_word')}</span>
-          </span>
-          <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 999, padding: '6px 12px', fontSize: 13, fontWeight: 900 }}>✎</span>
-        </button>
+        {/* Carte d'état : niveau de lecture, XP, aventures du jour */}
+        <div style={{ background: 'white', borderRadius: 26, padding: 14, marginBottom: 12, boxShadow: '0 8px 24px rgba(26,42,79,0.10)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 62, height: 62, borderRadius: 20, background: 'linear-gradient(145deg,#FFD54F,#FF9800)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: '0 4px 12px rgba(255,152,0,0.4)' }}>
+              <div style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', opacity: 0.95 }}>{t(lang, 'level')}</div>
+              <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, lineHeight: 1 }}>{progress.level}</div>
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                <span style={{ fontSize: 16, fontWeight: 900, color: INK }}>⭐ {progress.xp} XP</span>
+                <span style={{ fontSize: 12, fontWeight: 900, color: '#FF6F00' }}>{xpInLevel} / 300</span>
+              </div>
+              <div style={{ background: '#FFF3E0', borderRadius: 10, height: 12, overflow: 'hidden' }}>
+                <div style={{ width: `${Math.max(4, (xpInLevel / 300) * 100)}%`, height: '100%', background: 'linear-gradient(90deg,#FFD600,#FF6F00)', borderRadius: 10, transition: 'width 1s ease' }} />
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 12px', marginTop: 6, fontSize: 12, fontWeight: 800, color: '#78909C' }}>
+                <span>📚 {doneChapters} / {totalChapters} · {pct}%</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#1565C0', fontWeight: 900 }}>
+                  ⚡ {premium ? t(lang, 'daily_unlimited') : t(lang, 'daily_left')}
+                  {!premium && Array.from({ length: DAILY_FREE_CHAPTERS }, (_, i) => (
+                    <span key={i} style={{ width: 14, height: 14, borderRadius: '50%', background: i < DAILY_FREE_CHAPTERS - usedToday ? 'linear-gradient(145deg,#FFD54F,#FF9800)' : '#E3EAF2' }} />
+                  ))}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Choix du niveau de lecture : les 3 niveaux toujours visibles */}
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '2px solid #F1F4F8' }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ flex: 1, fontSize: 11, fontWeight: 900, color: '#78909C', textTransform: 'uppercase', letterSpacing: 0.5 }}>{t(lang, 'reading_level')}</span>
+              <button onClick={nav.openLevelPicker} style={{ background: 'none', border: 'none', color: '#1E88E5', fontWeight: 900, fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>ℹ️ {t(lang, 'choose_level')}</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              {LEVEL_KEYS.map((k) => {
+                const LL = LEVELS[k]
+                const on = k === difficulty
+                return (
+                  <button key={k} className="btn-kid soft" onClick={() => (on ? nav.openLevelPicker() : nav.setDifficulty(k))} aria-pressed={on}
+                    style={{ padding: '8px 4px', borderRadius: 16, background: on ? `linear-gradient(150deg, ${LL.grad[0]}, ${LL.grad[1]})` : '#F5F7FA', color: on ? 'white' : INK, boxShadow: on ? `0 4px 0 ${LL.grad[1]}66` : 'none', border: on ? 'none' : '2px solid #E3EAF2' }}>
+                    <span style={{ display: 'block', fontSize: 24, lineHeight: 1.1 }}>{LL.emoji}</span>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 900, lineHeight: 1.15 }}>{t(lang, `lvl_${k}`)}</span>
+                    <span style={{ display: 'block', fontSize: 10, fontWeight: 800, opacity: 0.85 }}>{LL.ages} {t(lang, 'years')}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
 
         {!premium && (
           <button className="btn-kid soft" onClick={nav.openPaywall}
@@ -96,34 +134,23 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           </button>
         )}
 
-        {/* Progression */}
-        <div style={{ background: 'white', borderRadius: 24, padding: 14, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 8px 24px rgba(26,42,79,0.10)' }}>
-          <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(145deg,#FFD54F,#FF9800)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', flexShrink: 0, boxShadow: '0 4px 12px rgba(255,152,0,0.4)' }}>
-            <div style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', opacity: 0.95 }}>{t(lang, 'level')}</div>
-            <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, lineHeight: 1 }}>{progress.level}</div>
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-              <span style={{ fontSize: 16, fontWeight: 900, color: INK }}>⭐ {progress.xp} XP</span>
-              <span style={{ fontSize: 12, fontWeight: 900, color: '#FF6F00' }}>{xpInLevel} / 300</span>
-            </div>
-            <div style={{ background: '#FFF3E0', borderRadius: 10, height: 14, overflow: 'hidden' }}>
-              <div style={{ width: `${Math.max(4, (xpInLevel / 300) * 100)}%`, height: '100%', background: 'linear-gradient(90deg,#FFD600,#FF6F00)', borderRadius: 10, transition: 'width 1s ease' }} />
-            </div>
-            <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 6 }}>
-              📚 {doneChapters} / {totalChapters} {t(lang, 'chapters_word')} · {pct}%
-            </div>
-            {/* Aventures du jour (version gratuite : 2 nouveaux chapitres par jour) */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, fontSize: 12, fontWeight: 900, color: '#1565C0' }}>
-              ⚡ {premium ? t(lang, 'daily_unlimited') : t(lang, 'daily_left')}
-              {!premium && Array.from({ length: DAILY_FREE_CHAPTERS }, (_, i) => (
-                <span key={i} style={{ width: 16, height: 16, borderRadius: '50%', background: i < DAILY_FREE_CHAPTERS - usedToday ? 'linear-gradient(145deg,#FFD54F,#FF9800)' : '#E3EAF2', boxShadow: i < DAILY_FREE_CHAPTERS - usedToday ? '0 2px 4px rgba(255,152,0,0.4)' : 'none' }} />
-              ))}
-            </div>
-          </div>
+        </div>
         </div>
 
-        </div>
+        {/* Raccourcis : passeport, carte, jeux */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10, marginBottom: 22 }}>
+          {[
+            ['🛂', t(lang, 'home_passport'), `${stamps} / ${Object.keys(COUNTRIES).length}`, ['#5C6BC0', '#1E3A8A'], nav.openPassport],
+            ['🗺️', t(lang, 'home_map'), t(lang, 'map_sub'), ['#26C6DA', '#00838F'], nav.openMap],
+            ['🎮', t(lang, 'home_games'), `⭐ ${activeChild?.games?.stars || 0}`, ['#FF7043', '#D84315'], nav.openGames],
+          ].map(([emoji, title, sub, grad, onClick]) => (
+            <button key={title} className="btn-kid lift" onClick={onClick}
+              style={{ background: `linear-gradient(150deg, ${grad[0]}, ${grad[1]})`, color: 'white', borderRadius: 24, padding: '14px 6px 12px', textAlign: 'center', boxShadow: `0 6px 0 ${grad[1]}55, 0 10px 20px ${grad[1]}35`, minHeight: 112 }}>
+              <span className="float" style={{ display: 'block', fontSize: 40, lineHeight: 1.1 }}>{emoji}</span>
+              <span style={{ display: 'block', fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 18, fontWeight: 700, marginTop: 4 }}>{title}</span>
+              <span style={{ display: 'block', fontSize: 11, fontWeight: 800, opacity: 0.92, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px' }}>{sub}</span>
+            </button>
+          ))}
         </div>
 
         <StoryBanners lang={lang} onOpen={nav.goCountry} />
