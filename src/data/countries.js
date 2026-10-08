@@ -12,25 +12,25 @@ export const COUNTRIES = {
     name: 'Mali', flag: '🇲🇱', region: 'africa',
     color: '#C8600A', dark: '#7A3500', bg: '#FFF3E0',
     hero: { emoji: '👦🏿', name: 'Moussa', age: 8 },
-    tagline: "De l'Empire du Ghana a aujourd'hui",
+    tagline: "De l'Empire du Ghana à aujourd'hui",
     chapters: [
       {
         id: 'ml_origins', era: 'Avant 300 ap. J.-C.', title: 'Les Origines',
         subtitle: 'Les premiers peuples du Niger',
         emoji: '🌅', color: '#5D4037', light: '#EFEBE9',
-        intro: "Il y a plus de 4000 ans, des peuples de chasseurs et pecheurs vivaient sur les rives du fleuve Niger. Ils cultivaient le mil, maitrisaient le fer, et formaient les premiers royaumes. Ce sont les ancetres des Maliens d'aujourd'hui.",
-        figure: { name: "Le Forgeron Ancestral", emoji: '⚒️', desc: "Dans les societes anciennes du Mali, le forgeron etait le personnage le plus respecte. Il transformait le fer en outils et armes, changeant a jamais la vie des peuples." },
+        intro: "Il y a plus de 4000 ans, des peuples de chasseurs et de pêcheurs vivaient sur les rives du fleuve Niger. Ils cultivaient le mil, maîtrisaient le fer et formaient les premiers royaumes. Ce sont les ancêtres des Maliens d'aujourd'hui.",
+        figure: { name: "Le Forgeron Ancestral", emoji: '⚒️', desc: "Dans les sociétés anciennes du Mali, le forgeron était le personnage le plus respecté. Il transformait le fer en outils et en armes, changeant à jamais la vie des peuples." },
         cards: [
-          { emoji: '🌊', title: 'Le Fleuve Niger', text: "Depuis 4000 ans, tout commence ici. Les premiers habitants peuplent ses rives, peches avec des pirogues, et echangent du poisson avec les villages voisins.", fact: "Le Niger est le 3e plus long fleuve d'Afrique. Sans lui, aucun empire malien n'aurait existe !" },
-          { emoji: '🌾', title: "L'Agriculture", text: "Il y a 3000 ans, les peuples du Mali apprennent a cultiver le mil, le sorgho et le riz. Cela permet de construire des villages permanents.", fact: "Le Mali est l'un des premiers endroits au monde ou le riz sauvage a ete cultive par l'homme !" },
-          { emoji: '⚒️', title: 'La Maitrise du Fer', text: "La decouverte du fer change tout. Avec des outils en fer, on cultive mieux. Les forgerons deviennent les personnages les plus puissants de la societe.", fact: "Dans la tradition malienne, le forgeron (numu) avait des pouvoirs magiques. Il etait craint et respecte." },
-          { emoji: '🐫', title: 'Les Routes du Sahara', text: "Des caravanes de chameaux traversent le desert. Elles apportent du sel du nord et repartent avec l'or du sud. Ces routes fondent la richesse des empires maliens.", fact: "Une livre d'or valait une livre de sel. Le sel etait si precieux car sans lui, la viande pourrissait !" },
-          { emoji: '👥', title: 'Les Soninkes', text: "Le peuple Soninke est le premier a s'organiser en royaume. Ils parlent une langue encore utilisee aujourd'hui et fondent le premier grand empire de la region.", fact: "Les descendants des Soninkes vivent encore au Mali, en Mauritanie et au Senegal. Leur culture a 4000 ans !" },
+          { emoji: '🌊', title: 'Le Fleuve Niger', text: "Depuis 4000 ans, tout commence ici. Les premiers habitants s'installent sur ses rives, pêchent en pirogue et échangent du poisson avec les villages voisins.", fact: "Le Niger est le 3e plus long fleuve d'Afrique. Sans lui, aucun empire malien n'aurait existé !" },
+          { emoji: '🌾', title: "L'Agriculture", text: "Il y a 3000 ans, les peuples du Mali apprennent à cultiver le mil, le sorgho et le riz. Cela permet de construire des villages permanents.", fact: "Le Mali est l'un des premiers endroits au monde où le riz sauvage a été cultivé par l'homme !" },
+          { emoji: '⚒️', title: 'La Maîtrise du Fer', text: "La découverte du fer change tout. Avec des outils en fer, on cultive mieux. Les forgerons deviennent les personnages les plus puissants de la société.", fact: "Dans la tradition malienne, on disait que le forgeron (numu) avait des pouvoirs magiques. Il était craint et respecté." },
+          { emoji: '🐫', title: 'Les Routes du Sahara', text: "Des caravanes de chameaux traversent le désert. Elles apportent du sel du nord et repartent avec l'or du sud. Ces routes font la richesse des empires maliens.", fact: "On raconte qu'une livre de sel pouvait valoir une livre d'or. Le sel était précieux car il permettait de conserver la viande !" },
+          { emoji: '👥', title: 'Les Soninkés', text: "Le peuple soninké est le premier à s'organiser en royaume. Il parle une langue encore utilisée aujourd'hui et fonde le premier grand empire de la région.", fact: "Les descendants des Soninkés vivent encore au Mali, en Mauritanie et au Sénégal. Leur culture est très ancienne !" },
         ],
         quiz: [
-          { q: "Sur quel fleuve sont nees les premieres civilisations du Mali ?", correct: "Le Niger", wrong1: "Le Nil", wrong2: "Le Congo", emoji: '🌊' },
-          { q: "Quel peuple a fonde le premier royaume de la region ?", correct: "Les Soninkes", wrong1: "Les Dogons", wrong2: "Les Touaregs", emoji: '👥' },
-          { q: "Qu'echangeait-on sur les routes du Sahara ?", correct: "L'or contre le sel", wrong1: "Le riz contre le mil", wrong2: "Des chevaux contre des chameaux", emoji: '🐫' },
+          { q: "Sur quel fleuve sont nées les premières civilisations du Mali ?", correct: "Le Niger", wrong1: "Le Nil", wrong2: "Le Congo", emoji: '🌊' },
+          { q: "Quel peuple a fondé le premier royaume de la région ?", correct: "Les Soninkés", wrong1: "Les Dogons", wrong2: "Les Touaregs", emoji: '👥' },
+          { q: "Qu'échangeait-on sur les routes du Sahara ?", correct: "L'or contre le sel", wrong1: "Le riz contre le mil", wrong2: "Des chevaux contre des chameaux", emoji: '🐫' },
         ]
       },
       {
