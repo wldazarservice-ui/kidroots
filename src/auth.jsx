@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   signOut as fbSignOut,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { auth, googleProvider } from './firebase'
 
@@ -31,3 +32,4 @@ export const signUp = (email, password) => createUserWithEmailAndPassword(auth, 
 export const signIn = (email, password) => signInWithEmailAndPassword(auth, email, password)
 export const googleSignIn = () => signInWithPopup(auth, googleProvider)
 export const signOut = () => fbSignOut(auth)
+export const resetPassword = (email) => sendPasswordResetEmail(auth, email)

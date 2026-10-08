@@ -3,7 +3,6 @@ import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import { TText } from '../useTranslated'
 import { isDone } from '../levels'
-import { isCountryLocked } from '../premium'
 
 const INK = '#1A2A4F'
 
@@ -58,16 +57,13 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
           const c = COUNTRIES[code]
           const doneCount = c.chapters.filter(ch => isDone(progress, ch.id, difficulty)).length
           const done = doneCount === c.chapters.length
-          const locked = isCountryLocked(code, premium)
           return (
             <div key={code} className="anim-slide-up" style={{ animationDelay: `${i * 50}ms`, opacity: 0 }}>
               <button className="btn-kid lift country-card" onClick={() => nav.goCountry(code)}
-                style={{ width: '100%', height: '100%', background: 'white', borderRadius: 26, padding: 0, overflow: 'hidden', textAlign: 'center', display: 'flex', flexDirection: 'column', border: `3px solid ${doneCount ? c.color : 'white'}`, boxShadow: `0 6px 0 ${c.color}2E, 0 12px 24px rgba(26,42,79,0.08)`, position: 'relative', opacity: locked ? 0.92 : 1 }}>
+                style={{ width: '100%', height: '100%', background: 'white', borderRadius: 26, padding: 0, overflow: 'hidden', textAlign: 'center', display: 'flex', flexDirection: 'column', border: `3px solid ${doneCount ? c.color : 'white'}`, boxShadow: `0 6px 0 ${c.color}2E, 0 12px 24px rgba(26,42,79,0.08)`, position: 'relative' }}>
                 {/* Bandeau colore avec le drapeau */}
                 <div style={{ background: `radial-gradient(circle at 50% 120%, ${c.color}30 0, ${c.bg} 70%)`, padding: '16px 10px 10px', position: 'relative' }}>
                   {done && <div style={{ position: 'absolute', top: 6, right: 8, fontSize: 24 }} className="anim-starpop">⭐</div>}
-                  {locked && <div style={{ position: 'absolute', top: 8, right: 10, fontSize: 13, background: 'white', borderRadius: 999, padding: '3px 8px', boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }} aria-label="verrouillé">🔒</div>}
-                  {!locked && !premium && <div style={{ position: 'absolute', top: 8, left: 10, fontSize: 11, fontWeight: 900, color: 'white', background: '#2E9E5B', borderRadius: 999, padding: '3px 9px' }}>🎁 {t(lang, 'free_badge')}</div>}
                   <div className="cflag" style={{ fontSize: 52, lineHeight: 1.1, filter: 'drop-shadow(0 6px 8px rgba(0,0,0,0.15))' }}>{c.flag}</div>
                 </div>
                 <div style={{ padding: '10px 12px 14px', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, width: '100%' }}>

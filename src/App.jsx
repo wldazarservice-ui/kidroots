@@ -13,6 +13,7 @@ import {
   saveChildProgress,
   saveChildLang,
   saveChildDifficulty,
+  saveChildDaily,
   readLegacyProgress,
   clearLegacyProgress,
 } from './cloud'
@@ -31,7 +32,15 @@ import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
 import { useUsageTracker, trackCountryVisit } from './stats'
 import ParentStats from './components/ParentStats'
-import { isCountryLocked, confirmCheckout, PAYWALL_ENABLED } from './premium'
+import { confirmCheckout, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
+import { isDone } from './levels'
+import LandingScreen from './components/LandingScreen'
+import DailyLimit from './components/DailyLimit'
+import AdminDashboard from './components/AdminDashboard'
+import { loadGuest, saveGuest, clearGuest } from './guest'
+import { track } from './track'
+import { signOut } from './auth'
+import { isStandalone } from './pwaInstall'
 
 function Spinner({ msg = 'Chargement...' }) {
   return (
@@ -68,6 +77,12 @@ export default function App() {
   const [userReload, setUserReload] = useState(0)
   const [toast, setToast] = useState(null)
   const [statsOpen, setStatsOpen] = useState(false)
+  const [limitOpen, setLimitOpen] = useState(false)
+  const [adminOpen, setAdminOpen] = useState(false)
+  // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
+  const [guest, setGuest] = useState(loadGuest)
+  const [guestPlaying, setGuestPlaying] = useState(false)
+  const [authMode, setAuthMode] = useState(() => (isStandalone() ? 'signin' : null)) // null = page de presentation
 
   const difficulty = activeChild?.difficulty || 'explorer'
   const inCountry = screen === 'country' || screen === 'chapter' || screen === 'result'
@@ -99,13 +114,18 @@ export default function App() {
       setKids([])
       setActiveChildState(null)
       setLegacyToMigrate(null)
+      setPremium(false)
       return
     }
+    // Connecte : le mode essai s'arrete (sa progression sera transferee au 1er profil cree)
+    setGuestPlaying(false)
+    setAuthMode(null)
     let cancelled = false
     setProfileLoading(true)
     ;(async () => {
       try {
         const ud = await ensureUserDoc(user)
+        if (ud.isNew) track('signup')
         if (!cancelled) setPremium(!!ud.premium)
         // 5 appareils maximum par compte
         const reg = await registerDevice(user.uid)
@@ -119,6 +139,8 @@ export default function App() {
           const legacy = readLegacyProgress()
           if (legacy) setLegacyToMigrate(legacy)
         }
+        clearGuest()
+        setGuest(null)
         if (ud.activeChildId) {
           const ac = await loadChild(user.uid, ud.activeChildId)
           if (cancelled) return
@@ -155,17 +177,34 @@ export default function App() {
       .catch((e) => console.error('Confirm checkout error:', e))
   }, [user])
 
+  // En mode essai, l'enfant actif est le profil local
+  useEffect(() => {
+    if (!user && guestPlaying && guest) setActiveChildState(guest)
+  }, [user, guestPlaying])
+  const isGuest = !user && guestPlaying && !!activeChild
+
+  // Met a jour l'enfant actif (Firestore si connecte, stockage local en mode essai)
+  const patchChild = (patch, save) => {
+    setActiveChildState((c) => {
+      const next = { ...c, ...patch }
+      if (!user) { saveGuest(next); setGuest(next) }
+      return next
+    })
+    if (user && activeChild) {
+      setKids((all) => all.map((k) => (k.id === activeChild.id ? { ...k, ...patch } : k)))
+      save?.().catch(console.error)
+    }
+  }
+
   const progress = activeChild
     ? { xp: activeChild.xp || 0, level: activeChild.level || 1, done: activeChild.done || {} }
     : { xp: 0, level: 1, done: {} }
 
   const changeDifficulty = async (d) => {
-    if (!user || !activeChild) return
-    setActiveChildState((c) => ({ ...c, difficulty: d }))
-    setKids((all) => all.map((k) => (k.id === activeChild.id ? { ...k, difficulty: d } : k)))
+    if (!activeChild) return
+    patchChild({ difficulty: d }, () => saveChildDifficulty(user.uid, activeChild.id, d))
     setLevelPickerOpen(false)
     if (screen === 'chapter' || screen === 'result') setScreen('country')
-    await saveChildDifficulty(user.uid, activeChild.id, d).catch(console.error)
   }
 
   const changeLang = useCallback((l) => {
@@ -177,14 +216,12 @@ export default function App() {
   }, [user, activeChild])
 
   const addXP = (xp, chapterId) => {
-    if (!user || !activeChild) return
+    if (!activeChild) return
     const newXP = (activeChild.xp || 0) + xp
     const newLevel = Math.floor(newXP / 300) + 1
     const done = { ...(activeChild.done || {}), [doneKey(chapterId, difficulty)]: true }
     const next = { xp: newXP, level: newLevel, done }
-    setActiveChildState((c) => ({ ...c, ...next }))
-    setKids((all) => all.map((k) => (k.id === activeChild.id ? { ...k, ...next } : k)))
-    saveChildProgress(user.uid, activeChild.id, next).catch(console.error)
+    patchChild(next, () => saveChildProgress(user.uid, activeChild.id, next))
     setXpAnim(xp)
     setTimeout(() => setXpAnim(null), 2000)
   }
@@ -224,27 +261,50 @@ export default function App() {
   }
 
   const switchProfile = () => {
+    if (isGuest) { setPaywallOpen(true); return }
     setActiveChildState(null)
     setScreen('home')
+  }
+
+  const hasPremium = premium || !PAYWALL_ENABLED
+
+  // Limite gratuite : 2 nouveaux chapitres par jour et par enfant (rejouer un chapitre fini reste libre)
+  const openChapter = (idx) => {
+    const ch = country?.chapters[idx]
+    if (!ch) return false
+    const chDone = isDone(progress, ch.id, difficulty)
+    if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium)) {
+      track('limit_hit')
+      setLimitOpen(true)
+      return false
+    }
+    if (!hasPremium && !chDone && !todayIds(activeChild).includes(ch.id)) {
+      const daily = { date: todayKey(), ids: [...todayIds(activeChild), ch.id] }
+      patchChild({ daily }, () => saveChildDaily(user.uid, activeChild.id, daily))
+    }
+    setChapterIdx(idx)
+    setStep('intro')
+    setQuizScore(0)
+    setScreen('chapter')
+    return true
+  }
+
+  const logout = () => {
+    if (isGuest) { setGuestPlaying(false); setActiveChildState(null); setScreen('home'); return }
+    signOut()
   }
 
   const nav = {
     goHome: () => setScreen('home'),
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
     goCountry: (code) => {
-      if (isCountryLocked(code, premium)) { setPaywallOpen(true); return }
       if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
       setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
     goBack: () => {
       if (screen === 'country') setScreen('regions')
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
     },
-    startChapter: (idx) => {
-      setChapterIdx(idx)
-      setStep('intro')
-      setQuizScore(0)
-      setScreen('chapter')
-    },
+    startChapter: (idx) => { openChapter(idx) },
     startCards: () => setStep('cards'),
     startQuiz: () => setStep('quiz'),
     finishChapter: (score) => {
@@ -256,10 +316,7 @@ export default function App() {
     goNextChapter: () => {
       const next = chapterIdx + 1
       if (next < country.chapters.length) {
-        setChapterIdx(next)
-        setStep('intro')
-        setQuizScore(0)
-        setScreen('chapter')
+        if (!openChapter(next)) setScreen('country')
       } else {
         setScreen('country')
       }
@@ -267,13 +324,27 @@ export default function App() {
     switchProfile,
     openLevelPicker: () => setLevelPickerOpen(true),
     openPaywall: () => setPaywallOpen(true),
+    logout,
   }
 
-  const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: premium || !PAYWALL_ENABLED }
+  const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: hasPremium, guest: isGuest }
 
   // ── Auth gates ────────────────────────────────────────────────
   if (authLoading) return <Spinner msg="Demarrage..." />
-  if (!user) return <AuthScreen />
+  if (!user && !isGuest) {
+    if (authMode) {
+      return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)}
+        onGuest={() => { if (guest) { setGuestPlaying(true); setScreen('home') } else setAuthMode(null) }} />
+    }
+    return (
+      <LandingScreen lang={lang} changeLang={changeLang} guest={guest}
+        onStartGuest={(g) => { saveGuest(g); setGuest({ ...g, id: 'guest' }); setGuestPlaying(true); setScreen('home'); track('guest_start') }}
+        onResumeGuest={() => { setGuestPlaying(true); setScreen('home') }}
+        onLogin={() => setAuthMode('signin')}
+        onSignup={() => { setAuthMode('signup'); track('signup_view') }} />
+    )
+  }
+  if (!activeChild && isGuest) return <Spinner />
   if (profileLoading) return <Spinner msg="Chargement du profil..." />
   if (deviceBlocked) {
     return (
@@ -288,6 +359,7 @@ export default function App() {
       <>
       {devicesOpen && <DevicesManager user={user} onClose={() => setDevicesOpen(false)} />}
       {statsOpen && <ParentStats user={user} lang={lang} onClose={() => setStatsOpen(false)} />}
+      {adminOpen && <AdminDashboard user={user} onClose={() => setAdminOpen(false)} />}
       <ChildPickerScreen
         user={user}
         kids={kids}
@@ -297,6 +369,8 @@ export default function App() {
         lang={lang}
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
+        premium={premium}
+        onOpenAdmin={isOwnerEmail(user.email) ? () => setAdminOpen(true) : null}
         onMigrate={() => { /* noop : legacy already loaded, will be applied at create */ }}
       />
       </>
@@ -328,7 +402,12 @@ export default function App() {
       )}
       {paywallOpen && (
         <Paywall lang={lang} user={user} onClose={() => setPaywallOpen(false)}
-          onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }} />
+          onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }}
+          onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
+      )}
+      {limitOpen && (
+        <DailyLimit lang={lang} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country') }}
+          onUnlock={() => { setLimitOpen(false); setPaywallOpen(true) }} />
       )}
       {toast && (
         <div className="anim-slide-up" style={{ position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 700, background: '#2E9E5B', color: 'white', padding: '12px 20px', borderRadius: 20, fontWeight: 900, fontSize: 16, fontFamily: 'Nunito, sans-serif', boxShadow: '0 8px 20px rgba(46,158,91,0.4)', whiteSpace: 'nowrap' }}>

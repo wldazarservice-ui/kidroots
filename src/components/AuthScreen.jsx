@@ -1,9 +1,10 @@
 import LegalFooter from './LegalFooter'
 import { useState } from 'react'
-import { signIn, signUp, googleSignIn } from '../auth'
+import { signIn, signUp, googleSignIn, resetPassword } from '../auth'
 
-export default function AuthScreen() {
-  const [mode, setMode] = useState('signin') // 'signin' | 'signup'
+export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) {
+  const [mode, setMode] = useState(initialMode) // 'signin' | 'signup'
+  const [info, setInfo] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
@@ -33,6 +34,17 @@ export default function AuthScreen() {
     }
   }
 
+  const forgot = async () => {
+    setError(''); setInfo('')
+    if (!email) { setError("Écris d'abord ton email ci-dessus."); return }
+    try {
+      await resetPassword(email)
+      setInfo('📧 Un email pour choisir un nouveau mot de passe a été envoyé (pense à vérifier les spams).')
+    } catch (err) {
+      setError(translateError(err.code))
+    }
+  }
+
   const google = async () => {
     setError('')
     setBusy(true)
@@ -50,7 +62,11 @@ export default function AuthScreen() {
   const input = { width: '100%', padding: '14px 16px', borderRadius: 16, border: '3px solid #D6EEDC', background: '#F7FDF6', color: INK, fontSize: 16, fontFamily: 'inherit', fontWeight: 800, outline: 'none' }
 
   return (
-    <div className="green-bg" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '32px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="green-bg" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '32px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+      {onBack && (
+        <button className="btn-kid soft" onClick={onBack}
+          style={{ position: 'absolute', top: 14, left: 16, background: 'white', color: '#1A2A4F', padding: '8px 14px', fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>← Mokalibo</button>
+      )}
       <div style={{ textAlign: 'center', marginBottom: 22 }}>
         <div style={{ fontSize: 84, lineHeight: 1, marginBottom: 6, filter: 'drop-shadow(0 10px 14px rgba(46,158,91,0.25))' }} className="float">🌍</div>
         <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1 }}>
@@ -77,6 +93,15 @@ export default function AuthScreen() {
           <input type="password" placeholder="Mot de passe (6 caractères min.)" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={isSignup ? 'new-password' : 'current-password'}
             style={{ ...input, marginBottom: 14 }} />
 
+          {!isSignup && (
+            <button type="button" onClick={forgot}
+              style={{ background: 'none', border: 'none', padding: 0, margin: '-6px 0 12px', color: '#2E7D4F', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, cursor: 'pointer' }}>
+              Mot de passe oublié ?
+            </button>
+          )}
+          {info && (
+            <div style={{ background: '#E8F8EA', border: '2px solid #A5D6A7', borderRadius: 14, padding: '10px 14px', marginBottom: 14, color: '#1B5E20', fontSize: 14, fontWeight: 800 }}>{info}</div>
+          )}
           {error && (
             <div style={{ background: '#FFEBEE', border: '2px solid #EF9A9A', borderRadius: 14, padding: '10px 14px', marginBottom: 14, color: '#B71C1C', fontSize: 14, fontWeight: 800 }}>
               ⚠️ {error}
@@ -105,6 +130,12 @@ export default function AuthScreen() {
           🔒 Le compte est créé par un parent.<br />
           Aucune publicité. Aucune donnée revendue.
         </div>
+        {onGuest && (
+          <button type="button" className="btn-kid soft" onClick={onGuest}
+            style={{ width: '100%', marginTop: 14, background: '#FFF8E1', color: '#1A2A4F', padding: '12px', fontSize: 14, borderRadius: 16, border: '2px dashed #FFC400' }}>
+            ▶ Essayer sans compte
+          </button>
+        )}
       </div>
       <LegalFooter />
     </div>

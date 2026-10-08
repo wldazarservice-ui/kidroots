@@ -84,11 +84,15 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Webhook Stripe : https://mokalibo.com/api/stripe-webhook
 - PWA : manifest.json deja configure dans public/
 
-## Paiement (2 € a vie par compte parent)
-- Gratuit : le Mali (`FREE_COUNTRIES` dans `src/premium.js`). Le reste se debloque avec un paiement unique Stripe.
-- Interrupteur : `VITE_PAYWALL_ENABLED=true` dans Netlify (variable de build : redeployer apres changement). Desactive = tout gratuit.
-- Fonctions Netlify : `netlify/functions/` (create-checkout, confirm-checkout, stripe-webhook), helper commun `netlify/lib/shared.mjs`.
-- Le flag `premium` est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).
+## Modele economique (freemium + Formule Famille)
+- Gratuit : tous les pays, 2 NOUVEAUX chapitres par jour et par enfant (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
+- Essai sans compte : profil local `kidroots_guest` (`src/guest.js`), progression recopiee dans `kidroots_v3_progress` pour etre transferee a la creation du compte.
+- Formule Famille : abonnement Stripe 3,99 €/mois ou 29,99 €/an (`PLANS` dans `src/premium.js` ET `netlify/lib/shared.mjs`). Anciens achats « a vie » conserves (premium sans subscriptionId).
+- Interrupteur : `VITE_PAYWALL_ENABLED=true` dans Netlify (variable de build). Desactive = tout illimite.
+- Fonctions Netlify (`netlify/functions/`) : create-checkout, confirm-checkout, stripe-webhook (checkout.session.completed, customer.subscription.updated/deleted, invoice.paid), billing-portal, cancel-request (Kuendigungsbutton § 312k BGB, page `public/kuendigen.html`), delete-account, track (compteurs anonymes `metrics/AAAA-MM-JJ`), metrics (tableau de bord proprietaire, `OWNER_EMAILS`).
+- Le flag `premium` (et subscriptionId, stripeCustomerId...) est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).
 - Variables Netlify requises : voir `.env.example`. Garder `firebase-admin` en v13 (v14 plante sur Netlify : jose ESM).
+- Pages legales : generer avec `python3 scripts/legal/build.py` (ne pas editer public/agb.html etc. a la main).
+- Page de presentation : `LandingScreen.jsx` (visiteurs non connectes, textes fr/en/de dans le fichier).
 - Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).
 - Limites par compte : 5 enfants (`users/{uid}/children/c1..c5`) et 5 appareils (`users/{uid}/devices/d1..d5`, id local `kidino_device_id`). Imposees par `firestore.rules` (emplacements fixes). Code : `src/devices.js`, `src/cloud.js` (createChild), `DevicesManager.jsx`.

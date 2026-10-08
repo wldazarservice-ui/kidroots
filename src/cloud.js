@@ -23,7 +23,7 @@ export async function ensureUserDoc(user) {
       createdAt: serverTimestamp(),
       activeChildId: null,
     })
-    return { activeChildId: null }
+    return { activeChildId: null, isNew: true }
   }
   return snap.data()
 }
@@ -82,6 +82,11 @@ export async function saveChildDifficulty(uid, childId, difficulty) {
     difficulty,
     updatedAt: serverTimestamp(),
   })
+}
+
+// Limite gratuite : chapitres commences aujourd'hui
+export async function saveChildDaily(uid, childId, daily) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { daily })
 }
 
 export async function saveChildLang(uid, childId, lang) {

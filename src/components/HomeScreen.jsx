@@ -4,7 +4,7 @@ import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
-import { signOut } from '../auth'
+import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
 import LegalFooter from './LegalFooter'
 import { LEVELS, isDone, countryStats } from '../levels'
 
@@ -19,6 +19,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
   const pct = Math.round((doneChapters / totalChapters) * 100)
   const xpInLevel = progress.xp % 300
   const firstName = (activeChild?.name || '').split(' ')[0]
+  const usedToday = Math.min(DAILY_FREE_CHAPTERS, todayIds(activeChild).length)
 
   const countryStarted = (code) => COUNTRIES[code]?.chapters.some(ch => isDone(progress, ch.id, difficulty))
   const countryDone = (code) => COUNTRIES[code]?.chapters.every(ch => isDone(progress, ch.id, difficulty))
@@ -45,7 +46,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         <div style={{ flex: 1 }} />
         <SpeakButton settings color="#FF6B35" label="" />
         <LangPicker lang={lang} onChange={changeLang} compact />
-        <button className="btn-kid" onClick={() => signOut()} title="Deconnexion" aria-label="Deconnexion"
+        <button className="btn-kid" onClick={nav.logout} title="Deconnexion" aria-label="Deconnexion"
           style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#90A4AE', width: 34, height: 34, fontSize: 14, borderRadius: '50%', boxShadow: '0 3px 10px rgba(26,42,79,0.12)', flexShrink: 0 }}>
           <LogoutIcon size={16} />
         </button>
@@ -90,7 +91,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, background: 'white', color: '#1A2A4F', borderRadius: 20, padding: '10px 14px', marginBottom: 12, textAlign: 'left', border: '3px dashed #FF9800' }}>
             <span style={{ fontSize: 26 }}>🔓</span>
             <span style={{ flex: 1, fontSize: 14, fontWeight: 900 }}>{t(lang, 'pw_banner')}</span>
-            <span style={{ background: '#FF7A00', color: 'white', borderRadius: 999, padding: '5px 11px', fontSize: 14, fontWeight: 900, whiteSpace: 'nowrap' }}>2 €</span>
+            <span style={{ background: '#FF7A00', color: 'white', borderRadius: 999, padding: '5px 11px', fontSize: 14, fontWeight: 900, whiteSpace: 'nowrap' }}>{PLANS.month.label} {t(lang, 'per_month')}</span>
           </button>
         )}
 
@@ -110,6 +111,13 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             </div>
             <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 6 }}>
               📚 {doneChapters} / {totalChapters} {t(lang, 'chapters_word')} · {pct}%
+            </div>
+            {/* Aventures du jour (version gratuite : 2 nouveaux chapitres par jour) */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 6, fontSize: 12, fontWeight: 900, color: '#1565C0' }}>
+              ⚡ {premium ? t(lang, 'daily_unlimited') : t(lang, 'daily_left')}
+              {!premium && Array.from({ length: DAILY_FREE_CHAPTERS }, (_, i) => (
+                <span key={i} style={{ width: 16, height: 16, borderRadius: '50%', background: i < DAILY_FREE_CHAPTERS - usedToday ? 'linear-gradient(145deg,#FFD54F,#FF9800)' : '#E3EAF2', boxShadow: i < DAILY_FREE_CHAPTERS - usedToday ? '0 2px 4px rgba(255,152,0,0.4)' : 'none' }} />
+              ))}
             </div>
           </div>
         </div>

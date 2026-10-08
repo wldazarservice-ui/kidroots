@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import LogoutIcon from './LogoutIcon'
 import LegalFooter from './LegalFooter'
+import DeleteAccount from './DeleteAccount'
+import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelAverages } from '../levels'
@@ -10,7 +12,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, premium, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -20,6 +22,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [levelTouched, setLevelTouched] = useState(false)
   const [busy, setBusy] = useState(false)
   const [createError, setCreateError] = useState('')
+  const [deleting, setDeleting] = useState(false)
+  const [portalBusy, setPortalBusy] = useState(false)
+  const portal = async () => {
+    setPortalBusy(true)
+    try { await openBillingPortal(user) } catch (e) { console.error(e); alert("L'espace abonnement n'a pas pu s'ouvrir. Réessaie dans un instant."); setPortalBusy(false) }
+  }
 
   const pickAge = (a) => {
     setAge(a)
@@ -133,9 +141,28 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               📱 Mes appareils
             </button>
           )}
+          {premium && (
+            <button className="btn-kid soft" onClick={portal} disabled={portalBusy}
+              style={{ width: '100%', background: 'white', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.12)' }}>
+              💳 {portalBusy ? '…' : t(lang, 'manage_sub')}
+            </button>
+          )}
+          {onOpenAdmin && (
+            <button className="btn-kid soft" onClick={onOpenAdmin}
+              style={{ width: '100%', background: '#1A2A4F', color: 'white', padding: '12px', fontSize: 15, borderRadius: 18 }}>
+              📈 Tableau de bord Mokalibo
+            </button>
+          )}
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 18 }}>
+            <button onClick={() => setDeleting(true)}
+              style={{ background: 'none', border: 'none', color: '#90A4AE', fontFamily: 'inherit', fontWeight: 800, fontSize: 12, textDecoration: 'underline', cursor: 'pointer' }}>
+              Supprimer mon compte
+            </button>
           </div>
         </>
       )}
+      {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}
 
       {creating && (
         <form onSubmit={submitNew} style={{ maxWidth: 600, background: 'white', borderRadius: 26, padding: 18, boxShadow: '0 10px 28px rgba(26,42,79,0.10)' }}>

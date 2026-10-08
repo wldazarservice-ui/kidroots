@@ -16,7 +16,7 @@ COMPANY = {
     'widnr': 'DE462026365-00001',
     'app': 'Mokalibo',
     'site': 'https://mokalibo.com',
-    'updated': '08.10.2026',
+    'updated': '08.10.2026 (Familien-Abo)',
     'authority': 'Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz, poststelle@datenschutz.rlp.de',
 }
 
@@ -143,6 +143,12 @@ DS_DE = f"""
 <p>Die Vorlesefunktion nutzt die Sprachausgabe des Browsers bzw. Betriebssystems. Je nach Gerät kann der Hersteller (z. B. Apple, Google, Microsoft) diese Funktion bereitstellen.</p>
 <h3>i) Schriftarten</h3>
 <p>Alle Schriftarten werden von unserem eigenen Server geladen; es findet keine Verbindung zu Google Fonts statt.</p>
+<h3>j) Anonyme Nutzungsstatistik</h3>
+<p>Um zu erfahren, wie viele Besucher die App ausprobieren, zählen wir auf unserem Server anonyme Ereignisse (z. B. „Seite aufgerufen“, „Test gestartet“, „Konto erstellt“) als reine Tageszähler, gegebenenfalls mit der Kampagnenquelle aus dem Link (z. B. utm_source=instagram). Es werden dabei weder IP-Adressen noch Kennungen, Cookies oder Geräteinformationen gespeichert; ein Personenbezug ist nicht möglich. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+<h3>k) Testmodus ohne Konto</h3>
+<p>Im Testmodus werden Vorname, Alter und Fortschritt des Kindes ausschließlich lokal auf dem Gerät gespeichert und nicht an uns übertragen. Wird später ein Elternkonto angelegt, kann der Fortschritt übernommen werden.</p>
+<h3>l) Kündigung</h3>
+<p>Bei einer Kündigung über „Verträge hier kündigen“ verarbeiten wir Name, E-Mail-Adresse, Art und gegebenenfalls Grund der Kündigung, um diese auszuführen und zu dokumentieren (Art. 6 Abs. 1 lit. b und c DSGVO). Eine Bestätigung kann per E-Mail über den Dienst Resend (Resend, Inc., USA) versendet werden.</p>
 
 <h2>4. Lokaler Speicher (keine Cookies zu Werbezwecken)</h2>
 <p>Die App speichert im Browser (Local Storage, Service Worker) nur technisch notwendige Informationen: Anmeldestatus, Sprache, Vorlese-Einstellung, Geräte-ID, Offline-Inhalte und Übersetzungs-Cache. Dies ist nach § 25 Abs. 2 Nr. 2 TDDDG ohne Einwilligung zulässig. Es werden keine Tracking-Cookies verwendet.</p>
@@ -154,7 +160,7 @@ DS_DE = f"""
 <p>Konto-, Kinder- und Gerätedaten speichern wir, bis das Elternkonto gelöscht wird. Zahlungs- und Rechnungsdaten bewahren wir aufgrund gesetzlicher Pflichten bis zu 10 Jahre auf (§ 147 AO, § 257 HGB).</p>
 
 <h2>7. Ihre Rechte</h2>
-<p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO). Zur Löschung Ihres Kontos und aller Kinderprofile genügt eine E-Mail an <a href="mailto:{C['email']}">{C['email']}</a>. Sie können sich außerdem bei einer Aufsichtsbehörde beschweren, zum Beispiel bei: {C['authority']}.</p>
+<p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO). Sie können Ihr Konto und alle Kinderprofile jederzeit selbst in der App löschen („Supprimer mon compte“) oder per E-Mail an <a href="mailto:{C['email']}">{C['email']}</a> löschen lassen. Sie können sich außerdem bei einer Aufsichtsbehörde beschweren, zum Beispiel bei: {C['authority']}.</p>
 """
 
 DS_FR = f"""
@@ -182,6 +188,12 @@ DS_FR = f"""
 <p>La voix off utilise la synthèse vocale du navigateur ou du système, fournie selon l'appareil par son fabricant (Apple, Google, Microsoft…).</p>
 <h3>i) Polices</h3>
 <p>Toutes les polices sont chargées depuis notre propre serveur, sans connexion à Google Fonts.</p>
+<h3>j) Statistiques anonymes</h3>
+<p>Pour savoir combien de visiteurs essaient l'app, notre serveur compte des événements anonymes (ex. « page vue », « essai commencé », « compte créé ») sous forme de simples compteurs par jour, éventuellement avec la source de campagne du lien (ex. utm_source=instagram). Aucune adresse IP, aucun identifiant, cookie ou information d'appareil n'est enregistré (art. 6 §1 f) RGPD).</p>
+<h3>k) Essai sans compte</h3>
+<p>En mode essai, le prénom, l'âge et la progression de l'enfant restent uniquement sur l'appareil et ne nous sont pas transmis. Ils peuvent être repris lors de la création d'un compte parent.</p>
+<h3>l) Résiliation</h3>
+<p>Lors d'une résiliation via « Verträge hier kündigen », nous traitons le nom, l'e-mail, le type et le motif éventuel pour l'exécuter et la documenter (art. 6 §1 b) et c) RGPD). Une confirmation peut être envoyée par e-mail via le service Resend (Resend, Inc., États-Unis).</p>
 <h2>4. Stockage local (aucun cookie publicitaire)</h2>
 <p>L'app ne conserve dans le navigateur que les informations strictement nécessaires (connexion, langue, voix off, identifiant d'appareil, contenus hors-ligne, cache de traduction), ce qui ne nécessite pas de consentement (§ 25 al. 2 n° 2 TDDDG). Aucun cookie de suivi.</p>
 <h2>5. Transferts hors UE</h2>
@@ -189,7 +201,7 @@ DS_FR = f"""
 <h2>6. Durée de conservation</h2>
 <p>Jusqu'à la suppression du compte parent. Les données de paiement et de facturation sont conservées jusqu'à 10 ans (obligations légales allemandes).</p>
 <h2>7. Vos droits</h2>
-<p>Accès, rectification, effacement, limitation, portabilité et opposition (art. 15 à 21 RGPD). Pour supprimer votre compte et tous les profils enfants, il suffit d'écrire à <a href="mailto:{C['email']}">{C['email']}</a>. Vous pouvez aussi saisir une autorité de contrôle, par exemple : {C['authority']}.</p>
+<p>Accès, rectification, effacement, limitation, portabilité et opposition (art. 15 à 21 RGPD). Vous pouvez supprimer vous-même votre compte et tous les profils enfants dans l'app (« Supprimer mon compte ») ou en écrivant à <a href="mailto:{C['email']}">{C['email']}</a>. Vous pouvez aussi saisir une autorité de contrôle, par exemple : {C['authority']}.</p>
 """
 page('datenschutz.html', 'Datenschutzerklärung / Confidentialité', DS_DE, DS_FR)
 
@@ -198,13 +210,19 @@ AGB_DE = f"""
 <h2>§ 1 Geltungsbereich und Anbieter</h2>
 <p>Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung der Lern-App {C['app']} ({C['site']}) und den Kauf des Vollzugangs. Anbieter ist {C['owner']}, {C['business']}, {C['street']}, {C['city']}, {C['country']}.</p>
 <h2>§ 2 Leistungen</h2>
-<p>Ein Land (Mali) kann kostenlos genutzt werden. Der kostenpflichtige Vollzugang schaltet alle Länder, Lesestufen und Quizze für alle Kinderprofile des Elternkontos frei. „Zugang auf Lebenszeit“ bedeutet: zeitlich unbegrenzt, solange {C['app']} betrieben wird; es handelt sich um eine Einmalzahlung ohne Abonnement.</p>
+<p><strong>Kostenlose Nutzung:</strong> Alle Länder können kostenlos genutzt werden, begrenzt auf 2 neue Kapitel pro Tag und Kinderprofil. Bereits abgeschlossene Kapitel können jederzeit wiederholt werden. Die kostenlose Nutzung kann auch ohne Konto (Testmodus, Speicherung nur auf dem Gerät) erfolgen.</p>
+<p><strong>Familien-Abo:</strong> Das kostenpflichtige Abonnement hebt die tägliche Begrenzung für alle Kinderprofile des Elternkontos auf (höchstens 5 Kinder und 5 Geräte).</p>
+<p>Kunden, die vor Einführung des Abonnements einen einmaligen Vollzugang erworben haben, behalten diesen Zugang unverändert.</p>
 <h2>§ 3 Konto und Nutzungsgrenzen</h2>
 <p>Das Elternkonto darf nur von volljährigen Personen angelegt werden. Pro Konto sind höchstens 5 Kinderprofile und 5 Geräte zulässig. Der Zugang ist für die private Nutzung innerhalb der Familie bestimmt; eine Weitergabe der Zugangsdaten an Dritte ist nicht gestattet.</p>
 <h2>§ 4 Vertragsschluss</h2>
-<p>Mit Klick auf die Schaltfläche zur Zahlung und Abschluss des Bezahlvorgangs bei Stripe gibt der Kunde ein verbindliches Angebot ab. Der Vertrag kommt mit der Freischaltung des Zugangs zustande. Die Vertragssprache ist Deutsch; eine französische Übersetzung wird zur Information bereitgestellt.</p>
+<p>Mit Klick auf die Schaltfläche „Abonnieren“ und Abschluss des Bezahlvorgangs bei Stripe gibt der Kunde ein verbindliches Angebot ab. Der Vertrag kommt mit der Freischaltung des Zugangs zustande. Die Vertragssprache ist Deutsch; eine französische Übersetzung wird zur Information bereitgestellt.</p>
 <h2>§ 5 Preis und Zahlung</h2>
-<p>Der Preis beträgt einmalig 2,00 €. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet. Die Zahlung erfolgt über Stripe mit den dort angebotenen Zahlungsmitteln. Eine Rechnung wird per E-Mail zugesandt.</p>
+<p>Das Familien-Abo kostet wahlweise 3,99 € pro Monat (Monatsabo) oder 29,99 € pro Jahr (Jahresabo). Gemäß § 19 UStG wird keine Umsatzsteuer berechnet. Der Betrag wird jeweils zu Beginn des Abrechnungszeitraums im Voraus über Stripe mit den dort angebotenen Zahlungsmitteln eingezogen. Rechnungen werden per E-Mail zugesandt.</p>
+<h2>§ 5a Laufzeit und Kündigung</h2>
+<p>Das Monatsabo hat eine Laufzeit von einem Monat, das Jahresabo eine Erstlaufzeit von einem Jahr. Das Monatsabo verlängert sich jeweils um einen weiteren Monat, wenn es nicht vor Ablauf gekündigt wird. Das Jahresabo verlängert sich nach Ablauf der Erstlaufzeit auf unbestimmte Zeit und kann dann jederzeit mit einer Frist von einem Monat gekündigt werden; für die Zeit nach dem Wirksamwerden der Kündigung bereits gezahlte Beträge werden anteilig erstattet.</p>
+<p>Die Kündigung ist jederzeit ohne Angabe von Gründen möglich: in der App unter „Mein Abonnement“, über die Schaltfläche <a href="/kuendigen">„Verträge hier kündigen“</a> oder per E-Mail an <a href="mailto:{C['email']}">{C['email']}</a>. Nach der Kündigung bleibt der Zugang bis zum Ende des bezahlten Zeitraums bestehen; anschließend gilt wieder die kostenlose Nutzung. Das Recht zur außerordentlichen Kündigung bleibt unberührt.</p>
+<p>Preisänderungen werden mindestens 30 Tage vor Wirksamwerden per E-Mail angekündigt und gelten erst ab dem folgenden Abrechnungszeitraum; der Kunde kann bis dahin kündigen.</p>
 <h2>§ 6 Widerrufsrecht</h2>
 <div class="card">
 <h3>Widerrufsbelehrung</h3>
@@ -216,7 +234,7 @@ AGB_DE = f"""
 <h3>Muster-Widerrufsformular</h3>
 <p>(Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es zurück.)<br>
 – An {C['owner']}, {C['business']}, {C['street']}, {C['city']}, E-Mail: {C['email']}<br>
-– Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Bereitstellung der folgenden digitalen Inhalte: {C['app']} Vollzugang<br>
+– Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über die Bereitstellung der folgenden digitalen Inhalte: {C['app']} Familien-Abo<br>
 – Bestellt am (*):<br>– Name des/der Verbraucher(s):<br>– Anschrift des/der Verbraucher(s):<br>– E-Mail-Adresse des Kontos:<br>
 – Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)<br>– Datum<br>(*) Unzutreffendes streichen.</p>
 </div>
@@ -232,13 +250,19 @@ AGB_FR = f"""
 <h2>Art. 1 Champ d'application et vendeur</h2>
 <p>Les présentes conditions générales de vente (CGV) s'appliquent à l'utilisation de l'application éducative {C['app']} ({C['site']}) et à l'achat de l'accès complet. Le vendeur est {C['owner']}, {C['business']}, {C['street']}, {C['city']}, {C['country']}.</p>
 <h2>Art. 2 Services</h2>
-<p>Un pays (le Mali) est utilisable gratuitement. L'accès complet payant débloque tous les pays, niveaux de lecture et quiz pour tous les profils enfants du compte parent. « Accès à vie » signifie : sans limite de durée, tant que {C['app']} est exploitée ; il s'agit d'un paiement unique, sans abonnement.</p>
+<p><strong>Utilisation gratuite :</strong> tous les pays sont accessibles gratuitement, dans la limite de 2 nouveaux chapitres par jour et par profil enfant. Les chapitres déjà terminés peuvent être rejoués à tout moment. L'essai est possible sans compte (données enregistrées uniquement sur l'appareil).</p>
+<p><strong>Formule Famille :</strong> l'abonnement payant supprime la limite quotidienne pour tous les profils enfants du compte parent (5 enfants et 5 appareils maximum).</p>
+<p>Les clients ayant acheté un accès à vie avant l'introduction de l'abonnement conservent cet accès.</p>
 <h2>Art. 3 Compte et limites d'utilisation</h2>
 <p>Le compte parent est réservé aux personnes majeures. 5 profils enfants et 5 appareils maximum par compte. L'accès est destiné à un usage privé et familial ; le partage des identifiants avec des tiers est interdit.</p>
 <h2>Art. 4 Conclusion du contrat</h2>
-<p>En validant le paiement sur Stripe, le client fait une offre ferme ; le contrat est conclu au déblocage de l'accès. La langue du contrat est l'allemand ; cette traduction est fournie à titre informatif.</p>
+<p>En cliquant sur « S'abonner » et en validant le paiement sur Stripe, le client fait une offre ferme ; le contrat est conclu au déblocage de l'accès. La langue du contrat est l'allemand ; cette traduction est fournie à titre informatif.</p>
 <h2>Art. 5 Prix et paiement</h2>
-<p>Le prix est de 2,00 € en paiement unique. TVA non applicable (§ 19 UStG, régime des petites entreprises). Le paiement s'effectue via Stripe. Une facture est envoyée par e-mail.</p>
+<p>La Formule Famille coûte 3,99 € par mois (mensuel) ou 29,99 € par an (annuel). TVA non applicable (§ 19 UStG, régime des petites entreprises). Le montant est prélevé d'avance au début de chaque période via Stripe. Les factures sont envoyées par e-mail.</p>
+<h2>Art. 5a Durée et résiliation</h2>
+<p>L'abonnement mensuel se renouvelle chaque mois. L'abonnement annuel a une première durée d'un an ; ensuite il se poursuit pour une durée indéterminée et peut être résilié à tout moment avec un préavis d'un mois, le trop-perçu étant remboursé au prorata.</p>
+<p>La résiliation est possible à tout moment, sans motif : dans l'app (« Mon abonnement »), via le bouton <a href="/kuendigen">« Verträge hier kündigen »</a> ou par e-mail à <a href="mailto:{C['email']}">{C['email']}</a>. L'accès reste actif jusqu'à la fin de la période payée, puis la version gratuite s'applique.</p>
+<p>Toute modification de prix est annoncée par e-mail au moins 30 jours à l'avance et ne s'applique qu'à la période suivante ; le client peut résilier d'ici là.</p>
 <h2>Art. 6 Droit de rétractation</h2>
 <div class="card">
 <p>Le consommateur dispose d'un délai de quatorze jours à compter de la conclusion du contrat pour se rétracter sans motif, en nous informant par une déclaration claire (par exemple par e-mail à {C['email']}). En cas de rétractation, nous remboursons tous les paiements reçus au plus tard dans les quatorze jours, par le même moyen de paiement, sans frais.</p>

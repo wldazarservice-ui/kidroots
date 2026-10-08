@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verträge hier kündigen — Mokalibo</title>
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  :root { --ink:#1A2A4F; --green:#2E9E5B; --muted:#5B6B7A; --bg:#F7FDF6; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Nunito, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg); line-height:1.6; }
+  header { background: linear-gradient(180deg,#CDEFD6,#E8F8EA); padding: 22px 16px; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+  .logo { font-weight: 900; font-size: 26px; text-decoration:none; }
+  .logo .a { color:#FF6F00; } .logo .b { color:#1E88E5; }
+  h1 { font-size: 28px; margin: 26px 0 6px; }
+  .card { background:white; border-radius:20px; padding:20px; margin: 16px 0; box-shadow:0 6px 18px rgba(46,158,91,.10); }
+  label { display:block; font-weight:800; font-size:14px; margin: 14px 0 6px; }
+  input, select, textarea { width:100%; padding:12px 14px; border-radius:12px; border:2px solid #D6EEDC; font: inherit; font-size:16px; color:var(--ink); background:#FAFFFA; }
+  textarea { min-height: 80px; }
+  button { margin-top: 20px; width:100%; padding:16px; border:none; border-radius:14px; background:#C62828; color:white; font: inherit; font-size:18px; font-weight:900; cursor:pointer; }
+  button:disabled { opacity: .6; }
+  .muted { color:var(--muted); font-size:14px; }
+  .ok { background:#E8F8EA; border:2px solid #2E9E5B; }
+  .err { color:#C62828; font-weight:800; }
+  a { color: var(--green); }
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="/"><span class="a">Moka</span><span class="b">libo</span></a></div></header>
+<main class="wrap">
+  <h1>Verträge hier kündigen</h1>
+  <p class="muted">Résilier votre abonnement Mokalibo Famille · Cancel your subscription</p>
+
+  <form id="f" class="card">
+    <label for="kind">Art der Kündigung / Type</label>
+    <select id="kind" name="kind">
+      <option value="ordinary">Ordentliche Kündigung zum nächstmöglichen Zeitpunkt / Résiliation ordinaire</option>
+      <option value="extraordinary">Außerordentliche Kündigung / Résiliation extraordinaire</option>
+    </select>
+
+    <label for="name">Vor- und Nachname / Nom et prénom *</label>
+    <input id="name" name="name" required maxlength="120" autocomplete="name">
+
+    <label for="email">E-Mail-Adresse Ihres Elternkontos / E-mail du compte parent *</label>
+    <input id="email" name="email" type="email" required maxlength="200" autocomplete="email">
+
+    <label for="reason">Grund (nur bei außerordentlicher Kündigung erforderlich) / Motif</label>
+    <textarea id="reason" name="reason" maxlength="1000"></textarea>
+
+    <p class="muted">Vertrag: Mokalibo Famille (Monats- oder Jahresabo). Der Zugang bleibt bis zum Ende des bereits bezahlten Zeitraums bestehen.<br>
+    Le contrat : Mokalibo Famille. L'accès reste actif jusqu'à la fin de la période déjà payée.</p>
+
+    <button id="go" type="submit">Jetzt kündigen</button>
+    <p id="e" class="err" hidden>Bitte Name und gültige E-Mail angeben. / Merci d'indiquer nom et e-mail.</p>
+  </form>
+
+  <div id="done" class="card ok" hidden>
+    <h2 style="margin-top:0">✅ Kündigung eingegangen</h2>
+    <p id="msg"></p>
+    <p class="muted">Bitte speichern oder drucken Sie diese Bestätigung. / Conservez ou imprimez cette confirmation.</p>
+  </div>
+
+  <p class="muted">Fragen? <a href="mailto:contact@azarconsulting.eu">contact@azarconsulting.eu</a> · <a href="/impressum">Impressum</a> · <a href="/agb">AGB</a> · <a href="/datenschutz">Datenschutz</a></p>
+</main>
+<script>
+  var f = document.getElementById('f'), $ = function (id) { return document.getElementById(id) }
+  f.addEventListener('submit', function (ev) {
+    ev.preventDefault()
+    var name = $('name').value.trim(), email = $('email').value.trim()
+    document.getElementById('e').hidden = !!(name && email)
+    if (!name || !email) return
+    var btn = document.getElementById('go'); btn.disabled = true; btn.textContent = '…'
+    fetch('/api/cancel-request', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email, kind: $('kind').value, reason: $('reason').value })
+    }).then(function (r) { return r.json().then(function (d) { if (!r.ok) throw d; return d }) })
+      .then(function (d) {
+        var at = new Date(d.at).toLocaleString('de-DE')
+        var ends = (d.ends || []).map(function (x) { return new Date(x).toLocaleDateString('de-DE') })
+        var t = 'Eingang Ihrer Kündigung: ' + at + ' (' + name + ', ' + email + '). '
+        t += ends.length ? 'Ihr Abonnement endet am ' + ends.join(', ') + '. / Votre abonnement se termine le ' + ends.join(', ') + '.'
+                         : 'Wir bearbeiten Ihre Kündigung und melden uns per E-Mail. / Nous traitons votre demande et revenons vers vous par e-mail.'
+        if (d.mailed) t += ' Eine Bestätigung wurde an Ihre E-Mail-Adresse gesendet.'
+        document.getElementById('msg').textContent = t
+        f.hidden = true; document.getElementById('done').hidden = false
+      })
+      .catch(function () { btn.disabled = false; btn.textContent = 'Jetzt kündigen'; document.getElementById('e').hidden = false })
+  })
+</script>
+</body>
+</html>
