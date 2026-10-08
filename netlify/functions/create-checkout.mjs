@@ -18,7 +18,7 @@ export default async (req) => {
         currency: 'eur',
         unit_amount: PRICE_CENTS,
         product_data: {
-          name: 'Kidino — accès à vie',
+          name: 'Mokalibo — accès à vie',
           description: 'Tous les pays et toutes les histoires, pour tous les enfants du compte. Paiement unique, sans abonnement.',
         },
       },

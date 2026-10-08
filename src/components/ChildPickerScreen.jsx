@@ -45,7 +45,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
         <div>
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
-            <span style={{ color: '#FF6F00' }}>Kid</span><span style={{ color: '#1E88E5' }}>ino</span>
+            <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
           </div>
           <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
         </div>

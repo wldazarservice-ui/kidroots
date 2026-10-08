@@ -1,4 +1,4 @@
-// Kidino — Service worker (mode hors-ligne)
+// Mokalibo — Service worker (mode hors-ligne)
 // - Installation : met en cache la page, le manifest et tous les assets Vite references par index.html
 // - Navigation : reseau d'abord, repli sur la page en cache si hors-ligne
 // - /assets/* (fichiers hashes) : cache d'abord

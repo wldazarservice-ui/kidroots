@@ -1,6 +1,6 @@
-# Kidino (ex-KidRoots) — Guide pour Claude Code
+# Mokalibo (ex-KidRoots, ex-Mokalibo) — Guide pour Claude Code
 
-Nom de l'app : **Kidino** (« kid he knows »). Les cles localStorage et les identifiants Firebase gardent le prefixe `kidroots` volontairement (ne pas renommer : perte des donnees deja sauvegardees).
+Nom de l'app : **Mokalibo** (prononcé mo-ka-li-bo, choisi pour se dire pareil dans les 6 langues ; mokalibo.com non enregistré au 08/10/2026). Les cles localStorage et les identifiants Firebase gardent le prefixe `kidroots` volontairement (ne pas renommer : perte des donnees deja sauvegardees).
 
 ## Contexte du projet
 Application educative pour enfants de 4-7 ans permettant de decouvrir l'histoire des pays du monde.

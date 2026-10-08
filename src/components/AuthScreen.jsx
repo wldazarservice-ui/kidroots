@@ -53,7 +53,7 @@ export default function AuthScreen() {
       <div style={{ textAlign: 'center', marginBottom: 22 }}>
         <div style={{ fontSize: 84, lineHeight: 1, marginBottom: 6, filter: 'drop-shadow(0 10px 14px rgba(46,158,91,0.25))' }} className="float">🌍</div>
         <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1 }}>
-          <span style={{ color: '#FF6F00' }}>Kid</span><span style={{ color: '#1E88E5' }}>ino</span>
+          <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
         </div>
         <div style={{ fontSize: 15, color: '#3E6B4F', fontWeight: 800, marginTop: 6 }}>
           Découvre l'histoire des pays du monde
