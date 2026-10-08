@@ -20,7 +20,7 @@
 | 6 | **Écoles / associations** : imprimer le flyer, contacter 10 structures par semaine | 2 h/sem | impression |
 | 7 | **Parrainage** : envoyer ton propre lien (bouton 🎁 dans l'app) à ta famille et tes amis | 15 min | 0 € |
 | 8 | **Facebook** : groupes de parents, d'expatriés, d'école à la maison (en respectant leurs règles) | 30 min/sem | 0 € |
-| 9 | **Pinterest** : créer un compte et épingler les pages « histoire de [pays] pour enfants » | 30 min/sem | 0 € |
+| 9 | **Pinterest** : créer un compte et épingler les visuels Instagram (lien vers mokalibo.com) | 30 min/sem | 0 € |
 | 10 | **Associations de protection de l'enfance** : choisir 1 ou 2 associations et garder une trace des dons (voir plus bas) | 30 min | — |
 
 ---
@@ -72,8 +72,6 @@ Supports : `flyer_mokalibo_fr.pdf` / `flyer_mokalibo_de.pdf` (A5, à imprimer ou
 Bonjour,
 
 Je suis Walid, papa et créateur de Mokalibo, une application qui raconte aux enfants de 4 à 12 ans la vraie histoire des 195 pays du monde : chapitres courts, lus à voix haute, avec un quiz à chaque fois.
-
-Pour vos exposés ou vos séances de géographie, chaque pays a aussi une page gratuite et sans inscription : par exemple https://mokalibo.com/histoire/japon/
 
 Les élèves peuvent aussi utiliser l'app gratuitement chez eux (2 histoires par jour, sans compte, sans publicité). Je joins un flyer pour les familles, si cela peut être utile.
 
