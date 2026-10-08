@@ -1,4 +1,4 @@
-// KidRoots — Donnees historiques completes
+// Kidino — Donnees historiques completes
 // 20 pays — 5 chapitres chacun — Histoire complete de l'Antiquite a aujourd'hui
 
 export const COUNTRIES = {

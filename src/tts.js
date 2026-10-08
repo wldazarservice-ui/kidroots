@@ -1,7 +1,7 @@
-// KidRoots — Voix off (Text-To-Speech via Web Speech API)
+// Kidino — Voix off (Text-To-Speech via Web Speech API)
 // Lecture a voix haute des cartes et textes pour les enfants de 4-7 ans.
 
-// Mapping langues KidRoots → codes BCP-47 utilises par les voix navigateurs
+// Mapping langues Kidino → codes BCP-47 utilises par les voix navigateurs
 const LANG_MAP = {
   fr: ['fr-FR', 'fr-CA', 'fr'],
   en: ['en-GB', 'en-US', 'en'],

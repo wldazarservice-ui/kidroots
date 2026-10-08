@@ -1,4 +1,4 @@
-// Systeme de traduction KidRoots
+// Systeme de traduction Kidino
 export const LANGUAGES = {
   fr: { flag: '🇫🇷', name: 'Français' },
   en: { flag: '🇬🇧', name: 'English' },

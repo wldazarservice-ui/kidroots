@@ -1,4 +1,6 @@
-# KidRoots — Guide pour Claude Code
+# Kidino (ex-KidRoots) — Guide pour Claude Code
+
+Nom de l'app : **Kidino** (« kid he knows »). Les cles localStorage et les identifiants Firebase gardent le prefixe `kidroots` volontairement (ne pas renommer : perte des donnees deja sauvegardees).
 
 ## Contexte du projet
 Application educative pour enfants de 4-7 ans permettant de decouvrir l'histoire des pays du monde.

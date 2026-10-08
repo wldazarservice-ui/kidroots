@@ -14,7 +14,7 @@ export function BadgeScreen({ country: c, badges, isNew, nav }) {
         <div style={{ fontSize: 72 }}>{c.flag}</div>
         <div style={{ fontSize: 24, fontWeight: 900, color: c.color, marginTop: 8 }}>{c.name}</div>
         <div style={{ fontSize: 14, color: '#888', fontWeight: 700, marginTop: 4 }}>avec {c.charName} {c.char}</div>
-        <div style={{ marginTop: 12, fontSize: 12, fontWeight: 700, color: '#aaa' }}>🌟 Explorateur KidRoots</div>
+        <div style={{ marginTop: 12, fontSize: 12, fontWeight: 700, color: '#aaa' }}>🌟 Explorateur Kidino</div>
       </div>
 
       {isNew && (

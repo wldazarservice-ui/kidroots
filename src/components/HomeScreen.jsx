@@ -54,7 +54,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         <div style={{ textAlign: 'center', marginBottom: 16 }}>
           <div className="float" style={{ fontSize: 78, lineHeight: 1, margin: '0 0 4px', filter: 'drop-shadow(0 10px 14px rgba(21,101,192,0.25))' }}>🌍</div>
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1, letterSpacing: 0.5 }}>
-            <span style={{ color: '#FF6F00' }}>Kid</span><span style={{ color: '#1E88E5' }}>Roots</span>
+            <span style={{ color: '#FF6F00' }}>Kid</span><span style={{ color: '#1E88E5' }}>ino</span>
           </div>
           {firstName && (
             <div style={{ fontSize: 20, fontWeight: 900, color: INK, marginTop: 10 }}>
