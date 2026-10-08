@@ -1,7 +1,7 @@
 // Notifications Stripe (source de verite) : debut, renouvellement, resiliation de l'abonnement.
 // Evenements a cocher dans Stripe : checkout.session.completed, customer.subscription.updated,
 // customer.subscription.deleted, invoice.paid
-import { stripe, syncSubscription, countEvent, json } from '../lib/shared.mjs'
+import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS } from '../lib/shared.mjs'
 
 const uidOf = (obj) => obj?.metadata?.uid || null
 
@@ -24,6 +24,7 @@ export default async (req) => {
       if (uid && (await syncSubscription(uid, sub))) {
         await countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval })
       }
+      if (uid) await rewardReferral(obj, uid).catch((e) => console.error('referral reward', e.message))
       break
     }
     case 'customer.subscription.created':
@@ -43,6 +44,35 @@ export default async (req) => {
     }
   }
   return json(200, { received: true })
+}
+
+// Parrainage : le filleul a payé → le parrain gagne 1 mois (réduction sur sa prochaine facture,
+// ou crédit gardé s'il n'est pas encore abonné). Idempotent grâce au document referrals/{sessionId}.
+async function rewardReferral(session, uid) {
+  const m = session.metadata || {}
+  if (!m.referrer && m.used_credit !== '1') return
+  const lock = db().doc(`referrals/${session.id}`)
+  const fresh = await db().runTransaction(async (tx) => {
+    if ((await tx.get(lock)).exists) return false
+    tx.set(lock, { uid, referrer: m.referrer || null, usedCredit: m.used_credit === '1', at: FieldValue.serverTimestamp() })
+    return true
+  })
+  if (!fresh) return
+  if (m.used_credit === '1') {
+    await db().doc(`users/${uid}`).set({ refCredits: FieldValue.increment(-1) }, { merge: true })
+  }
+  if (m.referrer) {
+    await db().doc(`users/${uid}`).set({ referredBy: m.referrer }, { merge: true })
+    const rref = db().doc(`users/${m.referrer}`)
+    const r = (await rref.get()).data() || {}
+    if (r.stripeCustomerId && r.subscriptionId && r.premium) {
+      await stripe().customers.createBalanceTransaction(r.stripeCustomerId, { amount: -PLANS.month.cents, currency: 'eur', description: 'Parrainage Mokalibo : 1 mois offert' })
+      await rref.set({ refCount: FieldValue.increment(1) }, { merge: true })
+    } else {
+      await rref.set({ refCount: FieldValue.increment(1), refCredits: FieldValue.increment(1) }, { merge: true })
+    }
+    await countEvent('referral').catch(() => {})
+  }
 }
 
 export const config = { path: '/api/stripe-webhook' }

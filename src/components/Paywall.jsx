@@ -1,6 +1,6 @@
 import { t } from '../i18n'
 import { PLANS, startCheckout } from '../premium'
-import { track } from '../track'
+import { track, referralCode } from '../track'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
 
@@ -8,7 +8,8 @@ const INK = '#1A2A4F'
 
 // Formule Famille (abonnement mensuel ou annuel). Etape 1 : controle parental. Etape 2 : paiement Stripe.
 // Sans compte (mode essai) : on propose de creer le compte parent.
-export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedAccount }) {
+export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedAccount, account = {} }) {
+  const refGift = !!referralCode() && !(account.refCredits > 0)
   const [plan, setPlan] = useState('year')
   useEffect(() => { track('paywall_open') }, [])
   const [step, setStep] = useState('gate') // 'gate' | 'pay'
@@ -54,6 +55,12 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
             </div>
           ))}
         </div>
+
+        {(refGift || account.refCredits > 0) && (
+          <div style={{ background: '#FFF3E0', border: '2px dashed #FFB74D', borderRadius: 16, padding: '10px 12px', marginBottom: 12, textAlign: 'center', fontSize: 14, fontWeight: 900, color: '#E65100' }}>
+            {account.refCredits > 0 ? t(lang, 'pw_ref_credit', { n: account.refCredits }) : t(lang, 'pw_ref_gift')}
+          </div>
+        )}
 
         {/* Choix de la formule */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 8 }}>

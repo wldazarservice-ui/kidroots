@@ -518,7 +518,7 @@ export default function App() {
           onPick={changeDifficulty} onClose={() => setLevelPickerOpen(false)} />
       )}
       {paywallOpen && (
-        <Paywall lang={lang} user={user} onClose={() => setPaywallOpen(false)}
+        <Paywall lang={lang} user={user} account={account} onClose={() => setPaywallOpen(false)}
           onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }}
           onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
       )}

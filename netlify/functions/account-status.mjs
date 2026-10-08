@@ -1,5 +1,5 @@
 // Appele a la connexion : applique un acces offert (COMP_EMAILS) et renvoie l'etat de l'abonnement
-import { verifyUser, isComp, isOwner, db, json, FieldValue } from '../lib/shared.mjs'
+import { verifyUser, isComp, isOwner, db, json, FieldValue, refCodeFor } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
@@ -16,6 +16,11 @@ export default async (req) => {
     }
   }
 
+  if (!data.refCode) {
+    data.refCode = refCodeFor(user.uid)
+    await ref.set({ refCode: data.refCode }, { merge: true }).catch(() => {})
+  }
+
   const kind = !data.premium ? 'free' : data.subscriptionId ? 'subscription' : data.comp ? 'gift' : 'lifetime'
   return json(200, {
     premium: !!data.premium,
@@ -24,6 +29,9 @@ export default async (req) => {
     until: data.premiumUntil?.toDate?.()?.toISOString() || null,
     cancelAtPeriodEnd: !!data.cancelAtPeriodEnd,
     owner: isOwner(user),
+    refCode: data.refCode,
+    refCredits: data.refCredits || 0,
+    refCount: data.refCount || 0,
   })
 }
 

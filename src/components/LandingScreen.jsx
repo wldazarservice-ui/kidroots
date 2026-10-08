@@ -7,6 +7,8 @@ import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
+import { referralCode } from '../track'
+import { t } from '../i18n'
 import { countryName } from '../names'
 
 const INK = '#1A2A4F'
@@ -374,6 +376,11 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         )}
       </header>
 
+      {referralCode() && (
+        <div style={{ background: 'linear-gradient(90deg,#FF9A1F,#FF6F00)', color: 'white', textAlign: 'center', fontWeight: 900, fontSize: 15, padding: '10px 14px' }}>
+          {t(lang, 'lp_ami')}
+        </div>
+      )}
       <main key={page} className="screen-enter">
       {page === 'home' && (<>
       {/* ── Heros ── */}

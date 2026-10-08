@@ -1,3 +1,4 @@
+import { referralCode } from './track'
 // Modele « freemium » : tous les pays sont jouables, avec 2 nouveaux chapitres par jour et par enfant.
 // La Formule Famille (abonnement mensuel ou annuel, 5 enfants / 5 appareils) rend tout illimite.
 // Les montants doivent correspondre a PLANS dans netlify/lib/shared.mjs.
@@ -38,7 +39,7 @@ async function call(path, user, body) {
 
 // Ouvre la page de paiement Stripe
 export async function startCheckout(user, { waiver, plan = 'year' } = {}) {
-  const data = await call('/api/create-checkout', user, { waiver: waiver === true, plan })
+  const data = await call('/api/create-checkout', user, { waiver: waiver === true, plan, ref: referralCode() })
   if (data.alreadyPremium) return { alreadyPremium: true }
   window.location.assign(data.url)
   return { redirected: true }

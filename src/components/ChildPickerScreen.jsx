@@ -5,6 +5,7 @@ import DeleteAccount from './DeleteAccount'
 import ResetProgress from './ResetProgress'
 import ScreenTimeSettings from './ScreenTimeSettings'
 import AccountSettings from './AccountSettings'
+import InviteFamily from './InviteFamily'
 import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
@@ -29,6 +30,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [resetting, setResetting] = useState(false)
   const [timing, setTiming] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [inviteOpen, setInviteOpen] = useState(false)
   const [portalBusy, setPortalBusy] = useState(false)
   const portal = async () => {
     setPortalBusy(true)
@@ -141,6 +143,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {MAX_CHILDREN})</span>
             </button>
           )}
+          {account.refCode && (
+            <button className="btn-kid soft" onClick={() => setInviteOpen(true)}
+              style={{ width: '100%', background: 'linear-gradient(135deg,#FFF3E0,#FFE0B2)', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.15)' }}>
+              🎁 {t(lang, 'inv_btn')}
+            </button>
+          )}
           {onOpenStats && kids.length > 0 && (
             <button className="btn-kid soft" onClick={onOpenStats}
               style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
@@ -189,6 +197,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </>
       )}
+      {inviteOpen && <InviteFamily lang={lang} account={account} onClose={() => setInviteOpen(false)} />}
       {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} />}
       {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}
       {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}

@@ -5,7 +5,7 @@ service cloud.firestore {
 
     // Champs reserves au serveur (paiement Stripe) : jamais modifiables par l'app
     function touchesPremium(data) {
-      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId']);
+      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy']);
     }
 
     // Doc parent : seul son proprietaire peut lire/ecrire, sauf les champs premium.
@@ -15,7 +15,7 @@ service cloud.firestore {
                     && !touchesPremium(request.resource.data);
       allow update: if request.auth != null && request.auth.uid == userId
                     && !request.resource.data.diff(resource.data).affectedKeys()
-                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId']);
+                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy']);
 
       // Profils enfants : 5 maximum (emplacements c1..c5 pour les nouveaux profils)
       match /children/{childId} {

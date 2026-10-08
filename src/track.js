@@ -21,3 +21,20 @@ export function track(e, { once = false } = {}) {
     fetch('/api/track', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ e, s: source() }) }).catch(() => {})
   } catch {}
 }
+
+// Parrainage : lien mokalibo.com/?ami=CODE (gardé 60 jours sur l'appareil)
+const REF_KEY = 'kidroots_ref'
+export function captureReferral() {
+  try {
+    const code = new URLSearchParams(window.location.search).get('ami')
+    if (code && /^[A-Za-z0-9]{6,12}$/.test(code)) localStorage.setItem(REF_KEY, JSON.stringify({ code: code.toUpperCase(), at: Date.now() }))
+  } catch {}
+}
+export function referralCode() {
+  try {
+    const r = JSON.parse(localStorage.getItem(REF_KEY) || 'null')
+    if (!r || Date.now() - r.at > 60 * 86400000) return null
+    return r.code
+  } catch { return null }
+}
+captureReferral()

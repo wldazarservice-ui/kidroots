@@ -73,7 +73,7 @@ export async function syncSubscription(uid, sub) {
 // purchase = nouvel abonne ; payment = chaque prelevement encaisse (revenueCents) ; cancel = resiliation
 // Un document par jour : metrics/AAAA-MM-JJ = { landing_view: 12, signup: 3, ... }
 // Aucune donnee personnelle (ni IP, ni identifiant) n'est enregistree.
-export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install']
+export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral']
 export const today = () => new Date().toISOString().slice(0, 10)
 
 export async function countEvent(event, { source, revenueCents, plan } = {}) {
@@ -95,6 +95,23 @@ export const isOwner = (user) => {
 // L'email doit etre verifie (connexion Google, ou lien de verification), sinon n'importe qui pourrait s'inscrire avec.
 export const compEmails = () => (process.env.COMP_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean)
 export const isComp = (user) => !!user?.email && compEmails().includes(user.email.toLowerCase())
+
+// ── Parrainage : « Invite une famille » ─────────────────────────────
+// Code = début de l'uid (stable, sans base de données à part). Le filleul a son 1er mois offert,
+// le parrain gagne un mois quand le filleul s'abonne.
+export const refCodeFor = (uid) => uid.slice(0, 8).toUpperCase()
+export const REF_COUPON = 'MOKA-AMI-1MOIS'
+export async function ensureRefCoupon() {
+  try { await stripe().coupons.retrieve(REF_COUPON) } catch {
+    await stripe().coupons.create({ id: REF_COUPON, amount_off: PLANS.month.cents, currency: 'eur', duration: 'once', name: 'Parrainage : 1 mois offert' })
+  }
+  return REF_COUPON
+}
+export async function findReferrer(code) {
+  if (!code || !/^[A-Za-z0-9]{6,12}$/.test(code)) return null
+  const q = await db().collection('users').where('refCode', '==', code.toUpperCase()).limit(1).get()
+  return q.empty ? null : { uid: q.docs[0].id, ...q.docs[0].data() }
+}
 
 export { FieldValue }
 

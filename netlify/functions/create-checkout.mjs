@@ -1,5 +1,5 @@
 // Cree une session d'abonnement Stripe (Formule Famille, mensuelle ou annuelle) pour le compte parent connecte
-import { stripe, verifyUser, db, json, PLANS, countEvent } from '../lib/shared.mjs'
+import { stripe, verifyUser, db, json, PLANS, countEvent, ensureRefCoupon, findReferrer } from '../lib/shared.mjs'
 
 const KLEIN = process.env.KLEINUNTERNEHMER !== 'false'
 const TAX_NOTE = 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet. · TVA non applicable (§ 19 UStG, Kleinunternehmer).'
@@ -23,6 +23,20 @@ export default async (req) => {
 
   const origin = process.env.URL || new URL(req.url).origin
   const meta = { uid: user.uid, plan, withdrawal_waiver_at: waiverAt, terms_version: '2026-10-sub' }
+  // Parrainage (ne doit jamais bloquer le paiement)
+  let discounts
+  try {
+    if ((ud.refCredits || 0) > 0) {
+      discounts = [{ coupon: await ensureRefCoupon() }]
+      meta.used_credit = '1'
+    } else if (body.ref && !ud.stripeCustomerId && !ud.referredBy) {
+      const referrer = await findReferrer(body.ref)
+      if (referrer && referrer.uid !== user.uid) {
+        discounts = [{ coupon: await ensureRefCoupon() }]
+        meta.referrer = referrer.uid
+      }
+    }
+  } catch (e) { console.error('referral', e.message); discounts = undefined }
   const session = await stripe().checkout.sessions.create({
     mode: 'subscription',
     line_items: [{
@@ -36,6 +50,7 @@ export default async (req) => {
     }],
     client_reference_id: user.uid,
     metadata: meta,
+    ...(discounts && { discounts }),
     subscription_data: { metadata: meta, description: 'Mokalibo Famille : 5 enfants, 5 appareils, aventures illimitées. Résiliable à tout moment.' },
     ...(ud.stripeCustomerId ? { customer: ud.stripeCustomerId } : { customer_email: user.email || undefined }),
     locale: 'auto',
@@ -44,7 +59,7 @@ export default async (req) => {
     cancel_url: `${origin}/?checkout=cancel`,
   })
   await countEvent('checkout_start', { plan }).catch(() => {})
-  return json(200, { url: session.url })
+  return json(200, { url: session.url, discount: !!discounts })
 }
 
 export const config = { path: '/api/create-checkout' }
