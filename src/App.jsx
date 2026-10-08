@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { COUNTRIES, REGIONS } from './data/countries'
 import { getLang, setLang, t, isLang } from './i18n'
 import { applyLevel, doneKey, defaultLevelForAge } from './levels'
@@ -91,6 +91,8 @@ export default function App() {
   const [statsOpen, setStatsOpen] = useState(false)
   const [limitOpen, setLimitOpen] = useState(false)
   const [gameKey, setGameKey] = useState(null)
+  const [countryFrom, setCountryFrom] = useState('regions') // écran d'où l'on vient avant un pays
+  const [backTick, setBackTick] = useState(0)
   const [newStamp, setNewStamp] = useState(null)
   // Temps d'écran du jour (limite réglée par les parents)
   const [screenSecs, setScreenSecs] = useState(0)
@@ -361,9 +363,10 @@ export default function App() {
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
     goCountry: (code) => {
       if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
+      if (['home', 'regions', 'map', 'passport', 'games'].includes(screen)) setCountryFrom(screen)
       setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
     goBack: () => {
-      if (screen === 'country') setScreen('regions')
+      if (screen === 'country') setScreen(countryFrom || 'regions')
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
     },
     startChapter: (idx) => { openChapter(idx) },
@@ -397,6 +400,39 @@ export default function App() {
     openPaywall: () => setPaywallOpen(true),
     logout,
   }
+
+  // Geste « retour » du téléphone (ou bouton retour du navigateur) : on revient en arrière DANS l'app
+  // au lieu de quitter le site. Une entrée d'historique « garde » est posée tant qu'il y a un retour possible.
+  const appBack = () => {
+    if (levelPickerOpen) { setLevelPickerOpen(false); return true }
+    if (paywallOpen) { setPaywallOpen(false); return true }
+    if (limitOpen) { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country'); return true }
+    if (newStamp) { setNewStamp(null); return true }
+    if (adminOpen) { setAdminOpen(false); return true }
+    if (statsOpen) { setStatsOpen(false); return true }
+    if (devicesOpen) { setDevicesOpen(false); return true }
+    if (!user && !isGuest) { if (authMode && !isStandalone()) { setAuthMode(null); return true } return false }
+    if (!activeChild) return false
+    if (screen === 'game') { setScreen('games'); return true }
+    if (screen === 'chapter' && step === 'quiz') { setStep('cards'); return true }
+    if (screen === 'chapter' && step === 'cards') { setStep('intro'); return true }
+    if (screen === 'chapter' || screen === 'result') { setScreen('country'); return true }
+    if (screen === 'country') { setScreen(countryFrom || 'regions'); return true }
+    if (screen !== 'home') { setScreen('home'); return true }
+    return false
+  }
+  const canBack = !!(levelPickerOpen || paywallOpen || limitOpen || newStamp || adminOpen || statsOpen || devicesOpen
+    || (!user && !isGuest && authMode && !isStandalone()) || (activeChild && screen !== 'home'))
+  const backRef = useRef(appBack)
+  backRef.current = appBack
+  useEffect(() => {
+    if (canBack && !window.history.state?.mkGuard) window.history.pushState({ mkGuard: 1 }, '')
+  }, [canBack, backTick])
+  useEffect(() => {
+    const onPop = () => { backRef.current(); setBackTick((n) => n + 1) }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
 
   const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: hasPremium, guest: isGuest }
 
