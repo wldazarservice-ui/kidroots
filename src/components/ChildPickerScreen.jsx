@@ -4,6 +4,7 @@ import LegalFooter from './LegalFooter'
 import DeleteAccount from './DeleteAccount'
 import ResetProgress from './ResetProgress'
 import ScreenTimeSettings from './ScreenTimeSettings'
+import AccountSettings from './AccountSettings'
 import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
@@ -14,7 +15,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, premium, account = {}, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -27,6 +28,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [deleting, setDeleting] = useState(false)
   const [resetting, setResetting] = useState(false)
   const [timing, setTiming] = useState(false)
+  const [accountOpen, setAccountOpen] = useState(false)
   const [portalBusy, setPortalBusy] = useState(false)
   const portal = async () => {
     setPortalBusy(true)
@@ -63,10 +65,16 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
           <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
         </div>
-        <button className="btn-kid" onClick={() => signOut()}
-          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', padding: '8px 14px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
-          <LogoutIcon size={14} /> Déconnexion
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn-kid" onClick={() => setAccountOpen(true)}
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#1565C0', padding: '8px 14px', fontSize: 13, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
+            👤 Mon compte
+          </button>
+          <button className="btn-kid" onClick={() => signOut()} aria-label="Déconnexion" title="Déconnexion"
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', padding: '8px 12px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
+            <LogoutIcon size={14} />
+          </button>
+        </div>
       </div>
 
       <div style={{ textAlign: 'center', marginBottom: 18 }}>
@@ -181,6 +189,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </>
       )}
+      {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} />}
       {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}
       {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}
       {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}

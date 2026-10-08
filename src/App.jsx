@@ -476,6 +476,7 @@ export default function App() {
         lang={lang}
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
+        onKidsChange={setKids}
         onLimitSaved={(id, min) => setKids((all) => all.map((k) => (k.id === id ? { ...k, screenLimit: min } : k)))}
         onKidsReset={(ids) => setKids((all) => all.map((k) => (ids.includes(k.id) ? { ...k, xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] } } : k)))}
         premium={premium}

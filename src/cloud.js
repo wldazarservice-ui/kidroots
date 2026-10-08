@@ -7,6 +7,7 @@ import {
   collection,
   getDocs,
   serverTimestamp,
+  deleteDoc,
 } from 'firebase/firestore'
 import { db } from './firebase'
 
@@ -24,6 +25,10 @@ export async function ensureUserDoc(user) {
       activeChildId: null,
     })
     return { activeChildId: null, isNew: true }
+  }
+  // Garde l'e-mail à jour si le parent l'a changé dans « Mon compte »
+  if (user.email && snap.data().email !== user.email) {
+    try { await updateDoc(ref, { email: user.email }) } catch {}
   }
   return snap.data()
 }
@@ -130,4 +135,20 @@ export function clearLegacyProgress() {
   try {
     localStorage.removeItem(LEGACY_PROGRESS_KEY)
   } catch {}
+}
+
+// Modifier un profil enfant (prénom, âge, avatar)
+export async function updateChildProfile(uid, childId, data) {
+  const clean = {}
+  if (data.name != null) clean.name = String(data.name).slice(0, 30)
+  if (data.age != null) clean.age = Number(data.age)
+  if (data.avatar != null) clean.avatar = data.avatar
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { ...clean, updatedAt: serverTimestamp() })
+}
+
+// Supprimer un profil enfant (sa progression est perdue)
+export async function deleteChild(uid, childId) {
+  await deleteDoc(doc(db, 'users', uid, 'children', childId))
+  const u = await getDoc(doc(db, 'users', uid))
+  if (u.exists() && u.data().activeChildId === childId) await updateDoc(doc(db, 'users', uid), { activeChildId: null })
 }
