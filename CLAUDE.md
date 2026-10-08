@@ -84,6 +84,11 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Webhook Stripe : https://mokalibo.com/api/stripe-webhook
 - PWA : manifest.json deja configure dans public/
 
+## Pays « monde » (objectif : tous les pays du monde)
+- 20 pays riches (3 niveaux, expert) dans `src/data/countries.js` ; les autres dans `src/data/world/XX.js` (format compact `country()/ch()` de `_make.js`), charges a l'ouverture (`load.js`).
+- Apres ajout/modif : `node scripts/build-world.mjs` (verifie + regenere `meta.gen.js`, l'index leger avec drapeau, nom, teaser, chapitres).
+- Regions : africa, europe, asia, americas, oceania (une region sans pays est masquee).
+
 ## Modele economique (freemium + Formule Famille)
 - Gratuit : tous les pays, 2 NOUVEAUX chapitres par jour et par enfant (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
 - Essai sans compte : profil local `kidroots_guest` (`src/guest.js`), progression recopiee dans `kidroots_v3_progress` pour etre transferee a la creation du compte.

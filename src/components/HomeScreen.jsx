@@ -130,7 +130,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
 
         {/* Continents */}
         <div className="continent-grid" style={{ marginBottom: 22 }}>
-          {Object.entries(REGIONS).map(([key, r], i) => {
+          {Object.entries(REGIONS).filter(([, r]) => r.countries.length).map(([key, r], i) => {
             const started = r.countries.filter(countryStarted).length
             const done = r.countries.filter(countryDone).length
             return (
@@ -143,9 +143,10 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
                   <TText text={r.name} lang={lang} />
                 </div>
                 <div className="flags" style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', background: 'rgba(255,255,255,0.92)', borderRadius: 14, padding: '5px 6px', width: '100%', gap: 3 }}>
-                  {r.countries.map(c => (
+                  {r.countries.slice(0, 7).map(c => (
                     <span key={c} style={{ fontSize: r.countries.length > 5 ? 14 : 17, lineHeight: 1.2 }}>{COUNTRIES[c]?.flag}</span>
                   ))}
+                  {r.countries.length > 7 && <span style={{ fontSize: 11, fontWeight: 900, color: '#546E7A', alignSelf: 'center' }}>+{r.countries.length - 7}</span>}
                 </div>
                 <div style={{ fontSize: 12, fontWeight: 900, marginTop: 8, opacity: 0.95 }}>
                   {done > 0 ? `⭐ ${done} / ${r.countries.length}` : started > 0 ? `🚀 ${started} / ${r.countries.length}` : `${r.countries.length} ${t(lang, 'countries_word')}`}

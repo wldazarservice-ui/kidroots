@@ -197,7 +197,7 @@ const TXT = {
 const AVATARS = ['👧🏽', '👦🏿', '👧🏻', '👦🏽', '🧒']
 
 function PhoneMockup({ T, lang }) {
-  const regions = Object.values(REGIONS)
+  const regions = Object.values(REGIONS).filter((r) => r.countries.length).slice(0, 4)
   return (
     <div className="lp-mock" aria-hidden>
       <div className="lp-phone">

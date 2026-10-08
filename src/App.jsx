@@ -3,6 +3,7 @@ import { COUNTRIES, REGIONS } from './data/countries'
 import { getLang, setLang, t, isLang } from './i18n'
 import { applyLevel, doneKey, defaultLevelForAge } from './levels'
 import { hasExpert, loadExpert } from './data/expert'
+import { loadWorld } from './data/world/load'
 import { useAuth } from './auth.jsx'
 import {
   ensureUserDoc,
@@ -101,12 +102,25 @@ export default function App() {
     return () => { cancelled = true }
   }, [needsExpert, countryCode, expert.code])
 
+  // Pays « monde » : contenu complet charge a l'ouverture
+  const [world, setWorld] = useState({ code: null, data: null })
+  const needsWorld = !!(countryCode && COUNTRIES[countryCode]?.lazy)
+  const worldReady = !needsWorld || world.code === countryCode
+  useEffect(() => {
+    if (!needsWorld || world.code === countryCode) return
+    let cancelled = false
+    loadWorld(countryCode)
+      .then((data) => { if (!cancelled && data) setWorld({ code: countryCode, data }) })
+      .catch((e) => console.error('World load error:', e))
+    return () => { cancelled = true }
+  }, [needsWorld, countryCode, world.code])
+
   // Objet stable (important pour la traduction qui depend de l'identite de l'objet)
   const country = useMemo(() => {
     if (!countryCode) return null
-    const base = COUNTRIES[countryCode]
+    const base = needsWorld ? (world.code === countryCode ? world.data : COUNTRIES[countryCode]) : COUNTRIES[countryCode]
     return applyLevel(base, difficulty, expert.code === countryCode ? expert.data : null)
-  }, [countryCode, difficulty, expert])
+  }, [countryCode, difficulty, expert, world, needsWorld])
   const chapter = country && chapterIdx !== null ? country.chapters[chapterIdx] : null
 
   // Charge le profil utilisateur + les enfants apres login
@@ -395,7 +409,7 @@ export default function App() {
         value={defaultLevelForAge(activeChild.age || 6)} onPick={changeDifficulty} />
     )
   }
-  if (needsExpert && !expertReady && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
+  if (((needsExpert && !expertReady) || !worldReady) && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
 
   return (
     <div style={{ minHeight: '100vh' }}>

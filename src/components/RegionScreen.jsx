@@ -21,8 +21,8 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
       </div>
 
       {/* Onglets continents */}
-      <div className="region-tabs" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 18 }}>
-        {Object.entries(REGIONS).map(([key, reg]) => {
+      <div className="region-tabs" style={{ display: 'grid', gridTemplateColumns: `repeat(${Object.values(REGIONS).filter((x) => x.countries.length).length}, 1fr)`, gap: 8, marginBottom: 18 }}>
+        {Object.entries(REGIONS).filter(([, reg]) => reg.countries.length).map(([key, reg]) => {
           const active = key === regionKey
           return (
             <button key={key} className="btn-kid soft" onClick={() => onRegion?.(key)} aria-pressed={active}

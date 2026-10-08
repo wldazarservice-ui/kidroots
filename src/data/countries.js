@@ -1,5 +1,6 @@
 // Mokalibo — Donnees historiques completes
-// 20 pays — 5 chapitres chacun — Histoire complete de l'Antiquite a aujourd'hui
+// 20 pays « riches » (3 niveaux) definis ici + les pays « monde » de src/data/world/ (charges a la demande)
+import { WORLD_META } from './world/meta.gen.js'
 
 export const COUNTRIES = {
 
@@ -1953,4 +1954,25 @@ export const REGIONS = {
     color: '#6A1B9A', bg: '#F3E5F5',
     countries: ['BR', 'MX', 'AR', 'PE', 'CA']
   },
+  oceania: {
+    mascot: "🦘", grad: ["#FFA726", "#E53935"],
+    name: 'Oceanie', emoji: '🌏',
+    color: '#C62828', bg: '#FFF3E0',
+    countries: []
+  },
 };
+
+// Pays « monde » : index leger (le contenu complet est charge a l'ouverture du pays).
+// Les chapitres contiennent des emplacements vides pour que les compteurs fonctionnent.
+export const RICH_CODES = Object.keys(COUNTRIES)
+for (const [code, m] of Object.entries(WORLD_META)) {
+  COUNTRIES[code] = {
+    name: m.name, flag: m.flag, region: m.region, color: m.color, dark: m.color, bg: m.bg,
+    tagline: m.tagline, teaser: m.teaser, hero: m.hero, lazy: true,
+    chapters: m.ch.map(([id, era, title, subtitle, emoji, color, light, nCards, nQuiz]) => ({
+      id, era, title, subtitle, emoji, color, light,
+      cards: Array(nCards).fill(null), quiz: Array(nQuiz).fill(null),
+    })),
+  }
+  REGIONS[m.region]?.countries.push(code)
+}

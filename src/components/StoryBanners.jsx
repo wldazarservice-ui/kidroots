@@ -11,7 +11,7 @@ const INK = '#1A2A4F'
 export default function StoryBanners({ lang, onOpen }) {
   const ref = useRef(null)
   const items = useMemo(() => {
-    const codes = Object.keys(TEASERS).filter((c) => COUNTRIES[c])
+    const codes = Object.keys(COUNTRIES).filter((c) => TEASERS[c] || COUNTRIES[c].teaser)
     const day = Math.floor(Date.now() / 86400000)
     return Array.from({ length: Math.min(8, codes.length) }, (_, i) => codes[(day * 3 + i) % codes.length])
   }, [])
@@ -46,7 +46,7 @@ export default function StoryBanners({ lang, onOpen }) {
                 <span style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 19, fontWeight: 700, color: c.color }}><TText text={c.name} lang={lang} /></span>
                 <span style={{ marginLeft: 'auto', fontSize: 26 }}>{c.hero?.emoji}</span>
               </div>
-              <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.5, color: '#37474F', flex: 1 }}><TText text={TEASERS[code]} lang={lang} /></div>
+              <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.5, color: '#37474F', flex: 1 }}><TText text={TEASERS[code] || c.teaser} lang={lang} /></div>
               <div style={{ alignSelf: 'flex-start', background: c.color, color: 'white', borderRadius: 999, padding: '6px 14px', fontSize: 13, fontWeight: 900 }}>{t(lang, 'discover')} →</div>
             </button>
           )
