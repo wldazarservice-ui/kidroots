@@ -28,3 +28,6 @@ pnpm-debug.log*
 *.local
 .cache/
 .netlify/
+
+marketing/video/out/
+marketing/video/node_modules/
