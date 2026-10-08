@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelAverages } from '../levels'
+import { MAX_CHILDREN } from '../cloud'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, lang = 'fr' }) {
+  const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
   const [age, setAge] = useState(5)
@@ -15,6 +17,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [difficulty, setDifficulty] = useState(defaultLevelForAge(5))
   const [levelTouched, setLevelTouched] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [createError, setCreateError] = useState('')
 
   const pickAge = (a) => {
     setAge(a)
@@ -25,10 +28,13 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
     e.preventDefault()
     if (!name.trim()) return
     setBusy(true)
+    setCreateError('')
     try {
       await onCreate({ name: name.trim(), age: Number(age), avatar, difficulty })
       setName('')
       setCreating(false)
+    } catch (err) {
+      setCreateError(err.message === 'child-limit' ? `Maximum ${MAX_CHILDREN} enfants par compte.` : 'La création a échoué. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -98,10 +104,22 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             })}
           </div>
 
-          <button className="btn-kid" onClick={() => setCreating(true)}
-            style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
-            ➕ Ajouter un enfant
-          </button>
+          {full ? (
+            <div style={{ background: 'white', borderRadius: 18, padding: '12px 14px', textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#607D8B' }}>
+              👨‍👩‍👧‍👦 {MAX_CHILDREN} / {MAX_CHILDREN} enfants : le maximum par compte est atteint.
+            </div>
+          ) : (
+            <button className="btn-kid" onClick={() => setCreating(true)}
+              style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
+              ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {MAX_CHILDREN})</span>
+            </button>
+          )}
+          {onManageDevices && (
+            <button className="btn-kid" onClick={onManageDevices}
+              style={{ width: '100%', marginTop: 12, background: 'white', color: '#2E7D4F', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
+              📱 Mes appareils
+            </button>
+          )}
         </>
       )}
 
@@ -151,6 +169,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             })}
           </div>
           <div style={{ fontSize: 12, color: '#90A4AE', fontWeight: 700, marginBottom: 18 }}>{t(lang, 'choose_level_sub')}</div>
+          {createError && <div style={{ marginBottom: 12, fontSize: 14, fontWeight: 800, color: '#C62828' }}>{createError}</div>}
 
           <div style={{ display: 'flex', gap: 10 }}>
             {kids.length > 0 && (

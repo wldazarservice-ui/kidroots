@@ -17,10 +17,18 @@ service cloud.firestore {
                     && !request.resource.data.diff(resource.data).affectedKeys()
                          .hasAny(['premium', 'premiumAt', 'stripeSessionId']);
 
-      // Sous-collection des profils enfants
+      // Profils enfants : 5 maximum (emplacements c1..c5 pour les nouveaux profils)
       match /children/{childId} {
-        allow read, write: if request.auth != null
-                           && request.auth.uid == userId;
+        allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null && request.auth.uid == userId
+                      && childId in ['c1', 'c2', 'c3', 'c4', 'c5'];
+      }
+
+      // Appareils : 5 maximum (emplacements d1..d5)
+      match /devices/{slot} {
+        allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null && request.auth.uid == userId
+                      && slot in ['d1', 'd2', 'd3', 'd4', 'd5'];
       }
     }
   }

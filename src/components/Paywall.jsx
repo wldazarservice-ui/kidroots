@@ -1,24 +1,15 @@
 import { useState } from 'react'
 import { t } from '../i18n'
 import { PRICE_LABEL, startCheckout } from '../premium'
+import ParentGate from './ParentGate'
 
 const INK = '#1A2A4F'
-const rnd = () => 3 + Math.floor(Math.random() * 7) // 3..9
 
 // Ecran de deblocage (2 € a vie). Etape 1 : controle parental. Etape 2 : paiement Stripe.
 export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
-  const [gate] = useState(() => ({ a: rnd(), b: rnd() }))
-  const [answer, setAnswer] = useState('')
   const [step, setStep] = useState('gate') // 'gate' | 'pay'
-  const [gateError, setGateError] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-
-  const checkGate = (e) => {
-    e.preventDefault()
-    if (Number(answer) === gate.a * gate.b) { setStep('pay'); setGateError(false) }
-    else { setGateError(true); setAnswer('') }
-  }
 
   const pay = async () => {
     setBusy(true); setError('')
@@ -65,21 +56,8 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium }) {
         </div>
 
         {step === 'gate' ? (
-          <form onSubmit={checkGate} style={{ background: '#FFF8E1', border: '3px solid #FFE082', borderRadius: 22, padding: 14 }}>
-            <div style={{ fontSize: 16, fontWeight: 900, color: '#E65100', marginBottom: 4 }}>{t(lang, 'pw_gate')}</div>
-            <label htmlFor="gate" style={{ display: 'block', fontSize: 15, fontWeight: 800, color: '#5D4037', marginBottom: 10 }}>
-              {t(lang, 'pw_gate_q', { a: gate.a, b: gate.b })}
-            </label>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input id="gate" type="number" inputMode="numeric" value={answer} onChange={e => setAnswer(e.target.value)} autoComplete="off"
-                style={{ flex: 1, minWidth: 0, padding: '12px 14px', borderRadius: 14, border: '3px solid #FFE082', fontSize: 18, fontWeight: 900, fontFamily: 'inherit', color: INK, outline: 'none' }} />
-              <button type="submit" className="btn-kid" disabled={!answer}
-                style={{ background: '#FF9800', color: 'white', padding: '0 18px', fontSize: 16, borderRadius: 14, opacity: answer ? 1 : 0.5 }}>
-                {t(lang, 'pw_gate_ok')}
-              </button>
-            </div>
-            {gateError && <div style={{ marginTop: 8, fontSize: 13, fontWeight: 800, color: '#C62828' }}>{t(lang, 'pw_gate_err')}</div>}
-          </form>
+          <ParentGate onPass={() => setStep('pay')} title={t(lang, 'pw_gate')}
+            question={(a, b) => t(lang, 'pw_gate_q', { a, b })} okLabel={t(lang, 'pw_gate_ok')} errorLabel={t(lang, 'pw_gate_err')} />
         ) : (
           <>
             <button className="btn-kid" onClick={pay} disabled={busy}

@@ -27,6 +27,8 @@ import AuthScreen from './components/AuthScreen'
 import ChildPickerScreen from './components/ChildPickerScreen'
 import LevelPicker from './components/LevelPicker'
 import Paywall from './components/Paywall'
+import DevicesManager from './components/DevicesManager'
+import { registerDevice } from './devices'
 import { isCountryLocked, confirmCheckout, PAYWALL_ENABLED } from './premium'
 
 function Spinner({ msg = 'Chargement...' }) {
@@ -59,6 +61,9 @@ export default function App() {
   const [levelPickerOpen, setLevelPickerOpen] = useState(false)
   const [premium, setPremium] = useState(false)
   const [paywallOpen, setPaywallOpen] = useState(false)
+  const [deviceBlocked, setDeviceBlocked] = useState(false)
+  const [devicesOpen, setDevicesOpen] = useState(false)
+  const [userReload, setUserReload] = useState(0)
   const [toast, setToast] = useState(null)
 
   const difficulty = activeChild?.difficulty || 'explorer'
@@ -97,6 +102,11 @@ export default function App() {
       try {
         const ud = await ensureUserDoc(user)
         if (!cancelled) setPremium(!!ud.premium)
+        // 5 appareils maximum par compte
+        const reg = await registerDevice(user.uid)
+        if (cancelled) return
+        if (!reg.ok) { setDeviceBlocked(true); return }
+        setDeviceBlocked(false)
         const list = await listChildren(user.uid)
         if (cancelled) return
         setKids(list)
@@ -122,7 +132,7 @@ export default function App() {
       }
     })()
     return () => { cancelled = true }
-  }, [user])
+  }, [user, userReload])
 
   // Retour de la page de paiement Stripe (?checkout=success&session_id=...)
   useEffect(() => {
@@ -196,7 +206,7 @@ export default function App() {
   const handleCreateChild = async (data) => {
     if (!user) return
     const seed = legacyToMigrate ? { ...data, xp: legacyToMigrate.xp, level: legacyToMigrate.level, done: legacyToMigrate.done, lang } : { ...data, lang }
-    const id = await createChild(user.uid, seed)
+    const id = await createChild(user.uid, seed, kids.map((k) => k.id))
     if (legacyToMigrate) {
       clearLegacyProgress()
       setLegacyToMigrate(null)
@@ -259,8 +269,18 @@ export default function App() {
   if (authLoading) return <Spinner msg="Demarrage..." />
   if (!user) return <AuthScreen />
   if (profileLoading) return <Spinner msg="Chargement du profil..." />
+  if (deviceBlocked) {
+    return (
+      <DevicesManager user={user} blocked onDone={async () => {
+        const reg = await registerDevice(user.uid)
+        if (reg.ok) { setDeviceBlocked(false); setProfileLoading(true); setUserReload((n) => n + 1) }
+      }} />
+    )
+  }
   if (!activeChild) {
     return (
+      <>
+      {devicesOpen && <DevicesManager user={user} onClose={() => setDevicesOpen(false)} />}
       <ChildPickerScreen
         user={user}
         kids={kids}
@@ -268,8 +288,10 @@ export default function App() {
         onCreate={handleCreateChild}
         hasLegacy={!!legacyToMigrate}
         lang={lang}
+        onManageDevices={() => setDevicesOpen(true)}
         onMigrate={() => { /* noop : legacy already loaded, will be applied at create */ }}
       />
+      </>
     )
   }
   // Profil sans niveau de lecture : on le demande une fois
