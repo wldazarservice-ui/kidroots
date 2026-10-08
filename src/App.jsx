@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { COUNTRIES, REGIONS } from './data/countries'
-import { getLang, setLang } from './i18n'
+import { getLang, setLang, t } from './i18n'
 import { applyLevel, doneKey, defaultLevelForAge } from './levels'
 import { hasExpert, loadExpert } from './data/expert'
 import { useAuth } from './auth.jsx'
@@ -26,6 +26,8 @@ import ResultScreen from './components/ResultScreen'
 import AuthScreen from './components/AuthScreen'
 import ChildPickerScreen from './components/ChildPickerScreen'
 import LevelPicker from './components/LevelPicker'
+import Paywall from './components/Paywall'
+import { isCountryLocked, confirmCheckout, PAYWALL_ENABLED } from './premium'
 
 function Spinner({ msg = 'Chargement...' }) {
   return (
@@ -55,6 +57,9 @@ export default function App() {
 
   const [expert, setExpert] = useState({ code: null, data: null })
   const [levelPickerOpen, setLevelPickerOpen] = useState(false)
+  const [premium, setPremium] = useState(false)
+  const [paywallOpen, setPaywallOpen] = useState(false)
+  const [toast, setToast] = useState(null)
 
   const difficulty = activeChild?.difficulty || 'explorer'
   const needsExpert = difficulty === 'expert' && countryCode && hasExpert(countryCode)
@@ -91,6 +96,7 @@ export default function App() {
     ;(async () => {
       try {
         const ud = await ensureUserDoc(user)
+        if (!cancelled) setPremium(!!ud.premium)
         const list = await listChildren(user.uid)
         if (cancelled) return
         setKids(list)
@@ -116,6 +122,22 @@ export default function App() {
       }
     })()
     return () => { cancelled = true }
+  }, [user])
+
+  // Retour de la page de paiement Stripe (?checkout=success&session_id=...)
+  useEffect(() => {
+    if (!user) return
+    const params = new URLSearchParams(window.location.search)
+    const status = params.get('checkout')
+    if (!status) return
+    const sessionId = params.get('session_id')
+    window.history.replaceState({}, '', window.location.pathname)
+    if (status !== 'success' || !sessionId) return
+    confirmCheckout(user, sessionId)
+      .then((ok) => {
+        if (ok) { setPremium(true); setToast('pw_thanks'); setTimeout(() => setToast(null), 4000) }
+      })
+      .catch((e) => console.error('Confirm checkout error:', e))
   }, [user])
 
   const progress = activeChild
@@ -194,7 +216,9 @@ export default function App() {
   const nav = {
     goHome: () => setScreen('home'),
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
-    goCountry: (code) => { setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
+    goCountry: (code) => {
+      if (isCountryLocked(code, premium)) { setPaywallOpen(true); return }
+      setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
     goBack: () => {
       if (screen === 'country') setScreen('regions')
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
@@ -226,9 +250,10 @@ export default function App() {
     },
     switchProfile,
     openLevelPicker: () => setLevelPickerOpen(true),
+    openPaywall: () => setPaywallOpen(true),
   }
 
-  const shared = { lang, changeLang, progress, nav, activeChild, difficulty }
+  const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: premium || !PAYWALL_ENABLED }
 
   // ── Auth gates ────────────────────────────────────────────────
   if (authLoading) return <Spinner msg="Demarrage..." />
@@ -270,6 +295,15 @@ export default function App() {
       {levelPickerOpen && (
         <LevelPicker lang={lang} age={activeChild.age} value={difficulty}
           onPick={changeDifficulty} onClose={() => setLevelPickerOpen(false)} />
+      )}
+      {paywallOpen && (
+        <Paywall lang={lang} user={user} onClose={() => setPaywallOpen(false)}
+          onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }} />
+      )}
+      {toast && (
+        <div className="anim-slide-up" style={{ position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 700, background: '#2E9E5B', color: 'white', padding: '12px 20px', borderRadius: 20, fontWeight: 900, fontSize: 16, fontFamily: 'Nunito, sans-serif', boxShadow: '0 8px 20px rgba(46,158,91,0.4)', whiteSpace: 'nowrap' }}>
+          {t(lang, toast)}
+        </div>
       )}
       {screen === 'home'    && <HomeScreen {...shared} />}
       {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}

@@ -3,10 +3,11 @@ import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import { TText } from '../useTranslated'
 import { isDone } from '../levels'
+import { isCountryLocked } from '../premium'
 
 const INK = '#1A2A4F'
 
-export default function RegionScreen({ lang, changeLang, progress, nav, difficulty, regionKey = 'africa', onRegion }) {
+export default function RegionScreen({ lang, changeLang, progress, nav, difficulty, premium, regionKey = 'africa', onRegion }) {
   const r = REGIONS[regionKey] || REGIONS.africa
 
   return (
@@ -57,11 +58,14 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
           const c = COUNTRIES[code]
           const doneCount = c.chapters.filter(ch => isDone(progress, ch.id, difficulty)).length
           const done = doneCount === c.chapters.length
+          const locked = isCountryLocked(code, premium)
           return (
             <div key={code} className="anim-slide-up" style={{ animationDelay: `${i * 50}ms`, opacity: 0 }}>
               <button className="btn-kid" onClick={() => nav.goCountry(code)}
                 style={{ width: '100%', height: '100%', background: 'white', borderRadius: 24, padding: '14px 10px 12px', textAlign: 'center', border: `3px solid ${doneCount ? c.color : 'transparent'}`, boxShadow: `0 6px 0 ${c.color}33, 0 10px 20px rgba(26,42,79,0.08)`, position: 'relative' }}>
                 {done && <div style={{ position: 'absolute', top: -8, right: -6, fontSize: 26 }} className="anim-starpop">⭐</div>}
+                {locked && <div style={{ position: 'absolute', top: 8, right: 10, fontSize: 18 }} aria-label="verrouillé">🔒</div>}
+                {!locked && !premium && <div style={{ position: 'absolute', top: 8, left: 10, fontSize: 18 }} aria-label="gratuit">🎁</div>}
                 <div style={{ fontSize: 46, lineHeight: 1.1 }}>{c.flag}</div>
                 <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 18, fontWeight: 600, color: INK, margin: '6px 0 2px' }}>
                   <TText text={c.name} lang={lang} />

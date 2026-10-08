@@ -8,7 +8,7 @@ import { LEVELS, isDone, countryStats } from '../levels'
 
 const INK = '#1A2A4F'
 
-export default function HomeScreen({ lang, changeLang, progress, nav, activeChild, difficulty }) {
+export default function HomeScreen({ lang, changeLang, progress, nav, activeChild, difficulty, premium }) {
   const L = LEVELS[difficulty] || LEVELS.explorer
   const allChapters = Object.values(COUNTRIES).flatMap(c => c.chapters)
   const totalChapters = allChapters.length
@@ -77,6 +77,15 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           </span>
           <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 999, padding: '6px 12px', fontSize: 13, fontWeight: 900 }}>✎</span>
         </button>
+
+        {!premium && (
+          <button className="btn-kid" onClick={nav.openPaywall}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, background: 'white', color: '#1A2A4F', borderRadius: 20, padding: '10px 14px', marginBottom: 12, textAlign: 'left', border: '3px dashed #FF9800' }}>
+            <span style={{ fontSize: 26 }}>🔓</span>
+            <span style={{ flex: 1, fontSize: 14, fontWeight: 900 }}>{t(lang, 'pw_banner')}</span>
+            <span style={{ background: '#FF7A00', color: 'white', borderRadius: 999, padding: '5px 11px', fontSize: 14, fontWeight: 900, whiteSpace: 'nowrap' }}>2 €</span>
+          </button>
+        )}
 
         {/* Progression */}
         <div style={{ background: 'white', borderRadius: 24, padding: 14, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14, boxShadow: '0 8px 24px rgba(26,42,79,0.10)' }}>
