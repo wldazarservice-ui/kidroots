@@ -374,3 +374,22 @@ body {
   /* Les raccourcis de l'accueil font doublon avec la barre : on les cache sur téléphone */
   .home-shortcuts.hide-with-nav { display: none; }
 }
+
+/* ── Menu de la page de présentation ── */
+.lp-topbar { position: sticky; top: 0; z-index: 300; background: rgba(255,253,247,0.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(26,42,79,0.06); padding: 10px 16px; }
+.lp-menu-desktop { display: none; gap: 4px; margin-left: 18px; }
+.lp-menu-desktop button, .lp-menu-mobile button { border: none; background: none; cursor: pointer; font-family: Nunito, sans-serif; font-weight: 900; color: #455A64; }
+.lp-menu-desktop button { font-size: 15px; padding: 9px 14px; border-radius: 999px; transition: background 0.2s, color 0.2s; }
+.lp-menu-desktop button:hover { background: #FFF3D6; color: #1A2A4F; }
+.lp-menu-desktop button.on { background: #1A2A4F; color: white; }
+.lp-burger { width: 44px; height: 44px; border-radius: 14px; border: none; background: white; box-shadow: 0 3px 10px rgba(26,42,79,0.12); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+.lp-burger span { display: block; width: 20px; height: 3px; border-radius: 2px; background: #1A2A4F; }
+.lp-menu-mobile { display: flex; flex-direction: column; gap: 4px; position: absolute; top: calc(100% + 6px); left: 12px; right: 12px; background: white; border-radius: 22px; padding: 8px; box-shadow: 0 12px 30px rgba(26,42,79,0.14); }
+.lp-menu-mobile button { text-align: left; font-size: 18px; padding: 14px 16px; border-radius: 16px; }
+.lp-menu-mobile button.on { background: #FFF3D6; color: #E65100; }
+.lp-login { display: none; }
+@media (min-width: 900px) {
+  .lp-menu-desktop { display: flex; }
+  .lp-burger, .lp-menu-mobile { display: none !important; }
+  .lp-login { display: inline-block; }
+}

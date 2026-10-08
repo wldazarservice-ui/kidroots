@@ -7,6 +7,7 @@ import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
+import { countryName } from '../names'
 
 const INK = '#1A2A4F'
 const FONT_TITLE = 'Fredoka, Nunito, sans-serif'
@@ -36,7 +37,7 @@ const TXT = {
     feats: [
       ['📚', '3 niveaux de lecture', 'Petit explorateur (4-5 ans), Explorateur (6-7 ans), Grand explorateur (8-12 ans) avec des histoires longues et datées.'],
       ['🔊', 'Voix off', 'Chaque histoire et chaque question peuvent être lues à voix haute.'],
-      ['🗣️', '6 langues', 'Français, anglais, allemand, arabe, portugais et bambara.'],
+      ['🗣️', '3 langues', 'Français, anglais et allemand, et d’autres langues bientôt.'],
       ['📊', 'Espace parents', 'Temps passé et pays explorés, pour chaque enfant.'],
       ['🛂', 'Passeport et badges', 'Un tampon pour chaque pays terminé et des badges à collectionner.'],
       ['🗺️', 'Carte et chasse au trésor', 'Une carte du monde interactive pour retrouver les pays en jouant.'],
@@ -100,7 +101,7 @@ const TXT = {
     feats: [
       ['📚', '3 reading levels', 'Little explorer (4-5), Explorer (6-7), Great explorer (8-12) with longer, dated stories.'],
       ['🔊', 'Voice-over', 'Every story and every question can be read aloud.'],
-      ['🗣️', '6 languages', 'French, English, German, Arabic, Portuguese and Bambara.'],
+      ['🗣️', '3 languages', 'French, English and German, with more languages coming soon.'],
       ['📊', 'Parents area', 'Time spent and countries explored, for each child.'],
       ['🛂', 'Passport and badges', 'A stamp for every country finished and badges to collect.'],
       ['🗺️', 'Map and treasure hunt', 'An interactive world map to find countries while playing.'],
@@ -164,7 +165,7 @@ const TXT = {
     feats: [
       ['📚', '3 Lesestufen', 'Kleiner Entdecker (4-5), Entdecker (6-7), Großer Entdecker (8-12) mit längeren Geschichten und Daten.'],
       ['🔊', 'Vorlesefunktion', 'Jede Geschichte und jede Frage kann vorgelesen werden.'],
-      ['🗣️', '6 Sprachen', 'Französisch, Englisch, Deutsch, Arabisch, Portugiesisch und Bambara.'],
+      ['🗣️', '3 Sprachen', 'Französisch, Englisch und Deutsch – weitere Sprachen folgen.'],
       ['📊', 'Elternbereich', 'Nutzungszeit und entdeckte Länder für jedes Kind.'],
       ['🛂', 'Pass und Abzeichen', 'Ein Stempel für jedes fertige Land und Abzeichen zum Sammeln.'],
       ['🗺️', 'Karte und Schatzsuche', 'Eine interaktive Weltkarte, um Länder spielerisch zu finden.'],
@@ -287,42 +288,98 @@ function GuestSheet({ T, onClose, onStart }) {
   )
 }
 
+
+// Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
+const PAGES = ['home', 'discover', 'countries', 'pricing', 'faq']
+const NAV = {
+  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Questions fréquentes →' }, all_countries: 'Tous les pays' },
+  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'FAQ →' }, all_countries: 'All countries' },
+  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Häufige Fragen →' }, all_countries: 'Alle Länder' },
+}
+const pageFromHash = () => {
+  const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
+  return PAGES.includes(h) ? h : 'home'
+}
+
 // Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ, essai sans compte
 export default function LandingScreen({ lang, changeLang, guest, onStartGuest, onResumeGuest, onLogin, onSignup }) {
   const N = String(Object.keys(COUNTRIES).length)
   const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || TXT.en).replaceAll('{n}', N)), [lang, N])
   const [sheet, setSheet] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
+  const [page, setPage] = useState(pageFromHash)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [region, setRegion] = useState('africa')
   useEffect(() => { track('landing_view', { once: true }) }, [])
-  useReveal([lang])
+  useEffect(() => {
+    const onNav = () => { setPage(pageFromHash()); setMenuOpen(false) }
+    window.addEventListener('hashchange', onNav)
+    window.addEventListener('popstate', onNav)
+    return () => { window.removeEventListener('hashchange', onNav); window.removeEventListener('popstate', onNav) }
+  }, [])
+  useEffect(() => { window.scrollTo(0, 0) }, [page])
+  useReveal([lang, page])
 
   const tryNow = () => (guest ? onResumeGuest() : setSheet(true))
   const tryLabel = guest ? T.cont.replace('{name}', guest.name) : T.try
-  const allFlags = Object.keys(COUNTRIES)
 
   const primary = { background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 20, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 14px 28px rgba(255,196,0,0.35)' }
   const secondary = { background: 'white', color: '#2E7D4F', padding: '14px 22px', fontSize: 16, borderRadius: 20, boxShadow: '0 4px 14px rgba(46,158,91,0.15)' }
   const h2 = { fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, textAlign: 'center', margin: '0 0 22px', lineHeight: 1.15 }
 
+  const NV = NAV[lang] || NAV.en
+  const go = (p) => {
+    setMenuOpen(false)
+    if (p === page) return
+    if (p === 'home') window.history.pushState(null, '', window.location.pathname + window.location.search)
+    else window.location.hash = p
+    setPage(p)
+  }
+  const nextBtn = NV.next[page] && (
+    <div style={{ textAlign: 'center', padding: '6px 16px 36px' }}>
+      <button className="btn-kid soft" onClick={() => go(PAGES[PAGES.indexOf(page) + 1])} style={secondary}>{NV.next[page]}</button>
+    </div>
+  )
+
   return (
-    <div style={{ fontFamily: 'Nunito, sans-serif', color: INK, background: '#FFFDF7' }}>
+    <div style={{ fontFamily: 'Nunito, sans-serif', color: INK, background: '#FFFDF7', minHeight: '100vh' }}>
       {sheet && <GuestSheet T={T} onClose={() => setSheet(false)} onStart={(g) => { setSheet(false); onStartGuest(g) }} />}
 
-      {/* ── Heros ── */}
-      <section className="home-sky" style={{ padding: '14px 16px 50px', position: 'relative', overflow: 'hidden' }}>
-        <div aria-hidden className="plane" style={{ top: 140 }}>✈️</div>
-        <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 90, left: '6%', fontSize: 56, opacity: 0.9 }}>☁️</div>
-        <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 260, right: '4%', fontSize: 46, opacity: 0.8, animationDelay: '-4s' }}>☁️</div>
-        <div className="lp-wrap" style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'relative', zIndex: 2 }}>
-          <div style={{ fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 28, lineHeight: 1 }}>
+      {/* ── Menu (toujours visible en haut) ── */}
+      <header className="lp-topbar">
+        <div className="lp-wrap" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button onClick={() => go('home')} aria-label={NV.home} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
             <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
-          </div>
+          </button>
+          <nav className="lp-menu-desktop" aria-label={NV.menu}>
+            {PAGES.map((p) => (
+              <button key={p} onClick={() => go(p)} className={p === page ? 'on' : ''} aria-current={p === page ? 'page' : undefined}>{NV[p]}</button>
+            ))}
+          </nav>
           <div style={{ flex: 1 }} />
           <LangPicker lang={lang} onChange={changeLang} compact />
-          <button className="btn-kid soft" onClick={onLogin}
-            style={{ background: 'white', color: INK, padding: '9px 16px', fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>{T.login}</button>
+          <button className="btn-kid soft lp-login" onClick={onLogin}
+            style={{ background: 'white', color: INK, padding: '9px 14px', fontSize: 14, boxShadow: '0 3px 10px rgba(26,42,79,0.12)', whiteSpace: 'nowrap' }}>{T.login}</button>
+          <button className="lp-burger" onClick={() => setMenuOpen((o) => !o)} aria-expanded={menuOpen} aria-label={NV.menu}>
+            <span /><span /><span />
+          </button>
         </div>
+        {menuOpen && (
+          <nav className="lp-menu-mobile anim-slide-up" aria-label={NV.menu}>
+            {PAGES.map((p) => (
+              <button key={p} onClick={() => go(p)} className={p === page ? 'on' : ''}>{NV[p]}</button>
+            ))}
+            <button onClick={() => { setMenuOpen(false); onLogin() }}>👤 {T.login}</button>
+          </nav>
+        )}
+      </header>
 
+      <main key={page} className="screen-enter">
+      {page === 'home' && (<>
+      {/* ── Heros ── */}
+      <section className="home-sky" style={{ padding: '6px 16px 50px', position: 'relative', overflow: 'hidden' }}>
+        <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 90, left: '6%', fontSize: 56, opacity: 0.9 }}>☁️</div>
+        <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 260, right: '4%', fontSize: 46, opacity: 0.8, animationDelay: '-4s' }}>☁️</div>
         <div className="lp-wrap lp-hero" style={{ position: 'relative', zIndex: 2 }}>
           <div className="lp-hero-text screen-enter">
             <h1 className="lp-h1" style={{ fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 40, lineHeight: 1.08, margin: '28px 0 14px', color: INK }}>{T.h1}</h1>
@@ -357,6 +414,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
       </section>
 
+      </>)}
+      {page === 'discover' && (<>
       {/* ── Comment ca marche ── */}
       <section style={{ padding: '10px 16px 56px' }}>
         <div className="lp-wrap">
@@ -370,25 +429,6 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#607D8B', lineHeight: 1.55 }}>{text}</div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pays ── */}
-      <section className="green-bg" style={{ padding: '50px 16px' }}>
-        <div className="lp-wrap" style={{ textAlign: 'center' }}>
-          <h2 style={{ ...h2, marginBottom: 6 }}>{T.countries_title}</h2>
-          <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 22 }}>{T.countries_sub}</div>
-          <div className="reveal-stagger" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
-            {allFlags.slice(0, 24).map((code) => (
-              <div key={code} title={COUNTRIES[code].name} style={{ background: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
-                <div style={{ fontSize: 34, lineHeight: 1.1 }}>{COUNTRIES[code].flag}</div>
-                <div style={{ fontSize: 12, fontWeight: 900, color: INK }}><TText text={COUNTRIES[code].name} lang={lang} /></div>
-              </div>
-            ))}
-            {allFlags.length > 24 && (
-              <div style={{ background: '#2E9E5B', color: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_TITLE, fontSize: 22, fontWeight: 700 }}>+{allFlags.length - 24}</div>
-            )}
           </div>
         </div>
       </section>
@@ -411,6 +451,36 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
       </section>
 
+      </>)}
+      {page === 'countries' && (
+      <section className="green-bg" style={{ padding: '40px 16px 50px' }}>
+        <div className="lp-wrap" style={{ textAlign: 'center' }}>
+          <h2 style={{ ...h2, marginBottom: 6 }}>{T.countries_title}</h2>
+          <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 26 }}>{T.countries_sub}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginBottom: 20 }}>
+            {Object.entries(REGIONS).filter(([, r]) => r.countries.length).map(([key, r]) => (
+              <button key={key} className="btn-kid soft" onClick={() => setRegion(key)} aria-pressed={region === key}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, borderRadius: 999, padding: '9px 14px', fontSize: 15, fontWeight: 900, background: region === key ? `linear-gradient(150deg, ${r.grad[0]}, ${r.grad[1]})` : 'white', color: region === key ? 'white' : INK, boxShadow: '0 3px 10px rgba(26,42,79,0.10)' }}>
+                <span>{r.mascot}</span><TText text={r.name} lang={lang} /><span style={{ fontSize: 12, opacity: 0.8 }}>{r.countries.length}</span>
+              </button>
+            ))}
+          </div>
+          {Object.entries(REGIONS).filter(([key, r]) => key === region && r.countries.length).map(([key, r]) => (
+            <div key={key} className="screen-enter" style={{ marginBottom: 10 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>
+                {r.countries.map((code) => (
+                  <div key={code} style={{ background: 'white', borderRadius: 16, padding: '8px 10px', width: 92, boxShadow: '0 4px 12px rgba(46,158,91,0.10)' }}>
+                    <div style={{ fontSize: 30, lineHeight: 1.1 }}>{COUNTRIES[code]?.flag}</div>
+                    <div style={{ fontSize: 11.5, fontWeight: 900, color: INK, lineHeight: 1.2, marginTop: 2 }}>{countryName(code, lang) || COUNTRIES[code]?.name}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      )}
+      {page === 'pricing' && (<>
       {/* ── Prix ── */}
       <section className="home-sky" style={{ padding: '56px 16px' }}>
         <div className="lp-wrap" style={{ maxWidth: 860 }}>
@@ -436,6 +506,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
       </section>
 
+      </>)}
+      {page === 'faq' && (<>
       {/* ── FAQ ── */}
       <section style={{ padding: '56px 16px' }}>
         <div className="lp-wrap" style={{ maxWidth: 780 }}>
@@ -453,9 +525,13 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         </div>
       </section>
 
-      {/* ── Appel final ── */}
-      <section className="green-bg" style={{ padding: '56px 16px 20px', textAlign: 'center' }}>
-        <div className="float" style={{ fontSize: 70 }}>🌍</div>
+      </>)}
+      {nextBtn}
+      </main>
+
+      {/* ── Appel final (sur chaque page) ── */}
+      <section className="green-bg" style={{ padding: '46px 16px 20px', textAlign: 'center' }}>
+        <div className="float" style={{ fontSize: 60 }}>🌍</div>
         <h2 style={{ ...h2, marginBottom: 6 }}>{T.final_title}</h2>
         <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 22 }}>{T.final_sub}</div>
         <button className="btn-kid soft" onClick={tryNow} style={primary}>{tryLabel}</button>
