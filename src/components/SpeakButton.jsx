@@ -63,14 +63,18 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
           setTTSEnabled(next)
         }}
         title={enabled ? 'Voix off ON' : 'Voix off OFF'}
+        aria-label={enabled ? 'Couper la voix' : 'Activer la voix'}
         style={{
           background: enabled ? color : 'white',
           color: enabled ? 'white' : '#90A4AE',
           border: 'none',
-          minHeight: 34,
-          borderRadius: 999,
-          padding: '6px 12px',
-          fontSize: 12,
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          padding: 0,
+          fontSize: 18,
+          justifyContent: 'center',
+          flexShrink: 0,
           fontWeight: 900,
           cursor: 'pointer',
           display: 'inline-flex',
@@ -80,7 +84,7 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
           boxShadow: enabled ? `0 3px 10px ${color}55` : '0 3px 10px rgba(26,42,79,0.12)',
         }}
       >
-        {enabled ? '🔊' : '🔇'} {label || 'Voix'}
+        {enabled ? '🔊' : '🔇'}{label ? ` ${label}` : ''}
       </button>
     )
   }

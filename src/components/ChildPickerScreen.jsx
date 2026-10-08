@@ -3,6 +3,7 @@ import LogoutIcon from './LogoutIcon'
 import LegalFooter from './LegalFooter'
 import DeleteAccount from './DeleteAccount'
 import ResetProgress from './ResetProgress'
+import ScreenTimeSettings from './ScreenTimeSettings'
 import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
@@ -13,7 +14,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, premium, account = {}, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= MAX_CHILDREN
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -25,6 +26,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [createError, setCreateError] = useState('')
   const [deleting, setDeleting] = useState(false)
   const [resetting, setResetting] = useState(false)
+  const [timing, setTiming] = useState(false)
   const [portalBusy, setPortalBusy] = useState(false)
   const portal = async () => {
     setPortalBusy(true)
@@ -137,6 +139,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               📊 {t(lang, 'ps_open')}
             </button>
           )}
+          {kids.length > 0 && (
+            <button className="btn-kid soft" onClick={() => setTiming(true)}
+              style={{ width: '100%', background: 'white', color: '#6A1B9A', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(106,27,154,0.12)' }}>
+              ⏱️ Temps d'écran
+            </button>
+          )}
           {onManageDevices && (
             <button className="btn-kid soft" onClick={onManageDevices}
               style={{ width: '100%', background: 'white', color: '#2E7D4F', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
@@ -173,6 +181,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </>
       )}
+      {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}
       {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}
       {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}
 

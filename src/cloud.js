@@ -96,6 +96,11 @@ export async function resetChildProgress(uid, childId) {
   })
 }
 
+// Limite de temps d'écran quotidienne (minutes, 0 = pas de limite), réglée par les parents
+export async function saveChildScreenLimit(uid, childId, minutes) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { screenLimit: minutes })
+}
+
 // Scores des jeux (étoiles par jeu) : { hunt, animals, riddles, memory }
 export async function saveChildGames(uid, childId, games) {
   await updateDoc(doc(db, 'users', uid, 'children', childId), { games })

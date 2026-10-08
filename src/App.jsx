@@ -32,7 +32,8 @@ import LevelPicker from './components/LevelPicker'
 import Paywall from './components/Paywall'
 import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
-import { useUsageTracker, trackCountryVisit } from './stats'
+import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
+import ScreenTimeLock from './components/ScreenTimeLock'
 import ParentStats from './components/ParentStats'
 import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
 import { isDone } from './levels'
@@ -90,6 +91,10 @@ export default function App() {
   const [limitOpen, setLimitOpen] = useState(false)
   const [gameKey, setGameKey] = useState(null)
   const [newStamp, setNewStamp] = useState(null)
+  // Temps d'écran du jour (limite réglée par les parents)
+  const [screenSecs, setScreenSecs] = useState(0)
+  const [extraMin, setExtraMin] = useState(0)
+  const [limitOff, setLimitOff] = useState(false)
   const [account, setAccount] = useState({ kind: 'free' })
   const [adminOpen, setAdminOpen] = useState(false)
   // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
@@ -212,6 +217,15 @@ export default function App() {
       })
       .catch((e) => console.error('Confirm checkout error:', e))
   }, [user])
+
+  useEffect(() => {
+    setScreenSecs(activeChild?.stats?.days?.[dayKey()] || 0); setExtraMin(0); setLimitOff(false)
+  }, [activeChild?.id])
+  useEffect(() => {
+    if (!user || !activeChild?.id) return
+    const id = setInterval(() => { if (document.visibilityState === 'visible') setScreenSecs((n) => n + 10) }, 10000)
+    return () => clearInterval(id)
+  }, [user, activeChild?.id])
 
   // Chaque nouvel écran commence en haut de la page
   useEffect(() => { window.scrollTo(0, 0) }, [screen, gameKey])
@@ -425,6 +439,7 @@ export default function App() {
         lang={lang}
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
+        onLimitSaved={(id, min) => setKids((all) => all.map((k) => (k.id === id ? { ...k, screenLimit: min } : k)))}
         onKidsReset={(ids) => setKids((all) => all.map((k) => (ids.includes(k.id) ? { ...k, xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] } } : k)))}
         premium={premium}
         account={account}
@@ -440,6 +455,10 @@ export default function App() {
       <LevelPicker lang={lang} age={activeChild.age} childName={(activeChild.name || '').split(' ')[0]}
         value={defaultLevelForAge(activeChild.age || 6)} onPick={changeDifficulty} />
     )
+  }
+  const screenLimit = user ? activeChild.screenLimit || 0 : 0
+  if (screenLimit > 0 && !limitOff && screenSecs >= (screenLimit + extraMin) * 60) {
+    return <ScreenTimeLock lang={lang} minutes={Math.round(screenSecs / 60)} onMore={() => setExtraMin((m) => m + 15)} onOff={() => setLimitOff(true)} onSwitch={switchProfile} />
   }
   if (((needsExpert && !expertReady) || !worldReady) && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
 
