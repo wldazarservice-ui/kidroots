@@ -39,7 +39,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         <div style={{ flex: 1 }} />
         <SpeakButton settings color="#FF6B35" label="" />
         <LangPicker lang={lang} onChange={changeLang} compact />
-        <button className="btn-kid" onClick={nav.logout} title="Deconnexion" aria-label="Deconnexion"
+        <button className="btn-kid" onClick={nav.logout} title="Déconnexion" aria-label="Déconnexion"
           style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#90A4AE', width: 40, height: 40, fontSize: 14, borderRadius: '50%', boxShadow: '0 3px 10px rgba(26,42,79,0.12)', flexShrink: 0 }}>
           <LogoutIcon size={16} />
         </button>

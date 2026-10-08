@@ -9,7 +9,7 @@ export default function DiscoverScreen({ country: c, nav }) {
       <div style={{ minHeight: '100vh', background: c.light, padding: '24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
         <div className="anim-starpop" style={{ fontSize: 80, marginBottom: 16 }}>🌟</div>
         <h2 style={{ fontSize: 26, fontWeight: 900, color: c.color, marginBottom: 10, fontFamily: 'Nunito' }}>
-          Bravo ! Tu as tout decouvert !
+          Bravo ! Tu as tout découvert !
         </h2>
         <p style={{ fontSize: 16, color: '#555', fontWeight: 700, marginBottom: 32 }}>
           Maintenant on passe au quiz ! 🎯
@@ -44,7 +44,7 @@ export default function DiscoverScreen({ country: c, nav }) {
           <div style={{ fontSize: 80, marginBottom: 16 }}>{f.e}</div>
           {!flipped ? (
             <div>
-              <div style={{ fontSize: 16, color: '#888', fontWeight: 700 }}>👆 Touche pour decouvrir !</div>
+              <div style={{ fontSize: 16, color: '#888', fontWeight: 700 }}>👆 Touche pour découvrir !</div>
             </div>
           ) : (
             <div className="anim-fadeup">

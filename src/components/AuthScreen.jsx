@@ -20,7 +20,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) 
       return
     }
     if (password.length < 6) {
-      setError('Mot de passe : 6 caracteres minimum.')
+      setError('Mot de passe : 6 caractères minimum.')
       return
     }
     setBusy(true)
@@ -144,15 +144,15 @@ export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) 
 
 function translateError(code) {
   const map = {
-    'auth/invalid-email': 'Email invalide.',
-    'auth/email-already-in-use': 'Cet email a deja un compte.',
+    'auth/invalid-email': 'E-mail invalide.',
+    'auth/email-already-in-use': 'Cet e-mail a déjà un compte.',
     'auth/weak-password': 'Mot de passe trop court (6 car. min.).',
-    'auth/user-not-found': 'Aucun compte avec cet email.',
+    'auth/user-not-found': 'Aucun compte avec cet e-mail.',
     'auth/wrong-password': 'Mot de passe incorrect.',
-    'auth/invalid-credential': 'Email ou mot de passe incorrect.',
-    'auth/popup-closed-by-user': 'Connexion annulee.',
+    'auth/invalid-credential': 'E-mail ou mot de passe incorrect.',
+    'auth/popup-closed-by-user': 'Connexion annulée.',
     'auth/network-request-failed': 'Pas de connexion internet.',
-    'auth/too-many-requests': 'Trop de tentatives. Reessaie plus tard.',
+    'auth/too-many-requests': 'Trop de tentatives. Réessaie plus tard.',
   }
   return map[code] || 'Erreur de connexion.'
 }
