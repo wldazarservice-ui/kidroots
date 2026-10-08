@@ -3,7 +3,7 @@
   publish = "dist"
   # Pas de construction (donc pas de credits Netlify) si seuls des fichiers hors du site ont change
   # (marketing/, scripts/, docs). Code de sortie 0 = on ignore ce deploiement.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public netlify index.html package.json package-lock.json vite.config.js netlify.toml tailwind.config.js postcss.config.js"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public netlify scripts index.html package.json package-lock.json vite.config.js netlify.toml tailwind.config.js postcss.config.js"
 
 [build.environment]
   # La cle Web Firebase est publique par conception (securite assuree par les regles Firebase)
