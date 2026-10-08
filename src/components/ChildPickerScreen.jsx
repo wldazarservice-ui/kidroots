@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import LogoutIcon from './LogoutIcon'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelAverages } from '../levels'
@@ -50,8 +51,8 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
         </div>
         <button className="btn-kid" onClick={() => signOut()}
-          style={{ background: 'white', color: '#78909C', padding: '8px 14px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
-          ⏻ Deconnexion
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', padding: '8px 14px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
+          <LogoutIcon size={14} /> Déconnexion
         </button>
       </div>
 

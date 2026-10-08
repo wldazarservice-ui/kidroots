@@ -1,4 +1,5 @@
 import { COUNTRIES, REGIONS } from '../data/countries'
+import LogoutIcon from './LogoutIcon'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import SpeakButton from './SpeakButton'
@@ -45,8 +46,8 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         <SpeakButton settings color="#FF6B35" label="" />
         <LangPicker lang={lang} onChange={changeLang} compact />
         <button className="btn-kid" onClick={() => signOut()} title="Deconnexion" aria-label="Deconnexion"
-          style={{ background: 'white', color: '#90A4AE', width: 34, height: 34, fontSize: 14, borderRadius: '50%', boxShadow: '0 3px 10px rgba(26,42,79,0.12)', flexShrink: 0 }}>
-          ⏻
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#90A4AE', width: 34, height: 34, fontSize: 14, borderRadius: '50%', boxShadow: '0 3px 10px rgba(26,42,79,0.12)', flexShrink: 0 }}>
+          <LogoutIcon size={16} />
         </button>
       </div>
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import LogoutIcon from './LogoutIcon'
 import ParentGate from './ParentGate'
 import { listDevices, removeDevice, getDeviceId, MAX_DEVICES } from '../devices'
 import { signOut } from '../auth'
@@ -88,8 +89,8 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
 
       {blocked && (
         <button className="btn-kid" onClick={() => signOut()}
-          style={{ width: '100%', marginTop: 14, background: 'white', color: '#607D8B', padding: '12px', fontSize: 14, borderRadius: 16 }}>
-          ⏻ Se déconnecter
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%', marginTop: 14, background: 'white', color: '#607D8B', padding: '12px', fontSize: 14, borderRadius: 16 }}>
+          <LogoutIcon size={15} /> Se déconnecter
         </button>
       )}
     </div>
