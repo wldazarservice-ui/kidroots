@@ -5,6 +5,7 @@ import { defaultLevelForAge } from '../levels'
 import { track } from '../track'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
+import { TText } from '../useTranslated'
 
 const INK = '#1A2A4F'
 const FONT_TITLE = 'Fredoka, Nunito, sans-serif'
@@ -195,7 +196,7 @@ const TXT = {
 
 const AVATARS = ['👧🏽', '👦🏿', '👧🏻', '👦🏽', '🧒']
 
-function PhoneMockup({ T }) {
+function PhoneMockup({ T, lang }) {
   const regions = Object.values(REGIONS)
   return (
     <div className="lp-mock" aria-hidden>
@@ -212,7 +213,7 @@ function PhoneMockup({ T }) {
             {regions.map((r) => (
               <div key={r.name} style={{ background: `linear-gradient(150deg, ${r.grad[0]}, ${r.grad[1]})`, borderRadius: 16, padding: '10px 4px 8px', textAlign: 'center', color: 'white', boxShadow: `0 4px 0 ${r.grad[1]}55` }}>
                 <div style={{ fontSize: 28, lineHeight: 1.1 }}>{r.mascot}</div>
-                <div style={{ fontFamily: FONT_TITLE, fontSize: 12, fontWeight: 600 }}>{r.name}</div>
+                <div style={{ fontFamily: FONT_TITLE, fontSize: 12, fontWeight: 600 }}><TText text={r.name} lang={lang} /></div>
                 <div style={{ fontSize: 9, background: 'rgba(255,255,255,0.9)', borderRadius: 8, marginTop: 4, padding: '2px 0' }}>
                   {r.countries.slice(0, 4).map((c) => COUNTRIES[c]?.flag).join(' ')}
                 </div>
@@ -321,7 +322,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
               ))}
             </div>
           </div>
-          <PhoneMockup T={T} />
+          <PhoneMockup T={T} lang={lang} />
         </div>
       </section>
 
@@ -366,7 +367,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
             {allFlags.map((code) => (
               <div key={code} title={COUNTRIES[code].name} style={{ background: 'white', borderRadius: 18, padding: '10px 12px', minWidth: 96, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
                 <div style={{ fontSize: 34, lineHeight: 1.1 }}>{COUNTRIES[code].flag}</div>
-                <div style={{ fontSize: 12, fontWeight: 900, color: INK }}>{COUNTRIES[code].name}</div>
+                <div style={{ fontSize: 12, fontWeight: 900, color: INK }}><TText text={COUNTRIES[code].name} lang={lang} /></div>
               </div>
             ))}
           </div>

@@ -128,6 +128,8 @@ export const UI = {
     daily_unlimited: "Aventures illimitées",
     manage_sub: "Mon abonnement",
     verify_sent: "📧 Vérifie ta boîte mail pour activer ton accès offert",
+    did_you_know: "Le savais-tu ?",
+    discover: "Découvrir",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -248,6 +250,8 @@ export const UI = {
     daily_unlimited: "Unlimited adventures",
     manage_sub: "My subscription",
     verify_sent: "📧 Check your inbox to activate your gifted access",
+    did_you_know: "Did you know?",
+    discover: "Discover",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -368,6 +372,8 @@ export const UI = {
     daily_unlimited: "Unbegrenzte Abenteuer",
     manage_sub: "Mein Abo",
     verify_sent: "📧 Bitte bestätige deine E-Mail, um den geschenkten Zugang zu aktivieren",
+    did_you_know: "Wusstest du schon?",
+    discover: "Entdecken",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',

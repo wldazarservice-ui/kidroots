@@ -6,6 +6,7 @@ import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
 import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
 import LegalFooter from './LegalFooter'
+import StoryBanners from './StoryBanners'
 import { LEVELS, isDone, countryStats } from '../levels'
 
 const INK = '#1A2A4F'
@@ -124,6 +125,8 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
 
         </div>
         </div>
+
+        <StoryBanners lang={lang} onOpen={nav.goCountry} />
 
         {/* Continents */}
         <div className="continent-grid" style={{ marginBottom: 22 }}>

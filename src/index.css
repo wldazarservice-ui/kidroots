@@ -281,3 +281,10 @@ body {
   .lp-phone { width: 270px; height: 520px; }
 }
 @media (max-width: 959px) { .lp-cloud { display: none; } }
+
+/* Bandeaux « Le savais-tu ? » */
+.story-strip { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 12px; scrollbar-width: none; }
+.story-strip::-webkit-scrollbar { display: none; }
+.story-card { flex: 0 0 82%; scroll-snap-align: start; min-height: 170px; }
+@media (min-width: 700px) { .story-card { flex-basis: 46%; } }
+@media (min-width: 960px) { .story-card { flex-basis: 31.5%; } }
