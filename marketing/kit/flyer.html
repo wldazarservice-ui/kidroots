@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@700;800;900&family=Noto+Color+Emoji&display=block" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+@page{size:A5;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:148mm;height:210mm;font-family:Nunito,'Noto Color Emoji',sans-serif;color:#1A2A4F;background:linear-gradient(180deg,#E3F4FF 0%,#FFF8E7 55%,#FFFFFF 100%);position:relative;overflow:hidden}
+.e{font-family:'Noto Color Emoji'}
+.top{text-align:center;padding:11mm 9mm 0}
+.logo{font-family:Fredoka;font-weight:700;font-size:40pt;line-height:1}
+.logo .a{color:#FF7A00}.logo .b{color:#1E88E5}
+h1{font-family:Fredoka;font-size:19pt;line-height:1.15;margin:4mm 0 2mm}
+.hi{background:#FF6F00;color:#fff;border-radius:6px;padding:0 5px}
+.sub{font-size:10.5pt;font-weight:800;color:#455A64}
+.list{margin:6mm 10mm 0;background:#fff;border-radius:16px;padding:4mm 6mm;box-shadow:0 4px 14px rgba(26,42,79,.08)}
+.li{display:flex;gap:3mm;align-items:center;font-size:10.5pt;font-weight:900;margin:2mm 0}
+.li .e{font-size:15pt;width:8mm;text-align:center}
+.qrbox{display:flex;align-items:center;gap:6mm;margin:6mm 10mm 0;background:#1E88E5;color:#fff;border-radius:18px;padding:5mm}
+#qr{background:#fff;padding:2mm;border-radius:8px}
+.qrtext b{display:block;font-family:Fredoka;font-size:15pt}
+.qrtext span{font-size:9.5pt;font-weight:800;color:#E3F2FD}
+.mission{position:absolute;left:0;right:0;bottom:8mm;text-align:center;font-size:9pt;font-weight:900;color:#D81B60}
+</style></head><body>
+<div class="top">
+  <div class="logo"><span class="a">Moka</span><span class="b">libo</span></div>
+  <h1 id="h1"></h1>
+  <div class="sub" id="sub"></div>
+</div>
+<div class="list" id="list"></div>
+<div class="qrbox"><div id="qr"></div><div class="qrtext"><b>mokalibo.com</b><span id="qrt"></span></div></div>
+<div class="mission" id="mis"></div>
+<script>
+const L = new URLSearchParams(location.search).get('lang') || 'fr'
+const T = {
+ fr: { h1: 'L’histoire des <span class="hi">195 pays</span> du monde, racontée aux enfants', sub: 'De 4 à 12 ans · histoires vraies lues à voix haute', items: [['📖','Des histoires vraies, avec dates et héros'],['🔊','Tout est lu à voix haute'],['🎯','Un quiz à chaque chapitre'],['🛂','Un passeport à remplir de tampons'],['🎮','Carte du monde et jeux malins'],['🚫','Sans publicité, sans traceur']], qrt: 'Scanne pour essayer gratuitement : 2 histoires offertes chaque jour, sans compte.', mis: '💛 Apprendre le monde, protéger les enfants.' },
+ de: { h1: 'Die Geschichte aller <span class="hi">195 Länder</span>, für Kinder erzählt', sub: '4 bis 12 Jahre · wahre Geschichten zum Vorlesen', items: [['📖','Wahre Geschichten mit Daten und Helden'],['🔊','Alles wird vorgelesen'],['🎯','Ein Quiz in jedem Kapitel'],['🛂','Ein Reisepass zum Stempeln'],['🎮','Weltkarte und clevere Spiele'],['🚫','Ohne Werbung, ohne Tracker']], qrt: 'Scannen und gratis testen: 2 Geschichten pro Tag, ohne Konto.', mis: '💛 Die Welt entdecken, Kinder schützen.' },
+}[L]
+document.getElementById('h1').innerHTML = T.h1
+document.getElementById('sub').textContent = T.sub
+document.getElementById('list').innerHTML = T.items.map(([e,t]) => `<div class="li"><span class="e">${e}</span>${t}</div>`).join('')
+document.getElementById('qrt').textContent = T.qrt
+document.getElementById('mis').textContent = T.mis
+new QRCode(document.getElementById('qr'), { text: `https://mokalibo.com/?utm_source=flyer_${L}`, width: 110, height: 110, correctLevel: QRCode.CorrectLevel.M })
+window.ready = async () => { await document.fonts.ready; await document.fonts.load('20px "Noto Color Emoji"', '📖🔊🎯🛂🎮🚫💛'); return true }
+</script></body></html>
