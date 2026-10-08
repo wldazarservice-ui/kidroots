@@ -69,3 +69,14 @@ export function levelAverages(difficulty) {
   const range = (k) => [Math.min(...list.map(s => s[k])), Math.max(...list.map(s => s[k]))]
   return { stories: avg('stories'), quiz: avg('quiz'), storiesRange: range('stories'), quizRange: range('quiz') }
 }
+
+// Total pour toute l'application (tous les pays) : ce que l'enfant peut découvrir à ce niveau
+export function levelTotals(difficulty) {
+  const codes = Object.keys(COUNTRIES)
+  const s = codes.map(code => countryStats(code, difficulty))
+  return {
+    countries: codes.length,
+    stories: s.reduce((a, x) => a + x.stories, 0),
+    quiz: s.reduce((a, x) => a + x.quiz, 0),
+  }
+}

@@ -7,7 +7,7 @@ import { TText } from '../useTranslated'
 import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
 import LegalFooter from './LegalFooter'
 import StoryBanners from './StoryBanners'
-import { LEVELS, LEVEL_KEYS, isDone } from '../levels'
+import { LEVELS, isDone } from '../levels'
 import { passportStats } from '../explore'
 
 const INK = '#1A2A4F'
@@ -56,6 +56,12 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
               </div>
               {firstName && <div className="hello" style={{ fontSize: 24, fontWeight: 900, color: INK, marginTop: 12 }}>{t(lang, 'hello', { name: firstName })}</div>}
               <div className="sub" style={{ fontSize: 16, color: '#546E7A', fontWeight: 700, marginTop: 4 }}>{t(lang, 'where_go')}</div>
+              <button className="btn-kid soft" onClick={nav.openLevelPicker} aria-label={t(lang, 'choose_level')}
+                style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 8, background: 'white', color: INK, borderRadius: 999, padding: '7px 8px 7px 12px', fontSize: 14, fontWeight: 900, boxShadow: '0 3px 10px rgba(26,42,79,0.10)', border: `2px solid ${LEVELS[difficulty]?.color || '#1E88E5'}33` }}>
+                <span style={{ fontSize: 22, lineHeight: 1 }}>{LEVELS[difficulty]?.emoji}</span>
+                <span>{t(lang, `lvl_${difficulty}`)}</span>
+                <span style={{ background: LEVELS[difficulty]?.color || '#1E88E5', color: 'white', borderRadius: 999, padding: '3px 10px', fontSize: 12 }}>{t(lang, 'lvl_change')}</span>
+              </button>
               <button className="btn-kid soft play-btn shine" onClick={() => nav.goRegions()}
                 style={{ marginTop: 18, background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 21, width: '100%', maxWidth: 420, borderRadius: 26, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.45)' }}>
                 {t(lang, 'play')}
@@ -64,7 +70,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
           </div>
 
           {/* Raccourcis : passeport, carte, jeux */}
-          <div className="home-shortcuts" style={{ gridArea: 'shortcuts' }}>
+          <div className="home-shortcuts hide-with-nav" style={{ gridArea: 'shortcuts' }}>
             {[
               ['🛂', t(lang, 'home_passport'), `${stamps} / ${Object.keys(COUNTRIES).length}`, ['#5C6BC0', '#1E3A8A'], nav.openPassport],
               ['🗺️', t(lang, 'home_map'), '🌍', ['#26C6DA', '#00838F'], nav.openMap],
@@ -108,24 +114,6 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
               </div>
             </div>
 
-            <div className="home-section-title" style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ flex: 1 }}>📚 {t(lang, 'reading_level')}</span>
-              <button onClick={nav.openLevelPicker} aria-label={t(lang, 'choose_level')} style={{ background: 'white', border: 'none', borderRadius: '50%', width: 30, height: 30, color: '#1E88E5', fontWeight: 900, fontSize: 15, cursor: 'pointer', boxShadow: '0 2px 8px rgba(26,42,79,0.12)' }}>?</button>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10, marginBottom: 22 }}>
-              {LEVEL_KEYS.map((k) => {
-                const LL = LEVELS[k]
-                const on = k === difficulty
-                return (
-                  <button key={k} className="btn-kid soft" onClick={() => (on ? nav.openLevelPicker() : nav.setDifficulty(k))} aria-pressed={on}
-                    style={{ padding: '12px 4px', borderRadius: 20, background: on ? `linear-gradient(150deg, ${LL.grad[0]}, ${LL.grad[1]})` : 'white', color: on ? 'white' : INK, boxShadow: on ? `0 5px 0 ${LL.grad[1]}66` : '0 3px 10px rgba(26,42,79,0.08)', border: 'none' }}>
-                    <span style={{ display: 'block', fontSize: 30, lineHeight: 1.1 }}>{LL.emoji}</span>
-                    <span style={{ display: 'block', fontSize: 13, fontWeight: 900, lineHeight: 1.15, marginTop: 4 }}>{t(lang, `lvl_${k}`)}</span>
-                    <span style={{ display: 'block', fontSize: 11, fontWeight: 800, opacity: 0.85 }}>{LL.ages} {t(lang, 'years')}</span>
-                  </button>
-                )
-              })}
-            </div>
           </div>
         </div>
 

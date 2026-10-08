@@ -303,7 +303,7 @@ body {
 /* ── Animations du site ─────────────────────────────── */
 /* Transition entre les écrans de l'app */
 @keyframes screenIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
-.screen-enter { animation: screenIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.screen-enter { animation: screenIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
 
 /* Apparition au défilement (page de présentation) */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -348,4 +348,29 @@ body {
 /* Sur téléphone : pas de cadre autour des blocs, pour gagner de la place */
 @media (max-width: 699px) {
   .flat-mobile { background: transparent !important; box-shadow: none !important; padding: 4px 2px !important; border: none !important; }
+}
+
+/* ── Barre de navigation du bas (téléphone / tablette) ── */
+.bottom-nav { display: none; }
+.bottom-nav-space { display: none; }
+@media (max-width: 959px) {
+  .bottom-nav {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 400;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(26,42,79,0.08); box-shadow: 0 -6px 20px rgba(26,42,79,0.08);
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0;
+  }
+  .bottom-nav button {
+    flex: 1; min-width: 0; border: none; background: none; cursor: pointer; font-family: Nunito, sans-serif;
+    display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 2px; border-radius: 16px;
+    color: #78909C; -webkit-tap-highlight-color: transparent; transition: background 0.2s, transform 0.15s;
+  }
+  .bottom-nav button:active { transform: scale(0.92); }
+  .bottom-nav .bn-icon { font-size: 26px; line-height: 1.1; transition: transform 0.2s; }
+  .bottom-nav .bn-label { font-size: 11px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .bottom-nav button.on { background: #FFF3D6; color: #E65100; }
+  .bottom-nav button.on .bn-icon { transform: translateY(-2px) scale(1.12); }
+  .bottom-nav-space { display: block; height: calc(76px + env(safe-area-inset-bottom)); }
+  /* Les raccourcis de l'accueil font doublon avec la barre : on les cache sur téléphone */
+  .home-shortcuts.hide-with-nav { display: none; }
 }

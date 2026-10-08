@@ -221,6 +221,10 @@ export const UI = {
     st_parent: "Parents : ajouter du temps",
     st_more15: "+15 minutes",
     st_off_today: "Pas de limite aujourd'hui",
+    nav_home: "Accueil",
+    nav_explore: "Explorer",
+    lvl_total: "à découvrir dans {n} pays",
+    lvl_change: "Changer",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -434,6 +438,10 @@ export const UI = {
     st_parent: "Parents: add time",
     st_more15: "+15 minutes",
     st_off_today: "No limit today",
+    nav_home: "Home",
+    nav_explore: "Explore",
+    lvl_total: "to discover in {n} countries",
+    lvl_change: "Change",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -647,6 +655,10 @@ export const UI = {
     st_parent: "Eltern: Zeit hinzufügen",
     st_more15: "+15 Minuten",
     st_off_today: "Heute keine Grenze",
+    nav_home: "Start",
+    nav_explore: "Entdecken",
+    lvl_total: "in {n} Ländern zu entdecken",
+    lvl_change: "Ändern",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',

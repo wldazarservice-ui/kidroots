@@ -29,6 +29,7 @@ import ResultScreen from './components/ResultScreen'
 import AuthScreen from './components/AuthScreen'
 import ChildPickerScreen from './components/ChildPickerScreen'
 import LevelPicker from './components/LevelPicker'
+import BottomNav from './components/BottomNav'
 import Paywall from './components/Paywall'
 import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
@@ -462,7 +463,9 @@ export default function App() {
   }
   if (((needsExpert && !expertReady) || !worldReady) && screen !== 'home' && screen !== 'regions') return <Spinner msg="📚" />
 
+  const showNav = ['home', 'regions', 'country', 'passport', 'map', 'games'].includes(screen)
   return (
+    <>
     <div style={{ minHeight: '100vh' }} key={`${screen}-${gameKey}-${countryCode}-${chapterIdx}-${step}`} className="screen-enter">
       {xpAnim && (
         <div style={{
@@ -514,6 +517,9 @@ export default function App() {
         <ResultScreen chapter={chapter} country={country} score={quizScore}
           hasNext={chapterIdx + 1 < country.chapters.length} {...shared} />
       )}
+      {showNav && <div className="bottom-nav-space" />}
     </div>
+    {showNav && <BottomNav lang={lang} screen={screen} nav={nav} />}
+    </>
   )
 }

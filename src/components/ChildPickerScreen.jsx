@@ -7,7 +7,7 @@ import ScreenTimeSettings from './ScreenTimeSettings'
 import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
-import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelAverages } from '../levels'
+import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
 import { MAX_CHILDREN } from '../cloud'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
@@ -215,7 +215,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
             {LEVEL_KEYS.map((k) => {
               const L = LEVELS[k]
-              const s = levelAverages(k)
+              const s = levelTotals(k)
               const active = difficulty === k
               return (
                 <button key={k} type="button" onClick={() => { setDifficulty(k); setLevelTouched(true) }} aria-pressed={active}
@@ -223,7 +223,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
                   <span style={{ fontSize: 30 }}>{L.emoji}</span>
                   <span style={{ flex: 1, minWidth: 0 }}>
                     <span style={{ display: 'block', fontSize: 15, fontWeight: 900, color: INK }}>{t(lang, `lvl_${k}`)} <span style={{ color: '#90A4AE', fontWeight: 800, fontSize: 12 }}>· {L.ages} ans</span></span>
-                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.storiesRange[0] === s.storiesRange[1] ? s.stories : `${s.storiesRange[0]}–${s.storiesRange[1]}`} {t(lang, 'stories_word')} · 🎯 {s.quizRange[0] === s.quizRange[1] ? s.quiz : `${s.quizRange[0]}–${s.quizRange[1]}`} {t(lang, 'questions_word')} {t(lang, 'per_country')}</span>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.stories.toLocaleString('fr-FR')} {t(lang, 'stories_word')} · 🎯 {s.quiz.toLocaleString('fr-FR')} {t(lang, 'questions_word')}</span>
                   </span>
                   <span style={{ width: 22, height: 22, borderRadius: '50%', border: `3px solid ${active ? L.color : '#CFD8DC'}`, background: active ? L.color : 'white', color: 'white', fontSize: 12, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{active ? '✓' : ''}</span>
                 </button>
