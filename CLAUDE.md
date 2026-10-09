@@ -90,7 +90,7 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Regions : africa, europe, asia, americas, oceania (une region sans pays est masquee).
 
 ## Modele economique (freemium + Formule Famille)
-- Gratuit : tous les pays, 2 NOUVEAUX chapitres par jour et par enfant (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
+- Gratuit : tous les pays, 2 NOUVEAUX chapitres et 3 parties de jeux (`DAILY_FREE_GAMES`, `gameDaily`) par jour et par enfant (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
 - Essai sans compte : profil local `kidroots_guest` (`src/guest.js`), progression recopiee dans `kidroots_v3_progress` pour etre transferee a la creation du compte.
 - Formule Famille : abonnement Stripe 1,99 €/mois ou 14,99 €/an (`PLANS` dans `src/premium.js` ET `netlify/lib/shared.mjs`). Anciens achats « a vie » conserves (premium sans subscriptionId).
 - Essai gratuit 3 jours (`TRIAL_DAYS`, `trialEligible`, `guardTrial` dans `netlify/lib/shared.mjs`) : 1 fois par compte ET par carte (empreinte `trialCards/{fingerprint}`), pas cumulable avec le parrainage.

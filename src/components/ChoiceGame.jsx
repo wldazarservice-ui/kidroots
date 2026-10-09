@@ -13,7 +13,7 @@ const INK = '#1A2A4F'
 const ROUNDS = 8
 
 // Deux jeux à choix multiples : « Qui habite où ? » (animaux) et « Énigmes des monuments »
-export default function ChoiceGame({ lang, kind, onBack, onFinish }) {
+export default function ChoiceGame({ onRound, lang, kind, onBack, onFinish }) {
   const isAnimal = kind === 'animals'
   const [game, setGame] = useState(0)
   const rounds = useMemo(() => {
@@ -42,7 +42,7 @@ export default function ChoiceGame({ lang, kind, onBack, onFinish }) {
       <ExploreHeader lang={lang} emoji={isAnimal ? '🦊' : '🏛️'} title={t(lang, isAnimal ? 'ani_title' : 'rid_title')} sub={t(lang, isAnimal ? 'ani_desc' : 'rid_desc')} onBack={onBack}
         right={<span style={{ background: 'white', borderRadius: 999, padding: '7px 14px', fontWeight: 900, color: '#FF8F00' }}>⭐ {stars}</span>} />
       {i >= ROUNDS ? (
-        <GameEnd lang={lang} stars={stars} max={ROUNDS} onAgain={again} onBack={onBack} onSave={() => onFinish(kind, stars)} />
+        <GameEnd lang={lang} stars={stars} max={ROUNDS} onAgain={() => { if (!onRound || onRound()) again() }} onBack={onBack} onSave={() => onFinish(kind, stars)} />
       ) : d && (
         <div style={{ padding: '8px 16px' }}>
           <div style={{ fontSize: 12, fontWeight: 900, color: '#90A4AE', marginBottom: 6 }}>{t(lang, 'round', { n: String(i + 1), t: String(ROUNDS) })}</div>

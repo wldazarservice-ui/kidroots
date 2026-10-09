@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { t } from '../i18n'
-import { DAILY_FREE_CHAPTERS } from '../premium'
+import { DAILY_FREE_CHAPTERS, DAILY_FREE_GAMES } from '../premium'
 
 const INK = '#1A2A4F'
 
@@ -12,7 +12,8 @@ const untilMidnight = () => {
 }
 
 // Limite gratuite atteinte (2 nouveaux chapitres par jour) : facon Duolingo, positif pour l'enfant
-export default function DailyLimit({ lang, onClose, onUnlock }) {
+export default function DailyLimit({ lang, onClose, onUnlock, kind = 'chapters' }) {
+  const games = kind === 'games'
   const [left, setLeft] = useState(untilMidnight)
   useEffect(() => {
     const id = setInterval(() => setLeft(untilMidnight()), 30000)
@@ -28,8 +29,8 @@ export default function DailyLimit({ lang, onClose, onUnlock }) {
           <span aria-hidden style={{ position: 'absolute', top: 6, left: '22%', fontSize: 20 }} className="anim-pulse">⭐</span>
           <span aria-hidden style={{ position: 'absolute', top: 40, right: '20%', fontSize: 16, animationDelay: '-1s' }} className="anim-pulse">✨</span>
         </div>
-        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 26, fontWeight: 700, lineHeight: 1.15, margin: '4px 0 8px' }}>{t(lang, 'lim_title')}</div>
-        <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5, opacity: 0.95 }}>{t(lang, 'lim_sub', { n: String(DAILY_FREE_CHAPTERS) })}</div>
+        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 26, fontWeight: 700, lineHeight: 1.15, margin: '4px 0 8px' }}>{t(lang, games ? 'lim_g_title' : 'lim_title')}</div>
+        <div style={{ fontSize: 15, fontWeight: 800, lineHeight: 1.5, opacity: 0.95 }}>{games ? t(lang, 'lim_g_sub', { n: String(DAILY_FREE_GAMES) }) : t(lang, 'lim_sub', { n: String(DAILY_FREE_CHAPTERS) })}</div>
         <div style={{ display: 'inline-block', marginTop: 14, background: 'rgba(255,255,255,0.18)', borderRadius: 999, padding: '7px 16px', fontSize: 14, fontWeight: 900 }}>⏰ {t(lang, 'lim_in', { time: left })}</div>
 
         <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -42,7 +43,7 @@ export default function DailyLimit({ lang, onClose, onUnlock }) {
             🔐 {t(lang, 'lim_parent')}
           </button>
         </div>
-        <div style={{ marginTop: 12, fontSize: 12, fontWeight: 800, color: '#5D6B8A' }}>{t(lang, 'lim_replay')}</div>
+        <div style={{ marginTop: 12, fontSize: 12, fontWeight: 800, color: '#5D6B8A' }}>{t(lang, games ? 'lim_g_replay' : 'lim_replay')}</div>
       </div>
     </div>
   )

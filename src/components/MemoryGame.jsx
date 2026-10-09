@@ -9,7 +9,7 @@ import GameEnd from './GameEnd'
 const INK = '#1A2A4F'
 
 // Memory des drapeaux : retrouver les paires (6 paires pour les petits, 8 sinon)
-export default function MemoryGame({ lang, difficulty, onBack, onFinish }) {
+export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish }) {
   const pairs = difficulty === 'mini' ? 6 : 8
   const [game, setGame] = useState(0)
   const cards = useMemo(() => {
@@ -41,7 +41,7 @@ export default function MemoryGame({ lang, difficulty, onBack, onFinish }) {
       <ExploreHeader lang={lang} emoji="🧠" title={t(lang, 'mem_title')} sub={t(lang, 'mem_desc')} onBack={onBack}
         right={<span style={{ background: 'white', borderRadius: 999, padding: '7px 14px', fontWeight: 900, color: '#1E88E5' }}>{t(lang, 'mem_moves', { n: String(moves) })}</span>} />
       {done ? (
-        <GameEnd lang={lang} stars={stars} max={3} onAgain={again} onBack={onBack} onSave={() => onFinish('memory', stars)} />
+        <GameEnd lang={lang} stars={stars} max={3} onAgain={() => { if (!onRound || onRound()) again() }} onBack={onBack} onSave={() => onFinish('memory', stars)} />
       ) : (
         <div style={{ padding: '10px 16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
           {cards.map((card) => {

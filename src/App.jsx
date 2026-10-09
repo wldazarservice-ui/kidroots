@@ -16,6 +16,7 @@ import {
   saveChildDifficulty,
   saveChildDaily,
   saveChildGames,
+  saveChildGameDaily,
   readLegacyProgress,
   clearLegacyProgress,
 } from './cloud'
@@ -37,7 +38,7 @@ import { setLimits } from './limits'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import ScreenTimeLock from './components/ScreenTimeLock'
 import ParentStats from './components/ParentStats'
-import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail } from './premium'
+import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail, gamesLeft, gamesPlayedToday } from './premium'
 import { isDone } from './levels'
 import LandingScreen from './components/LandingScreen'
 import PassportScreen from './components/PassportScreen'
@@ -85,6 +86,7 @@ export default function App() {
   const [levelPickerOpen, setLevelPickerOpen] = useState(false)
   const [premium, setPremium] = useState(false)
   const [paywallOpen, setPaywallOpen] = useState(false)
+  const [limitKind, setLimitKind] = useState('chapters')
   const [paywallAudience, setPaywallAudience] = useState('family')
   const [deviceBlocked, setDeviceBlocked] = useState(false)
   const [devicesOpen, setDevicesOpen] = useState(false)
@@ -342,6 +344,7 @@ export default function App() {
     const chDone = isDone(progress, ch.id, difficulty)
     if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium)) {
       track('limit_hit')
+      setLimitKind('chapters')
       setLimitOpen(true)
       return false
     }
@@ -353,6 +356,22 @@ export default function App() {
     setStep('intro')
     setQuizScore(0)
     setScreen('chapter')
+    return true
+  }
+
+  // Jeux : 3 parties gratuites par jour et par enfant. Retourne false (et affiche la limite) si plus de partie.
+  const takeGameRound = () => {
+    if (!activeChild) return false
+    if (gamesLeft(activeChild, hasPremium) <= 0) {
+      track('limit_hit')
+      setLimitKind('games')
+      setLimitOpen(true)
+      return false
+    }
+    if (!hasPremium) {
+      const gameDaily = { date: todayKey(), n: gamesPlayedToday(activeChild) + 1 }
+      patchChild({ gameDaily }, () => saveChildGameDaily(user.uid, activeChild.id, gameDaily))
+    }
     return true
   }
 
@@ -407,7 +426,7 @@ export default function App() {
     openPassport: () => setScreen('passport'),
     openMap: () => setScreen('map'),
     openGames: () => setScreen('games'),
-    openGame: (key) => { setGameKey(key); setScreen('game') },
+    openGame: (key) => { if (takeGameRound()) { setGameKey(key); setScreen('game') } },
     openPaywall: () => setPaywallOpen(true),
     logout,
   }
@@ -539,7 +558,7 @@ export default function App() {
           onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
       )}
       {limitOpen && (
-        <DailyLimit lang={lang} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country') }}
+        <DailyLimit lang={lang} kind={limitKind} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country'); if (screen === 'game') setScreen('games') }}
           onUnlock={() => { setLimitOpen(false); setPaywallOpen(true) }} />
       )}
       {toast && (
@@ -552,9 +571,9 @@ export default function App() {
       {screen === 'passport' && <PassportScreen {...shared} />}
       {screen === 'map'     && <MapScreen {...shared} />}
       {screen === 'games'   && <GamesScreen {...shared} />}
-      {screen === 'game' && gameKey === 'hunt' && <HuntGame lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
-      {screen === 'game' && gameKey === 'memory' && <MemoryGame lang={lang} difficulty={difficulty} onBack={nav.openGames} onFinish={addGameResult} />}
-      {screen === 'game' && (gameKey === 'animals' || gameKey === 'riddles') && <ChoiceGame key={gameKey} kind={gameKey} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && gameKey === 'hunt' && <HuntGame onRound={takeGameRound} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && gameKey === 'memory' && <MemoryGame onRound={takeGameRound} lang={lang} difficulty={difficulty} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && (gameKey === 'animals' || gameKey === 'riddles') && <ChoiceGame key={gameKey} onRound={takeGameRound} kind={gameKey} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
       {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}
       {screen === 'country' && country && <CountryScreen country={country} code={countryCode} {...shared} />}
       {screen === 'chapter' && chapter && step === 'intro' && (

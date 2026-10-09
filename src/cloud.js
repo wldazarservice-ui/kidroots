@@ -105,6 +105,10 @@ export async function saveChildScreenLimit(uid, childId, minutes) {
 }
 
 // Scores des jeux (étoiles par jeu) : { hunt, animals, riddles, memory }
+export async function saveChildGameDaily(uid, childId, gameDaily) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { gameDaily })
+}
+
 export async function saveChildGames(uid, childId, games) {
   await updateDoc(doc(db, 'users', uid, 'children', childId), { games })
 }

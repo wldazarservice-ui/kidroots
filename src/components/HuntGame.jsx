@@ -12,7 +12,7 @@ const INK = '#1A2A4F'
 const ROUNDS = 8
 
 // Chasse au trésor : retrouver un pays sur la carte (3 essais, l'indice du continent arrive après une erreur)
-export default function HuntGame({ lang, onBack, onFinish }) {
+export default function HuntGame({ onRound, lang, onBack, onFinish }) {
   const [boxes, setBoxes] = useState(null)
   const [game, setGame] = useState(0)
   const targets = useMemo(() => {
@@ -56,7 +56,7 @@ export default function HuntGame({ lang, onBack, onFinish }) {
       <ExploreHeader lang={lang} emoji="🧭" title={t(lang, 'hunt_title')} sub={t(lang, 'hunt_desc')} onBack={onBack}
         right={<span style={{ background: 'white', borderRadius: 999, padding: '7px 14px', fontWeight: 900, color: '#FF8F00' }}>⭐ {stars}</span>} />
       {done ? (
-        <GameEnd lang={lang} stars={stars} max={ROUNDS * 3} onAgain={again} onBack={onBack} onSave={() => onFinish('hunt', stars)} />
+        <GameEnd lang={lang} stars={stars} max={ROUNDS * 3} onAgain={() => { if (!onRound || onRound()) again() }} onBack={onBack} onSave={() => onFinish('hunt', stars)} />
       ) : (
         <div style={{ padding: '6px 16px' }}>
           {c && (
