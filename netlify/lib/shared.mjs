@@ -27,6 +27,33 @@ export const isSchool = (user) => !!user?.email && schoolEmails().includes(user.
 export const TRIAL_DAYS = 3
 export const trialEligible = (ud = {}) => !ud.premium && !ud.stripeCustomerId && !ud.subscriptionId && !ud.trialUsed
 
+// Une carte = un seul essai gratuit, meme avec plusieurs comptes. Si la carte a deja servi
+// pour un essai d'un autre compte, l'essai est arrete et le premier paiement a lieu tout de suite.
+// Empreinte de carte gardee dans trialCards/{fingerprint} (lisible seulement par le serveur).
+export async function guardTrial(uid, sub) {
+  if (sub.status !== 'trialing') return false
+  let pmId = typeof sub.default_payment_method === 'string' ? sub.default_payment_method : sub.default_payment_method?.id
+  if (!pmId) {
+    const customer = typeof sub.customer === 'string' ? sub.customer : sub.customer?.id
+    const list = await stripe().paymentMethods.list({ customer, type: 'card', limit: 1 })
+    pmId = list.data[0]?.id
+  }
+  if (!pmId) return false
+  const pm = await stripe().paymentMethods.retrieve(pmId)
+  const fp = pm.card?.fingerprint
+  if (!fp) return false
+  const ref = db().doc(`trialCards/${fp}`)
+  const reused = await db().runTransaction(async (tx) => {
+    const snap = await tx.get(ref)
+    if (snap.exists && snap.data().uid !== uid) return true
+    if (!snap.exists) tx.set(ref, { uid, at: FieldValue.serverTimestamp() })
+    return false
+  })
+  if (!reused) return false
+  await stripe().subscriptions.update(sub.id, { trial_end: 'now', proration_behavior: 'none' })
+  return true
+}
+
 let stripeClient
 export const stripe = () => (stripeClient ||= new Stripe(process.env.STRIPE_SECRET_KEY))
 

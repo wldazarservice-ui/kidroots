@@ -1,6 +1,6 @@
 // Appareils par compte (contre le partage d'identifiants) : 5 en famille, 30 pour une ecole.
 // Chaque appareil occupe un emplacement d1..dN dans users/{uid}/devices (regles Firestore).
-import { doc, getDocs, collection, deleteDoc, updateDoc, runTransaction, serverTimestamp } from 'firebase/firestore'
+import { doc, getDocs, collection, updateDoc, runTransaction, serverTimestamp } from 'firebase/firestore'
 import { db } from './firebase'
 import { LIMITS, slots } from './limits'
 
@@ -55,6 +55,14 @@ export async function registerDevice(uid) {
   return result
 }
 
-export async function removeDevice(uid, slot) {
-  await deleteDoc(doc(db, 'users', uid, 'devices', slot))
+// Retrait par le serveur : 3 remplacements d'appareil par mois au maximum
+export async function removeDevice(user, slot) {
+  const res = await fetch('/api/remove-device', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${await user.getIdToken()}` },
+    body: JSON.stringify({ slot }),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`)
+  return data
 }

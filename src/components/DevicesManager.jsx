@@ -26,11 +26,14 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
   const remove = async (slot) => {
     setBusy(slot); setError('')
     try {
-      await removeDevice(user.uid, slot)
+      await removeDevice(user, slot)
       if (blocked) { await onDone?.(); return }
       await load()
     } catch (e) {
-      console.error(e); setError('La suppression a échoué. Réessaie.')
+      console.error(e)
+      setError(e.message === 'swap-limit'
+        ? 'Tu as déjà remplacé 3 appareils ce mois-ci. Tu pourras en retirer un autre le mois prochain, ou écris-nous : contact@azarconsulting.eu'
+        : 'La suppression a échoué. Réessaie.')
     } finally {
       setBusy(null)
     }
@@ -52,7 +55,7 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
         <div style={{ fontSize: 14, color: '#3E6B4F', fontWeight: 800, marginTop: 4, lineHeight: 1.5 }}>
           {blocked
             ? `Ce compte est déjà utilisé sur ${maxDevices()} appareils. Retire un ancien appareil pour utiliser Mokalibo ici.`
-            : `Un compte Mokalibo peut être utilisé sur ${maxDevices()} appareils maximum.`}
+            : `Un compte Mokalibo peut être utilisé sur ${maxDevices()} appareils maximum (3 remplacements par mois).`}
         </div>
       </div>
 

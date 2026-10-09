@@ -14,7 +14,7 @@ service cloud.firestore {
 
     // Champs reserves au serveur (paiement Stripe) : jamais modifiables par l'app
     function touchesPremium(data) {
-      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school']);
+      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school', 'deviceSwaps']);
     }
 
     // Doc parent : seul son proprietaire peut lire/ecrire, sauf les champs premium.
@@ -24,7 +24,7 @@ service cloud.firestore {
                     && !touchesPremium(request.resource.data);
       allow update: if request.auth != null && request.auth.uid == userId
                     && !request.resource.data.diff(resource.data).affectedKeys()
-                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school']);
+                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school', 'deviceSwaps']);
 
       // Profils enfants / eleves : emplacements c1..cN (N = maxChildren du compte, 5 par defaut)
       match /children/{childId} {
@@ -34,8 +34,9 @@ service cloud.firestore {
       }
 
       // Appareils : emplacements d1..dN (N = maxDevices du compte, 5 par defaut)
+      // Retrait uniquement par le serveur (/api/remove-device, 3 remplacements par mois)
       match /devices/{slot} {
-        allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+        allow read, update: if request.auth != null && request.auth.uid == userId;
         allow create: if request.auth != null && request.auth.uid == userId
                       && slotOk(slot, 'd', userId, 'maxDevices');
       }

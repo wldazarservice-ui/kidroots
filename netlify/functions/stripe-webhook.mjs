@@ -1,7 +1,7 @@
 // Notifications Stripe (source de verite) : debut, renouvellement, resiliation de l'abonnement.
 // Evenements a cocher dans Stripe : checkout.session.completed, customer.subscription.updated,
 // customer.subscription.deleted, invoice.paid
-import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS } from '../lib/shared.mjs'
+import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial } from '../lib/shared.mjs'
 
 const uidOf = (obj) => obj?.metadata?.uid || null
 
@@ -20,8 +20,12 @@ export default async (req) => {
     case 'checkout.session.completed': {
       if (obj.mode !== 'subscription' || !obj.subscription) break
       const uid = obj.client_reference_id || uidOf(obj)
-      const sub = await stripe().subscriptions.retrieve(obj.subscription)
-      if (uid && (await syncSubscription(uid, sub))) {
+      let sub = await stripe().subscriptions.retrieve(obj.subscription)
+      // Carte deja utilisee pour un essai sur un autre compte : pas de 2e essai, paiement immediat
+      const blocked = !!uid && (await guardTrial(uid, sub).catch((e) => { console.error('guardTrial', e.message); return false }))
+      if (blocked) sub = await stripe().subscriptions.retrieve(obj.subscription)
+      // (essai bloque : le nouvel abonne est compte par customer.subscription.updated, trialing → active)
+      if (uid && (await syncSubscription(uid, sub)) && !blocked) {
         await (sub.status === 'trialing' ? countEvent('trial') : countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval }))
       }
       if (uid) await rewardReferral(obj, uid).catch((e) => console.error('referral reward', e.message))
