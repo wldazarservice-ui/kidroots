@@ -6,7 +6,6 @@ import ResetProgress from './ResetProgress'
 import ScreenTimeSettings from './ScreenTimeSettings'
 import AccountSettings from './AccountSettings'
 import InviteFamily from './InviteFamily'
-import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
@@ -17,7 +16,7 @@ const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽',
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, onOpenPro, premium, account = {}, lang = 'fr' }) {
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, onOpenPro, onOpenOffer, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= LIMITS.children
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -32,11 +31,6 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [timing, setTiming] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const [inviteOpen, setInviteOpen] = useState(false)
-  const [portalBusy, setPortalBusy] = useState(false)
-  const portal = async () => {
-    setPortalBusy(true)
-    try { await openBillingPortal(user) } catch (e) { console.error(e); alert("L'espace abonnement n'a pas pu s'ouvrir. Réessaie dans un instant."); setPortalBusy(false) }
-  }
 
   const pickAge = (a) => {
     setAge(a)
@@ -183,10 +177,10 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               ✅ {account.kind === 'school' ? 'Licence École active' : account.kind === 'gift' ? 'Accès illimité offert' : 'Accès illimité à vie'}
             </div>
           )}
-          {premium && account.kind === 'subscription' && (
-            <button className="btn-kid soft" onClick={portal} disabled={portalBusy}
+          {(account.kind === 'subscription' || account.kind === 'free' || !account.kind) && (
+            <button className="btn-kid soft" onClick={() => setAccountOpen(true)}
               style={{ width: '100%', background: 'white', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.12)' }}>
-              💳 {portalBusy ? '…' : t(lang, 'manage_sub')}
+              💳 {t(lang, 'manage_sub')}
             </button>
           )}
           {onOpenAdmin && (
@@ -209,7 +203,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
         </>
       )}
       {inviteOpen && <InviteFamily lang={lang} account={account} onClose={() => setInviteOpen(false)} />}
-      {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} />}
+      {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} account={account} onOpenOffer={onOpenOffer} />}
       {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}
       {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}
       {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}

@@ -512,6 +512,7 @@ export default function App() {
         onOpenStats={() => setStatsOpen(true)}
         onKidsChange={setKids}
         onOpenPro={PAYWALL_ENABLED ? () => { setPaywallAudience('teacher'); setPaywallOpen(true) } : null}
+        onOpenOffer={PAYWALL_ENABLED ? () => { setPaywallAudience('family'); setPaywallOpen(true) } : null}
         onLimitSaved={(id, min) => setKids((all) => all.map((k) => (k.id === id ? { ...k, screenLimit: min } : k)))}
         onKidsReset={(ids) => setKids((all) => all.map((k) => (ids.includes(k.id) ? { ...k, xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] } } : k)))}
         premium={premium}

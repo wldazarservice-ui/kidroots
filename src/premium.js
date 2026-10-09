@@ -66,8 +66,8 @@ export async function fetchAccountStatus(user) {
 }
 
 // Espace client Stripe (changer de formule, factures, resilier)
-export async function openBillingPortal(user) {
-  const data = await call('/api/billing-portal', user)
+export async function openBillingPortal(user, flow) {
+  const data = await call('/api/billing-portal', user, flow ? { flow } : {})
   window.location.assign(data.url)
 }
 

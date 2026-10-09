@@ -53,6 +53,8 @@ export default async (req) => {
     maxChildren: data.maxChildren || TIERS.family.maxChildren,
     maxDevices: data.maxDevices || TIERS.family.maxDevices,
     trialing: data.subStatus === 'trialing',
+    subStatus: data.subStatus || null,
+    hasCustomer: !!data.stripeCustomerId,
   })
 }
 

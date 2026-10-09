@@ -1,6 +1,7 @@
 import { openSupport } from '../support'
 import { useState } from 'react'
 import ParentGate from './ParentGate'
+import SubscriptionCard from './SubscriptionCard'
 import { changePassword, changeEmail, hasPassword, isGoogleAccount, resetPassword, verifyEmail } from '../auth'
 import { updateChildProfile, deleteChild } from '../cloud'
 
@@ -23,7 +24,7 @@ function errText(code = '') {
 }
 
 // Espace « Mon compte » du parent : e-mail, mot de passe, profils des enfants
-export default function AccountSettings({ user, kids, onClose, onKidsChange }) {
+export default function AccountSettings({ user, kids, onClose, onKidsChange, account, onOpenOffer }) {
   const [unlocked, setUnlocked] = useState(false)
   const [msg, setMsg] = useState(null) // { ok, text, zone }
   const [busy, setBusy] = useState('')
@@ -84,6 +85,8 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange }) {
 
         {!unlocked ? <ParentGate onPass={() => setUnlocked(true)} /> : (
           <>
+            <SubscriptionCard user={user} account={account} onOpenOffer={onOpenOffer && (() => { onClose(); onOpenOffer() })} />
+
             <button type="button" onClick={() => openSupport({ where: 'account' })}
               style={{ ...card, width: '100%', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', border: 'none', fontSize: 15, fontWeight: 900, color: '#1565C0' }}>
               💬 Aide et contact : une question, un souci ? Écris-nous
