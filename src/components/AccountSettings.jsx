@@ -1,3 +1,4 @@
+import { openSupport } from '../support'
 import { useState } from 'react'
 import ParentGate from './ParentGate'
 import { changePassword, changeEmail, hasPassword, isGoogleAccount, resetPassword, verifyEmail } from '../auth'
@@ -83,6 +84,11 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange }) {
 
         {!unlocked ? <ParentGate onPass={() => setUnlocked(true)} /> : (
           <>
+            <button type="button" onClick={() => openSupport({ where: 'account' })}
+              style={{ ...card, width: '100%', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', border: 'none', fontSize: 15, fontWeight: 900, color: '#1565C0' }}>
+              💬 Aide et contact : une question, un souci ? Écris-nous
+            </button>
+
             {/* E-mail du compte */}
             <div style={card}>
               <div style={h}>📧 Adresse e-mail</div>

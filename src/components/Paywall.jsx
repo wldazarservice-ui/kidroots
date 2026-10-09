@@ -3,6 +3,7 @@ import { PLANS, SCHOOL_FROM, startCheckout } from '../premium'
 import { track, referralCode } from '../track'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
+import { openSupport } from '../support'
 
 const INK = '#1A2A4F'
 
@@ -150,6 +151,10 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
 
         <div style={{ marginTop: 14, fontSize: 13, fontWeight: 800, color: '#3E6B4F', textAlign: 'center' }}>🎁 {t(lang, 'pw_free')}</div>
         <div style={{ marginTop: 10, fontSize: 13, fontWeight: 800, color: '#D81B60', textAlign: 'center', lineHeight: 1.45 }}>{t(lang, 'pw_mission')}</div>
+        <div style={{ marginTop: 10, textAlign: 'center' }}>
+          <button type="button" onClick={() => openSupport({ where: 'paywall', topic: teacher ? 'school' : 'payment', gate: !!user })}
+            style={{ background: 'none', border: 'none', color: '#1565C0', fontWeight: 900, fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', textDecoration: 'underline' }}>💬 {t(lang, 'support_question')}</button>
+        </div>
       </div>
     </div>
   )

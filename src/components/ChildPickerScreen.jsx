@@ -11,6 +11,7 @@ import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
 import { LIMITS } from '../limits'
+import { openSupport } from '../support'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
 const INK = '#1A2A4F'
@@ -149,6 +150,10 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               🎁 {t(lang, 'inv_btn')}
             </button>
           )}
+          <button className="btn-kid soft" onClick={() => openSupport({ where: 'picker', gate: true })}
+            style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
+            💬 {t(lang, 'support_link')}
+          </button>
           {onOpenPro && !premium && (
             <button className="btn-kid soft" onClick={onOpenPro}
               style={{ width: '100%', background: 'white', color: '#00695C', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(0,105,92,0.12)' }}>

@@ -10,6 +10,7 @@ import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode } from '../track'
 import { t } from '../i18n'
+import { openSupport } from '../support'
 import { countryName } from '../names'
 
 const INK = '#1A2A4F'
@@ -561,6 +562,10 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
               {openFaq === i && <div style={{ padding: '0 18px 16px', fontSize: 15, fontWeight: 700, color: '#546E7A', lineHeight: 1.6 }}>{a}</div>}
             </div>
           ))}
+          <div style={{ textAlign: 'center', marginTop: 18 }}>
+            <button className="btn-kid soft" onClick={() => openSupport({ where: 'faq' })}
+              style={{ background: 'white', color: '#1565C0', padding: '14px 22px', fontSize: 16, borderRadius: 20, boxShadow: '0 4px 14px rgba(30,136,229,0.15)' }}>💬 {t(lang, 'support_faq')}</button>
+          </div>
         </div>
       </section>
 
@@ -574,7 +579,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
         <h2 style={{ ...h2, marginBottom: 6 }}>{T.final_title}</h2>
         <div style={{ fontWeight: 800, color: '#3E6B4F', marginBottom: 22 }}>{T.final_sub}</div>
         <button className="btn-kid soft" onClick={tryNow} style={primary}>{tryLabel}</button>
-        <LegalFooter lang={lang} />
+        <LegalFooter lang={lang} gate={false} />
       </section>
     </div>
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
+import SupportSheet from './components/SupportSheet'
 import { AuthProvider } from './auth.jsx'
 // Polices hebergees sur notre domaine (RGPD : aucune connexion aux serveurs Google)
 import '@fontsource/nunito/400.css'
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <App />
+      <SupportSheet />
     </AuthProvider>
   </React.StrictMode>,
 )

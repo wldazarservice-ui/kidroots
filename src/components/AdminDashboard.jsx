@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchMetrics } from '../premium'
+import { setSupportStatus } from '../support'
 
 const INK = '#1A2A4F'
 const euro = (c = 0) => (c / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })
@@ -14,6 +15,7 @@ const FUNNEL = [
   ['checkout_start', '💳 Paiement commencé'],
   ['trial', '🎁 Essais 3 jours'],
   ['school_request', '🏫 Demandes écoles'],
+  ['support', '💬 Messages support'],
   ['purchase', '⭐ Nouveaux abonnés'],
 ]
 
@@ -28,6 +30,12 @@ export default function AdminDashboard({ user, onClose }) {
     fetchMetrics(user, days).then(setData).catch((e) => setError(e.message))
   }, [user, days])
 
+  const [supFilter, setSupFilter] = useState('new')
+  const toggleSupport = async (m) => {
+    const status = m.status === 'done' ? 'new' : 'done'
+    setData((d) => ({ ...d, support: d.support.map((x) => (x.id === m.id ? { ...x, status } : x)) }))
+    await setSupportStatus(user, m.id, status).catch((e) => setError(e.message))
+  }
   const sum = (k) => (data?.rows || []).reduce((a, r) => a + (r[k] || 0), 0)
   const sources = {}
   for (const r of data?.rows || []) {
@@ -119,6 +127,34 @@ export default function AdminDashboard({ user, onClose }) {
                   <span>👀 {ev.landing_view || 0}</span>
                   <span>▶ {ev.guest_start || 0}</span>
                   <span>✍️ {ev.signup || 0}</span>
+                </div>
+              ))}
+            </div>
+
+            <div id="support" style={{ background: 'white', borderRadius: 18, padding: 14, marginTop: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                <div style={{ fontWeight: 900, flex: 1 }}>💬 Messages du support ({(data.support || []).filter((m) => m.status !== 'done').length} à traiter)</div>
+                <select value={supFilter} onChange={(e) => setSupFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 10, border: '2px solid #E3EAF2', fontFamily: 'inherit', fontWeight: 800 }}>
+                  <option value="new">À traiter</option>
+                  <option value="all">Tous</option>
+                </select>
+              </div>
+              {(data.support || []).filter((m) => supFilter === 'all' || m.status !== 'done').length === 0 ? (
+                <div style={{ fontSize: 13, color: '#90A4AE', fontWeight: 800 }}>Aucun message à traiter 🎉</div>
+              ) : data.support.filter((m) => supFilter === 'all' || m.status !== 'done').map((m) => (
+                <div key={m.id} style={{ fontSize: 13, fontWeight: 700, padding: '10px 0', borderTop: '1px solid #F1F4F8', lineHeight: 1.45, opacity: m.status === 'done' ? 0.55 : 1 }}>
+                  <div style={{ fontWeight: 900 }}>
+                    {m.premium ? '⭐ ' : ''}{m.name || m.email} · <span style={{ color: '#1565C0' }}>{m.topic}</span> · {m.at ? new Date(m.at).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }) : ''}
+                  </div>
+                  <div style={{ whiteSpace: 'pre-wrap', color: '#37474F', margin: '4px 0' }}>{m.message}</div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <a href={`mailto:${m.email}?subject=${encodeURIComponent('Re : votre message à Mokalibo')}&body=${encodeURIComponent(`Bonjour${m.name ? ' ' + m.name : ''},\n\n\n\n——\nVotre message :\n${m.message}`)}`}
+                      style={{ background: '#1E88E5', color: 'white', borderRadius: 999, padding: '6px 12px', fontWeight: 900, textDecoration: 'none' }}>✉️ Répondre</a>
+                    <button onClick={() => toggleSupport(m)} style={{ background: m.status === 'done' ? '#ECEFF1' : '#E8F5E9', color: m.status === 'done' ? '#546E7A' : '#2E7D4F', border: 'none', borderRadius: 999, padding: '6px 12px', fontWeight: 900, fontFamily: 'inherit', cursor: 'pointer' }}>
+                      {m.status === 'done' ? '↩ Remettre à traiter' : '✓ Traité'}
+                    </button>
+                    <span style={{ color: '#90A4AE', alignSelf: 'center' }}>{m.email} · {m.uid ? 'compte' : 'sans compte'} · {m.where}</span>
+                  </div>
                 </div>
               ))}
             </div>

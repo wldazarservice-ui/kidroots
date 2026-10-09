@@ -137,7 +137,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) 
           </button>
         )}
       </div>
-      <LegalFooter />
+      <LegalFooter gate={false} />
     </div>
   )
 }

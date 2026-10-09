@@ -154,6 +154,8 @@ DS_DE = f"""
 <h3>l) Kündigung</h3>
 <p>Bei einer Kündigung über „Verträge hier kündigen“ verarbeiten wir Name, E-Mail-Adresse, Art und gegebenenfalls Grund der Kündigung, um diese auszuführen und zu dokumentieren (Art. 6 Abs. 1 lit. b und c DSGVO). Eine Bestätigung kann per E-Mail über den Dienst Resend (Resend, Inc., USA) versendet werden.</p>
 
+<h3>n) Hilfe & Kontakt</h3>
+<p>Wenn Sie uns über „Hilfe & Kontakt“ schreiben, verarbeiten wir Ihre E-Mail-Adresse, optional Ihren Vornamen, das Thema und Ihre Nachricht sowie gegebenenfalls die Kennung Ihres Kontos, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b und f DSGVO). Die Nachricht wird in Google Firebase (Firestore) gespeichert und uns gegebenenfalls über den Dienst Resend (Resend, Inc., USA) per E-Mail zugestellt. Sie wird gelöscht, sobald sie nicht mehr benötigt wird, spätestens nach 24 Monaten.</p>
 <h3>m) Angebotsanfrage für Schulen</h3>
 <p>Wenn Sie über die Seite „Schulen“ ein Angebot anfragen, verarbeiten wir Name der Schule, Ihren Namen, Ihre E-Mail-Adresse sowie optional Ort, Schülerzahl und Nachricht, um Ihre Anfrage zu beantworten (Art. 6 Abs. 1 lit. b DSGVO). Die Daten werden in Google Firebase (Firestore) gespeichert und gelöscht, sobald sie dafür nicht mehr benötigt werden, spätestens nach 12 Monaten ohne Vertragsabschluss.</p>
 
@@ -201,6 +203,8 @@ DS_FR = f"""
 <p>En mode essai, le prénom, l'âge et la progression de l'enfant restent uniquement sur l'appareil et ne nous sont pas transmis. Ils peuvent être repris lors de la création d'un compte parent.</p>
 <h3>l) Résiliation</h3>
 <p>Lors d'une résiliation via « Verträge hier kündigen », nous traitons le nom, l'e-mail, le type et le motif éventuel pour l'exécuter et la documenter (art. 6 §1 b) et c) RGPD). Une confirmation peut être envoyée par e-mail via le service Resend (Resend, Inc., États-Unis).</p>
+<h3>n) Aide et contact</h3>
+<p>Si vous nous écrivez via « Aide et contact », nous traitons votre e-mail, éventuellement votre prénom, le sujet et votre message, ainsi que l'identifiant de votre compte le cas échéant, pour répondre à votre demande (art. 6 §1 b) et f) RGPD). Le message est stocké dans Google Firebase (Firestore) et peut nous être transmis par e-mail via le service Resend (Resend, Inc., États-Unis). Il est supprimé lorsqu'il n'est plus nécessaire, au plus tard après 24 mois.</p>
 <h3>m) Demande de devis pour les écoles</h3>
 <p>Si vous demandez un devis via la page « Écoles », nous traitons le nom de l'école, votre nom, votre e-mail et, si vous les indiquez, la ville, le nombre d'élèves et votre message, afin de répondre à votre demande (art. 6 §1 b) RGPD). Ces données sont stockées dans Google Firebase (Firestore) et supprimées lorsqu'elles ne sont plus nécessaires, au plus tard 12 mois après la demande en l'absence de contrat.</p>
 <h2>4. Stockage local (aucun cookie publicitaire)</h2>

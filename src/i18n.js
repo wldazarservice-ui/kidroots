@@ -265,6 +265,9 @@ export const UI = {
     lim_g_replay: "Tu peux toujours lire tes histoires du jour 📖",
     games_left: "🎮 Encore {n} partie(s) gratuite(s) aujourd'hui",
     games_none: "🌙 Plus de parties gratuites aujourd'hui · Illimité avec la Formule Famille",
+    support_link: "Aide et contact",
+    support_faq: "Une autre question ? Écrivez-nous",
+    support_question: "Une question avant de vous abonner ? Écrivez-nous",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -522,6 +525,9 @@ export const UI = {
     lim_g_replay: "You can still read today's stories 📖",
     games_left: "🎮 {n} free game(s) left today",
     games_none: "🌙 No free games left today · Unlimited with the Family Plan",
+    support_link: "Help & contact",
+    support_faq: "Another question? Write to us",
+    support_question: "A question before subscribing? Write to us",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -779,6 +785,9 @@ export const UI = {
     lim_g_replay: "Du kannst immer noch deine Geschichten von heute lesen 📖",
     games_left: "🎮 Heute noch {n} kostenlose(s) Spiel(e)",
     games_none: "🌙 Heute keine kostenlosen Spiele mehr · Unbegrenzt mit dem Familien-Abo",
+    support_link: "Hilfe & Kontakt",
+    support_faq: "Noch eine Frage? Schreiben Sie uns",
+    support_question: "Eine Frage vor dem Abo? Schreiben Sie uns",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',
