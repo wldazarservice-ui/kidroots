@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="noto-emoji.css" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; }
+  .e { font-family: 'Noto Color Emoji'; line-height: 1; display: inline-block; }
+  #bg { position: absolute; inset: 0; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: .45; }
+  .layer { position: absolute; inset: 0; opacity: 0; }
+  .fr { font-family: 'Fredoka', sans-serif; font-weight: 700; }
+  /* zone sure : y 260 → 1480 (interface TikTok / Reels en haut et en bas) */
+  #badge { position: absolute; left: 50%; top: 300px; transform: translateX(-50%); background: #FFD600; color: #1A2A4F; border-radius: 999px; padding: 18px 44px; font-size: 64px; white-space: nowrap; box-shadow: 0 14px 30px rgba(0,0,0,.2); }
+  #flag { position: absolute; left: 50%; top: 520px; font-size: 420px; transform: translateX(-50%); filter: drop-shadow(0 30px 40px rgba(0,0,0,.3)); }
+  #cname { position: absolute; left: 0; right: 0; top: 1030px; text-align: center; color: #fff; font-size: 120px; text-shadow: 0 8px 24px rgba(0,0,0,.25); }
+  #ill { position: absolute; left: 50%; top: 300px; font-size: 230px; transform: translateX(-50%); }
+  #card { position: absolute; left: 70px; right: 70px; top: 600px; background: #fff; border-radius: 48px; padding: 56px 54px; box-shadow: 0 30px 60px rgba(0,0,0,.25); }
+  #fact { font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 70px; line-height: 1.22; color: #1A2A4F; }
+  #fact .w { display: inline-block; opacity: 0; margin-right: .22em; }
+  #fact .hl { color: #FF6F00; }
+  #cflag { position: absolute; right: 40px; top: -60px; font-size: 120px; }
+  #phone { position: absolute; left: 290px; top: 470px; width: 500px; border-radius: 70px; border: 16px solid #111318; background: #111318; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,.35); }
+  #phone img { display: block; width: 100%; border-radius: 54px; }
+  #pcap { position: absolute; left: 60px; right: 60px; top: 250px; text-align: center; color: #fff; font-size: 76px; line-height: 1.1; text-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  #logo { position: absolute; left: 50%; top: 440px; transform: translateX(-50%); background: #fff; border-radius: 999px; padding: 26px 80px 34px; font-size: 150px; white-space: nowrap; box-shadow: 0 24px 50px rgba(0,0,0,.25); }
+  #globe { position: absolute; left: 50%; top: 250px; transform: translateX(-50%); font-size: 170px; }
+  #tag { position: absolute; left: 0; right: 0; top: 760px; text-align: center; color: #fff; font-size: 70px; line-height: 1.15; text-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  #offer { position: absolute; left: 50%; top: 1010px; transform: translateX(-50%); background: #FFD600; color: #1A2A4F; border-radius: 40px; padding: 30px 60px; font-size: 84px; white-space: nowrap; box-shadow: 0 14px 0 #E6A100, 0 30px 50px rgba(0,0,0,.25); }
+  #url { position: absolute; left: 0; right: 0; top: 1240px; text-align: center; color: #fff; font-size: 92px; }
+  #small { position: absolute; left: 0; right: 0; top: 1380px; text-align: center; color: rgba(255,255,255,.92); font-size: 46px; font-weight: 900; }
+</style>
+</head>
+<body>
+<div id="bg"><div class="blob" id="b1" style="width:900px;height:900px"></div><div class="blob" id="b2" style="width:800px;height:800px"></div></div>
+
+<div class="layer" id="L1">
+  <div id="badge" class="fr">💡 Le savais-tu ?</div>
+  <div id="flag" class="e"></div>
+  <div id="cname" class="fr"></div>
+</div>
+
+<div class="layer" id="L2">
+  <div id="ill" class="e"></div>
+  <div id="card"><div id="cflag" class="e"></div><div id="fact"></div></div>
+</div>
+
+<div class="layer" id="L3">
+  <div id="pcap" class="fr"></div>
+  <div id="phone"><img id="shot"></div>
+</div>
+
+<div class="layer" id="L4">
+  <div id="globe" class="e">🌍</div>
+  <div id="logo" class="fr"><span style="color:#FF7A00">Moka</span><span style="color:#1E88E5">libo</span></div>
+  <div id="tag" class="fr"></div>
+  <div id="offer" class="fr"></div>
+  <div id="url" class="fr">mokalibo.com</div>
+  <div id="small"></div>
+</div>
+
+<script>
+// Contenu des Reels. Les mots entre *etoiles* sont mis en orange.
+const REELS = {
+  fr: {
+    cap: "Des histoires vraies comme celle-ci, pour les 4-12 ans",
+    tag: "L'histoire des 195 pays,<br>racontée aux enfants",
+    offer: "🎁 3 jours gratuits",
+    small: "Lu à voix haute · Quiz et jeux · Sans pub",
+    list: [
+      ['🇲🇱', 'Mali', '👑', "Au XIVe siècle, l'empereur *Mansa Moussa* était si riche qu'en traversant l'Égypte, il a distribué tant d'or que son *prix a chuté* pendant des années !", ['#FFB300', '#E65100']],
+      ['🇻🇦', 'Vatican', '⛪', "Le plus petit pays du monde se trouve… *à l'intérieur d'une ville* ! Le Vatican est au cœur de Rome : on le traverse à pied en *une vingtaine de minutes*.", ['#FFD54F', '#F9A825']],
+      ['🇲🇳', 'Mongolie', '🐎', "En Mongolie, il y a *plus de chevaux que d'habitants* ! Les enfants y apprennent à monter à cheval *tout petits*.", ['#42A5F5', '#1565C0']],
+      ['🇾🇪', 'Yémen', '☕', "Le mot *« moka »* vient du Yémen ! Le café partait du *port de Mocha* vers le monde entier.", ['#A1887F', '#5D4037']],
+      ['🇺🇾', 'Uruguay', '⚽', "La toute *première Coupe du monde* de football a eu lieu en Uruguay en 1930… et c'est *l'Uruguay qui l'a gagnée* !", ['#4FC3F7', '#0277BD']],
+      ['🇰🇮', 'Kiribati', '🎆', "Kiribati est le *premier pays du monde* à fêter le Nouvel An ! Ses îles du Pacifique voient *minuit avant tout le monde*.", ['#7E57C2', '#311B92']],
+      ['🇧🇹', 'Bhoutan', '😊', "Au Bhoutan, on ne mesure pas seulement la richesse du pays : on mesure aussi *le bonheur de ses habitants* !", ['#FFA726', '#D84315']],
+      ['🇦🇺', 'Australie', '🎲', "En Australie vit le *wombat*, un petit animal qui fait des crottes… *en forme de cube* !", ['#FF8A65', '#BF360C']],
+      ['🇳🇵', 'Népal', '🚩', "Le Népal est *le seul pays du monde* dont le drapeau n'est pas rectangulaire : il est fait de *deux triangles* !", ['#EF5350', '#B71C1C']],
+      ['🇨🇦', 'Canada', '🏞️', "Le Canada compte *plus de lacs* que tous les autres pays du monde *réunis* !", ['#66BB6A', '#1B5E20']],
+    ],
+  },
+  de: {
+    cap: "Wahre Geschichten wie diese, für Kinder von 4 bis 12",
+    tag: "Die Geschichte aller 195 Länder,<br>für Kinder erzählt",
+    offer: "🎁 3 Tage gratis",
+    small: "Zum Vorlesen · Quiz und Spiele · Ohne Werbung",
+    list: [
+      ['🇲🇱', 'Mali', '👑', "Im 14. Jahrhundert war Kaiser *Mansa Musa* so reich, dass er in Ägypten so viel Gold verschenkte, dass der *Goldpreis jahrelang fiel*!", ['#FFB300', '#E65100']],
+      ['🇻🇦', 'Vatikan', '⛪', "Das kleinste Land der Welt liegt… *mitten in einer Stadt*! Der Vatikan ist in Rom: Zu Fuß durchquert man ihn in *etwa 20 Minuten*.", ['#FFD54F', '#F9A825']],
+      ['🇲🇳', 'Mongolei', '🐎', "In der Mongolei gibt es *mehr Pferde als Menschen*! Kinder lernen dort *schon ganz klein* reiten.", ['#42A5F5', '#1565C0']],
+      ['🇾🇪', 'Jemen', '☕', "Das Wort *„Mokka“* kommt aus dem Jemen! Der Kaffee wurde vom *Hafen Mocha* in die ganze Welt verschifft.", ['#A1887F', '#5D4037']],
+      ['🇺🇾', 'Uruguay', '⚽', "Die allererste *Fußball-WM* fand 1930 in Uruguay statt… und *Uruguay hat sie gewonnen*!", ['#4FC3F7', '#0277BD']],
+      ['🇰🇮', 'Kiribati', '🎆', "Kiribati feiert *als erstes Land der Welt* Silvester! Seine Pazifikinseln erleben *Mitternacht vor allen anderen*.", ['#7E57C2', '#311B92']],
+      ['🇧🇹', 'Bhutan', '😊', "In Bhutan misst man nicht nur den Reichtum des Landes, sondern auch *das Glück der Menschen*!", ['#FFA726', '#D84315']],
+      ['🇦🇺', 'Australien', '🎲', "In Australien lebt der *Wombat* – ein kleines Tier, dessen Kot… *würfelförmig* ist!", ['#FF8A65', '#BF360C']],
+      ['🇳🇵', 'Nepal', '🚩', "Nepal hat *als einziges Land der Welt* keine rechteckige Flagge: Sie besteht aus *zwei Dreiecken*!", ['#EF5350', '#B71C1C']],
+      ['🇨🇦', 'Kanada', '🏞️', "Kanada hat *mehr Seen* als alle anderen Länder der Welt *zusammen*!", ['#66BB6A', '#1B5E20']],
+    ],
+  },
+}
+const P = new URLSearchParams(location.search)
+const lang = P.get('lang') || 'fr'
+const id = Number(P.get('id') || 0)
+const R = REELS[lang]
+const [flag, cname, ill, fact, [c1, c2]] = R.list[id]
+const $ = (i) => document.getElementById(i)
+$('bg').style.background = `linear-gradient(160deg, ${c1}, ${c2})`
+$('b1').style.cssText += `;background:${c1};left:-300px;top:-200px`
+$('b2').style.cssText += `;background:#ffffff;right:-350px;bottom:-250px;opacity:.18`
+$('flag').textContent = flag; $('cname').textContent = cname; $('ill').textContent = ill; $('cflag').textContent = flag
+$('fact').innerHTML = fact.split(/\s+/).reduce((acc, w) => {
+  const hlStart = w.startsWith('*'), hlEnd = w.replace(/[!?.,…:]+$/, '').endsWith('*')
+  if (hlStart) acc.on = true
+  const clean = w.replace(/\*/g, '')
+  acc.html += `<span class="w${acc.on ? ' hl' : ''}">${clean}</span>`
+  if (hlEnd) acc.on = false
+  return acc
+}, { html: '', on: false }).html
+$('pcap').textContent = R.cap
+$('shot').src = `shots/${lang}/${id % 2 ? 'home' : 'card1_open'}.png`
+$('tag').innerHTML = R.tag; $('offer').textContent = R.offer; $('small').textContent = R.small
+if (lang !== 'fr') $('badge').textContent = lang === 'de' ? '💡 Wusstest du?' : '💡 Did you know?'
+
+const clamp = (x) => Math.max(0, Math.min(1, x))
+const prog = (t, a, b) => clamp((t - a) / (b - a))
+const eo = (x) => 1 - Math.pow(1 - x, 3)
+const back = (x) => { const s = 1.7; x -= 1; return x * x * ((s + 1) * x + s) + 1 }
+const words = [...document.querySelectorAll('#fact .w')]
+const SC = [[0, 3.2, 'L1'], [3.2, 12, 'L2'], [12, 15, 'L3'], [15, 18.5, 'L4']]
+
+window.render = function (t) {
+  for (const [a, b, L] of SC) {
+    const el = $(L)
+    const on = t >= a && t < b
+    const fade = on ? Math.min(prog(t, a, a + 0.25), 1 - prog(t, b - 0.2, b)) : 0
+    el.style.opacity = L === 'L4' && t >= a ? prog(t, a, a + 0.25) : fade
+  }
+  // scene 1
+  $('badge').style.transform = `translateX(-50%) scale(${back(prog(t, 0.1, 0.6))})`
+  const fp = back(prog(t, 0.35, 1.0))
+  $('flag').style.transform = `translateX(-50%) scale(${fp}) rotate(${Math.sin(t * 2.2) * 4}deg)`
+  $('cname').style.transform = `translateY(${(1 - eo(prog(t, 0.8, 1.3))) * 80}px)`
+  $('cname').style.opacity = prog(t, 0.8, 1.3)
+  // scene 2 : mots qui apparaissent un par un
+  const lt = t - 3.4
+  $('ill').style.transform = `translateX(-50%) scale(${back(prog(t, 3.3, 3.8))}) translateY(${Math.sin(t * 2) * 12}px)`
+  $('card').style.transform = `translateY(${(1 - eo(prog(t, 3.3, 3.8))) * 140}px)`
+  const per = Math.min(0.2, 6.5 / words.length)
+  words.forEach((w, i) => {
+    const p = prog(lt, 0.3 + i * per, 0.3 + i * per + 0.25)
+    w.style.opacity = p
+    w.style.transform = `translateY(${(1 - eo(p)) * 24}px)`
+  })
+  // scene 3
+  $('phone').style.transform = `translateY(${(1 - eo(prog(t, 12, 12.7))) * 500}px) rotate(${Math.sin(t * 1.6) * 1.5}deg)`
+  $('pcap').style.opacity = prog(t, 12.2, 12.7)
+  // scene 4
+  $('logo').style.transform = `translateX(-50%) scale(${back(prog(t, 15.05, 15.5))})`
+  $('globe').style.transform = `translateX(-50%) rotate(${Math.sin(t * 2) * 8}deg) scale(${back(prog(t, 15, 15.4))})`
+  $('tag').style.opacity = prog(t, 15.4, 15.8)
+  $('offer').style.transform = `translateX(-50%) scale(${back(prog(t, 15.8, 16.3)) * (1 + Math.sin(t * 6) * 0.025)})`
+  $('url').style.opacity = prog(t, 16.2, 16.6)
+  $('small').style.opacity = prog(t, 16.5, 16.9)
+}
+window.ready = async function () {
+  await document.fonts.ready
+  await $('shot').decode().catch(() => {})
+  const txt = R.list.map((r) => r[0] + r[2]).join('') + '💡🌍🎁'
+  await document.fonts.load('100px "Noto Color Emoji"', txt)
+  await document.fonts.load('700 100px Fredoka'); await document.fonts.load('600 100px Fredoka'); await document.fonts.load('900 100px Nunito')
+  return true
+}
+render(0)
+</script>
+</body>
+</html>
