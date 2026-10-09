@@ -242,6 +242,13 @@ export const UI = {
     pw_ref_credit: "🎁 Tu as {n} mois offert(s) : il sera déduit automatiquement",
     lp_ami: "🎁 Une famille t'offre ton 1er mois de Formule Famille !",
     pw_mission: "💛 Apprendre le monde, protéger les enfants : le reste de nos revenus va à la protection de l'enfance.",
+    card_fact_tap: "Le savais-tu ? Touche pour découvrir",
+    pw_trial_badge: "🎁 3 jours gratuits",
+    pw_trial_pay: "Essayer 3 jours gratuitement",
+    pw_trial_note: "0 € aujourd'hui. Après 3 jours : {price}, prélevé automatiquement. Résilie avant la fin de l'essai : tu ne paies rien.",
+    pw_trial_waiver: "Après l'essai gratuit de 3 jours, l'abonnement payant démarre automatiquement, sauf résiliation avant la fin de l'essai.",
+    up_trial: "Essaie la Formule Famille 3 jours gratuitement.",
+    lim_trial: "🎁 3 jours illimités gratuits",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -476,6 +483,13 @@ export const UI = {
     pw_ref_credit: "🎁 You have {n} free month(s): it will be deducted automatically",
     lp_ami: "🎁 A family is giving you your first month of the Family plan!",
     pw_mission: "💛 Learn the world, protect children: what's left of our revenue goes to child protection.",
+    card_fact_tap: "Did you know? Tap to find out",
+    pw_trial_badge: "🎁 3 days free",
+    pw_trial_pay: "Try 3 days for free",
+    pw_trial_note: "€0 today. After 3 days: {price}, charged automatically. Cancel before the trial ends and you pay nothing.",
+    pw_trial_waiver: "After the 3-day free trial, the paid subscription starts automatically unless cancelled before the trial ends.",
+    up_trial: "Try the Family Plan free for 3 days.",
+    lim_trial: "🎁 3 unlimited days for free",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -710,6 +724,13 @@ export const UI = {
     pw_ref_credit: "🎁 Du hast {n} Gratismonat(e): wird automatisch abgezogen",
     lp_ami: "🎁 Eine Familie schenkt dir den ersten Monat des Familien-Abos!",
     pw_mission: "💛 Die Welt entdecken, Kinder schützen: Der Rest unserer Einnahmen geht an den Kinderschutz.",
+    card_fact_tap: "Wusstest du? Tippen zum Entdecken",
+    pw_trial_badge: "🎁 3 Tage gratis",
+    pw_trial_pay: "3 Tage kostenlos testen",
+    pw_trial_note: "Heute 0 €. Nach 3 Tagen: {price}, automatisch abgebucht. Vor Ablauf des Tests kündigen: du zahlst nichts.",
+    pw_trial_waiver: "Nach dem kostenlosen 3-Tage-Test startet das kostenpflichtige Abo automatisch, sofern nicht vor Ablauf gekündigt wird.",
+    up_trial: "Teste das Familien-Abo 3 Tage kostenlos.",
+    lim_trial: "🎁 3 Tage unbegrenzt gratis",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',
@@ -887,6 +908,7 @@ export const UI = {
     daily_left: "مغامرات اليوم",
     daily_unlimited: "مغامرات بلا حدود",
     manage_sub: "اشتراكي",
+    card_fact_tap: "هل تعلم؟ اضغط للاكتشاف",
   },
   pt: {
     tagline: 'Descubra a historia dos paises do mundo',
@@ -1006,6 +1028,7 @@ export const UI = {
     daily_left: "Aventuras de hoje",
     daily_unlimited: "Aventuras ilimitadas",
     manage_sub: "Minha assinatura",
+    card_fact_tap: "Você sabia? Toque para descobrir",
   },
 }
 

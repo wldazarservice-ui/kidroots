@@ -22,7 +22,7 @@ export default async (req) => {
       const uid = obj.client_reference_id || uidOf(obj)
       const sub = await stripe().subscriptions.retrieve(obj.subscription)
       if (uid && (await syncSubscription(uid, sub))) {
-        await countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval })
+        await (sub.status === 'trialing' ? countEvent('trial') : countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval }))
       }
       if (uid) await rewardReferral(obj, uid).catch((e) => console.error('referral reward', e.message))
       break
@@ -36,6 +36,8 @@ export default async (req) => {
       const prev = event.data.previous_attributes || {}
       const cancelled = event.type === 'customer.subscription.deleted' || (obj.cancel_at_period_end && prev.cancel_at_period_end === false)
       if (cancelled) await countEvent('cancel')
+      // Fin de l'essai gratuit : premier vrai paiement = nouvel abonne
+      if (prev.status === 'trialing' && obj.status === 'active') await countEvent('purchase', { plan: obj.items?.data?.[0]?.price?.recurring?.interval })
       break
     }
     case 'invoice.paid': {

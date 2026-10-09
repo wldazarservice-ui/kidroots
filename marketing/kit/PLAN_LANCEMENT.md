@@ -4,6 +4,7 @@
 - Formule Famille : 1,99 €/mois (≈ 1,71 € net après Stripe) ou 14,99 €/an (≈ 1,20 €/mois net).
 - **1 000 €/mois ≈ 650 familles abonnées.**
 - Une app éducative convertit en général **2 à 5 %** des familles qui l'essaient → il faut **15 000 à 30 000 familles qui essaient**.
+- **Nouveau : essai gratuit de 3 jours** (carte demandée, abonnement lancé automatiquement ensuite, résiliable sans frais pendant l'essai). Avec un essai, 40 à 60 % des essais deviennent souvent payants : c'est le levier n°1, il faut le mettre en avant partout (« 3 jours gratuits »).
 - Donc la priorité n°1 = **faire venir du monde**. L'app, les prix, le paiement et le parrainage sont prêts.
 
 ---
@@ -45,12 +46,14 @@
 1. « Papa, c'est où le Mali ? » Cette question de mon fils a donné naissance à Mokalibo : l'histoire des 195 pays du monde, racontée aux enfants de 4 à 12 ans. Essai gratuit, sans compte. 🌍
 2. Votre enfant pose plein de questions sur le monde ? Avec Mokalibo, il découvre l'histoire de chaque pays en jouant : histoires vraies lues à voix haute, quiz et passeport à tamponner. Sans publicité.
 3. Un écran utile, enfin. Mokalibo : histoires vraies, quiz et jeux sur les 195 pays du monde. 2 histoires offertes chaque jour. 💛 Apprendre le monde, protéger les enfants.
+4. 🎁 3 jours gratuits pour tout découvrir : 195 pays, des histoires vraies lues à voix haute, des quiz. Ensuite 1,25 €/mois (formule annuelle), résiliable en 2 clics. Votre enfant va adorer voyager dans l'histoire !
 
-**Titres** : « Essai gratuit, sans compte » · « L'histoire du monde pour les enfants » · « 195 pays à explorer »
+**Titres** : « 3 jours gratuits » · « Essai gratuit, sans compte » · « L'histoire du monde pour les enfants » · « 195 pays à explorer »
 
 **Textes à tester (DE)**
 1. „Papa, wo liegt Mali?" – Diese Frage meines Sohnes war der Anfang von Mokalibo: die Geschichte aller 195 Länder, für Kinder von 4 bis 12 erzählt. Gratis testen, ohne Konto. 🌍
 2. Dein Kind will alles über die Welt wissen? Mit Mokalibo entdeckt es spielerisch die Geschichte jedes Landes: wahre Geschichten zum Vorlesen, Quiz und Reisepass. Ohne Werbung.
+3. 🎁 3 Tage kostenlos testen: 195 Länder, wahre Geschichten zum Vorlesen, Quiz. Danach nur 1,25 €/Monat (Jahresabo), jederzeit kündbar.
 
 **Règles pour piloter**
 - Regarder les chiffres après 3 jours, pas avant.

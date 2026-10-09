@@ -7,9 +7,13 @@ import { getFirestore, FieldValue } from 'firebase-admin/firestore'
 // Formule Famille (5 enfants, 5 appareils) : abonnement mensuel ou annuel.
 // Doit correspondre a PLANS dans src/premium.js
 export const PLANS = {
-  month: { cents: 199, interval: 'month', label: 'Mokalibo Famille — mensuel' },
-  year: { cents: 1499, interval: 'year', label: 'Mokalibo Famille — annuel' },
+  month: { cents: 199, interval: 'month', label: 'Mokalibo Famille — mensuel', price: '1,99 €/mois (Monat)' },
+  year: { cents: 1499, interval: 'year', label: 'Mokalibo Famille — annuel', price: '14,99 €/an (Jahr)' },
 }
+
+// Essai gratuit (une seule fois par compte, carte demandee, abonnement lance automatiquement ensuite)
+export const TRIAL_DAYS = 3
+export const trialEligible = (ud = {}) => !ud.premium && !ud.stripeCustomerId && !ud.subscriptionId && !ud.trialUsed
 
 let stripeClient
 export const stripe = () => (stripeClient ||= new Stripe(process.env.STRIPE_SECRET_KEY))
@@ -64,6 +68,7 @@ export async function syncSubscription(uid, sub) {
       premiumUntil: periodEnd ? new Date(periodEnd * 1000) : null,
       cancelAtPeriodEnd: !!sub.cancel_at_period_end,
       stripeCustomerId: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id,
+      ...(sub.trial_end && { trialUsed: true }),
     }, { merge: true })
     return active && !prev.premium
   })
@@ -73,7 +78,7 @@ export async function syncSubscription(uid, sub) {
 // purchase = nouvel abonne ; payment = chaque prelevement encaisse (revenueCents) ; cancel = resiliation
 // Un document par jour : metrics/AAAA-MM-JJ = { landing_view: 12, signup: 3, ... }
 // Aucune donnee personnelle (ni IP, ni identifiant) n'est enregistree.
-export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral']
+export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial']
 export const today = () => new Date().toISOString().slice(0, 10)
 
 export async function countEvent(event, { source, revenueCents, plan } = {}) {

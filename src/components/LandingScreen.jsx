@@ -61,11 +61,13 @@ const TXT = {
     launch: 'Le plus choisi',
     per_year: '/ an', per_month: '/ mois', or_month: 'ou {p} par mois', once: 'résiliable à tout moment',
     full_items: ['Histoires illimitées, tous les jours', 'Les {n} pays et tous les nouveaux', 'Tous les tampons et badges du passeport', '5 enfants · 5 appareils', 'Statistiques parents'],
-    full_cta: 'Commencer gratuitement',
-    full_note: 'Commencez gratuitement, passez à la Formule Famille quand vous voulez.',
+    full_cta: 'Essai gratuit 3 jours',
+    full_note: '3 jours gratuits, puis abonnement automatique. Résiliez avant la fin de l’essai : 0 € à payer.',
+    trial_badge: '🎁 3 jours offerts',
     faq_title: 'Questions fréquentes',
     faq: [
       ['Où va l’argent des abonnements ?', 'Il finance d’abord l’entretien de l’application (serveurs, nouvelles histoires, nouveaux pays). Le reste est reversé à des associations de protection de l’enfance.'],
+      ['Comment marche l’essai de 3 jours ?', 'Vous profitez de la Formule Famille complète pendant 3 jours sans payer. À la fin de l’essai, l’abonnement choisi démarre automatiquement. Vous pouvez résilier en deux clics avant la fin : vous ne payez rien.'],
       ['C’est vraiment gratuit ?', 'Oui. Chaque enfant peut jouer 2 nouveaux chapitres par jour, dans tous les pays, sans limite de durée. La Formule Famille débloque des aventures illimitées pour 5 enfants.'],
       ['Comment résilier ?', 'En deux clics, dans l’app (« Mon abonnement ») ou sur la page « Verträge hier kündigen ». L’accès reste actif jusqu’à la fin de la période payée.'],
       ['Pour quel âge ?', 'De 4 à 12 ans. Vous choisissez un niveau de lecture pour chaque enfant, et vous pouvez le changer à tout moment.'],
@@ -129,11 +131,13 @@ const TXT = {
     launch: 'Most popular',
     per_year: '/ year', per_month: '/ month', or_month: 'or {p} per month', once: 'cancel anytime',
     full_items: ['Unlimited stories, every day', 'All {n} countries and every new one', 'Every passport stamp and badge', '5 children · 5 devices', 'Parent statistics'],
-    full_cta: 'Start for free',
-    full_note: 'Start for free, upgrade to the Family Plan whenever you like.',
+    full_cta: '3-day free trial',
+    full_note: '3 days free, then the subscription starts automatically. Cancel before the trial ends: you pay nothing.',
+    trial_badge: '🎁 3 days free',
     faq_title: 'Frequently asked questions',
     faq: [
       ['Where does the subscription money go?', 'First, it pays for running the app (servers, new stories, new countries). The rest is donated to child protection charities.'],
+      ['How does the 3-day trial work?', 'You get the full Family Plan for 3 days without paying. When the trial ends, the plan you chose starts automatically. Cancel in two clicks before the end and you pay nothing.'],
       ['Is it really free?', 'Yes. Every child can play 2 new chapters a day, in every country, with no time limit. The Family Plan unlocks unlimited adventures for 5 children.'],
       ['How do I cancel?', 'In two clicks, in the app (“My subscription”) or on the “Verträge hier kündigen” page. Access stays active until the end of the paid period.'],
       ['What age is it for?', 'Ages 4 to 12. You choose a reading level for each child and can change it at any time.'],
@@ -197,11 +201,13 @@ const TXT = {
     launch: 'Am beliebtesten',
     per_year: '/ Jahr', per_month: '/ Monat', or_month: 'oder {p} pro Monat', once: 'jederzeit kündbar',
     full_items: ['Unbegrenzte Geschichten, jeden Tag', 'Alle {n} Länder und alle neuen', 'Alle Stempel und Abzeichen im Pass', '5 Kinder · 5 Geräte', 'Statistik für Eltern'],
-    full_cta: 'Kostenlos starten',
-    full_note: 'Kostenlos starten, jederzeit zum Familien-Abo wechseln.',
+    full_cta: '3 Tage kostenlos testen',
+    full_note: '3 Tage kostenlos, danach startet das Abo automatisch. Vor Ablauf des Tests kündigen: 0 € Kosten.',
+    trial_badge: '🎁 3 Tage gratis',
     faq_title: 'Häufige Fragen',
     faq: [
       ['Wohin geht das Geld der Abos?', 'Zuerst in den Betrieb der App (Server, neue Geschichten, neue Länder). Der Rest wird an Kinderschutz-Organisationen gespendet.'],
+      ['Wie funktioniert der 3-Tage-Test?', 'Sie nutzen das komplette Familien-Abo 3 Tage lang kostenlos. Danach startet das gewählte Abo automatisch. Kündigen Sie vor Ablauf mit zwei Klicks, zahlen Sie nichts.'],
       ['Ist es wirklich kostenlos?', 'Ja. Jedes Kind kann täglich 2 neue Kapitel spielen, in allen Ländern, ohne zeitliche Begrenzung. Das Familien-Abo schaltet unbegrenzte Abenteuer für 5 Kinder frei.'],
       ['Wie kündige ich?', 'Mit zwei Klicks in der App („Mein Abo“) oder über „Verträge hier kündigen“. Der Zugang bleibt bis zum Ende des bezahlten Zeitraums bestehen.'],
       ['Für welches Alter?', 'Von 4 bis 12 Jahren. Sie wählen für jedes Kind eine Lesestufe und können sie jederzeit ändern.'],
@@ -524,6 +530,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
             <div style={{ background: 'linear-gradient(160deg,#FF9A1F,#FF6F00)', color: 'white', borderRadius: 30, padding: '26px 22px', boxShadow: '0 14px 36px rgba(255,111,0,0.35)', position: 'relative', display: 'flex', flexDirection: 'column' }}>
               <div style={{ position: 'absolute', top: -12, right: 18, background: '#FFD600', color: INK, borderRadius: 999, padding: '5px 12px', fontSize: 13, fontWeight: 900, boxShadow: '0 3px 8px rgba(0,0,0,0.15)' }}>⭐ {T.launch}</div>
               <div style={{ fontSize: 18, fontWeight: 900 }}>🌍 {T.full_name}</div>
+              <div style={{ alignSelf: 'flex-start', marginTop: 8, background: 'white', color: '#E65100', borderRadius: 999, padding: '4px 12px', fontSize: 14, fontWeight: 900 }}>{T.trial_badge}</div>
               <div style={{ fontFamily: FONT_TITLE, fontSize: 46, fontWeight: 700, margin: '6px 0 0' }}>{PLANS.year.label} <span style={{ fontSize: 18 }}>{T.per_year}</span></div>
               <div style={{ fontSize: 14, fontWeight: 900, opacity: 0.95 }}>{T.or_month.replace('{p}', PLANS.month.label)}</div>
               <div style={{ fontSize: 13, fontWeight: 800, opacity: 0.9, marginBottom: 12 }}>✓ {T.once}</div>

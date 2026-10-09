@@ -15,7 +15,7 @@ export default async (req) => {
   if (!sub || typeof sub === 'string') return json(200, { premium: false })
 
   const isNew = await syncSubscription(user.uid, sub)
-  if (isNew) await countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval }).catch(() => {})
+  if (isNew) await (sub.status === 'trialing' ? countEvent('trial') : countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval })).catch(() => {})
   return json(200, { premium: ['active', 'trialing', 'past_due'].includes(sub.status) })
 }
 

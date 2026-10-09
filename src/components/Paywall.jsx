@@ -10,6 +10,8 @@ const INK = '#1A2A4F'
 // Sans compte (mode essai) : on propose de creer le compte parent.
 export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedAccount, account = {} }) {
   const refGift = !!referralCode() && !(account.refCredits > 0)
+  // Essai gratuit de 3 jours : 1re fois seulement, pas cumulable avec le parrainage (verifie aussi cote serveur)
+  const trial = !refGift && !(account.refCredits > 0) && (!user || account.trial > 0)
   const [plan, setPlan] = useState('year')
   useEffect(() => { track('paywall_open') }, [])
   const [step, setStep] = useState('gate') // 'gate' | 'pay'
@@ -62,6 +64,12 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
           </div>
         )}
 
+        {trial && (
+          <div style={{ textAlign: 'center', marginBottom: 14 }}>
+            <span style={{ display: 'inline-block', background: '#FF7A00', color: 'white', borderRadius: 999, padding: '7px 16px', fontSize: 16, fontWeight: 900, boxShadow: '0 4px 12px rgba(255,122,0,0.3)' }}>{t(lang, 'pw_trial_badge')}</span>
+          </div>
+        )}
+
         {/* Choix de la formule */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 8 }}>
           {['year', 'month'].map((k) => {
@@ -79,7 +87,8 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
             )
           })}
         </div>
-        <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#3E6B4F', marginBottom: 14 }}>✓ {t(lang, 'pw_once')}</div>
+        <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#3E6B4F', marginBottom: trial ? 6 : 14 }}>✓ {t(lang, 'pw_once')}</div>
+        {trial && <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#37474F', lineHeight: 1.45, marginBottom: 14 }}>{t(lang, 'pw_trial_note', { price: `${PLANS[plan].label} ${t(lang, plan === 'year' ? 'per_year' : 'per_month')}` })}</div>}
 
         {!user ? (
           <>
@@ -98,13 +107,13 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
               <input type="checkbox" checked={waiver} onChange={(e) => setWaiver(e.target.checked)}
                 style={{ width: 22, height: 22, marginTop: 2, accentColor: '#2E9E5B', flexShrink: 0 }} />
               <span style={{ fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.5 }}>
-                {t(lang, 'pw_waiver')}{' '}
+                {trial && <>{t(lang, 'pw_trial_waiver')}{' '}</>}{t(lang, 'pw_waiver')}{' '}
                 <a href="/agb" target="_blank" rel="noopener" style={{ color: '#2E7D4F', fontWeight: 900 }}>{t(lang, 'legal_terms')}</a>
               </span>
             </label>
             <button className="btn-kid" onClick={pay} disabled={busy || !waiver}
               style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '18px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #1F7A43', opacity: busy || !waiver ? 0.55 : 1 }}>
-              {busy ? t(lang, 'pw_wait') : t(lang, 'pw_pay', { price: `${PLANS[plan].label} ${t(lang, plan === 'year' ? 'per_year' : 'per_month')}` })}
+              {busy ? t(lang, 'pw_wait') : trial ? t(lang, 'pw_trial_pay') : t(lang, 'pw_pay', { price: `${PLANS[plan].label} ${t(lang, plan === 'year' ? 'per_year' : 'per_month')}` })}
             </button>
             {error && <div style={{ marginTop: 10, fontSize: 14, fontWeight: 800, color: '#C62828', textAlign: 'center' }}>{error}</div>}
             <div style={{ marginTop: 10, fontSize: 12, fontWeight: 800, color: '#6B8F77', textAlign: 'center' }}>{t(lang, 'pw_secure')}</div>

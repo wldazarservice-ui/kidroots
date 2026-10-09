@@ -12,6 +12,7 @@ const FUNNEL = [
   ['limit_hit', '🌙 Limite du jour atteinte'],
   ['paywall_open', '🔓 Offre affichée'],
   ['checkout_start', '💳 Paiement commencé'],
+  ['trial', '🎁 Essais 3 jours'],
   ['purchase', '⭐ Nouveaux abonnés'],
 ]
 
@@ -73,6 +74,7 @@ export default function AdminDashboard({ user, onClose }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 14 }}>
               {tile('💶 Encaissé', euro(sum('revenueCents')), '#2E9E5B')}
               {tile('⭐ Nouveaux abonnés', sum('purchase'), '#FF7A00')}
+              {tile('🎁 Essais 3 jours', sum('trial'), '#8E24AA')}
               {tile('👨‍💻 Comptes (total)', data.totals.users)}
               {tile('💳 Payants (total)', data.totals.premium, '#1E88E5')}
               {tile('🔁 Résiliations', sum('cancel'), '#C62828')}
