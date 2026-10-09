@@ -16,7 +16,10 @@ export default async (req) => {
     db().collection('users').count().get(),
     db().collection('users').where('premium', '==', true).count().get(),
   ])
-  return json(200, { rows, totals: { users: users.data().count, premium: paid.data().count } })
+  // Dernieres demandes de devis des ecoles
+  const reqSnap = await db().collection('schoolRequests').orderBy('at', 'desc').limit(20).get().catch(() => null)
+  const schools = reqSnap ? reqSnap.docs.map((d) => { const x = d.data(); return { ...x, id: d.id, at: x.at?.toDate?.()?.toISOString() || null } }) : []
+  return json(200, { rows, schools, totals: { users: users.data().count, premium: paid.data().count } })
 }
 
 export const config = { path: '/api/metrics' }

@@ -6,7 +6,11 @@ export const DAILY_FREE_CHAPTERS = 2
 export const PLANS = {
   month: { cents: 199, label: '1,99 €' },
   year: { cents: 1499, label: '14,99 €', perMonth: '1,25 €', savePct: 37 },
+  teacher_month: { cents: 499, label: '4,99 €' },
+  teacher_year: { cents: 3900, label: '39 €', perMonth: '3,25 €', savePct: 35 },
 }
+// Ecoles : sur devis (facture, virement a 30 jours), a partir de ce prix par an
+export const SCHOOL_FROM = '149 €'
 export const PRICE_LABEL = PLANS.month.label
 
 // Interrupteur : le paiement n'est actif que si VITE_PAYWALL_ENABLED=true dans Netlify.

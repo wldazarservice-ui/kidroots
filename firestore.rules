@@ -3,9 +3,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Limite fixee par le serveur selon la formule (famille 5, enseignant 35, ecole 300), 5 par defaut
+    function limitOf(userId, field) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.get(field, 5);
+    }
+    // Emplacement numerote (c1, c2… / d1, d2…) dans la limite du compte
+    function slotOk(id, prefix, userId, field) {
+      return id.matches(prefix + '[1-9][0-9]{0,2}') && int(id.split(prefix)[1]) <= limitOf(userId, field);
+    }
+
     // Champs reserves au serveur (paiement Stripe) : jamais modifiables par l'app
     function touchesPremium(data) {
-      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed']);
+      return data.keys().hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school']);
     }
 
     // Doc parent : seul son proprietaire peut lire/ecrire, sauf les champs premium.
@@ -15,20 +24,20 @@ service cloud.firestore {
                     && !touchesPremium(request.resource.data);
       allow update: if request.auth != null && request.auth.uid == userId
                     && !request.resource.data.diff(resource.data).affectedKeys()
-                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed']);
+                         .hasAny(['premium', 'premiumAt', 'stripeSessionId', 'comp', 'subscriptionId', 'subStatus', 'plan', 'premiumUntil', 'cancelAtPeriodEnd', 'stripeCustomerId', 'refCode', 'refCredits', 'refCount', 'referredBy', 'trialUsed', 'tier', 'maxChildren', 'maxDevices', 'school']);
 
-      // Profils enfants : 5 maximum (emplacements c1..c5 pour les nouveaux profils)
+      // Profils enfants / eleves : emplacements c1..cN (N = maxChildren du compte, 5 par defaut)
       match /children/{childId} {
         allow read, update, delete: if request.auth != null && request.auth.uid == userId;
         allow create: if request.auth != null && request.auth.uid == userId
-                      && childId in ['c1', 'c2', 'c3', 'c4', 'c5'];
+                      && slotOk(childId, 'c', userId, 'maxChildren');
       }
 
-      // Appareils : 5 maximum (emplacements d1..d5)
+      // Appareils : emplacements d1..dN (N = maxDevices du compte, 5 par defaut)
       match /devices/{slot} {
         allow read, update, delete: if request.auth != null && request.auth.uid == userId;
         allow create: if request.auth != null && request.auth.uid == userId
-                      && slot in ['d1', 'd2', 'd3', 'd4', 'd5'];
+                      && slotOk(slot, 'd', userId, 'maxDevices');
       }
     }
   }

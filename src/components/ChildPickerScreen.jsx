@@ -10,14 +10,14 @@ import { openBillingPortal } from '../premium'
 import { signOut } from '../auth'
 import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
-import { MAX_CHILDREN } from '../cloud'
+import { LIMITS } from '../limits'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, premium, account = {}, lang = 'fr' }) {
-  const full = kids.length >= MAX_CHILDREN
+export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, onOpenPro, premium, account = {}, lang = 'fr' }) {
+  const full = kids.length >= LIMITS.children
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
   const [age, setAge] = useState(5)
@@ -52,7 +52,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
       setName('')
       setCreating(false)
     } catch (err) {
-      setCreateError(err.message === 'child-limit' ? `Maximum ${MAX_CHILDREN} enfants par compte.` : 'La création a échoué. Réessaie.')
+      setCreateError(err.message === 'child-limit' ? `Maximum ${LIMITS.children} enfants par compte.` : 'La création a échoué. Réessaie.')
     } finally {
       setBusy(false)
     }
@@ -135,18 +135,24 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div className="picker-actions">
           {full ? (
             <div style={{ background: 'white', borderRadius: 18, padding: '12px 14px', textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#607D8B' }}>
-              🧒 {MAX_CHILDREN} / {MAX_CHILDREN} enfants : le maximum par compte est atteint.
+              🧒 {LIMITS.children} / {LIMITS.children} enfants : le maximum par compte est atteint.
             </div>
           ) : (
             <button className="btn-kid soft" onClick={() => setCreating(true)}
               style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
-              ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {MAX_CHILDREN})</span>
+              ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {LIMITS.children})</span>
             </button>
           )}
           {account.refCode && (
             <button className="btn-kid soft" onClick={() => setInviteOpen(true)}
               style={{ width: '100%', background: 'linear-gradient(135deg,#FFF3E0,#FFE0B2)', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.15)' }}>
               🎁 {t(lang, 'inv_btn')}
+            </button>
+          )}
+          {onOpenPro && !premium && (
+            <button className="btn-kid soft" onClick={onOpenPro}
+              style={{ width: '100%', background: 'white', color: '#00695C', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(0,105,92,0.12)' }}>
+              {t(lang, 'picker_pro')}
             </button>
           )}
           {onOpenStats && kids.length > 0 && (
@@ -169,7 +175,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           )}
           {premium && account.kind !== 'subscription' && (
             <div style={{ background: 'white', borderRadius: 18, padding: '12px', textAlign: 'center', fontSize: 15, fontWeight: 900, color: '#2E7D4F', boxShadow: '0 4px 12px rgba(46,158,91,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              ✅ {account.kind === 'gift' ? 'Accès illimité offert' : 'Accès illimité à vie'}
+              ✅ {account.kind === 'school' ? 'Licence École active' : account.kind === 'gift' ? 'Accès illimité offert' : 'Accès illimité à vie'}
             </div>
           )}
           {premium && account.kind === 'subscription' && (

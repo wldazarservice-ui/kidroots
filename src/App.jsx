@@ -33,6 +33,7 @@ import BottomNav from './components/BottomNav'
 import Paywall from './components/Paywall'
 import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
+import { setLimits } from './limits'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import ScreenTimeLock from './components/ScreenTimeLock'
 import ParentStats from './components/ParentStats'
@@ -84,6 +85,7 @@ export default function App() {
   const [levelPickerOpen, setLevelPickerOpen] = useState(false)
   const [premium, setPremium] = useState(false)
   const [paywallOpen, setPaywallOpen] = useState(false)
+  const [paywallAudience, setPaywallAudience] = useState('family')
   const [deviceBlocked, setDeviceBlocked] = useState(false)
   const [devicesOpen, setDevicesOpen] = useState(false)
   const [userReload, setUserReload] = useState(0)
@@ -159,13 +161,22 @@ export default function App() {
     ;(async () => {
       try {
         const ud = await ensureUserDoc(user)
+        setLimits(ud)
         if (ud.isNew) track('signup')
         if (!cancelled) setPremium(!!ud.premium)
         // Etat verifie par le serveur (acces offert, abonnement, acces a vie)
         fetchAccountStatus(user).then((st) => {
           if (cancelled) return
           setPremium(!!st.premium)
+          setLimits(st)
           setAccount(st)
+          // Inscription depuis l'offre enseignant : on rouvre l'offre une fois connecte
+          try {
+            if (localStorage.getItem('kidroots_intent') === 'teacher') {
+              localStorage.removeItem('kidroots_intent')
+              if (!st.premium) { setPaywallAudience('teacher'); setPaywallOpen(true) }
+            }
+          } catch { /* stockage indisponible */ }
           if (st.needVerify && !sessionStorage.getItem('kidroots_verify_sent')) {
             sessionStorage.setItem('kidroots_verify_sent', '1')
             verifyEmail(user).then(() => { setToast('verify_sent'); setTimeout(() => setToast(null), 6000) }).catch(() => {})
@@ -467,6 +478,10 @@ export default function App() {
       {devicesOpen && <DevicesManager user={user} onClose={() => setDevicesOpen(false)} />}
       {statsOpen && <ParentStats user={user} lang={lang} onClose={() => setStatsOpen(false)} />}
       {adminOpen && <AdminDashboard user={user} onClose={() => setAdminOpen(false)} />}
+      {paywallOpen && (
+        <Paywall lang={lang} user={user} account={account} audience={paywallAudience} onClose={() => { setPaywallOpen(false); setPaywallAudience('family') }}
+          onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }} />
+      )}
       <ChildPickerScreen
         user={user}
         kids={kids}
@@ -477,6 +492,7 @@ export default function App() {
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
         onKidsChange={setKids}
+        onOpenPro={PAYWALL_ENABLED ? () => { setPaywallAudience('teacher'); setPaywallOpen(true) } : null}
         onLimitSaved={(id, min) => setKids((all) => all.map((k) => (k.id === id ? { ...k, screenLimit: min } : k)))}
         onKidsReset={(ids) => setKids((all) => all.map((k) => (ids.includes(k.id) ? { ...k, xp: 0, level: 1, done: {}, games: {}, daily: { date: '', ids: [] } } : k)))}
         premium={premium}
@@ -518,7 +534,7 @@ export default function App() {
           onPick={changeDifficulty} onClose={() => setLevelPickerOpen(false)} />
       )}
       {paywallOpen && (
-        <Paywall lang={lang} user={user} account={account} onClose={() => setPaywallOpen(false)}
+        <Paywall lang={lang} user={user} account={account} audience={paywallAudience} onClose={() => { setPaywallOpen(false); setPaywallAudience('family') }}
           onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }}
           onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
       )}

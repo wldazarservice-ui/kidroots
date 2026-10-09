@@ -1,3 +1,4 @@
+import { LIMITS, slots } from './limits'
 // Helpers Firestore : profil parent + profils enfants + progression
 import {
   doc,
@@ -40,14 +41,11 @@ export async function listChildren(uid) {
     .sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0))
 }
 
-// 5 profils enfants maximum par compte : chaque enfant occupe un emplacement c1..c5
-// (les regles Firestore refusent tout autre identifiant).
-export const MAX_CHILDREN = 5
-export const CHILD_SLOTS = ['c1', 'c2', 'c3', 'c4', 'c5']
-
+// Profils enfants : chaque enfant occupe un emplacement c1..cN, N = limite du compte
+// (5 en famille, 35 enseignant, 300 ecole ; les regles Firestore refusent tout autre identifiant).
 export async function createChild(uid, data, takenIds = []) {
-  const slot = CHILD_SLOTS.find((id) => !takenIds.includes(id))
-  if (!slot || takenIds.length >= MAX_CHILDREN) throw new Error('child-limit')
+  const slot = slots('c', LIMITS.children).find((id) => !takenIds.includes(id))
+  if (!slot || takenIds.length >= LIMITS.children) throw new Error('child-limit')
   const docRef = doc(db, 'users', uid, 'children', slot)
   await setDoc(docRef, {
     name: data.name || 'Enfant',

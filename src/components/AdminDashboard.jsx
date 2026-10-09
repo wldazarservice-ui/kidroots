@@ -13,6 +13,7 @@ const FUNNEL = [
   ['paywall_open', '🔓 Offre affichée'],
   ['checkout_start', '💳 Paiement commencé'],
   ['trial', '🎁 Essais 3 jours'],
+  ['school_request', '🏫 Demandes écoles'],
   ['purchase', '⭐ Nouveaux abonnés'],
 ]
 
@@ -118,6 +119,20 @@ export default function AdminDashboard({ user, onClose }) {
                   <span>👀 {ev.landing_view || 0}</span>
                   <span>▶ {ev.guest_start || 0}</span>
                   <span>✍️ {ev.signup || 0}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background: 'white', borderRadius: 18, padding: 14, marginTop: 14 }}>
+              <div style={{ fontWeight: 900, marginBottom: 4 }}>🏫 Demandes de devis des écoles</div>
+              <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginBottom: 8 }}>Après paiement de la facture : ajoute l'e-mail du compte de l'école dans la variable Netlify SCHOOL_EMAILS.</div>
+              {(data.schools || []).length === 0 ? (
+                <div style={{ fontSize: 13, color: '#90A4AE', fontWeight: 800 }}>Aucune demande pour l'instant.</div>
+              ) : data.schools.map((r) => (
+                <div key={r.id} style={{ fontSize: 13, fontWeight: 700, padding: '8px 0', borderTop: '1px solid #F1F4F8', lineHeight: 1.45 }}>
+                  <div style={{ fontWeight: 900 }}>{r.school} · {r.students || '?'} élèves{r.city ? ` · ${r.city}` : ''}</div>
+                  <div>{r.name} · <a href={`mailto:${r.email}?subject=${encodeURIComponent('Mokalibo pour ' + r.school)}`}>{r.email}</a> · {r.at ? new Date(r.at).toLocaleDateString('fr-FR') : ''}</div>
+                  {r.message && <div style={{ color: '#546E7A' }}>{r.message}</div>}
                 </div>
               ))}
             </div>

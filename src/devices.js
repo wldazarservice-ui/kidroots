@@ -1,10 +1,10 @@
-// 5 appareils maximum par compte parent (contre le partage d'identifiants).
-// Chaque appareil occupe un emplacement d1..d5 dans users/{uid}/devices (regles Firestore).
+// Appareils par compte (contre le partage d'identifiants) : 5 en famille, 30 pour une ecole.
+// Chaque appareil occupe un emplacement d1..dN dans users/{uid}/devices (regles Firestore).
 import { doc, getDocs, collection, deleteDoc, updateDoc, runTransaction, serverTimestamp } from 'firebase/firestore'
 import { db } from './firebase'
+import { LIMITS, slots } from './limits'
 
-export const MAX_DEVICES = 5
-const SLOTS = ['d1', 'd2', 'd3', 'd4', 'd5']
+export const maxDevices = () => LIMITS.devices
 const KEY = 'kidino_device_id'
 
 export function getDeviceId() {
@@ -34,9 +34,10 @@ export async function listDevices(uid) {
   return snap.docs.map((d) => ({ slot: d.id, ...d.data() })).sort((a, b) => a.slot.localeCompare(b.slot))
 }
 
-// Enregistre cet appareil. Retourne { ok: true } ou { ok: false, devices } si les 5 places sont prises.
+// Enregistre cet appareil. Retourne { ok: true } ou { ok: false, devices } si toutes les places sont prises.
 export async function registerDevice(uid) {
   const deviceId = getDeviceId()
+  const SLOTS = slots('d', LIMITS.devices)
   const result = await runTransaction(db, async (tx) => {
     const refs = SLOTS.map((s) => doc(db, 'users', uid, 'devices', s))
     const snaps = await Promise.all(refs.map((r) => tx.get(r)))

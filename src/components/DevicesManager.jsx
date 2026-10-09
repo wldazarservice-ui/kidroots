@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import LogoutIcon from './LogoutIcon'
 import ParentGate from './ParentGate'
-import { listDevices, removeDevice, getDeviceId, MAX_DEVICES } from '../devices'
+import { listDevices, removeDevice, getDeviceId, maxDevices } from '../devices'
 import { signOut } from '../auth'
 
 const INK = '#1A2A4F'
@@ -51,8 +51,8 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
         </div>
         <div style={{ fontSize: 14, color: '#3E6B4F', fontWeight: 800, marginTop: 4, lineHeight: 1.5 }}>
           {blocked
-            ? `Ce compte est déjà utilisé sur ${MAX_DEVICES} appareils. Retire un ancien appareil pour utiliser Mokalibo ici.`
-            : `Un compte Mokalibo peut être utilisé sur ${MAX_DEVICES} appareils maximum.`}
+            ? `Ce compte est déjà utilisé sur ${maxDevices()} appareils. Retire un ancien appareil pour utiliser Mokalibo ici.`
+            : `Un compte Mokalibo peut être utilisé sur ${maxDevices()} appareils maximum.`}
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
         })}
       </div>
       <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 900, color: '#3E6B4F', marginBottom: 14 }}>
-        {devices ? `${devices.length} / ${MAX_DEVICES} appareils` : ''}
+        {devices ? `${devices.length} / ${maxDevices()} appareils` : ''}
       </div>
 
       {!unlocked && devices?.some((d) => d.deviceId !== myId) && (

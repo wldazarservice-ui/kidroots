@@ -5,6 +5,7 @@ import { defaultLevelForAge } from '../levels'
 import { track } from '../track'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
+import SchoolsPage from './SchoolsPage'
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode } from '../track'
@@ -310,11 +311,11 @@ function GuestSheet({ T, onClose, onStart }) {
 
 
 // Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
-const PAGES = ['home', 'discover', 'countries', 'pricing', 'faq']
+const PAGES = ['home', 'discover', 'countries', 'pricing', 'ecoles', 'faq']
 const NAV = {
-  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Questions fréquentes →' }, all_countries: 'Tous les pays' },
-  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'FAQ →' }, all_countries: 'All countries' },
-  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Häufige Fragen →' }, all_countries: 'Alle Länder' },
+  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays' },
+  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries' },
+  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder' },
 }
 const pageFromHash = () => {
   const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
@@ -544,6 +545,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
       </section>
 
       </>)}
+      {page === 'ecoles' && <SchoolsPage lang={lang} onSignup={onSignup} h2={h2} primary={primary} />}
       {page === 'faq' && (<>
       {/* ── FAQ ── */}
       <section style={{ padding: '56px 16px' }}>

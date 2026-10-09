@@ -58,10 +58,17 @@ export default async (req) => {
     ...(discounts && { discounts }),
     subscription_data: {
       metadata: meta,
-      description: 'Mokalibo Famille : 5 enfants, 5 appareils, aventures illimitées. Résiliable à tout moment.',
+      description: P.tier === 'teacher'
+        ? 'Mokalibo Enseignant : 35 élèves, 5 appareils, histoires illimitées. Résiliable à tout moment.'
+        : 'Mokalibo Famille : 5 enfants, 5 appareils, aventures illimitées. Résiliable à tout moment.',
       ...(trial && { trial_period_days: TRIAL_DAYS, trial_settings: { end_behavior: { missing_payment_method: 'cancel' } } }),
     },
     payment_method_collection: 'always',
+    // Enseignant : adresse et nom de l'ecole sur la facture (souvent remboursee par l'ecole)
+    ...(P.tier === 'teacher' && {
+      billing_address_collection: 'required',
+      custom_fields: [{ key: 'ecole', type: 'text', optional: true, label: { type: 'custom', custom: 'École · Schule (facultatif)' } }],
+    }),
     ...(ud.stripeCustomerId ? { customer: ud.stripeCustomerId } : { customer_email: user.email || undefined }),
     locale: 'auto',
     ...(note && { custom_text: { submit: { message: note } } }),

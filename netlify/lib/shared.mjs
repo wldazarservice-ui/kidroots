@@ -9,7 +9,19 @@ import { getFirestore, FieldValue } from 'firebase-admin/firestore'
 export const PLANS = {
   month: { cents: 199, interval: 'month', label: 'Mokalibo Famille — mensuel', price: '1,99 €/mois (Monat)' },
   year: { cents: 1499, interval: 'year', label: 'Mokalibo Famille — annuel', price: '14,99 €/an (Jahr)' },
+  teacher_month: { cents: 499, interval: 'month', label: 'Mokalibo Enseignant — mensuel', price: '4,99 €/mois (Monat)', tier: 'teacher' },
+  teacher_year: { cents: 3900, interval: 'year', label: 'Mokalibo Enseignant — annuel', price: '39 €/an (Jahr)', tier: 'teacher' },
 }
+
+// Limites par type de compte (profils enfants / eleves et appareils), appliquees par firestore.rules
+export const TIERS = {
+  family: { maxChildren: 5, maxDevices: 5 },
+  teacher: { maxChildren: 35, maxDevices: 5 },
+  school: { maxChildren: 300, maxDevices: 30 },
+}
+// Ecoles (sur devis, payees par facture) : emails listes dans la variable Netlify SCHOOL_EMAILS
+export const schoolEmails = () => (process.env.SCHOOL_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean)
+export const isSchool = (user) => !!user?.email && schoolEmails().includes(user.email.toLowerCase())
 
 // Essai gratuit (une seule fois par compte, carte demandee, abonnement lance automatiquement ensuite)
 export const TRIAL_DAYS = 3
@@ -54,9 +66,12 @@ export async function syncSubscription(uid, sub) {
   const active = ACTIVE.includes(sub.status)
   const item = sub.items?.data?.[0]
   const periodEnd = item?.current_period_end || sub.current_period_end
+  const tier = PLANS[sub.metadata?.plan]?.tier || 'family'
   return db().runTransaction(async (tx) => {
     const snap = await tx.get(ref)
     const prev = snap.exists ? snap.data() : {}
+    // Un compte ecole garde ses limites ; sinon limites de la formule tant qu'elle est active
+    const limits = prev.school ? {} : (active ? { tier, ...TIERS[tier] } : { tier: 'family', ...TIERS.family })
     // Un ancien achat « a vie » reste valable quoi qu'il arrive
     const lifetime = prev.premium && !prev.subscriptionId
     tx.set(ref, {
@@ -69,6 +84,7 @@ export async function syncSubscription(uid, sub) {
       cancelAtPeriodEnd: !!sub.cancel_at_period_end,
       stripeCustomerId: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id,
       ...(sub.trial_end && { trialUsed: true }),
+      ...limits,
     }, { merge: true })
     return active && !prev.premium
   })
@@ -78,7 +94,7 @@ export async function syncSubscription(uid, sub) {
 // purchase = nouvel abonne ; payment = chaque prelevement encaisse (revenueCents) ; cancel = resiliation
 // Un document par jour : metrics/AAAA-MM-JJ = { landing_view: 12, signup: 3, ... }
 // Aucune donnee personnelle (ni IP, ni identifiant) n'est enregistree.
-export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial']
+export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial', 'school_request']
 export const today = () => new Date().toISOString().slice(0, 10)
 
 export async function countEvent(event, { source, revenueCents, plan } = {}) {

@@ -1,5 +1,5 @@
 import { t } from '../i18n'
-import { PLANS, startCheckout } from '../premium'
+import { PLANS, SCHOOL_FROM, startCheckout } from '../premium'
 import { track, referralCode } from '../track'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
@@ -8,11 +8,15 @@ const INK = '#1A2A4F'
 
 // Formule Famille (abonnement mensuel ou annuel). Etape 1 : controle parental. Etape 2 : paiement Stripe.
 // Sans compte (mode essai) : on propose de creer le compte parent.
-export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedAccount, account = {} }) {
+export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedAccount, account = {}, audience: aud0 = 'family' }) {
+  const [audience, setAudience] = useState(aud0)
+  const teacher = audience === 'teacher'
   const refGift = !!referralCode() && !(account.refCredits > 0)
   // Essai gratuit de 3 jours : 1re fois seulement, pas cumulable avec le parrainage (verifie aussi cote serveur)
   const trial = !refGift && !(account.refCredits > 0) && (!user || account.trial > 0)
-  const [plan, setPlan] = useState('year')
+  const [plan, setPlan] = useState(aud0 === 'teacher' ? 'teacher_year' : 'year')
+  const switchAudience = (a) => { setAudience(a); setPlan(a === 'teacher' ? 'teacher_year' : 'year') }
+  const isYear = plan.endsWith('year')
   useEffect(() => { track('paywall_open') }, [])
   const [step, setStep] = useState('gate') // 'gate' | 'pay'
   const [waiver, setWaiver] = useState(false)
@@ -31,8 +35,8 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
     }
   }
 
-  const features = ['pw_f1', 'pw_f2', 'pw_f3', 'pw_f4']
-  const icons = ['🌍', '📚', '🧒', '🚫']
+  const features = teacher ? ['pw_t_f1', 'pw_t_f2', 'pw_t_f3', 'pw_t_f4'] : ['pw_f1', 'pw_f2', 'pw_f3', 'pw_f4']
+  const icons = teacher ? ['🧑‍🏫', '📺', '📚', '🧾'] : ['🌍', '📚', '🧒', '🚫']
 
   return (
     <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
@@ -45,8 +49,18 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
 
         <div style={{ textAlign: 'center', marginBottom: 16 }}>
           <div className="float" style={{ fontSize: 62, lineHeight: 1.1 }}>🔓</div>
-          <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, color: INK, marginTop: 4 }}>{t(lang, 'pw_title')}</div>
-          <div style={{ fontSize: 15, color: '#3E6B4F', fontWeight: 800, marginTop: 2 }}>{t(lang, 'pw_sub')}</div>
+          <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, color: INK, marginTop: 4 }}>{t(lang, teacher ? 'pw_t_title' : 'pw_title')}</div>
+          <div style={{ fontSize: 15, color: '#3E6B4F', fontWeight: 800, marginTop: 2 }}>{t(lang, teacher ? 'pw_t_sub' : 'pw_sub')}</div>
+        </div>
+
+        {/* Famille / Enseignant */}
+        <div role="tablist" style={{ display: 'flex', background: 'rgba(255,255,255,0.7)', borderRadius: 999, padding: 4, marginBottom: 14 }}>
+          {['family', 'teacher'].map((a) => (
+            <button key={a} type="button" role="tab" aria-selected={audience === a} onClick={() => switchAudience(a)}
+              style={{ flex: 1, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, fontWeight: 900, padding: '9px 6px', borderRadius: 999, background: audience === a ? 'white' : 'transparent', color: audience === a ? INK : '#607D8B', boxShadow: audience === a ? '0 2px 8px rgba(26,42,79,0.12)' : 'none' }}>
+              {t(lang, a === 'teacher' ? 'pw_tab_teacher' : 'pw_tab_family')}
+            </button>
+          ))}
         </div>
 
         <div style={{ background: 'white', borderRadius: 22, padding: '12px 14px', marginBottom: 14, boxShadow: '0 6px 18px rgba(46,158,91,0.12)' }}>
@@ -72,28 +86,36 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
 
         {/* Choix de la formule */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 8 }}>
-          {['year', 'month'].map((k) => {
+          {(teacher ? ['teacher_year', 'teacher_month'] : ['year', 'month']).map((k) => {
+            const y = k.endsWith('year')
             const P = PLANS[k]
             const on = plan === k
             return (
               <button key={k} type="button" onClick={() => setPlan(k)} aria-pressed={on}
                 style={{ position: 'relative', textAlign: 'center', fontFamily: 'inherit', cursor: 'pointer', background: on ? 'white' : 'rgba(255,255,255,0.6)', border: `3px solid ${on ? '#FF7A00' : '#E3EAF2'}`, borderRadius: 20, padding: '16px 8px 12px', boxShadow: on ? '0 6px 16px rgba(255,122,0,0.22)' : 'none' }}>
-                {k === 'year' && <span style={{ position: 'absolute', top: -11, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', background: '#2E9E5B', color: 'white', fontSize: 11, fontWeight: 900, borderRadius: 999, padding: '3px 10px' }}>{t(lang, 'plan_best')} · {t(lang, 'plan_save', { pct: P.savePct })}</span>}
-                <div style={{ fontSize: 14, fontWeight: 900, color: '#607D8B' }}>{t(lang, k === 'year' ? 'plan_year' : 'plan_month')}</div>
+                {y && <span style={{ position: 'absolute', top: -11, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap', background: '#2E9E5B', color: 'white', fontSize: 11, fontWeight: 900, borderRadius: 999, padding: '3px 10px' }}>{t(lang, 'plan_best')} · {t(lang, 'plan_save', { pct: P.savePct })}</span>}
+                <div style={{ fontSize: 14, fontWeight: 900, color: '#607D8B' }}>{t(lang, y ? 'plan_year' : 'plan_month')}</div>
                 <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, color: on ? '#FF7A00' : INK, lineHeight: 1.15 }}>{P.label}</div>
-                <div style={{ fontSize: 12, fontWeight: 800, color: '#78909C' }}>{t(lang, k === 'year' ? 'per_year' : 'per_month')}</div>
-                {k === 'year' && <div style={{ fontSize: 11, fontWeight: 900, color: '#2E9E5B', marginTop: 2 }}>{t(lang, 'plan_year_note', { pm: P.perMonth })}</div>}
+                <div style={{ fontSize: 12, fontWeight: 800, color: '#78909C' }}>{t(lang, y ? 'per_year' : 'per_month')}</div>
+                {y && <div style={{ fontSize: 11, fontWeight: 900, color: '#2E9E5B', marginTop: 2 }}>{t(lang, 'plan_year_note', { pm: P.perMonth })}</div>}
               </button>
             )
           })}
         </div>
         <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#3E6B4F', marginBottom: trial ? 6 : 14 }}>✓ {t(lang, 'pw_once')}</div>
-        {trial && <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#37474F', lineHeight: 1.45, marginBottom: 14 }}>{t(lang, 'pw_trial_note', { price: `${PLANS[plan].label} ${t(lang, plan === 'year' ? 'per_year' : 'per_month')}` })}</div>}
+        {trial && <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#37474F', lineHeight: 1.45, marginBottom: 14 }}>{t(lang, 'pw_trial_note', { price: `${PLANS[plan].label} ${t(lang, isYear ? 'per_year' : 'per_month')}` })}</div>}
+
+        {teacher && (
+          <div style={{ background: 'white', borderRadius: 16, padding: '10px 12px', marginBottom: 14, textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#37474F', lineHeight: 1.45 }}>
+            🏫 {t(lang, 'pw_school', { p: SCHOOL_FROM })}{' '}
+            <a href={`mailto:contact@azarconsulting.eu?subject=${encodeURIComponent('Mokalibo : devis école')}`} style={{ color: '#1E88E5', fontWeight: 900 }}>{t(lang, 'pw_school_cta')}</a>
+          </div>
+        )}
 
         {!user ? (
           <>
             <div style={{ fontSize: 14, fontWeight: 800, color: '#37474F', textAlign: 'center', lineHeight: 1.5, marginBottom: 12 }}>{t(lang, 'pw_need_account')}</div>
-            <button className="btn-kid soft" onClick={onNeedAccount}
+            <button className="btn-kid soft" onClick={() => { try { if (teacher) localStorage.setItem('kidroots_intent', 'teacher') } catch { /* stockage indisponible */ } onNeedAccount?.() }}
               style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '18px', fontSize: 18, borderRadius: 22, boxShadow: '0 6px 0 #1F7A43' }}>
               {t(lang, 'pw_create_account')}
             </button>
@@ -113,7 +135,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
             </label>
             <button className="btn-kid" onClick={pay} disabled={busy || !waiver}
               style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '18px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #1F7A43', opacity: busy || !waiver ? 0.55 : 1 }}>
-              {busy ? t(lang, 'pw_wait') : trial ? t(lang, 'pw_trial_pay') : t(lang, 'pw_pay', { price: `${PLANS[plan].label} ${t(lang, plan === 'year' ? 'per_year' : 'per_month')}` })}
+              {busy ? t(lang, 'pw_wait') : trial ? t(lang, 'pw_trial_pay') : t(lang, 'pw_pay', { price: `${PLANS[plan].label} ${t(lang, isYear ? 'per_year' : 'per_month')}` })}
             </button>
             {error && <div style={{ marginTop: 10, fontSize: 14, fontWeight: 800, color: '#C62828', textAlign: 'center' }}>{error}</div>}
             <div style={{ marginTop: 10, fontSize: 12, fontWeight: 800, color: '#6B8F77', textAlign: 'center' }}>{t(lang, 'pw_secure')}</div>
