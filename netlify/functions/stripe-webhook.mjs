@@ -1,7 +1,7 @@
 // Notifications Stripe (source de verite) : debut, renouvellement, resiliation de l'abonnement.
 // Evenements a cocher dans Stripe : checkout.session.completed, customer.subscription.updated,
 // customer.subscription.deleted, invoice.paid
-import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial } from '../lib/shared.mjs'
+import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial, ensureGift } from '../lib/shared.mjs'
 
 const uidOf = (obj) => obj?.metadata?.uid || null
 
@@ -18,6 +18,7 @@ export default async (req) => {
 
   switch (event.type) {
     case 'checkout.session.completed': {
+      if (obj.mode === 'payment' && obj.metadata?.kind === 'gift') { await ensureGift(obj); break }
       if (obj.mode !== 'subscription' || !obj.subscription) break
       const uid = obj.client_reference_id || uidOf(obj)
       let sub = await stripe().subscriptions.retrieve(obj.subscription)

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { PLANS, openBillingPortal, PAYWALL_ENABLED } from '../premium'
+import { PLANS, openBillingPortal, PAYWALL_ENABLED, redeemGift } from '../premium'
+import { openGift } from './Gift'
 import { openSupport } from '../support'
 
 const INK = '#1A2A4F'
@@ -9,6 +10,19 @@ const fmt = (iso) => (iso ? new Date(iso).toLocaleDateString('fr-FR', { day: 'nu
 export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
   const [busy, setBusy] = useState('')
   const [err, setErr] = useState('')
+  const [code, setCode] = useState('')
+  const [giftMsg, setGiftMsg] = useState('')
+  const redeem = async (e) => {
+    e.preventDefault(); setBusy('gift'); setGiftMsg('')
+    try {
+      const r = await redeemGift(user, code)
+      window.dispatchEvent(new CustomEvent('mokalibo:welcome', { detail: { gift: true, applied: r.applied, until: r.until } }))
+      setGiftMsg('✅'); setTimeout(() => window.location.reload(), 2500)
+    } catch (e2) {
+      setGiftMsg({ used: 'Ce code a déjà été utilisé.', mine: 'Ce code est déjà activé sur ton compte.', unknown: 'Code introuvable : vérifie les lettres.', code: 'Le code ressemble à MOKA-XXXX-XXXX.', limit: 'Trop d’essais aujourd’hui. Réessaie demain.' }[e2.message] || 'L’activation a échoué. Réessaie.')
+    }
+    setBusy('')
+  }
   const go = async (flow) => {
     setBusy(flow || 'portal'); setErr('')
     try { await openBillingPortal(user, flow) } catch (e) {
@@ -27,6 +41,12 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
   if (kind === 'school') {
     title = '🏫 Licence École active'
     lines = ['Accès illimité pour tous les élèves de l’école.', 'Facturation sur devis : pour toute question, écris-nous.']
+  } else if (kind === 'giftcard') {
+    title = '🎁 Carte cadeau'
+    lines = [`Accès illimité jusqu'au ${fmt(account.giftUntil)}.`, 'Ensuite, la version gratuite reprend automatiquement : aucun prélèvement.']
+    actions = PAYWALL_ENABLED && onOpenOffer && (
+      <button type="button" onClick={onOpenOffer} style={btn('#F1F4F8', INK)}>⭐ Prolonger avec la Formule Famille</button>
+    )
   } else if (kind === 'gift') {
     title = '🎁 Accès illimité offert'
     lines = ['Rien à payer : profite de toutes les aventures !']
@@ -76,6 +96,18 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
       {lines.map((l) => <div key={l} style={{ fontSize: 14, fontWeight: 700, color: '#455A64', lineHeight: 1.5 }}>{l}</div>)}
       {actions}
       {err && <div style={{ marginTop: 8, fontSize: 13, fontWeight: 800, color: '#C62828' }}>{err}</div>}
+      {kind !== 'school' && kind !== 'gift' && kind !== 'lifetime' && (
+        <form onSubmit={redeem} style={{ marginTop: 12, paddingTop: 10, borderTop: '2px solid #F1F4F8' }}>
+          <div style={{ fontSize: 13, fontWeight: 900, color: '#E65100', marginBottom: 6 }}>🎁 J’ai un code cadeau</div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="MOKA-XXXX-XXXX" maxLength={20} autoCapitalize="characters"
+              style={{ flex: 1, minWidth: 0, padding: '10px 12px', borderRadius: 12, border: '2px solid #FFE0B2', fontFamily: 'inherit', fontSize: 15, fontWeight: 900, letterSpacing: 1, color: INK }} />
+            <button type="submit" disabled={!code || !!busy} style={{ border: 'none', borderRadius: 12, padding: '0 14px', background: '#FF7A00', color: 'white', fontWeight: 900, fontFamily: 'inherit', cursor: 'pointer', opacity: !code ? 0.5 : 1 }}>{busy === 'gift' ? '…' : 'Activer'}</button>
+          </div>
+          {giftMsg && giftMsg !== '✅' && <div style={{ marginTop: 6, fontSize: 13, fontWeight: 800, color: '#C62828' }}>{giftMsg}</div>}
+        </form>
+      )}
+      <button type="button" onClick={openGift} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#E65100', fontWeight: 900, fontFamily: 'inherit', fontSize: 13, cursor: 'pointer', textDecoration: 'underline' }}>🎁 Offrir Mokalibo à une autre famille</button>
       <div style={{ marginTop: 10, fontSize: 12, fontWeight: 700, color: '#90A4AE', lineHeight: 1.5 }}>
         Paiement sécurisé par Stripe. Résiliation aussi possible sans connexion : <a href="/kuendigen" target="_blank" rel="noopener" style={{ color: 'inherit' }}>Verträge hier kündigen</a> ·{' '}
         <button type="button" onClick={() => openSupport({ where: 'subscription', topic: 'payment' })} style={{ background: 'none', border: 'none', padding: 0, color: '#1565C0', fontWeight: 900, fontFamily: 'inherit', fontSize: 12, cursor: 'pointer', textDecoration: 'underline' }}>une question ?</button>

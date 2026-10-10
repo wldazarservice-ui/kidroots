@@ -36,6 +36,8 @@ import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
 import { setLimits } from './limits'
 import { refreshOfflineIfNeeded } from './offline'
+import { pendingGift, clearPendingGift } from './components/Gift'
+import { redeemGift } from './premium'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import ScreenTimeLock from './components/ScreenTimeLock'
 import ParentStats from './components/ParentStats'
@@ -221,6 +223,23 @@ export default function App() {
 
   // Mode voyage : apres une mise a jour de l'app, retelecharge les pays choisis (en arriere-plan)
   useEffect(() => { if (user) refreshOfflineIfNeeded(lang) }, [user, lang])
+
+  // Carte cadeau recue (lien ?cadeau=CODE) : activation automatique une fois connecte
+  useEffect(() => {
+    const code = pendingGift()
+    if (!user || !code) return
+    redeemGift(user, code)
+      .then((r) => {
+        clearPendingGift()
+        setPremium(true)
+        window.dispatchEvent(new CustomEvent('mokalibo:welcome', { detail: { gift: true, applied: r.applied, until: r.until } }))
+        fetchAccountStatus(user).then((st) => { setLimits(st); setAccount(st) }).catch(() => {})
+      })
+      .catch((e) => {
+        if (['used', 'mine', 'unknown', 'code'].includes(e.message)) clearPendingGift()
+        setToast(e.message === 'mine' ? 'gift_mine' : e.message === 'used' ? 'gift_used' : 'gift_bad'); setTimeout(() => setToast(null), 6000)
+      })
+  }, [user])
 
   // Retour de la page de paiement Stripe (?checkout=success&session_id=...)
   useEffect(() => {

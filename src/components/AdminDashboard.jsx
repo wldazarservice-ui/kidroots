@@ -16,6 +16,8 @@ const FUNNEL = [
   ['trial', '🎁 Essais 3 jours'],
   ['school_request', '🏫 Demandes écoles'],
   ['support', '💬 Messages support'],
+  ['gift_purchase', '🎁 Cartes cadeaux vendues'],
+  ['gift_redeem', '🎟️ Cartes cadeaux activées'],
   ['purchase', '⭐ Nouveaux abonnés'],
 ]
 

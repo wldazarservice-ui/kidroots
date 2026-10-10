@@ -102,6 +102,7 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Variables Netlify requises : voir `.env.example`. Garder `firebase-admin` en v13 (v14 plante sur Netlify : jose ESM).
 - Engagement : 5 % de chaque abonnement reverses chaque trimestre a la protection de l'enfance, bilan dans `public/dons.html` (a mettre a jour a chaque versement).
 - Mode voyage (hors-ligne) : `src/offline.js` + `TripDownload.jsx` (choix des pays et des jeux), Firestore en cache local (`src/firebase.js`), traductions pre-chargees par paquets (`translateMany`), max 40 pays par langue traduite.
+- Cartes cadeaux « Offrir Mokalibo » (14,99 €, 12 mois, code MOKA-XXXX-XXXX valable 3 ans) : create-gift-checkout, gift-status, redeem-gift, `ensureGift` (webhook), `giftUntil` sur users, page #offrir, `Gift.jsx`, lien ?cadeau=CODE.
 - Pages legales : generer avec `python3 scripts/legal/build.py` (ne pas editer public/agb.html etc. a la main).
 - Page de presentation : `LandingScreen.jsx` (visiteurs non connectes, textes fr/en/de dans le fichier).
 - Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).

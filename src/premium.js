@@ -87,3 +87,20 @@ export async function fetchMetrics(user, days = 30) {
 
 export const OWNER_EMAILS = ['wld.azarservice@gmail.com']
 export const isOwnerEmail = (email) => !!email && OWNER_EMAILS.includes(email.toLowerCase())
+
+// ── Cartes cadeaux ─────────────────────────────────────────────
+export const GIFT_PRICE = '14,99 €'
+async function post(path, body, user) {
+  const headers = { 'content-type': 'application/json' }
+  if (user) headers.authorization = `Bearer ${await user.getIdToken()}`
+  const res = await fetch(path, { method: 'POST', headers, body: JSON.stringify(body || {}) })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`)
+  return data
+}
+export async function startGiftCheckout(info, user) {
+  const data = await post('/api/create-gift-checkout', info, user)
+  window.location.assign(data.url)
+}
+export const giftStatus = (sessionId) => post('/api/gift-status', { sessionId })
+export const redeemGift = (user, code) => post('/api/redeem-gift', { code }, user)

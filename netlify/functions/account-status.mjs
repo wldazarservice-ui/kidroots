@@ -1,5 +1,5 @@
 // Appele a la connexion : applique un acces offert (COMP_EMAILS) et renvoie l'etat de l'abonnement
-import { verifyUser, isComp, isOwner, isSchool, db, json, FieldValue, refCodeFor, trialEligible, TRIAL_DAYS, TIERS } from '../lib/shared.mjs'
+import { verifyUser, isComp, isOwner, isSchool, db, json, FieldValue, refCodeFor, trialEligible, TRIAL_DAYS, TIERS, giftActive } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
@@ -32,12 +32,19 @@ export default async (req) => {
     data = { ...data, ...upd }
   }
 
+  // Carte cadeau expiree (et pas d'autre acces) : retour a la version gratuite
+  const subActive = !!data.subscriptionId && ['active', 'trialing', 'past_due'].includes(data.subStatus)
+  if (data.premium && data.giftUntil && !giftActive(data) && !subActive && !data.comp && !data.school) {
+    await ref.set({ premium: false }, { merge: true })
+    data = { ...data, premium: false }
+  }
+
   if (!data.refCode) {
     data.refCode = refCodeFor(user.uid)
     await ref.set({ refCode: data.refCode }, { merge: true }).catch(() => {})
   }
 
-  const kind = !data.premium ? 'free' : data.school ? 'school' : data.subscriptionId ? 'subscription' : data.comp ? 'gift' : 'lifetime'
+  const kind = !data.premium ? 'free' : data.school ? 'school' : subActive ? 'subscription' : data.comp ? 'gift' : giftActive(data) ? 'giftcard' : data.subscriptionId ? 'subscription' : 'lifetime'
   return json(200, {
     premium: !!data.premium,
     kind,
@@ -55,6 +62,7 @@ export default async (req) => {
     trialing: data.subStatus === 'trialing',
     subStatus: data.subStatus || null,
     hasCustomer: !!data.stripeCustomerId,
+    giftUntil: data.giftUntil?.toDate?.()?.toISOString() || null,
   })
 }
 

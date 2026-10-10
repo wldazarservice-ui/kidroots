@@ -1,5 +1,6 @@
 // Outils communs aux fonctions de paiement (Stripe + Firebase Admin)
 import Stripe from 'stripe'
+import { randomInt } from 'node:crypto'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore, FieldValue } from 'firebase-admin/firestore'
@@ -100,9 +101,10 @@ export async function syncSubscription(uid, sub) {
     // Un compte ecole garde ses limites ; sinon limites de la formule tant qu'elle est active
     const limits = prev.school ? {} : (active ? { tier, ...TIERS[tier] } : { tier: 'family', ...TIERS.family })
     // Un ancien achat « a vie » reste valable quoi qu'il arrive
-    const lifetime = prev.premium && !prev.subscriptionId
+    const lifetime = prev.premium && !prev.subscriptionId && !prev.giftUntil
+    const giftValid = giftActive(prev)
     tx.set(ref, {
-      premium: lifetime || active,
+      premium: lifetime || active || giftValid || !!prev.comp || !!prev.school,
       premiumAt: prev.premiumAt || FieldValue.serverTimestamp(),
       subscriptionId: sub.id,
       subStatus: sub.status,
@@ -121,7 +123,7 @@ export async function syncSubscription(uid, sub) {
 // purchase = nouvel abonne ; payment = chaque prelevement encaisse (revenueCents) ; cancel = resiliation
 // Un document par jour : metrics/AAAA-MM-JJ = { landing_view: 12, signup: 3, ... }
 // Aucune donnee personnelle (ni IP, ni identifiant) n'est enregistree.
-export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial', 'school_request', 'support']
+export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial', 'school_request', 'support', 'gift_purchase', 'gift_redeem']
 export const today = () => new Date().toISOString().slice(0, 10)
 
 export async function countEvent(event, { source, revenueCents, plan } = {}) {
@@ -177,3 +179,49 @@ export async function sendMail({ to, subject, text, replyTo }) {
   return !!res?.ok
 }
 export const ownerEmails = () => (process.env.OWNER_EMAILS || 'wld.azarservice@gmail.com').split(',').map((e) => e.trim()).filter(Boolean)
+
+// ── Cartes cadeaux « Offrir Mokalibo » (1 an de Formule Famille) ─────────────
+export const GIFT = { cents: 1499, months: 12, label: 'Mokalibo — Carte cadeau 1 an (Formule Famille)' }
+export const giftActive = (d = {}) => {
+  const u = d.giftUntil?.toDate ? d.giftUntil.toDate() : d.giftUntil ? new Date(d.giftUntil) : null
+  return !!u && u > new Date()
+}
+const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // sans 0/O ni 1/I
+export function newGiftCode() {
+  const pick = () => Array.from({ length: 4 }, () => ALPHA[randomInt(ALPHA.length)]).join('')
+  return `MOKA-${pick()}-${pick()}`
+}
+export const normGiftCode = (c) => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^MOKA/, '').replace(/^(.{4})(.{4})$/, 'MOKA-$1-$2')
+
+// Cree la carte cadeau d'une session Stripe payee (idempotent : appele par le webhook ET par la page de succes)
+export async function ensureGift(session) {
+  if (session.mode !== 'payment' || session.metadata?.kind !== 'gift' || session.payment_status !== 'paid') return null
+  const lock = db().doc(`giftSessions/${session.id}`)
+  const res = await db().runTransaction(async (tx) => {
+    const l = await tx.get(lock)
+    if (l.exists) return { code: l.data().code, fresh: false }
+    const code = newGiftCode()
+    const m = session.metadata || {}
+    tx.set(lock, { code, at: FieldValue.serverTimestamp() })
+    tx.set(db().doc(`gifts/${code}`), {
+      status: 'new', months: GIFT.months, sessionId: session.id,
+      buyerEmail: session.customer_details?.email || session.customer_email || null,
+      to: m.to || '', from: m.from || '', message: m.message || '',
+      amount: session.amount_total || GIFT.cents, createdAt: FieldValue.serverTimestamp(),
+    })
+    return { code, fresh: true }
+  })
+  const g = (await db().doc(`gifts/${res.code}`).get()).data() || {}
+  if (res.fresh) {
+    await countEvent('gift_purchase').catch(() => {})
+    await countEvent('payment', { revenueCents: session.amount_total || GIFT.cents }).catch(() => {})
+    if (g.buyerEmail) {
+      await sendMail({
+        to: g.buyerEmail,
+        subject: '🎁 Votre carte cadeau Mokalibo',
+        text: `Merci pour votre achat !\n\nCode cadeau : ${res.code}\n${g.to ? `Pour : ${g.to}\n` : ''}\nPour l'activer (1 an de Formule Famille, jusqu'à 5 enfants) :\n1. Ouvrir https://mokalibo.com/?cadeau=${res.code}\n2. Créer un compte parent gratuit (ou se connecter)\n3. L'accès illimité s'active automatiquement.\n\nLe code est valable 3 ans. Vous pouvez imprimer ou envoyer la carte depuis la page de confirmation.\n\nMokalibo · L'histoire du monde, racontée aux enfants\n5 % de chaque achat vont à la protection de l'enfance 💛`,
+      }).catch(() => {})
+    }
+  }
+  return { code: res.code, to: g.to, from: g.from, message: g.message }
+}

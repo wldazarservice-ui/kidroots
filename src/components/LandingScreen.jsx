@@ -5,6 +5,13 @@ import { track } from '../track'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
 import SchoolsPage from './SchoolsPage'
+import { openGift, pendingGift } from './Gift'
+
+const GIFT_TXT = {
+  fr: { title: 'Offrir Mokalibo', sub: 'Un cadeau qui dure toute l’année : 195 pays, des histoires vraies lues à voix haute, des quiz et des jeux. Pour les enfants de 4 à 12 ans, sans publicité.', points: ['🎁 1 an de Formule Famille (jusqu’à 5 enfants) · 14,99 €', '⚡ Code cadeau reçu tout de suite après le paiement', '🖨️ Jolie carte à imprimer ou à envoyer par WhatsApp', '👵 Idéal pour les grands-parents, parrains et marraines', '💛 5 % vont à la protection de l’enfance'], cta: '🎁 Offrir Mokalibo · 14,99 €', note: 'Paiement unique, sans abonnement · valable 3 ans' },
+  en: { title: 'Give Mokalibo', sub: 'A gift that lasts all year: 195 countries, true stories read aloud, quizzes and games. For children aged 4 to 12, no ads.', points: ['🎁 1 year of the Family Plan (up to 5 children) · €14.99', '⚡ Gift code right after payment', '🖨️ A lovely card to print or send on WhatsApp', '👵 Perfect for grandparents and godparents', '💛 5% goes to child protection'], cta: '🎁 Give Mokalibo · €14.99', note: 'One-time payment, no subscription · valid for 3 years' },
+  de: { title: 'Mokalibo verschenken', sub: 'Ein Geschenk, das das ganze Jahr hält: 195 Länder, wahre Geschichten zum Vorlesen, Quiz und Spiele. Für Kinder von 4 bis 12, ohne Werbung.', points: ['🎁 1 Jahr Familien-Abo (bis zu 5 Kinder) · 14,99 €', '⚡ Geschenkcode sofort nach der Zahlung', '🖨️ Schöne Karte zum Ausdrucken oder per WhatsApp', '👵 Ideal für Großeltern, Paten und Patinnen', '💛 5 % gehen an den Kinderschutz'], cta: '🎁 Mokalibo verschenken · 14,99 €', note: 'Einmalzahlung, kein Abo · 3 Jahre gültig' },
+}
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode } from '../track'
@@ -276,11 +283,11 @@ function PhoneMockup({ T, lang }) {
 
 
 // Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
-const PAGES = ['home', 'discover', 'countries', 'pricing', 'ecoles', 'faq']
+const PAGES = ['home', 'discover', 'countries', 'pricing', 'offrir', 'ecoles', 'faq']
 const NAV = {
-  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
-  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries', dons: 'See our donation report' },
-  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
+  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', offrir: '🎁 Offrir', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: '🎁 Offrir Mokalibo →', offrir: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
+  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', offrir: '🎁 Gift', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: '🎁 Give Mokalibo →', offrir: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries', dons: 'See our donation report' },
+  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', offrir: '🎁 Schenken', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: '🎁 Mokalibo verschenken →', offrir: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
 }
 const pageFromHash = () => {
   const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
@@ -313,6 +320,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   const h2 = { fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, textAlign: 'center', margin: '0 0 22px', lineHeight: 1.15 }
 
   const NV = NAV[lang] || NAV.en
+  const GT = GIFT_TXT[lang] || GIFT_TXT.en
   const go = (p) => {
     setMenuOpen(false)
     if (p === page) return
@@ -358,6 +366,11 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
         )}
       </header>
 
+      {pendingGift() && (
+        <button onClick={onSignup} style={{ display: 'block', width: '100%', border: 'none', cursor: 'pointer', background: 'linear-gradient(90deg,#43C27A,#2E9E5B)', color: 'white', textAlign: 'center', fontWeight: 900, fontSize: 15, padding: '12px 14px', fontFamily: 'inherit' }}>
+          {t(lang, 'gift_banner')} →
+        </button>
+      )}
       {referralCode() && (
         <div style={{ background: 'linear-gradient(90deg,#FF9A1F,#FF6F00)', color: 'white', textAlign: 'center', fontWeight: 900, fontSize: 15, padding: '10px 14px' }}>
           {t(lang, 'lp_ami')}
@@ -509,6 +522,20 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
       </section>
 
       </>)}
+      {page === 'offrir' && (
+      <section className="home-sky" style={{ padding: '56px 16px' }}>
+        <div className="lp-wrap" style={{ maxWidth: 760, textAlign: 'center' }}>
+          <div className="float" style={{ fontSize: 80 }}>🎁</div>
+          <h2 className="reveal" style={h2}>{GT.title}</h2>
+          <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.6, maxWidth: 600, margin: '0 auto 20px' }}>{GT.sub}</p>
+          <div style={{ display: 'grid', gap: 10, maxWidth: 520, margin: '0 auto 24px', textAlign: 'left' }}>
+            {GT.points.map((p) => <div key={p} style={{ background: 'white', borderRadius: 18, padding: '12px 16px', fontSize: 16, fontWeight: 800, boxShadow: '0 4px 14px rgba(26,42,79,0.06)' }}>{p}</div>)}
+          </div>
+          <button className="btn-kid soft anim-glow" onClick={openGift} style={{ ...primary, background: 'linear-gradient(180deg,#FF9A1F,#FF6F00)', color: 'white', boxShadow: '0 7px 0 #C75000' }}>{GT.cta}</button>
+          <div style={{ fontSize: 13, fontWeight: 800, color: '#607D8B', marginTop: 12 }}>{GT.note}</div>
+        </div>
+      </section>
+      )}
       {page === 'ecoles' && <SchoolsPage lang={lang} onSignup={onSignup} h2={h2} primary={primary} />}
       {page === 'faq' && (<>
       {/* ── FAQ ── */}

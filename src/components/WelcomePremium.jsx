@@ -9,6 +9,7 @@ const TXT = {
     unlocked: 'Ce qui est débloqué dès maintenant :',
     items: (pro) => ['📚 Histoires illimitées dans les 195 pays', '🎮 Jeux illimités', pro ? '🧒 Jusqu’à 35 élèves et 5 appareils' : '👧 Jusqu’à 5 enfants et 5 appareils', '🦉 Les 3 niveaux, du petit au grand explorateur', '🚫 Toujours sans publicité'],
     trial: (d) => `🎁 Ton essai gratuit dure jusqu’au ${d}. Aucun prélèvement avant cette date.`,
+    gift: (d) => `🎁 Carte cadeau activée : accès illimité jusqu’au ${d}.`, gift_credit: '🎁 Carte cadeau activée : 14,99 € seront déduits de tes prochaines factures.',
     paid: 'Ton reçu arrive par e-mail.',
     easy: 'Tout se gère en 2 clics dans 👤 Mon compte → Mon abonnement (carte, factures, résiliation).',
     tip: 'Astuce : crée un profil pour chaque enfant, chacun garde sa progression et son passeport.',
@@ -20,6 +21,7 @@ const TXT = {
     unlocked: 'Unlocked right now:',
     items: (pro) => ['📚 Unlimited stories in all 195 countries', '🎮 Unlimited games', pro ? '🧒 Up to 35 pupils and 5 devices' : '👧 Up to 5 children and 5 devices', '🦉 All 3 reading levels', '🚫 Always ad-free'],
     trial: (d) => `🎁 Your free trial runs until ${d}. Nothing is charged before then.`,
+    gift: (d) => `🎁 Gift card activated: unlimited access until ${d}.`, gift_credit: '🎁 Gift card activated: €14.99 will be deducted from your next invoices.',
     paid: 'Your receipt is on its way by e-mail.',
     easy: 'Manage everything in 2 clicks in 👤 My account → My subscription (card, invoices, cancellation).',
     tip: 'Tip: create a profile for each child, so everyone keeps their own progress and passport.',
@@ -31,6 +33,7 @@ const TXT = {
     unlocked: 'Ab sofort freigeschaltet:',
     items: (pro) => ['📚 Unbegrenzte Geschichten in allen 195 Ländern', '🎮 Unbegrenzte Spiele', pro ? '🧒 Bis zu 35 Schüler und 5 Geräte' : '👧 Bis zu 5 Kinder und 5 Geräte', '🦉 Alle 3 Lesestufen', '🚫 Immer ohne Werbung'],
     trial: (d) => `🎁 Dein kostenloser Test läuft bis zum ${d}. Vorher wird nichts abgebucht.`,
+    gift: (d) => `🎁 Geschenkkarte aktiviert: unbegrenzter Zugang bis zum ${d}.`, gift_credit: '🎁 Geschenkkarte aktiviert: 14,99 € werden von deinen nächsten Rechnungen abgezogen.',
     paid: 'Deine Quittung kommt per E-Mail.',
     easy: 'Alles mit 2 Klicks unter 👤 Mein Konto → Mein Abo (Karte, Rechnungen, Kündigung).',
     tip: 'Tipp: Lege für jedes Kind ein Profil an, so behält jedes seinen Fortschritt und Reisepass.',
@@ -51,7 +54,7 @@ export default function WelcomePremium() {
   const lang = getLang()
   const T = TXT[lang] || TXT.en
   const pro = info.tier === 'teacher'
-  const date = info.until ? new Date(info.until).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long' }) : ''
+  const date = info.until ? new Date(info.until).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', ...(info.gift && { year: 'numeric' }) }) : ''
 
   return (
     <div className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.55)', zIndex: 740, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, overflow: 'hidden' }}>
@@ -68,7 +71,7 @@ export default function WelcomePremium() {
           {T.items(pro).map((it) => <div key={it} style={{ fontSize: 15, fontWeight: 800, padding: '3px 0' }}>{it}</div>)}
         </div>
         <div style={{ fontSize: 14, fontWeight: 800, color: '#37474F', lineHeight: 1.5, textAlign: 'left' }}>
-          <div style={{ marginBottom: 6 }}>{info.trialing && date ? T.trial(date) : T.paid}</div>
+          <div style={{ marginBottom: 6 }}>{info.gift ? (info.applied === 'credit' ? T.gift_credit : T.gift(date)) : info.trialing && date ? T.trial(date) : T.paid}</div>
           <div style={{ marginBottom: 6 }}>✅ {T.easy}</div>
           <div style={{ color: '#607D8B' }}>💡 {T.tip}</div>
         </div>
