@@ -174,7 +174,7 @@ export async function sendMail({ to, subject, text, replyTo }) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: process.env.MAIL_FROM, to: Array.isArray(to) ? to : [to], subject, text, ...(replyTo && { reply_to: replyTo }) }),
+    body: JSON.stringify({ from: process.env.MAIL_FROM, to: Array.isArray(to) ? to : [to], subject, text, reply_to: replyTo || process.env.MAIL_REPLY_TO || 'contact@azarconsulting.eu' }),
   }).catch(() => null)
   return !!res?.ok
 }
