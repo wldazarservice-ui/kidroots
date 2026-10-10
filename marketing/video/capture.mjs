@@ -46,7 +46,7 @@ const guestNames = { fr: 'Lina', en: 'Lily', de: 'Lena' }
 await page.evaluate(async (lang, name) => {
   const { COUNTRIES } = await import('/src/data/countries.js')
   const done = {}
-  for (const code of ['JP', 'EG', 'BR', 'FR', 'MA', 'SN', 'IN', 'KE', 'MX', 'IT', 'AU', 'CN']) {
+  for (const code of ['EG', 'BR', 'FR', 'MA', 'SN', 'IN', 'KE', 'MX', 'IT', 'AU', 'CN']) {
     for (const ch of COUNTRIES[code]?.chapters || []) done[ch.id] = true
   }
   localStorage.clear()
@@ -77,9 +77,8 @@ async function shot(name, full = false) {
   console.log(lang, name)
 }
 
-await page.reload({ waitUntil: 'networkidle0' })
+await page.goto(BASE + '?demo=1', { waitUntil: 'networkidle0' })
 await sleep(800)
-await clickText(guestNames[lang])
 await settle()
 await shot('home')
 await shot('home_full', true)
@@ -97,10 +96,15 @@ await settle()
 await shot('regions_full', true)
 await shot('regions')
 
-// Pays : Mali
+// Pays : Japon (onglet Asie)
 await page.evaluate(() => {
-  const el = [...document.querySelectorAll('button')].find((b) => b.innerText.includes('Mali'))
-  el.click()
+  const tab = [...document.querySelectorAll('button')].find((b) => /^\W*(Asie|Asia|Asien)\b/.test(b.innerText.trim()) || b.innerText.trim().endsWith('Asie') || b.innerText.trim().endsWith('Asien') || b.innerText.trim().endsWith('Asia'))
+  tab && tab.click()
+})
+await sleep(1200)
+await page.evaluate(() => {
+  const el = [...document.querySelectorAll('button')].find((b) => /Japon|Japan/.test(b.innerText))
+  el.scrollIntoView({ block: 'center' }); el.click()
 })
 await settle(2500)
 await shot('country')
@@ -116,21 +120,20 @@ await shot('intro')
 await clickText(await T('start_explore'))
 await settle(2200)
 await shot('card1')
-await page.evaluate(() => document.querySelector('.card-flip-wrapper').click())
-await sleep(1500)
+const factTap = await T('card_fact_tap')
+await clickText(factTap)
+await sleep(1200)
 await shot('card1_open')
 const nextDoc = await T('next_doc')
 await clickText(nextDoc)
 await settle(1800)
-await page.evaluate(() => document.querySelector('.card-flip-wrapper').click())
-await sleep(1500)
+await clickText(factTap)
+await sleep(1200)
 await shot('card2_open')
 // Fin des cartes
 for (let i = 0; i < 12; i++) {
   const has = await page.evaluate(() => !!document.querySelector('.card-flip-wrapper'))
   if (!has) break
-  await page.evaluate(() => document.querySelector('.card-flip-wrapper').click())
-  await sleep(500)
   await page.evaluate((a, b) => {
     const el = [...document.querySelectorAll('button')].find((x) => x.innerText.includes(a) || x.innerText.includes(b))
     el && el.click()
@@ -162,9 +165,8 @@ await settle(3000)
 await shot('result')
 
 // Carte, passeport, jeux
-await page.reload({ waitUntil: 'networkidle0' })
+await page.goto(BASE + '?demo=1', { waitUntil: 'networkidle0' })
 await sleep(800)
-await clickText(guestNames[lang])
 await settle(1000)
 await page.evaluate(() => document.querySelectorAll('.bottom-nav button')[2].click())
 await settle(2500)

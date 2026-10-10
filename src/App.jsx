@@ -109,7 +109,8 @@ export default function App() {
   const [adminOpen, setAdminOpen] = useState(false)
   // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
   const [guest, setGuest] = useState(loadGuest)
-  const [guestPlaying, setGuestPlaying] = useState(false)
+  // Mode demo (developpement uniquement, ?demo=1) : profil local pour les captures marketing
+  const [guestPlaying, setGuestPlaying] = useState(() => import.meta.env.DEV && new URLSearchParams(window.location.search).has('demo'))
   const [authMode, setAuthMode] = useState(() => (isStandalone() ? 'signin' : null)) // null = page de presentation
 
   const difficulty = activeChild?.difficulty || 'explorer'
