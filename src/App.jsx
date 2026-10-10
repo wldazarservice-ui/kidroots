@@ -35,6 +35,7 @@ import Paywall from './components/Paywall'
 import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
 import { setLimits } from './limits'
+import { refreshOfflineIfNeeded } from './offline'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import ScreenTimeLock from './components/ScreenTimeLock'
 import ParentStats from './components/ParentStats'
@@ -184,8 +185,8 @@ export default function App() {
             verifyEmail(user).then(() => { setToast('verify_sent'); setTimeout(() => setToast(null), 6000) }).catch(() => {})
           }
         }).catch((e) => console.error('Account status error:', e))
-        // 5 appareils maximum par compte
-        const reg = await registerDevice(user.uid)
+        // 5 appareils maximum par compte (verifie seulement en ligne ; hors-ligne on laisse jouer)
+        const reg = navigator.onLine ? await registerDevice(user.uid).catch(() => ({ ok: true })) : { ok: true }
         if (cancelled) return
         if (!reg.ok) { setDeviceBlocked(true); return }
         setDeviceBlocked(false)
@@ -217,6 +218,9 @@ export default function App() {
     })()
     return () => { cancelled = true }
   }, [user, userReload])
+
+  // Mode voyage : apres une mise a jour de l'app, retelecharge les pays choisis (en arriere-plan)
+  useEffect(() => { if (user) refreshOfflineIfNeeded(lang) }, [user, lang])
 
   // Retour de la page de paiement Stripe (?checkout=success&session_id=...)
   useEffect(() => {
@@ -303,7 +307,7 @@ export default function App() {
     if (!user) return
     setProfileLoading(true)
     try {
-      await setActiveChild(user.uid, childId)
+      setActiveChild(user.uid, childId).catch(() => {}) // sans attendre : marche aussi hors-ligne
       const ac = await loadChild(user.uid, childId)
       if (ac) {
         setActiveChildState(ac)

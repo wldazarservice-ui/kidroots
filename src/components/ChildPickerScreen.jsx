@@ -5,6 +5,7 @@ import DeleteAccount from './DeleteAccount'
 import ResetProgress from './ResetProgress'
 import ScreenTimeSettings from './ScreenTimeSettings'
 import AccountSettings from './AccountSettings'
+import TripDownload from './TripDownload'
 import InviteFamily from './InviteFamily'
 import { signOut } from '../auth'
 import { t } from '../i18n'
@@ -31,6 +32,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   const [timing, setTiming] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const [inviteOpen, setInviteOpen] = useState(false)
+  const [trip, setTrip] = useState(false)
 
   const pickAge = (a) => {
     setAge(a)
@@ -144,6 +146,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               🎁 {t(lang, 'inv_btn')}
             </button>
           )}
+          {kids.length > 0 && (
+            <button className="btn-kid soft" onClick={() => setTrip(true)}
+              style={{ width: '100%', background: 'linear-gradient(135deg,#E3F2FD,#BBDEFB)', color: '#0D47A1', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.15)' }}>
+              {t(lang, 'trip_btn')}
+            </button>
+          )}
           <button className="btn-kid soft" onClick={() => openSupport({ where: 'picker', gate: true })}
             style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
             💬 {t(lang, 'support_link')}
@@ -202,6 +210,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
         </>
       )}
+      {trip && <TripDownload lang={lang} onClose={() => setTrip(false)} />}
       {inviteOpen && <InviteFamily lang={lang} account={account} onClose={() => setInviteOpen(false)} />}
       {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} account={account} onOpenOffer={onOpenOffer} />}
       {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}

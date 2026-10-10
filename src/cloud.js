@@ -29,7 +29,7 @@ export async function ensureUserDoc(user) {
   }
   // Garde l'e-mail à jour si le parent l'a changé dans « Mon compte »
   if (user.email && snap.data().email !== user.email) {
-    try { await updateDoc(ref, { email: user.email }) } catch {}
+    updateDoc(ref, { email: user.email }).catch(() => {}) // sans attendre (hors-ligne : synchronise plus tard)
   }
   return snap.data()
 }

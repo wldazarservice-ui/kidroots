@@ -97,3 +97,49 @@ export async function translateObject(value, dst) {
   }
   return value
 }
+
+// Toutes les chaines traduisibles d'un objet (memes regles que translateObject)
+export function collectStrings(value, out = new Set()) {
+  if (typeof value === 'string') { if (value.trim()) out.add(value) }
+  else if (Array.isArray(value)) value.forEach((v) => collectStrings(v, out))
+  else if (value && typeof value === 'object') for (const [k, v] of Object.entries(value)) if (!SKIP_KEYS.has(k)) collectStrings(v, out)
+  return out
+}
+
+// Traduit beaucoup de chaines a l'avance (mode voyage). Les phrases sont envoyees par paquets
+// (separees par des retours a la ligne) pour aller vite ; si un paquet revient mal decoupe,
+// on retraduit ses phrases une par une.
+export async function translateMany(strings, dst, onEach) {
+  if (!isTranslatable(dst)) return
+  loadCache()
+  const todo = [...strings].filter((s) => !cache[`${dst}|${s}`])
+  const single = todo.filter((s) => s.includes('\n'))
+  const batches = []
+  let cur = [], len = 0
+  for (const s of todo.filter((x) => !x.includes('\n'))) {
+    if (cur.length && len + s.length > 1000) { batches.push(cur); cur = []; len = 0 }
+    cur.push(s); len += s.length + 1
+  }
+  if (cur.length) batches.push(cur)
+
+  let i = 0
+  const worker = async () => {
+    while (i < batches.length) {
+      const batch = batches[i++]
+      let lines = null
+      try {
+        const raw = decode(await fetchGoogle(batch.join('\n'), dst))
+        lines = raw.split('\n').map((l) => l.trim())
+      } catch { lines = null }
+      if (lines && lines.length === batch.length && lines.every(Boolean)) {
+        batch.forEach((s, k) => { cache[`${dst}|${s}`] = lines[k] })
+      } else {
+        for (const s of batch) await translateString(s, dst)
+      }
+      onEach?.(batch.length)
+    }
+  }
+  await Promise.all(Array.from({ length: 3 }, worker))
+  for (const s of single) await translateString(s, dst)
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)) } catch {}
+}

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import SupportSheet from './components/SupportSheet'
 import WelcomePremium from './components/WelcomePremium'
+import OfflineBanner from './components/OfflineBanner'
 import { AuthProvider } from './auth.jsx'
 // Polices hebergees sur notre domaine (RGPD : aucune connexion aux serveurs Google)
 import '@fontsource/nunito/400.css'
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <App />
       <SupportSheet />
       <WelcomePremium />
+      <OfflineBanner />
     </AuthProvider>
   </React.StrictMode>,
 )

@@ -1,7 +1,7 @@
 // Configuration Firebase Mokalibo
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager, getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD2rOoIjILi0CsM3qVpghqwEKVcwoYSs9w',
@@ -15,5 +15,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
-export const db = getFirestore(app)
+// Copie locale de la base (IndexedDB) : l'app fonctionne hors-ligne et synchronise au retour du reseau
+let firestore
+try {
+  firestore = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) })
+} catch {
+  firestore = getFirestore(app) // navigateur sans IndexedDB (navigation privee…)
+}
+export const db = firestore
 export const googleProvider = new GoogleAuthProvider()
