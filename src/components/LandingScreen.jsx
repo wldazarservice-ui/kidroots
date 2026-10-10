@@ -32,7 +32,7 @@ const TXT = {
     story_text: "Un soir, mon fils m'a posé cette question. J'ai cherché une app qui raconte aux enfants l'histoire des pays, avec leurs héros, leurs dates et leurs cultures, et pas seulement celle de l'Europe. Je ne l'ai pas trouvée. Alors je l'ai créée.",
     story_sign: 'Walid, papa et créateur de Mokalibo',
     mission_slogan: 'Apprendre le monde, protéger les enfants.',
-    mission_text: 'Les revenus de Mokalibo financent l’entretien et l’amélioration de l’application. Le reste est reversé à des associations de protection de l’enfance.',
+    mission_text: '5 % de chaque abonnement sont reversés à des associations de protection de l’enfance, chaque trimestre, avec un bilan publié sur ce site. Le reste fait vivre et grandir l’application : serveurs, nouvelles histoires, nouveaux pays.',
     mission_kicker: 'Notre engagement',
     how_title: 'Comment ça marche ?',
     how: [
@@ -68,7 +68,7 @@ const TXT = {
     trial_badge: '🎁 3 jours offerts',
     faq_title: 'Questions fréquentes',
     faq: [
-      ['Où va l’argent des abonnements ?', 'Il finance d’abord l’entretien de l’application (serveurs, nouvelles histoires, nouveaux pays). Le reste est reversé à des associations de protection de l’enfance.'],
+      ['Où va l’argent des abonnements ?', '5 % de chaque abonnement sont reversés à des associations de protection de l’enfance, chaque trimestre, avec un bilan publié sur ce site. Les 95 % restants financent l’application : serveurs, nouvelles histoires, nouveaux pays.'],
       ['Comment marche l’essai de 3 jours ?', 'Vous profitez de la Formule Famille complète pendant 3 jours sans payer. À la fin de l’essai, l’abonnement choisi démarre automatiquement. Vous pouvez résilier en deux clics avant la fin : vous ne payez rien.'],
       ['C’est vraiment gratuit ?', 'Oui. Chaque enfant peut jouer 2 nouveaux chapitres et 3 parties de jeux par jour, dans tous les pays, sans limite de durée. La Formule Famille débloque des aventures illimitées pour 5 enfants.'],
       ['Comment résilier ?', 'En deux clics, dans l’app (« Mon abonnement ») ou sur la page « Verträge hier kündigen ». L’accès reste actif jusqu’à la fin de la période payée.'],
@@ -103,7 +103,7 @@ const TXT = {
     story_text: 'One evening my son asked me this question. I looked for an app that tells children the history of countries, with their heroes, dates and cultures, and not only Europe’s. I couldn’t find one. So I built it.',
     story_sign: 'Walid, dad and creator of Mokalibo',
     mission_slogan: 'Learn the world, protect children.',
-    mission_text: 'Mokalibo’s revenue pays for running and improving the app. The rest is donated to child protection charities.',
+    mission_text: '5% of every subscription goes to child protection charities, every quarter, with a report published on this site. The rest keeps the app running and growing: servers, new stories, new countries.',
     mission_kicker: 'Our commitment',
     how_title: 'How does it work?',
     how: [
@@ -139,7 +139,7 @@ const TXT = {
     trial_badge: '🎁 3 days free',
     faq_title: 'Frequently asked questions',
     faq: [
-      ['Where does the subscription money go?', 'First, it pays for running the app (servers, new stories, new countries). The rest is donated to child protection charities.'],
+      ['Where does the subscription money go?', '5% of every subscription goes to child protection charities, every quarter, with a report published on this site. The other 95% pay for the app: servers, new stories, new countries.'],
       ['How does the 3-day trial work?', 'You get the full Family Plan for 3 days without paying. When the trial ends, the plan you chose starts automatically. Cancel in two clicks before the end and you pay nothing.'],
       ['Is it really free?', 'Yes. Every child can play 2 new chapters and 3 games a day, in every country, with no time limit. The Family Plan unlocks unlimited adventures for 5 children.'],
       ['How do I cancel?', 'In two clicks, in the app (“My subscription”) or on the “Verträge hier kündigen” page. Access stays active until the end of the paid period.'],
@@ -174,7 +174,7 @@ const TXT = {
     story_text: 'Eines Abends stellte mir mein Sohn diese Frage. Ich suchte eine App, die Kindern die Geschichte der Länder erzählt, mit ihren Helden, Daten und Kulturen, und nicht nur die Europas. Ich fand keine. Also habe ich sie selbst gebaut.',
     story_sign: 'Walid, Papa und Gründer von Mokalibo',
     mission_slogan: 'Die Welt entdecken, Kinder schützen.',
-    mission_text: 'Die Einnahmen von Mokalibo finanzieren Betrieb und Weiterentwicklung der App. Der Rest wird an Kinderschutz-Organisationen gespendet.',
+    mission_text: '5 % jedes Abos spenden wir an Kinderschutz-Organisationen, jedes Quartal, mit einem Bericht auf dieser Website. Der Rest finanziert Betrieb und Weiterentwicklung der App: Server, neue Geschichten, neue Länder.',
     mission_kicker: 'Unser Versprechen',
     how_title: 'So funktioniert es',
     how: [
@@ -210,7 +210,7 @@ const TXT = {
     trial_badge: '🎁 3 Tage gratis',
     faq_title: 'Häufige Fragen',
     faq: [
-      ['Wohin geht das Geld der Abos?', 'Zuerst in den Betrieb der App (Server, neue Geschichten, neue Länder). Der Rest wird an Kinderschutz-Organisationen gespendet.'],
+      ['Wohin geht das Geld der Abos?', '5 % jedes Abos spenden wir an Kinderschutz-Organisationen, jedes Quartal, mit einem Bericht auf dieser Website. Die übrigen 95 % finanzieren die App: Server, neue Geschichten, neue Länder.'],
       ['Wie funktioniert der 3-Tage-Test?', 'Sie nutzen das komplette Familien-Abo 3 Tage lang kostenlos. Danach startet das gewählte Abo automatisch. Kündigen Sie vor Ablauf mit zwei Klicks, zahlen Sie nichts.'],
       ['Ist es wirklich kostenlos?', 'Ja. Jedes Kind kann täglich 2 neue Kapitel und 3 Spiele spielen, in allen Ländern, ohne zeitliche Begrenzung. Das Familien-Abo schaltet unbegrenzte Abenteuer für 5 Kinder frei.'],
       ['Wie kündige ich?', 'Mit zwei Klicks in der App („Mein Abo“) oder über „Verträge hier kündigen“. Der Zugang bleibt bis zum Ende des bezahlten Zeitraums bestehen.'],
@@ -278,9 +278,9 @@ function PhoneMockup({ T, lang }) {
 // Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
 const PAGES = ['home', 'discover', 'countries', 'pricing', 'ecoles', 'faq']
 const NAV = {
-  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays' },
-  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries' },
-  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder' },
+  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
+  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries', dons: 'See our donation report' },
+  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
 }
 const pageFromHash = () => {
   const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
@@ -410,6 +410,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
               <div style={{ fontSize: 13, fontWeight: 900, color: '#D81B60', letterSpacing: 1, textTransform: 'uppercase', marginTop: 4 }}>{T.mission_kicker}</div>
               <div style={{ fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, margin: '6px 0 12px', lineHeight: 1.15 }}>{T.mission_slogan}</div>
               <p style={{ fontSize: 17, lineHeight: 1.7, fontWeight: 700, color: '#37474F', margin: 0 }}>{T.mission_text}</p>
+              <a href="/dons" style={{ display: 'inline-block', marginTop: 10, color: '#D81B60', fontWeight: 900 }}>💛 {NV.dons}</a>
             </div>
           </div>
         </section>

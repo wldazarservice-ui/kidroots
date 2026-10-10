@@ -16,6 +16,8 @@ export default function LegalFooter({ lang = getLang(), install = true, gate = t
       <span style={{ color: '#A5C2AE', margin: '0 8px' }}>·</span>
       <a href="/kuendigen" style={link}>Verträge hier kündigen</a>
       <span style={{ color: '#A5C2AE', margin: '0 8px' }}>·</span>
+      <a href="/dons" style={link}>💛 {t(lang, 'dons_link')}</a>
+      <span style={{ color: '#A5C2AE', margin: '0 8px' }}>·</span>
       <button type="button" onClick={() => openSupport({ where: 'footer', gate })} style={{ ...link, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit' }}>💬 {t(lang, 'support_link')}</button>
       <div style={{ color: '#90A4AE', fontWeight: 700, marginTop: 6 }}>© Mokalibo</div>
     </div>

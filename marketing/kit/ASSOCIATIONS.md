@@ -5,11 +5,10 @@
 1. **On n'a pas besoin de leur permission pour donner.** N'importe qui peut faire un don en ligne et recevoir un reçu.
 2. **Mais on n'a PAS le droit d'utiliser leur nom ou leur logo** (« en partenariat avec Save the Children », « 10 % reversés à l'UNICEF »…)
    **sans leur accord écrit.** Les grandes ONG ont des règles strictes pour ça (contrat de « partenariat entreprise »
-   ou de « produit-partage »), souvent avec un don minimum. Sans accord : on écrit seulement « une partie de nos revenus
-   va à des associations de protection de l'enfance » (c'est ce qu'affiche le site aujourd'hui).
-3. **Promesse claire = confiance (et c'est plus sûr juridiquement).** « Une partie » est vague. Je te conseille de fixer
-   un chiffre simple et vérifiable, par exemple **10 % du chiffre d'affaires** (ou 1 € par abonnement annuel), versé
-   **une fois par trimestre**, avec un petit bilan public (« Nos dons »). Dis-moi le chiffre choisi et je mets le site à jour.
+   ou de « produit-partage »), souvent avec un don minimum. Sans accord : on écrit seulement « 5 % de chaque abonnement
+   vont à des associations de protection de l'enfance » (c'est ce qu'affiche le site aujourd'hui).
+3. **Notre engagement (choisi le 10/10/2026) : 5 % de chaque abonnement**, versés **chaque trimestre**, avec un bilan public
+   (page « Nos dons » du site). Clair, vérifiable, et soutenable pour faire vivre l'app.
 4. Les grandes ONG répondent parfois lentement aux petites entreprises. On écrit aussi à 1 ou 2 associations plus
    petites, souvent plus contentes d'avoir un partenaire et plus rapides à accepter qu'on cite leur nom.
 
@@ -37,7 +36,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 >
 > mein Name ist Walid Azar, ich bin Vater und Gründer von **Mokalibo** (mokalibo.com), einer werbefreien Lern-App, die Kindern von 4 bis 12 Jahren die Geschichte aller 195 Länder der Welt erzählt – mit wahren Geschichten zum Vorlesen, Quiz und Spielen.
 >
-> Mokalibo steht unter dem Motto **„Die Welt lernen, Kinder schützen“**: Nach den Betriebskosten der App möchten wir einen festen Teil unserer Einnahmen regelmäßig an Kinderschutz-Organisationen spenden. Wir würden diese Spenden sehr gern an [Name der Organisation] richten.
+> Mokalibo steht unter dem Motto **„Die Welt lernen, Kinder schützen“**: Wir spenden 5 % jedes Abos vierteljährlich an Kinderschutz-Organisationen. Wir würden diese Spenden sehr gern an [Name der Organisation] richten.
 >
 > Daher meine Fragen:
 > 1. Gibt es bei Ihnen ein Kooperationsmodell für kleine Unternehmen bzw. Start-ups (z. B. regelmäßige Spenden aus Umsatzanteilen)?
@@ -60,7 +59,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 >
 > Je m'appelle Walid Azar, je suis papa et fondateur de **Mokalibo** (mokalibo.com), une application éducative sans publicité qui raconte aux enfants de 4 à 12 ans l'histoire des 195 pays du monde : histoires vraies lues à voix haute, quiz et jeux.
 >
-> Mokalibo a pour devise **« Apprendre le monde, protéger les enfants »** : après les frais d'entretien de l'application, nous souhaitons reverser régulièrement une part fixe de nos revenus à des associations de protection de l'enfance, et nous aimerions beaucoup que [nom de l'association] en bénéficie.
+> Mokalibo a pour devise **« Apprendre le monde, protéger les enfants »** : nous reversons chaque trimestre 5 % de chaque abonnement à des associations de protection de l'enfance, et nous aimerions beaucoup que [nom de l'association] en bénéficie.
 >
 > J'aurais deux questions :
 > 1. Proposez-vous une forme de partenariat adaptée aux petites entreprises (dons réguliers basés sur une part du chiffre d'affaires, par exemple) ?
@@ -83,7 +82,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 >
 > My name is Walid Azar. I am a father and the founder of **Mokalibo** (mokalibo.com), an ad-free learning app that tells children aged 4 to 12 the history of all 195 countries of the world through true stories read aloud, quizzes and games.
 >
-> Our motto is **"Learn the world, protect children"**: after covering the app's running costs, we want to donate a fixed share of our revenue to child-protection charities on a regular basis, and we would love [organisation] to be one of them.
+> Our motto is **"Learn the world, protect children"**: we donate 5% of every subscription to child-protection charities every quarter, and we would love [organisation] to be one of them.
 >
 > 1. Do you offer a partnership model suitable for small companies (e.g. regular donations based on a share of revenue)?
 > 2. Under which conditions could we name your organisation as a beneficiary on our website?

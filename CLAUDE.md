@@ -100,6 +100,7 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Fonctions Netlify (`netlify/functions/`) : create-checkout, confirm-checkout, stripe-webhook (checkout.session.completed, customer.subscription.updated/deleted, invoice.paid), billing-portal, cancel-request (Kuendigungsbutton § 312k BGB, page `public/kuendigen.html`), delete-account, track (compteurs anonymes `metrics/AAAA-MM-JJ`), metrics (tableau de bord proprietaire, `OWNER_EMAILS`).
 - Le flag `premium` (et subscriptionId, stripeCustomerId...) est sur `users/{uid}` et n'est modifiable QUE par le serveur (regles `firestore.rules`, deployees sur kidroots-cdaf0).
 - Variables Netlify requises : voir `.env.example`. Garder `firebase-admin` en v13 (v14 plante sur Netlify : jose ESM).
+- Engagement : 5 % de chaque abonnement reverses chaque trimestre a la protection de l'enfance, bilan dans `public/dons.html` (a mettre a jour a chaque versement).
 - Pages legales : generer avec `python3 scripts/legal/build.py` (ne pas editer public/agb.html etc. a la main).
 - Page de presentation : `LandingScreen.jsx` (visiteurs non connectes, textes fr/en/de dans le fichier).
 - Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).

@@ -5,7 +5,7 @@ const INK = '#1A2A4F'
 const TXT = {
   fr: {
     title: (pro) => `Bienvenue dans la ${pro ? 'Formule Enseignant' : 'Formule Famille'} !`,
-    thanks: 'Merci pour ta confiance 💛 Grâce à toi, Mokalibo grandit, et une partie de nos revenus va à la protection de l’enfance.',
+    thanks: 'Merci pour ta confiance 💛 Grâce à toi, Mokalibo grandit, et 5 % de ton abonnement vont à la protection de l’enfance.',
     unlocked: 'Ce qui est débloqué dès maintenant :',
     items: (pro) => ['📚 Histoires illimitées dans les 195 pays', '🎮 Jeux illimités', pro ? '🧒 Jusqu’à 35 élèves et 5 appareils' : '👧 Jusqu’à 5 enfants et 5 appareils', '🦉 Les 3 niveaux, du petit au grand explorateur', '🚫 Toujours sans publicité'],
     trial: (d) => `🎁 Ton essai gratuit dure jusqu’au ${d}. Aucun prélèvement avant cette date.`,
@@ -16,7 +16,7 @@ const TXT = {
   },
   en: {
     title: (pro) => `Welcome to the ${pro ? 'Teacher Plan' : 'Family Plan'}!`,
-    thanks: 'Thank you for your trust 💛 Thanks to you, Mokalibo keeps growing, and part of our revenue goes to child protection.',
+    thanks: 'Thank you for your trust 💛 Thanks to you, Mokalibo keeps growing, and 5% of your subscription goes to child protection.',
     unlocked: 'Unlocked right now:',
     items: (pro) => ['📚 Unlimited stories in all 195 countries', '🎮 Unlimited games', pro ? '🧒 Up to 35 pupils and 5 devices' : '👧 Up to 5 children and 5 devices', '🦉 All 3 reading levels', '🚫 Always ad-free'],
     trial: (d) => `🎁 Your free trial runs until ${d}. Nothing is charged before then.`,
@@ -27,7 +27,7 @@ const TXT = {
   },
   de: {
     title: (pro) => `Willkommen im ${pro ? 'Lehrer-Abo' : 'Familien-Abo'}!`,
-    thanks: 'Danke für dein Vertrauen 💛 Dank dir wächst Mokalibo, und ein Teil unserer Einnahmen geht an den Kinderschutz.',
+    thanks: 'Danke für dein Vertrauen 💛 Dank dir wächst Mokalibo, und 5 % deines Abos gehen an den Kinderschutz.',
     unlocked: 'Ab sofort freigeschaltet:',
     items: (pro) => ['📚 Unbegrenzte Geschichten in allen 195 Ländern', '🎮 Unbegrenzte Spiele', pro ? '🧒 Bis zu 35 Schüler und 5 Geräte' : '👧 Bis zu 5 Kinder und 5 Geräte', '🦉 Alle 3 Lesestufen', '🚫 Immer ohne Werbung'],
     trial: (d) => `🎁 Dein kostenloser Test läuft bis zum ${d}. Vorher wird nichts abgebucht.`,

@@ -90,7 +90,7 @@ Bonjour,
 
 Je suis Walid, papa et créateur de Mokalibo, une application qui fait découvrir aux enfants l'histoire des 195 pays du monde (histoires vraies lues à voix haute, quiz, jeux, sans publicité).
 
-Accepteriez-vous de déposer quelques flyers à l'accueil, ou de partager le lien dans votre newsletter ? L'essai est gratuit. Les revenus servent à l'entretien de l'app et le reste est reversé à des associations de protection de l'enfance.
+Accepteriez-vous de déposer quelques flyers à l'accueil, ou de partager le lien dans votre newsletter ? L'essai est gratuit. 5 % de chaque abonnement sont reversés à des associations de protection de l'enfance.
 
 Merci d'avance, et belle journée,
 Walid Azar — Mokalibo
@@ -112,11 +112,13 @@ Hallo, ich bin Walid, Vater und Gründer von Mokalibo – einer App, die Kindern
 ---
 
 ## 4. L'engagement « protection de l'enfance »
-Le site affiche : *« Apprendre le monde, protéger les enfants. Les revenus financent l'entretien de l'application ; le reste est reversé à des associations de protection de l'enfance. »*
+Le site affiche : *« Apprendre le monde, protéger les enfants. 5 % de chaque abonnement sont reversés à des associations de protection de l'enfance, chaque trimestre, avec un bilan publié. »*
+
+**Règle simple** : chaque trimestre (fin mars, juin, septembre, décembre), regarde le montant « 💶 Encaissé » du tableau de bord sur les 3 mois, fais un don de 5 % de ce montant, garde le reçu, et envoie-moi montant + association + date : je mets à jour la page « Nos dons ».
 
 Pour que ce soit solide juridiquement et crédible :
 - Choisis 1 ou 2 associations reconnues (ex. en France : Fondation pour l'Enfance, L'Enfant Bleu ; en Allemagne : Deutscher Kinderschutzbund, SOS-Kinderdorf ; international : UNICEF).
-- Garde les reçus de dons, et publie un petit bilan une fois par an (montant, association). Je peux ajouter une page « Nos dons » sur le site dès que tu as les infos.
+- Garde les reçus de dons, et publie le bilan chaque trimestre (montant, association). Je peux ajouter une page « Nos dons » sur le site dès que tu as les infos.
 - Quand ce sera fait, on pourra nommer l'association sur le site (c'est beaucoup plus convaincant).
 
 ---

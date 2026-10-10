@@ -162,7 +162,7 @@ function indexPage() {
 }
 
 // Pages pays désactivées (le contenu des chapitres reste réservé à l'app)
-const urls = [`${SITE}/`, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
+const urls = [`${SITE}/`, `${SITE}/dons.html`, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}

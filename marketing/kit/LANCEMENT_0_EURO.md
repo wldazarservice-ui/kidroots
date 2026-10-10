@@ -38,7 +38,7 @@ Publie **avec une photo** (post_02 ou la vidéo). Maximum 2 à 3 groupes par jou
 > **Mokalibo** : 195 pays, des histoires vraies lues à voix haute, un quiz après chaque chapitre, un passeport à tamponner. Pour les 4-12 ans, sans publicité, en français, allemand et anglais.
 > C'est gratuit pour essayer (2 histoires par jour). Je serais très heureux d'avoir vos retours de parents 🙏
 > 👉 mokalibo.com
-> (Les revenus servent à entretenir l'appli, le reste va à des associations de protection de l'enfance 💛)
+> (5 % de chaque abonnement vont à des associations de protection de l'enfance 💛)
 
 **DE**
 > „Papa, wo liegt Mali?“ 🇲🇱
@@ -46,7 +46,7 @@ Publie **avec une photo** (post_02 ou la vidéo). Maximum 2 à 3 groupes par jou
 > **Mokalibo**: 195 Länder, wahre Geschichten zum Vorlesen, ein Quiz nach jedem Kapitel, ein Reisepass zum Stempeln. Für Kinder von 4 bis 12, ohne Werbung, auf Deutsch, Französisch und Englisch.
 > Kostenlos testen (2 Geschichten pro Tag). Ich freue mich sehr über Feedback von Eltern 🙏
 > 👉 mokalibo.com
-> (Die Einnahmen finanzieren die App, der Rest geht an Kinderschutz-Organisationen 💛)
+> (5 % jedes Abos gehen an Kinderschutz-Organisationen 💛)
 
 ---
 
@@ -99,7 +99,7 @@ Envoie avec 2 images en pièce jointe (`post_02.png` et la couverture Facebook) 
 >
 > In Mokalibo reisen Kinder von Land zu Land: Jedes Land hat fünf Kapitel mit wahren Geschichten, historischen Persönlichkeiten und überraschenden Fakten. Alle Texte werden vorgelesen, sodass auch Kinder mitmachen können, die noch nicht lesen. Nach jedem Kapitel folgt ein Quiz, für jedes Land gibt es einen Stempel im Reisepass. Es gibt drei Lesestufen, Lernspiele und eine Weltkarte. Die App ist auf Deutsch, Französisch und Englisch verfügbar, **ohne Werbung und ohne Tracker**.
 >
-> Mokalibo ist kostenlos nutzbar (zwei neue Geschichten pro Tag). Das Familien-Abo für bis zu fünf Kinder kostet 1,99 € im Monat oder 14,99 € im Jahr; Lehrkräfte und Schulen erhalten eigene Angebote. Unter dem Motto „Die Welt lernen, Kinder schützen“ finanzieren die Einnahmen zuerst den Betrieb der App, der Rest wird an Kinderschutz-Organisationen gespendet.
+> Mokalibo ist kostenlos nutzbar (zwei neue Geschichten pro Tag). Das Familien-Abo für bis zu fünf Kinder kostet 1,99 € im Monat oder 14,99 € im Jahr; Lehrkräfte und Schulen erhalten eigene Angebote. Unter dem Motto „Die Welt lernen, Kinder schützen“ werden 5 % jedes Abos vierteljährlich an Kinderschutz-Organisationen gespendet; der Rest finanziert die App.
 >
 > **Web:** mokalibo.com
 > **Kontakt:** Walid Azar – contact@azarconsulting.eu
@@ -113,7 +113,7 @@ Envoie avec 2 images en pièce jointe (`post_02.png` et la couverture Facebook) 
 >
 > Dans Mokalibo, les enfants voyagent de pays en pays : chaque pays compte cinq chapitres d'histoires vraies, de grands personnages et d'anecdotes étonnantes. Tous les textes sont lus à voix haute, pour que même les enfants qui ne savent pas encore lire puissent suivre. Un quiz conclut chaque chapitre, et chaque pays terminé vaut un tampon dans le passeport. L'appli propose trois niveaux de lecture, des jeux et une carte du monde, en français, allemand et anglais, **sans publicité ni traceur**.
 >
-> Mokalibo est gratuite à l'essai (deux nouvelles histoires par jour). La Formule Famille, pour cinq enfants, coûte 1,99 € par mois ou 14,99 € par an ; des offres existent pour les enseignants et les écoles. Avec la devise « Apprendre le monde, protéger les enfants », les revenus financent d'abord l'entretien de l'appli, et le reste est reversé à des associations de protection de l'enfance.
+> Mokalibo est gratuite à l'essai (deux nouvelles histoires par jour). La Formule Famille, pour cinq enfants, coûte 1,99 € par mois ou 14,99 € par an ; des offres existent pour les enseignants et les écoles. Avec la devise « Apprendre le monde, protéger les enfants », 5 % de chaque abonnement sont reversés chaque trimestre à des associations de protection de l'enfance ; le reste finance l'appli.
 >
 > **Site :** mokalibo.com
 > **Contact :** Walid Azar – contact@azarconsulting.eu

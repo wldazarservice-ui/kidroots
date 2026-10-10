@@ -241,7 +241,7 @@ export const UI = {
     pw_ref_gift: "🎁 1er mois offert grâce à ton parrainage",
     pw_ref_credit: "🎁 Tu as {n} mois offert(s) : il sera déduit automatiquement",
     lp_ami: "🎁 Une famille t'offre ton 1er mois de Formule Famille !",
-    pw_mission: "💛 Apprendre le monde, protéger les enfants : le reste de nos revenus va à la protection de l'enfance.",
+    pw_mission: "💛 Apprendre le monde, protéger les enfants : 5 % de chaque abonnement vont à la protection de l'enfance.",
     card_fact_tap: "Le savais-tu ? Touche pour découvrir",
     pw_trial_badge: "🎁 3 jours gratuits",
     pw_trial_pay: "Essayer 3 jours gratuitement",
@@ -270,6 +270,7 @@ export const UI = {
     support_question: "Une question avant de vous abonner ? Écrivez-nous",
     autoread_on: "Lecture auto : oui",
     autoread_off: "Lecture auto : non",
+    dons_link: "Nos dons",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -503,7 +504,7 @@ export const UI = {
     pw_ref_gift: "🎁 First month free thanks to your invitation",
     pw_ref_credit: "🎁 You have {n} free month(s): it will be deducted automatically",
     lp_ami: "🎁 A family is giving you your first month of the Family plan!",
-    pw_mission: "💛 Learn the world, protect children: what's left of our revenue goes to child protection.",
+    pw_mission: "💛 Learn the world, protect children: 5% of every subscription goes to child protection.",
     card_fact_tap: "Did you know? Tap to find out",
     pw_trial_badge: "🎁 3 days free",
     pw_trial_pay: "Try 3 days for free",
@@ -532,6 +533,7 @@ export const UI = {
     support_question: "A question before subscribing? Write to us",
     autoread_on: "Auto-read: on",
     autoread_off: "Auto-read: off",
+    dons_link: "Our donations",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -765,7 +767,7 @@ export const UI = {
     pw_ref_gift: "🎁 Erster Monat gratis dank deiner Einladung",
     pw_ref_credit: "🎁 Du hast {n} Gratismonat(e): wird automatisch abgezogen",
     lp_ami: "🎁 Eine Familie schenkt dir den ersten Monat des Familien-Abos!",
-    pw_mission: "💛 Die Welt entdecken, Kinder schützen: Der Rest unserer Einnahmen geht an den Kinderschutz.",
+    pw_mission: "💛 Die Welt entdecken, Kinder schützen: 5 % jedes Abos gehen an den Kinderschutz.",
     card_fact_tap: "Wusstest du? Tippen zum Entdecken",
     pw_trial_badge: "🎁 3 Tage gratis",
     pw_trial_pay: "3 Tage kostenlos testen",
@@ -794,6 +796,7 @@ export const UI = {
     support_question: "Eine Frage vor dem Abo? Schreiben Sie uns",
     autoread_on: "Automatisch vorlesen: an",
     autoread_off: "Automatisch vorlesen: aus",
+    dons_link: "Unsere Spenden",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',
@@ -974,6 +977,7 @@ export const UI = {
     card_fact_tap: "هل تعلم؟ اضغط للاكتشاف",
     autoread_on: "القراءة التلقائية: نعم",
     autoread_off: "القراءة التلقائية: لا",
+    dons_link: "تبرعاتنا",
   },
   pt: {
     tagline: 'Descubra a historia dos paises do mundo',
@@ -1096,6 +1100,7 @@ export const UI = {
     card_fact_tap: "Você sabia? Toque para descobrir",
     autoread_on: "Leitura automática: sim",
     autoread_off: "Leitura automática: não",
+    dons_link: "Nossas doações",
   },
 }
 
