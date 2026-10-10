@@ -70,7 +70,7 @@ Histoires vraies à voix haute
 Quiz et jeux éducatifs
 Pour les 4 à 12 ans
 Sans publicité, sans traceur
-Essai gratuit sans compte
+Compte gratuit en 1 clic
 Mokalibo : app éducative
 Apprendre la géographie
 Dès 1,25 €/mois (annuel)
@@ -144,7 +144,7 @@ Wahre Geschichten vorgelesen
 Quiz und Lernspiele
 Für Kinder von 4 bis 12
 Ohne Werbung, ohne Tracker
-Gratis testen ohne Konto
+Gratis-Konto mit 1 Klick
 Mokalibo: Lern-App
 Geografie spielend lernen
 Ab 1,25 €/Monat (Jahresabo)
@@ -161,7 +161,7 @@ Flaggen-Memory, Weltkarte und Reisepass zum Stempeln: Bildschirmzeit, die sich l
 
 ## 4. Suivre les résultats
 
-- Tableau de bord Mokalibo → ligne **Sources** → `google` : visites, essais sans compte, comptes créés.
+- Tableau de bord Mokalibo → ligne **Sources** → `google` : visites, comptes créés, essais 3 jours.
 - Dans Google Ads : regarder le **CPC moyen** et le **taux de clic (CTR)**.
 - Règles :
   - CTR < 3 % après 5 jours → changer les titres.

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { PLANS, DAILY_FREE_CHAPTERS } from '../premium'
-import { defaultLevelForAge } from '../levels'
 import { track } from '../track'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
@@ -22,8 +21,9 @@ const TXT = {
     login: 'Se connecter',
     h1: "L'histoire du monde, racontée aux enfants",
     h1_sub: 'Des histoires vraies, des quiz et une voix qui lit tout à voix haute. {n} pays, 3 niveaux de lecture, de 4 à 12 ans.',
-    try: '▶ Essayer gratuitement',
-    try_note: 'Sans compte · sans carte bancaire · 2 chapitres gratuits par jour',
+    try: '▶ Commencer gratuitement',
+    try_note: 'Compte parent gratuit en 1 clic · sans carte bancaire · 2 histoires offertes par jour',
+    have_account: "J'ai déjà un compte",
     cont: '▶ Continuer avec {name}',
     signup: 'Créer un compte parent',
     proof: ['🚫 Sans publicité', '🔒 Sans traceur', '🇪🇺 Conforme RGPD', '💛 Pour la protection de l’enfance'],
@@ -76,7 +76,7 @@ const TXT = {
       ['Mon enfant ne sait pas encore lire.', 'Pas de souci : l’app peut lire à voix haute toutes les histoires et toutes les questions.'],
       ['Sur quels appareils ?', 'Téléphone, tablette et ordinateur, dans le navigateur. Vous pouvez aussi l’installer sur l’écran d’accueil, sans passer par un store.'],
       ['Et les données de mon enfant ?', 'Nous demandons seulement un prénom (ou un surnom) et un âge. Pas de publicité, pas de traceur, aucune donnée vendue. Vous pouvez supprimer le compte à tout moment.'],
-      ['Faut-il un compte pour essayer ?', 'Non : vous pouvez commencer tout de suite, sans compte et sans carte bancaire. Le compte parent (gratuit) sert à garder la progression.'],
+      ['Faut-il un compte pour essayer ?', 'Oui, un compte parent gratuit, créé en 1 clic avec Google ou avec votre e-mail, sans carte bancaire. Il garde la progression de chaque enfant sur tous vos appareils.'],
     ],
     final_title: 'Prêt pour le voyage ?',
     final_sub: 'Le premier voyage est gratuit, tous les jours.',
@@ -92,8 +92,9 @@ const TXT = {
     login: 'Sign in',
     h1: 'World history, told for kids',
     h1_sub: 'True stories, quizzes and a voice that reads everything aloud. {n} countries, 3 reading levels, ages 4 to 12.',
-    try: '▶ Try it free',
-    try_note: 'No account · no card · 2 free chapters a day',
+    try: '▶ Start for free',
+    try_note: 'Free parent account in 1 click · no card · 2 free stories a day',
+    have_account: 'I already have an account',
     cont: '▶ Continue with {name}',
     signup: 'Create a parent account',
     proof: ['🚫 No ads', '🔒 No trackers', '🇪🇺 GDPR compliant', '💛 Supporting child protection'],
@@ -146,7 +147,7 @@ const TXT = {
       ['My child cannot read yet.', 'No problem: the app can read every story and every question aloud.'],
       ['Which devices?', 'Phone, tablet and computer, in the browser. You can also add it to your home screen, without any app store.'],
       ['What about my child’s data?', 'We only ask for a first name (or nickname) and an age. No ads, no trackers, no data sold. You can delete the account at any time.'],
-      ['Do I need an account to try?', 'No: you can start right away, with no account and no card. The free parent account keeps the progress.'],
+      ['Do I need an account to try?', 'Yes, a free parent account, created in 1 click with Google or with your e-mail, no card needed. It keeps each child’s progress on all your devices.'],
     ],
     final_title: 'Ready for the journey?',
     final_sub: 'The first journey is free, every day.',
@@ -162,8 +163,9 @@ const TXT = {
     login: 'Anmelden',
     h1: 'Die Geschichte der Welt, für Kinder erzählt',
     h1_sub: 'Wahre Geschichten, Quizze und eine Stimme, die alles vorliest. {n} Länder, 3 Lesestufen, von 4 bis 12 Jahren.',
-    try: '▶ Kostenlos ausprobieren',
-    try_note: 'Ohne Konto · ohne Karte · 2 Gratis-Kapitel pro Tag',
+    try: '▶ Kostenlos starten',
+    try_note: 'Kostenloses Elternkonto mit 1 Klick · ohne Karte · 2 Gratis-Geschichten pro Tag',
+    have_account: 'Ich habe schon ein Konto',
     cont: '▶ Weiter mit {name}',
     signup: 'Elternkonto erstellen',
     proof: ['🚫 Keine Werbung', '🔒 Kein Tracking', '🇪🇺 DSGVO-konform', '💛 Für den Kinderschutz'],
@@ -216,7 +218,7 @@ const TXT = {
       ['Mein Kind kann noch nicht lesen.', 'Kein Problem: Die App liest alle Geschichten und Fragen vor.'],
       ['Auf welchen Geräten?', 'Handy, Tablet und Computer, im Browser. Sie können die App auch ohne Store auf dem Startbildschirm installieren.'],
       ['Und die Daten meines Kindes?', 'Wir fragen nur nach einem Vornamen (oder Spitznamen) und dem Alter. Keine Werbung, kein Tracking, kein Datenverkauf. Sie können das Konto jederzeit löschen.'],
-      ['Brauche ich zum Testen ein Konto?', 'Nein: Sie können sofort loslegen, ohne Konto und ohne Karte. Das kostenlose Elternkonto speichert den Fortschritt.'],
+      ['Brauche ich zum Testen ein Konto?', 'Ja, ein kostenloses Elternkonto – mit 1 Klick über Google oder mit Ihrer E-Mail, ohne Karte. Es speichert den Fortschritt jedes Kindes auf all Ihren Geräten.'],
     ],
     final_title: 'Bereit für die Reise?',
     final_sub: 'Die erste Reise ist kostenlos, jeden Tag.',
@@ -230,7 +232,6 @@ const TXT = {
   },
 }
 
-const AVATARS = ['👧🏽', '👦🏿', '👧🏻', '👦🏽', '🧒']
 
 function PhoneMockup({ T, lang }) {
   const regions = Object.values(REGIONS).filter((r) => r.countries.length).slice(0, 4)
@@ -272,43 +273,6 @@ function PhoneMockup({ T, lang }) {
   )
 }
 
-function GuestSheet({ T, onClose, onStart }) {
-  const [name, setName] = useState('')
-  const [age, setAge] = useState(6)
-  const [avatar, setAvatar] = useState(AVATARS[0])
-  const go = (e) => {
-    e.preventDefault()
-    if (!name.trim()) return
-    onStart({ name: name.trim(), age, avatar, difficulty: defaultLevelForAge(age), xp: 0, level: 1, done: {} })
-  }
-  return (
-    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
-      <form onSubmit={go} onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet green-bg"
-        style={{ width: '100%', maxWidth: 420, borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif' }}>
-        <div style={{ textAlign: 'center', fontFamily: FONT_TITLE, fontSize: 26, fontWeight: 700, color: INK, marginBottom: 14 }}>{T.guest_title}</div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 14 }}>
-          {AVATARS.map((a) => (
-            <button key={a} type="button" onClick={() => setAvatar(a)} aria-pressed={avatar === a}
-              style={{ fontSize: 30, width: 54, height: 54, borderRadius: 16, cursor: 'pointer', border: `3px solid ${avatar === a ? '#FF9800' : 'white'}`, background: avatar === a ? '#FFF3E0' : 'white' }}>{a}</button>
-          ))}
-        </div>
-        <input autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={20} placeholder={T.guest_name}
-          style={{ width: '100%', padding: '14px 16px', borderRadius: 16, border: '3px solid #D6EEDC', background: 'white', color: INK, fontSize: 18, fontFamily: 'inherit', fontWeight: 800, outline: 'none', marginBottom: 14 }} />
-        <div style={{ fontSize: 12, fontWeight: 900, color: '#3E6B4F', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>{T.guest_age}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 5, marginBottom: 18 }}>
-          {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((a) => (
-            <button key={a} type="button" onClick={() => setAge(a)} aria-pressed={age === a}
-              style={{ padding: '10px 0', borderRadius: 12, border: 'none', background: age === a ? '#2E9E5B' : 'white', color: age === a ? 'white' : INK, fontSize: 15, fontWeight: 900, cursor: 'pointer', fontFamily: 'inherit' }}>{a}</button>
-          ))}
-        </div>
-        <button type="submit" className="btn-kid soft" disabled={!name.trim()}
-          style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #E6A100', opacity: name.trim() ? 1 : 0.5 }}>
-          {T.guest_go}
-        </button>
-      </form>
-    </div>
-  )
-}
 
 
 // Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
@@ -323,11 +287,10 @@ const pageFromHash = () => {
   return PAGES.includes(h) ? h : 'home'
 }
 
-// Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ, essai sans compte
-export default function LandingScreen({ lang, changeLang, guest, onStartGuest, onResumeGuest, onLogin, onSignup }) {
+// Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ. Jouer demande un compte parent (gratuit).
+export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   const N = String(Object.keys(COUNTRIES).length)
   const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || TXT.en).replaceAll('{n}', N)), [lang, N])
-  const [sheet, setSheet] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
   const [page, setPage] = useState(pageFromHash)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -342,8 +305,8 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
   useEffect(() => { window.scrollTo(0, 0) }, [page])
   useReveal([lang, page])
 
-  const tryNow = () => (guest ? onResumeGuest() : setSheet(true))
-  const tryLabel = guest ? T.cont.replace('{name}', guest.name) : T.try
+  const tryNow = () => onSignup()
+  const tryLabel = T.try
 
   const primary = { background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 20, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 14px 28px rgba(255,196,0,0.35)' }
   const secondary = { background: 'white', color: '#2E7D4F', padding: '14px 22px', fontSize: 16, borderRadius: 20, boxShadow: '0 4px 14px rgba(46,158,91,0.15)' }
@@ -365,7 +328,6 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
 
   return (
     <div style={{ fontFamily: 'Nunito, sans-serif', color: INK, background: '#FFFDF7', minHeight: '100vh' }}>
-      {sheet && <GuestSheet T={T} onClose={() => setSheet(false)} onStart={(g) => { setSheet(false); onStartGuest(g) }} />}
 
       {/* ── Menu (toujours visible en haut) ── */}
       <header className="lp-topbar">
@@ -413,7 +375,7 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
             <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.55, margin: '0 0 24px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
-              <button className="btn-kid soft" onClick={onSignup} style={secondary}>{T.signup}</button>
+              <button className="btn-kid soft" onClick={onLogin} style={secondary}>{T.have_account}</button>
             </div>
             <div style={{ fontSize: 13, fontWeight: 800, color: '#607D8B', marginTop: 12 }}>{T.try_note}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }} className="lp-proof">

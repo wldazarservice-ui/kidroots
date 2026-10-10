@@ -470,13 +470,10 @@ export default function App() {
   if (authLoading) return <Spinner msg="Demarrage..." />
   if (!user && !isGuest) {
     if (authMode) {
-      return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)}
-        onGuest={() => { if (guest) { setGuestPlaying(true); setScreen('home') } else setAuthMode(null) }} />
+      return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)} />
     }
     return (
-      <LandingScreen lang={lang} changeLang={changeLang} guest={guest}
-        onStartGuest={(g) => { saveGuest(g); setGuest({ ...g, id: 'guest' }); setGuestPlaying(true); setScreen('home'); track('guest_start') }}
-        onResumeGuest={() => { setGuestPlaying(true); setScreen('home') }}
+      <LandingScreen lang={lang} changeLang={changeLang}
         onLogin={() => setAuthMode('signin')}
         onSignup={() => { setAuthMode('signup'); track('signup_view') }} />
     )

@@ -43,22 +43,22 @@
   3. Image `post_11` (« Pensé pour les parents »)
 
 **Textes à tester (FR)**
-1. « Papa, c'est où le Mali ? » Cette question de mon fils a donné naissance à Mokalibo : l'histoire des 195 pays du monde, racontée aux enfants de 4 à 12 ans. Essai gratuit, sans compte. 🌍
+1. « Papa, c'est où le Mali ? » Cette question de mon fils a donné naissance à Mokalibo : l'histoire des 195 pays du monde, racontée aux enfants de 4 à 12 ans. Essai gratuit. 🌍
 2. Votre enfant pose plein de questions sur le monde ? Avec Mokalibo, il découvre l'histoire de chaque pays en jouant : histoires vraies lues à voix haute, quiz et passeport à tamponner. Sans publicité.
 3. Un écran utile, enfin. Mokalibo : histoires vraies, quiz et jeux sur les 195 pays du monde. 2 histoires offertes chaque jour. 💛 Apprendre le monde, protéger les enfants.
 4. 🎁 3 jours gratuits pour tout découvrir : 195 pays, des histoires vraies lues à voix haute, des quiz. Ensuite 1,25 €/mois (formule annuelle), résiliable en 2 clics. Votre enfant va adorer voyager dans l'histoire !
 
-**Titres** : « 3 jours gratuits » · « Essai gratuit, sans compte » · « L'histoire du monde pour les enfants » · « 195 pays à explorer »
+**Titres** : « 3 jours gratuits » · « Compte gratuit en 1 clic » · « L'histoire du monde pour les enfants » · « 195 pays à explorer »
 
 **Textes à tester (DE)**
-1. „Papa, wo liegt Mali?" – Diese Frage meines Sohnes war der Anfang von Mokalibo: die Geschichte aller 195 Länder, für Kinder von 4 bis 12 erzählt. Gratis testen, ohne Konto. 🌍
+1. „Papa, wo liegt Mali?" – Diese Frage meines Sohnes war der Anfang von Mokalibo: die Geschichte aller 195 Länder, für Kinder von 4 bis 12 erzählt. Gratis testen. 🌍
 2. Dein Kind will alles über die Welt wissen? Mit Mokalibo entdeckt es spielerisch die Geschichte jedes Landes: wahre Geschichten zum Vorlesen, Quiz und Reisepass. Ohne Werbung.
 3. 🎁 3 Tage kostenlos testen: 195 Länder, wahre Geschichten zum Vorlesen, Quiz. Danach nur 1,25 €/Monat (Jahresabo), jederzeit kündbar.
 
 **Règles pour piloter**
 - Regarder les chiffres après 3 jours, pas avant.
 - Coût par clic > 0,80 € → changer l'image ou le texte.
-- Garder la pub qui donne le plus d'« Essais sans compte » (tableau de bord Mokalibo, ligne « meta »).
+- Garder la pub qui donne le plus d'« Comptes créés » (tableau de bord Mokalibo, ligne « meta »).
 - Si 1 abonnement coûte moins de 10 € en pub → augmenter le budget de 20 % tous les 3 jours (au-delà de 12 €, la pub coûte plus que ce que l’abonné rapporte la 1re année).
 
 ---
@@ -76,7 +76,7 @@ Bonjour,
 
 Je suis Walid, papa et créateur de Mokalibo, une application qui raconte aux enfants de 4 à 12 ans la vraie histoire des 195 pays du monde : chapitres courts, lus à voix haute, avec un quiz à chaque fois.
 
-Les élèves peuvent aussi utiliser l'app gratuitement chez eux (2 histoires par jour, sans compte, sans publicité). Je joins un flyer pour les familles, si cela peut être utile.
+Les élèves peuvent aussi utiliser l'app gratuitement chez eux (2 histoires par jour avec un compte parent gratuit, sans publicité). Je joins un flyer pour les familles, si cela peut être utile.
 
 Je serais ravi d'avoir votre avis d'enseignant(e).
 Bien cordialement,
@@ -90,7 +90,7 @@ Bonjour,
 
 Je suis Walid, papa et créateur de Mokalibo, une application qui fait découvrir aux enfants l'histoire des 195 pays du monde (histoires vraies lues à voix haute, quiz, jeux, sans publicité).
 
-Accepteriez-vous de déposer quelques flyers à l'accueil, ou de partager le lien dans votre newsletter ? L'essai est gratuit et sans compte. Les revenus servent à l'entretien de l'app et le reste est reversé à des associations de protection de l'enfance.
+Accepteriez-vous de déposer quelques flyers à l'accueil, ou de partager le lien dans votre newsletter ? L'essai est gratuit. Les revenus servent à l'entretien de l'app et le reste est reversé à des associations de protection de l'enfance.
 
 Merci d'avance, et belle journée,
 Walid Azar — Mokalibo
@@ -99,7 +99,7 @@ Walid Azar — Mokalibo
 Bonjour [prénom] ! Je suis Walid, papa et créateur de Mokalibo : l'histoire des 195 pays du monde racontée aux enfants (histoires lues à voix haute, quiz, passeport à tamponner, sans pub). Je pense que ça pourrait plaire à ta communauté. Je peux t’offrir 1 an de Formule Famille pour que tu testes avec tes enfants (pour offrir l’accès : ajoute son e-mail à la variable COMP_EMAILS dans Netlify), sans aucune obligation de publier. Ça te dirait ?
 
 ### Nachricht für Elternvereine / Bibliotheken (DE) — per Telefon, Brief oder Kontaktformular
-Hallo, ich bin Walid, Vater und Gründer von Mokalibo – einer App, die Kindern von 4 bis 12 Jahren die Geschichte aller 195 Länder der Welt erzählt (wahre Geschichten zum Vorlesen, Quiz, Spiele, ohne Werbung). Dürfte ich Ihnen ein paar Flyer für die Familien vorbeibringen? Die App ist kostenlos testbar, ohne Konto. Vielen Dank! Walid Azar – Mokalibo
+Hallo, ich bin Walid, Vater und Gründer von Mokalibo – einer App, die Kindern von 4 bis 12 Jahren die Geschichte aller 195 Länder der Welt erzählt (wahre Geschichten zum Vorlesen, Quiz, Spiele, ohne Werbung). Dürfte ich Ihnen ein paar Flyer für die Familien vorbeibringen? Die App ist kostenlos testbar. Vielen Dank! Walid Azar – Mokalibo
 
 ---
 
@@ -124,7 +124,7 @@ Pour que ce soit solide juridiquement et crédible :
 ## 5. Suivre les résultats (chaque lundi, 10 minutes)
 Dans l'app : écran des profils → **📈 Tableau de bord Mokalibo** (visible seulement par toi).
 - **Visites** → est-ce que la pub / Google amène du monde ?
-- **Essais sans compte** → le site donne-t-il envie ?
+- **Comptes créés** → le site donne-t-il envie ?
 - **Offre affichée → Paiement commencé → Nouveaux abonnés** → où les gens s'arrêtent-ils ?
 - **Sources** → quelle pub / quel réseau marche le mieux ?
 

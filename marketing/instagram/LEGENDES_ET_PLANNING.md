@@ -46,7 +46,7 @@ Mokalibo, c'est une app où votre enfant découvre la vraie histoire des pays du
 📖 Histoires vraies · 🔊 Voix off · 🎯 Quiz et jeux
 👧 De 4 à 12 ans · 🚫 Sans publicité
 
-Essai gratuit, sans compte 👉 lien dans la bio
+Essai gratuit 👉 lien dans la bio
 
 #mokalibo #histoirepourenfants #appeducative #apprendreenjouant #enfants #parentalite
 
@@ -187,7 +187,7 @@ Commencez le voyage gratuitement 🚀
 
 ✅ Tous les pays
 ✅ 2 nouvelles histoires par jour
-✅ Sans compte, sans carte bancaire
+✅ Compte parent gratuit, sans carte bancaire
 
 Et pour des aventures illimitées : la Formule Famille, avec 3 jours gratuits pour essayer, puis 1,99 €/mois ou 14,99 €/an, pour 5 enfants ⭐
 

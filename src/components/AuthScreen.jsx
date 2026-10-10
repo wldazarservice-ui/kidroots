@@ -2,7 +2,7 @@ import LegalFooter from './LegalFooter'
 import { useState } from 'react'
 import { signIn, signUp, googleSignIn, resetPassword } from '../auth'
 
-export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) {
+export default function AuthScreen({ initialMode = 'signin', onBack }) {
   const [mode, setMode] = useState(initialMode) // 'signin' | 'signup'
   const [info, setInfo] = useState('')
   const [email, setEmail] = useState('')
@@ -130,12 +130,6 @@ export default function AuthScreen({ initialMode = 'signin', onBack, onGuest }) 
           🔒 Le compte est créé par un parent.<br />
           Aucune publicité. Aucune donnée revendue.
         </div>
-        {onGuest && (
-          <button type="button" className="btn-kid soft" onClick={onGuest}
-            style={{ width: '100%', marginTop: 14, background: '#FFF8E1', color: '#1A2A4F', padding: '12px', fontSize: 14, borderRadius: 16, border: '2px dashed #FFC400' }}>
-            ▶ Essayer sans compte
-          </button>
-        )}
       </div>
       <LegalFooter gate={false} />
     </div>

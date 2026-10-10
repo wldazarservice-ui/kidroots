@@ -149,8 +149,8 @@ DS_DE = f"""
 <p>Alle Schriftarten werden von unserem eigenen Server geladen; es findet keine Verbindung zu Google Fonts statt.</p>
 <h3>j) Anonyme Nutzungsstatistik</h3>
 <p>Um zu erfahren, wie viele Besucher die App ausprobieren, zählen wir auf unserem Server anonyme Ereignisse (z. B. „Seite aufgerufen“, „Test gestartet“, „Konto erstellt“) als reine Tageszähler, gegebenenfalls mit der Kampagnenquelle aus dem Link (z. B. utm_source=instagram). Es werden dabei weder IP-Adressen noch Kennungen, Cookies oder Geräteinformationen gespeichert; ein Personenbezug ist nicht möglich. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
-<h3>k) Testmodus ohne Konto</h3>
-<p>Im Testmodus werden Vorname, Alter und Fortschritt des Kindes ausschließlich lokal auf dem Gerät gespeichert und nicht an uns übertragen. Wird später ein Elternkonto angelegt, kann der Fortschritt übernommen werden.</p>
+<h3>k) Früherer Testmodus ohne Konto</h3>
+<p>Der frühere Testmodus ohne Konto wird nicht mehr angeboten. Damals lokal gespeicherte Angaben (Vorname, Alter, Fortschritt) verbleiben ausschließlich auf dem Gerät und können beim Anlegen eines Elternkontos übernommen werden.</p>
 <h3>l) Kündigung</h3>
 <p>Bei einer Kündigung über „Verträge hier kündigen“ verarbeiten wir Name, E-Mail-Adresse, Art und gegebenenfalls Grund der Kündigung, um diese auszuführen und zu dokumentieren (Art. 6 Abs. 1 lit. b und c DSGVO). Eine Bestätigung kann per E-Mail über den Dienst Resend (Resend, Inc., USA) versendet werden.</p>
 
@@ -199,8 +199,8 @@ DS_FR = f"""
 <p>Toutes les polices sont chargées depuis notre propre serveur, sans connexion à Google Fonts.</p>
 <h3>j) Statistiques anonymes</h3>
 <p>Pour savoir combien de visiteurs essaient l'app, notre serveur compte des événements anonymes (ex. « page vue », « essai commencé », « compte créé ») sous forme de simples compteurs par jour, éventuellement avec la source de campagne du lien (ex. utm_source=instagram). Aucune adresse IP, aucun identifiant, cookie ou information d'appareil n'est enregistré (art. 6 §1 f) RGPD).</p>
-<h3>k) Essai sans compte</h3>
-<p>En mode essai, le prénom, l'âge et la progression de l'enfant restent uniquement sur l'appareil et ne nous sont pas transmis. Ils peuvent être repris lors de la création d'un compte parent.</p>
+<h3>k) Ancien essai sans compte</h3>
+<p>L'ancien mode d'essai sans compte n'est plus proposé. Les données enregistrées à l'époque sur l'appareil (prénom, âge, progression) y restent et peuvent être reprises lors de la création d'un compte parent.</p>
 <h3>l) Résiliation</h3>
 <p>Lors d'une résiliation via « Verträge hier kündigen », nous traitons le nom, l'e-mail, le type et le motif éventuel pour l'exécuter et la documenter (art. 6 §1 b) et c) RGPD). Une confirmation peut être envoyée par e-mail via le service Resend (Resend, Inc., États-Unis).</p>
 <h3>n) Aide et contact</h3>
@@ -223,7 +223,7 @@ AGB_DE = f"""
 <h2>§ 1 Geltungsbereich und Anbieter</h2>
 <p>Diese Allgemeinen Geschäftsbedingungen gelten für die Nutzung der Lern-App {C['app']} ({C['site']}) und den Kauf des Vollzugangs. Anbieter ist {C['owner']}, {C['business']}, {C['street']}, {C['city']}, {C['country']}.</p>
 <h2>§ 2 Leistungen</h2>
-<p><strong>Kostenlose Nutzung:</strong> Alle Länder können kostenlos genutzt werden, begrenzt auf 2 neue Kapitel und 3 Spielrunden pro Tag und Kinderprofil. Bereits abgeschlossene Kapitel können jederzeit wiederholt werden. Die kostenlose Nutzung kann auch ohne Konto (Testmodus, Speicherung nur auf dem Gerät) erfolgen.</p>
+<p><strong>Kostenlose Nutzung:</strong> Alle Länder können kostenlos genutzt werden, begrenzt auf 2 neue Kapitel und 3 Spielrunden pro Tag und Kinderprofil. Bereits abgeschlossene Kapitel können jederzeit wiederholt werden. Für die Nutzung ist ein kostenloses Elternkonto erforderlich.</p>
 <p><strong>Familien-Abo:</strong> Das kostenpflichtige Abonnement hebt die tägliche Begrenzung für alle Kinderprofile des Elternkontos auf (höchstens 5 Kinder und 5 Geräte).</p>
 <p><strong>Lehrer-Abo:</strong> Für eine Lehrkraft und ihre Klasse, zur Nutzung im Unterricht: unbegrenzte Kapitel für höchstens 35 Schülerprofile und 5 Geräte (einschließlich digitaler Tafel).</p>
 <p><strong>Schul-Lizenz:</strong> Für alle Lehrkräfte einer Schule (höchstens 300 Schülerprofile und 30 Geräte). Preis und Laufzeit werden im individuellen Angebot festgelegt; die Zahlung erfolgt per Überweisung auf Rechnung. Der Zugang wird nach Zahlungseingang freigeschaltet.</p>
@@ -265,7 +265,7 @@ AGB_FR = f"""
 <h2>Art. 1 Champ d'application et vendeur</h2>
 <p>Les présentes conditions générales de vente (CGV) s'appliquent à l'utilisation de l'application éducative {C['app']} ({C['site']}) et à l'achat de l'accès complet. Le vendeur est {C['owner']}, {C['business']}, {C['street']}, {C['city']}, {C['country']}.</p>
 <h2>Art. 2 Services</h2>
-<p><strong>Utilisation gratuite :</strong> tous les pays sont accessibles gratuitement, dans la limite de 2 nouveaux chapitres et 3 parties de jeux par jour et par profil enfant. Les chapitres déjà terminés peuvent être rejoués à tout moment. L'essai est possible sans compte (données enregistrées uniquement sur l'appareil).</p>
+<p><strong>Utilisation gratuite :</strong> tous les pays sont accessibles gratuitement, dans la limite de 2 nouveaux chapitres et 3 parties de jeux par jour et par profil enfant. Les chapitres déjà terminés peuvent être rejoués à tout moment. L'utilisation nécessite un compte parent gratuit.</p>
 <p><strong>Formule Famille :</strong> l'abonnement payant supprime la limite quotidienne pour tous les profils enfants du compte parent (5 enfants et 5 appareils maximum).</p>
 <p><strong>Formule Enseignant :</strong> pour un enseignant et sa classe, en usage scolaire : chapitres illimités pour 35 profils élèves et 5 appareils maximum (tableau numérique compris).</p>
 <p><strong>Licence École :</strong> pour tous les enseignants d'une école (300 profils élèves et 30 appareils maximum). Le prix et la durée sont fixés dans un devis individuel ; le paiement se fait par virement sur facture. L'accès est activé à réception du paiement.</p>
