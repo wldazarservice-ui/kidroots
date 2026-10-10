@@ -78,15 +78,14 @@ export const ttsSpeak = (text, opts = {}) => {
   return u
 }
 
-// Preference utilisateur : voix off activee ou non (par defaut : oui)
-const TTS_KEY = 'kidroots_tts_enabled'
+// Preference : lecture AUTOMATIQUE des textes (par defaut : non). Le bouton 🔊 lit toujours a la demande.
+// Nouvelle cle (l'ancienne 'kidroots_tts_enabled' etait activee par defaut) : tout le monde repart sur « non ».
+const TTS_KEY = 'kidroots_autoread'
 export const getTTSEnabled = () => {
-  try {
-    const v = localStorage.getItem(TTS_KEY)
-    return v === null ? true : v === '1'
-  } catch { return true }
+  try { return localStorage.getItem(TTS_KEY) === '1' } catch { return false }
 }
 export const setTTSEnabled = (on) => {
   try { localStorage.setItem(TTS_KEY, on ? '1' : '0') } catch {}
   if (!on) ttsStop()
+  window.dispatchEvent(new CustomEvent('mokalibo:autoread', { detail: on }))
 }

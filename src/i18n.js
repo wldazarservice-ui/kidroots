@@ -268,6 +268,8 @@ export const UI = {
     support_link: "Aide et contact",
     support_faq: "Une autre question ? Écrivez-nous",
     support_question: "Une question avant de vous abonner ? Écrivez-nous",
+    autoread_on: "Lecture auto : oui",
+    autoread_off: "Lecture auto : non",
   },
   en: {
     tagline: 'Discover the history of countries around the world',
@@ -528,6 +530,8 @@ export const UI = {
     support_link: "Help & contact",
     support_faq: "Another question? Write to us",
     support_question: "A question before subscribing? Write to us",
+    autoread_on: "Auto-read: on",
+    autoread_off: "Auto-read: off",
   },
   de: {
     tagline: 'Entdecke die Geschichte der Lander der Welt',
@@ -788,6 +792,8 @@ export const UI = {
     support_link: "Hilfe & Kontakt",
     support_faq: "Noch eine Frage? Schreiben Sie uns",
     support_question: "Eine Frage vor dem Abo? Schreiben Sie uns",
+    autoread_on: "Automatisch vorlesen: an",
+    autoread_off: "Automatisch vorlesen: aus",
   },
   bm: {
     tagline: 'I ka duniya jamana tarixi lajili',
@@ -966,6 +972,8 @@ export const UI = {
     daily_unlimited: "مغامرات بلا حدود",
     manage_sub: "اشتراكي",
     card_fact_tap: "هل تعلم؟ اضغط للاكتشاف",
+    autoread_on: "القراءة التلقائية: نعم",
+    autoread_off: "القراءة التلقائية: لا",
   },
   pt: {
     tagline: 'Descubra a historia dos paises do mundo',
@@ -1086,6 +1094,8 @@ export const UI = {
     daily_unlimited: "Aventuras ilimitadas",
     manage_sub: "Minha assinatura",
     card_fact_tap: "Você sabia? Toque para descobrir",
+    autoread_on: "Leitura automática: sim",
+    autoread_off: "Leitura automática: não",
   },
 }
 

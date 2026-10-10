@@ -5,8 +5,13 @@ import { ttsAvailable, ttsSpeak, ttsStop, getTTSEnabled, setTTSEnabled } from '.
 // Props: text (string|string[]), lang, color, size, autoPlay, settings
 export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, autoPlay = false, settings = false, label }) {
   const [speaking, setSpeaking] = useState(false)
-  const [enabled, setEnabledState] = useState(getTTSEnabled())
+  const [enabled, setEnabledState] = useState(getTTSEnabled()) // lecture automatique
   const mountedRef = useRef(true)
+  useEffect(() => {
+    const on = (e) => setEnabledState(!!e.detail)
+    window.addEventListener('mokalibo:autoread', on)
+    return () => window.removeEventListener('mokalibo:autoread', on)
+  }, [])
 
   const fullText = Array.isArray(text) ? text.filter(Boolean).join('. ') : text
 
@@ -25,18 +30,13 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
     setSpeaking(false)
   }
 
+  // Bouton 🔊 : lit (ou arrete) a la demande, que la lecture automatique soit activee ou non
   const toggle = () => {
-    if (!enabled) {
-      setEnabledState(true)
-      setTTSEnabled(true)
-      setTimeout(start, 50)
-      return
-    }
     if (speaking) stop()
     else start()
   }
 
-  // Lecture automatique a l'apparition (quand l'utilisateur a active la voix off)
+  // Lecture automatique a l'apparition, seulement si le parent/l'enfant l'a activee (« Lecture auto »)
   useEffect(() => {
     mountedRef.current = true
     if (autoPlay && enabled && fullText) {
@@ -62,8 +62,8 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
           setEnabledState(next)
           setTTSEnabled(next)
         }}
-        title={enabled ? 'Voix off ON' : 'Voix off OFF'}
-        aria-label={enabled ? 'Couper la voix' : 'Activer la voix'}
+        title={enabled ? 'Lecture automatique : activée' : 'Lecture automatique : désactivée'}
+        aria-label={enabled ? 'Désactiver la lecture automatique' : 'Activer la lecture automatique'}
         style={{
           background: enabled ? color : 'white',
           color: enabled ? 'white' : '#90A4AE',

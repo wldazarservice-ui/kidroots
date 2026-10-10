@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { t } from '../i18n'
 import SpeakButton from './SpeakButton'
+import AutoReadChip from './AutoReadChip'
 import { ttsStop } from '../tts'
 import { useTranslatedObj } from '../useTranslated'
 
@@ -60,7 +61,8 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
               💡 {t(lang, 'card_fact_tap')}
             </button>
         )}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
+          <AutoReadChip lang={lang} color={ch.color} />
           <SpeakButton
             key={`card-${idx}-${revealed ? 'f' : 't'}`}
             text={revealed ? [card.fact] : [card.date, card.title, card.text]}
