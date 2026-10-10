@@ -9,6 +9,9 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  // Accord pour le bilan de la semaine et les conseils par e-mail (decoche par defaut, § 7 UWG / RGPD)
+  const [optIn, setOptIn] = useState(false)
+  const setOpt = (v) => { setOptIn(v); try { sessionStorage.setItem('kidroots_optin', v ? '1' : '0') } catch { /* rien */ } }
 
   const isSignup = mode === 'signup'
 
@@ -108,6 +111,12 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
             </div>
           )}
 
+          {isSignup && (
+            <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 14, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.45 }}>
+              <input type="checkbox" checked={optIn} onChange={(e) => setOpt(e.target.checked)} style={{ width: 20, height: 20, marginTop: 1, accentColor: GREEN, flexShrink: 0 }} />
+              <span>📧 Je veux recevoir le bilan de la semaine de mes enfants et des conseils par e-mail (désinscription en 1 clic).</span>
+            </label>
+          )}
           <button type="submit" className="btn-kid" disabled={busy}
             style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '16px', fontSize: 18, borderRadius: 20, marginBottom: 12, boxShadow: '0 6px 0 #1F7A43', opacity: busy ? 0.6 : 1 }}>
             {busy ? '...' : isSignup ? '✨ Créer mon compte' : '🚀 Se connecter'}

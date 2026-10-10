@@ -1,9 +1,9 @@
 import { openSupport } from '../support'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
 import SubscriptionCard from './SubscriptionCard'
 import { changePassword, changeEmail, hasPassword, isGoogleAccount, resetPassword, verifyEmail } from '../auth'
-import { updateChildProfile, deleteChild } from '../cloud'
+import { updateChildProfile, deleteChild, setEmailOptIn, getEmailOptIn } from '../cloud'
 
 const INK = '#1A2A4F'
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
@@ -91,6 +91,9 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
               style={{ ...card, width: '100%', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', border: 'none', fontSize: 15, fontWeight: 900, color: '#1565C0' }}>
               💬 Aide et contact : une question, un souci ? Écris-nous
             </button>
+
+            {/* Accord e-mails */}
+            <EmailPrefs user={user} card={card} />
 
             {/* E-mail du compte */}
             <div style={card}>
@@ -196,5 +199,19 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
         )}
       </div>
     </div>
+  )
+}
+
+// Interrupteur « bilan de la semaine et conseils par e-mail »
+function EmailPrefs({ user, card }) {
+  const [on, setOn] = useState(null)
+  useEffect(() => { getEmailOptIn(user.uid).then(setOn).catch(() => setOn(false)) }, [user.uid])
+  if (on === null) return null
+  const toggle = async () => { const v = !on; setOn(v); try { await setEmailOptIn(user.uid, v) } catch { setOn(!v) } }
+  return (
+    <button type="button" onClick={toggle} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+      <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
+      <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>📧 Recevoir le bilan de la semaine de mes enfants et des conseils par e-mail</span>
+    </button>
   )
 }

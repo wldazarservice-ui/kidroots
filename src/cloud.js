@@ -24,6 +24,7 @@ export async function ensureUserDoc(user) {
       displayName: user.displayName || '',
       createdAt: serverTimestamp(),
       activeChildId: null,
+      emailOptIn: (() => { try { return sessionStorage.getItem('kidroots_optin') === '1' } catch { return false } })(),
     })
     return { activeChildId: null, isNew: true }
   }
@@ -153,4 +154,13 @@ export async function deleteChild(uid, childId) {
   await deleteDoc(doc(db, 'users', uid, 'children', childId))
   const u = await getDoc(doc(db, 'users', uid))
   if (u.exists() && u.data().activeChildId === childId) await updateDoc(doc(db, 'users', uid), { activeChildId: null })
+}
+
+// Accord e-mails (bilan de la semaine + conseils), modifiable dans Mon compte
+export async function setEmailOptIn(uid, on) {
+  await updateDoc(doc(db, 'users', uid), { emailOptIn: !!on })
+}
+export async function getEmailOptIn(uid) {
+  const snap = await getDoc(doc(db, 'users', uid))
+  return snap.data()?.emailOptIn === true
 }
