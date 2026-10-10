@@ -57,7 +57,7 @@ export async function startCheckout(user, { waiver, plan = 'year' } = {}) {
 // Au retour de Stripe : confirme le paiement cote serveur
 export async function confirmCheckout(user, sessionId) {
   const data = await call('/api/confirm-checkout', user, { sessionId })
-  return !!data.premium
+  return data.premium ? data : null
 }
 
 // Etat du compte cote serveur (abonnement, acces a vie, acces offert)

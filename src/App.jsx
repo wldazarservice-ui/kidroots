@@ -229,7 +229,11 @@ export default function App() {
     if (status !== 'success' || !sessionId) return
     confirmCheckout(user, sessionId)
       .then((ok) => {
-        if (ok) { setPremium(true); setToast('pw_thanks'); setTimeout(() => setToast(null), 4000) }
+        if (ok) {
+          setPremium(true)
+          window.dispatchEvent(new CustomEvent('mokalibo:welcome', { detail: ok }))
+          fetchAccountStatus(user).then((st) => { setLimits(st); setAccount(st) }).catch(() => {})
+        }
       })
       .catch((e) => console.error('Confirm checkout error:', e))
   }, [user])
@@ -560,7 +564,7 @@ export default function App() {
           onUnlock={() => { setLimitOpen(false); setPaywallOpen(true) }} />
       )}
       {toast && (
-        <div className="anim-slide-up" style={{ position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 700, background: '#2E9E5B', color: 'white', padding: '12px 20px', borderRadius: 20, fontWeight: 900, fontSize: 16, fontFamily: 'Nunito, sans-serif', boxShadow: '0 8px 20px rgba(46,158,91,0.4)', whiteSpace: 'nowrap' }}>
+        <div className="anim-slide-up" style={{ position: 'fixed', top: 'calc(env(safe-area-inset-top, 0px) + 16px)', left: 16, right: 16, margin: '0 auto', maxWidth: 420, textAlign: 'center', zIndex: 700, background: '#2E9E5B', color: 'white', padding: '12px 20px', borderRadius: 20, fontWeight: 900, fontSize: 16, lineHeight: 1.35, fontFamily: 'Nunito, sans-serif', boxShadow: '0 8px 20px rgba(46,158,91,0.4)' }}>
           {t(lang, toast)}
         </div>
       )}

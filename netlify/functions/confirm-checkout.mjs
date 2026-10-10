@@ -1,5 +1,5 @@
 // Au retour de Stripe : verifie la session et debloque le compte sans attendre le webhook
-import { stripe, verifyUser, syncSubscription, countEvent, json } from '../lib/shared.mjs'
+import { stripe, verifyUser, syncSubscription, countEvent, json, PLANS } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
@@ -16,7 +16,15 @@ export default async (req) => {
 
   const isNew = await syncSubscription(user.uid, sub)
   if (isNew) await (sub.status === 'trialing' ? countEvent('trial') : countEvent('purchase', { plan: sub.items?.data?.[0]?.price?.recurring?.interval })).catch(() => {})
-  return json(200, { premium: ['active', 'trialing', 'past_due'].includes(sub.status) })
+  const item = sub.items?.data?.[0]
+  const end = sub.status === 'trialing' ? sub.trial_end : (item?.current_period_end || sub.current_period_end)
+  return json(200, {
+    premium: ['active', 'trialing', 'past_due'].includes(sub.status),
+    trialing: sub.status === 'trialing',
+    plan: item?.price?.recurring?.interval || null,
+    tier: PLANS[sub.metadata?.plan]?.tier || 'family',
+    until: end ? new Date(end * 1000).toISOString() : null,
+  })
 }
 
 export const config = { path: '/api/confirm-checkout' }
