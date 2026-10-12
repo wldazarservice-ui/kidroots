@@ -6,17 +6,16 @@ import html, os
 
 COMPANY = {
     'owner': 'Walid Azar',
-    'business': 'Azar Consulting (Einzelunternehmen)',
-    'street': 'Zur Schweiz 3a, Whg. 3',
+    'business': 'Azar Consulting',
+    'street': 'Zur Schweiz 3a',
     'city': '54516 Wittlich',
     'country': 'Deutschland',
     'email': 'bonjour@mokalibo.com',
-    'phone': '+49 151 704 25620',
     'web': 'https://azarconsulting.eu',
     'widnr': 'DE462026365-00001',
     'app': 'Mokalibo',
     'site': 'https://mokalibo.com',
-    'updated': '08.10.2026 (Familien-Abo)',
+    'updated': '12.10.2026',
     'authority': 'Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere Bleiche 34, 55116 Mainz, poststelle@datenschutz.rlp.de',
 }
 
@@ -24,7 +23,7 @@ C = {k: html.escape(v) for k, v in COMPANY.items()}
 OUT = os.path.join(os.path.dirname(__file__), '..', '..', 'public')
 
 ADDRESS = f"{C['owner']}<br>{C['business']}<br>{C['street']}<br>{C['city']}<br>{C['country']}"
-CONTACT = f"E-Mail : <a href=\"mailto:{C['email']}\">{C['email']}</a><br>Tel. : {C['phone']}<br>Web : <a href=\"{C['web']}\">{C['web']}</a>"
+CONTACT = f"E-Mail : <a href=\"mailto:{C['email']}\">{C['email']}</a><br>Web : <a href=\"{C['web']}\">{C['web']}</a>"
 
 PAGE = """<!doctype html>
 <html lang="de">
