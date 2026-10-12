@@ -5,10 +5,44 @@ const CACHE_KEY = 'kidroots_tr_cache_v2'
 const SRC_LANG = 'fr'
 const UNSUPPORTED = new Set(['bm'])
 
+// Traductions corrigees a la main (la traduction automatique se trompe sur ces textes)
+const FIXED = {
+  "De l'Empire du Ghana à aujourd'hui": { de: "Vom Reich Ghana bis heute", en: "From the Ghana Empire to today", pt: "Do Império do Gana até hoje", ar: "من إمبراطورية غانا إلى اليوم" },
+  "Du Royaume du Sine au Lion de Teranga": { de: "Vom Königreich Sine zum Löwen von Teranga" },
+  "Des tribus germaniques à la réunion": { de: "Von den germanischen Stämmen zur Wiedervereinigung", en: "From Germanic tribes to reunification" },
+  "Du Grand Nord aux deux langues": { de: "Vom hohen Norden bis zu zwei Landessprachen", en: "From the Far North to two official languages" },
+  "Des Tupi à l'Amazonie moderne": { de: "Von den Tupi zum modernen Amazonien" },
+  "L'île du poisson volant et du cricket": { de: "Die Insel der fliegenden Fische und des Crickets" },
+  "Le petit sultanat de Bornéo": { en: "The little sultanate of Borneo" },
+  "Des peintures du Tassili à l'Algérie moderne": { de: "Von den Felsmalereien des Tassili zum modernen Algerien", en: "From the rock paintings of Tassili to modern Algeria" },
+  "Le pays coupé en deux par la ligne de l'équateur": { de: "Das Land, das der Äquator in zwei Hälften teilt" },
+  "Des ports antiques à Asmara l'art déco": { de: "Von antiken Häfen bis zum Art-déco-Asmara", en: "From ancient ports to art deco Asmara" },
+  "Plus de 300 îles et un grand « Bula ! »": { de: "Mehr als 300 Inseln und ein großes „Bula!“", en: "More than 300 islands and a big “Bula!”" },
+  "Le pays des pièces de monnaie géantes et de la cité sur l'eau": { de: "Das Land der Riesenmünzen und der Stadt auf dem Wasser" },
+  "L'île du cuivre et d'Aphrodite": { de: "Die Insel des Kupfers und der Aphrodite" },
+  "Des cavaliers magyars au Rubik's Cube": { de: "Von den magyarischen Reitern bis zum Zauberwürfel", en: "From Magyar horsemen to the Rubik's Cube" },
+  "Le pays d'Angkor": { de: "Das Land von Angkor", en: "The land of Angkor" },
+  "L'île du dodo, des lagons et des mille cultures": { de: "Die Insel des Dodos, der Lagunen und der tausend Kulturen", en: "The island of the dodo, lagoons and a thousand cultures" },
+  "Les maîtres des cartes en bâtons": { de: "Die Meister der Stabkarten", en: "The masters of stick charts" },
+  "Le pays gagné sur la mer": { de: "Das dem Meer abgerungene Land", en: "The land reclaimed from the sea" },
+  "Les îles des pirogues sculptées": { de: "Die Inseln der geschnitzten Kanus", en: "The islands of carved canoes" },
+  "L'archipel du coco de mer et des tortues géantes": { de: "Der Archipel der Seychellennuss und der Riesenschildkröten", en: "The archipelago of the coco de mer and giant tortoises" },
+  "Le pays du saut du gaul": { de: "Das Land der Turmspringer von Pentecost", en: "The land of the Pentecost land divers" },
+  "Le petit pays du premier Mondial de football": { de: "Das kleine Land der ersten Fußball-WM", en: "The small country of the first football World Cup" },
+  "Le pays des hommes intègres": { de: "Das Land der aufrichtigen Menschen", en: "The land of upright people" },
+  "Le pays du matin calme": { de: "Das Land der Morgenstille", en: "The land of the morning calm" },
+  "Le pays du million d'éléphants": { de: "Das Land der Million Elefanten" },
+  "Des monastères dans la roche aux caves géantes": { de: "Von Felsenklöstern bis zu riesigen Weinkellern", en: "From rock monasteries to giant wine cellars" },
+  "Le pays qui fait promettre aux visiteurs de protéger la nature": { de: "Das Land, in dem Besucher versprechen, die Natur zu schützen" },
+  "Le pays-continent des kangourous et de la plus vieille culture vivante": { de: "Der Kontinent-Staat der Kängurus und der ältesten lebenden Kultur" },
+  "L'île du crocodile": { de: "Die Krokodilinsel" },
+}
+
 let cache = null
 function loadCache() {
   if (cache) return cache
   try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') } catch { cache = {} }
+  for (const [src, tr] of Object.entries(FIXED)) for (const [l, v] of Object.entries(tr)) cache[`${l}|${src}`] = v
   return cache
 }
 

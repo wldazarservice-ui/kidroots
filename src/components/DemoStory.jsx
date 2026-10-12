@@ -10,13 +10,15 @@ const TXT = {
   fr: { kicker: 'Essaie maintenant', title: 'Une vraie histoire de Mokalibo', sub: 'Touche 🔊 pour l’écouter, comme le ferait ton enfant.', fact: 'Le savais-tu ? Touche pour découvrir', next: 'Carte suivante →', end_t: 'Il reste plus de 3 500 histoires à découvrir !', end_s: '195 pays, des quiz, des jeux et un passeport à tamponner. Gratuit, sans carte bancaire.', cta: '▶ Continuer l’aventure gratuitement', again: '↺ Revoir les cartes' },
   en: { kicker: 'Try it now', title: 'A real Mokalibo story', sub: 'Tap 🔊 to listen, just like your child would.', fact: 'Did you know? Tap to find out', next: 'Next card →', end_t: 'More than 3,500 stories are waiting!', end_s: '195 countries, quizzes, games and a passport to stamp. Free, no card needed.', cta: '▶ Continue the adventure for free', again: '↺ See the cards again' },
   de: { kicker: 'Jetzt ausprobieren', title: 'Eine echte Mokalibo-Geschichte', sub: 'Tippe auf 🔊 zum Anhören – genau wie dein Kind.', fact: 'Wusstest du? Tippen zum Entdecken', next: 'Nächste Karte →', end_t: 'Über 3.500 Geschichten warten!', end_s: '195 Länder, Quiz, Spiele und ein Reisepass zum Stempeln. Kostenlos, ohne Karte.', cta: '▶ Kostenlos weiterspielen', again: '↺ Karten noch einmal' },
+  pt: { kicker: 'Experimenta agora', title: 'Uma verdadeira história Mokalibo', sub: 'Toca em 🔊 para ouvir, como o teu filho faria.', fact: 'Sabias que? Toca para descobrir', next: 'Cartão seguinte →', end_t: 'Há mais de 3 500 histórias à tua espera!', end_s: '195 países, quizzes, jogos e um passaporte para carimbar. Grátis, sem cartão.', cta: '▶ Continuar a aventura grátis', again: '↺ Rever os cartões' },
+  ar: { kicker: 'جرّب الآن', title: 'قصة حقيقية من Mokalibo', sub: 'المس 🔊 للاستماع، كما سيفعل طفلك.', fact: 'هل تعلم؟ المس للاكتشاف', next: '← البطاقة التالية', end_t: 'أكثر من 3500 قصة في انتظارك!', end_s: '195 دولة، واختبارات، وألعاب، وجواز سفر للختم. مجانًا، بدون بطاقة.', cta: '▶ تابع المغامرة مجانًا', again: '↺ أعد مشاهدة البطاقات' },
 }
 // Deux cartes du Japon : les samourais, puis les jeux video
 const RAW = [COUNTRIES.JP?.chapters?.[1]?.cards?.[0], COUNTRIES.JP?.chapters?.[3]?.cards?.[1]].filter(Boolean)
 
 // Apercu interactif sur la page d'accueil : on goute une histoire avant de creer son compte
 export default function DemoStory({ lang, onSignup }) {
-  const T = TXT[lang] || TXT.en
+  const T = TXT[lang] || (lang === 'bm' ? TXT.fr : TXT.en)
   const cards = useTranslatedObj(RAW, lang)
   const [i, setI] = useState(0)
   const [fact, setFact] = useState(false)
@@ -26,7 +28,7 @@ export default function DemoStory({ lang, onSignup }) {
   const color = '#C62828'
 
   return (
-    <section style={{ padding: '30px 16px 40px', background: 'linear-gradient(180deg,#FFFDF7,#FFF3E0)' }}>
+    <section id="demo" style={{ scrollMarginTop: 70, padding: '30px 16px 40px', background: 'linear-gradient(180deg,#FFFDF7,#FFF3E0)' }}>
       <div style={{ maxWidth: 520, margin: '0 auto', textAlign: 'center' }}>
         <div style={{ fontSize: 13, fontWeight: 900, color: '#E65100', letterSpacing: 1, textTransform: 'uppercase' }}>👇 {T.kicker}</div>
         <h2 style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 28, fontWeight: 700, color: INK, margin: '4px 0 4px' }}>{T.title}</h2>

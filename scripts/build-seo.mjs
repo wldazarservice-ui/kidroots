@@ -62,7 +62,7 @@ footer a{margin:0 8px;color:#607D8B}
 @media(max-width:600px){h1{font-size:28px}.top nav{display:none}}
 `
 
-function layout({ title, description, canonical, body, jsonld, ogImage = `${SITE}/icon-512.png` }) {
+function layout({ title, description, canonical, body, jsonld, ogImage = `${SITE}/og-image.jpg` }) {
   return `<!doctype html>
 <html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -71,7 +71,7 @@ function layout({ title, description, canonical, body, jsonld, ogImage = `${SITE
 <link rel="canonical" href="${canonical}">
 <meta property="og:type" content="article"><meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}">
-<meta property="og:image" content="${ogImage}"><meta property="og:site_name" content="Mokalibo"><meta name="twitter:card" content="summary">
+<meta property="og:image" content="${ogImage}"><meta property="og:site_name" content="Mokalibo"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>${CSS}</style>
@@ -93,20 +93,18 @@ function countryPage(code, c) {
   const nCards = c.chapters.reduce((a, ch) => a + (ch.cards?.length || 0), 0)
   const nQuiz = c.chapters.reduce((a, ch) => a + (ch.quiz?.length || 0), 0)
   const title = `${name} : l'histoire du pays expliquée aux enfants | Mokalibo`
-  const description = cut(`Découvre l'histoire de ${name} pour les enfants de 4 à 12 ans : ${c.chapters.map((ch) => ch.title).slice(0, 3).join(', ')}… Histoires vraies, quiz et jeux.`, 158)
+  const description = cut(`L'histoire de ${name} racontée aux enfants de 4 à 12 ans en ${c.chapters.length} chapitres : ${c.chapters.map((ch) => ch.title).slice(0, 3).join(', ')}… Histoires lues à voix haute, quiz et jeux.`, 158)
 
+  // Vitrine seulement (decision du 08/10/2026) : titres des chapitres, guide, accroche.
+  // JAMAIS le texte des histoires, les personnages, les anecdotes ni les reponses du quiz.
+  const hero = COUNTRIES[code].hero || c.hero
   const chapters = c.chapters.map((ch) => `
-  <section class="card">
+  <li class="card" style="list-style:none">
     <span class="era">${esc(ch.era)}</span>
     <h3>${esc(ch.emoji || '')} ${esc(ch.title)}</h3>
     ${ch.subtitle ? `<div style="font-weight:800;color:#607D8B">${esc(ch.subtitle)}</div>` : ''}
-    <p style="margin-top:8px">${esc(ch.intro)}</p>
-    ${ch.figure?.name ? `<div class="fig"><b>${esc(ch.figure.emoji || '⭐')} ${esc(ch.figure.name)}</b> — ${esc(ch.figure.desc)}</div>` : ''}
-  </section>`).join('')
-
-  // Quelques anecdotes (une par chapitre) : le reste se découvre dans l'app
-  const facts = c.chapters.map((ch) => ch.cards?.[0]).filter((x) => x && x.fact).slice(0, 5)
-  const quiz = c.chapters.map((ch) => ch.quiz?.[0]).filter(Boolean).slice(0, 3)
+    <div style="margin-top:6px;font-size:14px;font-weight:800;color:#90A4AE">🔒 ${ch.cards?.length || 0} histoires et ${ch.quiz?.length || 0} questions dans l'app</div>
+  </li>`).join('')
   const neighbours = (reg?.countries || []).filter((x) => x !== code && slugs[x]).slice(0, 12)
 
   const body = `
@@ -115,22 +113,20 @@ function countryPage(code, c) {
     <h1>${esc(name)} : l'histoire du pays expliquée aux enfants</h1>
     <p class="lead">${esc(c.tagline || '')}</p>
     <div class="chips"><span class="chip">📖 ${c.chapters.length} chapitres</span><span class="chip">🃏 ${nCards} histoires</span><span class="chip">🎯 ${nQuiz} questions</span><span class="chip">👧 4 à 12 ans</span></div>
-    <a class="btn" href="/">▶ Découvrir ${esc(name)} en jouant — gratuit</a>
+    <a class="btn" href="/?utm_source=seo&amp;utm_medium=pays">▶ Découvrir ce pays en jouant · essai gratuit</a>
   </div>
+  ${hero?.name ? `<div class="card" style="display:flex;gap:14px;align-items:center"><span style="font-size:46px">${esc(hero.emoji || '🧒')}</span><div><b>Ton guide : ${esc(hero.name)}${hero.age ? `, ${esc(/\D/.test(String(hero.age)) ? hero.age : hero.age + ' ans')}` : ''}</b><br>Dans Mokalibo, ton enfant traverse ${c.chapters.length} chapitres de l'histoire du pays en compagnie de son guide, grâce à des histoires lues à voix haute.</div></div>` : ''}
   ${teaser ? `<div class="teaser">💡 Le savais-tu ? ${esc(teaser)}</div>` : ''}
-  <h2>🗺️ L'histoire de ${esc(name)} en ${c.chapters.length} chapitres</h2>
-  ${chapters}
-  ${facts.length ? `<h2>✨ Anecdotes à raconter aux enfants</h2><ul class="facts">${facts.map((f) => `<li><b>${esc(f.title)}</b> : ${esc(f.fact)}</li>`).join('')}</ul>` : ''}
-  ${d ? `<h2>🦁 L'animal et le monument</h2>
-  <div class="card"><h3>${esc(d.animal.emoji)} ${esc(d.animal.name)}</h3><p>${esc(d.animal.fact)}</p><p style="margin-top:6px"><b>Comment le protéger ?</b> ${esc(d.animal.protect)}</p></div>
-  <div class="card"><h3>${esc(d.monument.emoji)} ${esc(d.monument.name)}</h3><p>${esc(d.monument.riddle || '')}</p></div>` : ''}
-  ${quiz.length ? `<h2>🎯 Petit quiz</h2>${quiz.map((q) => `<details><summary>${esc(q.q)}</summary><p style="margin-top:6px">✅ ${esc(q.correct)}</p></details>`).join('')}` : ''}
-  <div class="cta"><div style="font-size:44px">🌍</div><h2 style="margin:6px 0 0;color:#fff">Ton enfant va adorer ${esc(name)}</h2>
-  <p>Histoires lues à voix haute, quiz, passeport à tamponner et jeux. 2 histoires offertes chaque jour, sans compte et sans publicité.</p>
-  <p style="font-weight:900;color:#FFE082">💛 Apprendre le monde, protéger les enfants : le reste de nos revenus va à la protection de l'enfance.</p>
-  <a class="btn" href="/">Essayer Mokalibo gratuitement</a></div>
+  <h2>🗺️ Son histoire en ${c.chapters.length} chapitres</h2>
+  <ol style="padding:0">${chapters}</ol>
+  ${d ? `<h2>🦁 À découvrir aussi dans l'app</h2>
+  <div class="chips" style="justify-content:flex-start"><span class="chip">${esc(d.animal.emoji)} ${esc(d.animal.name)}</span><span class="chip">${esc(d.monument.emoji)} ${esc(d.monument.name)}</span><span class="chip">🛂 Un tampon dans le passeport</span><span class="chip">🎮 Des jeux pour réviser</span></div>` : ''}
+  <div class="cta"><div style="font-size:44px">🌍</div><h2 style="margin:6px 0 0;color:#fff">Un voyage que ton enfant va adorer</h2>
+  <p>Histoires vraies lues à voix haute, quiz, passeport à tamponner et jeux, dans ${codes.length} pays. 3 niveaux de lecture de 4 à 12 ans, sans publicité.</p>
+  <p style="font-weight:900;color:#FFE082">💛 Apprendre le monde, protéger les enfants : 5 % de chaque abonnement vont à la protection de l'enfance.</p>
+  <a class="btn" href="/?utm_source=seo&amp;utm_medium=pays">Essayer Mokalibo gratuitement</a></div>
   ${neighbours.length ? `<h2>${esc(reg.mascot || '🌍')} Autres pays à découvrir</h2><div class="grid">${neighbours.map((x) => `<a href="/histoire/${slugs[x]}/"><span>${COUNTRIES[x].flag}</span>${esc(COUNTRIES[x].name)}</a>`).join('')}</div>` : ''}
-  <p style="margin-top:22px"><a href="/histoire/">← L'histoire des 195 pays du monde</a></p>`
+  <p style="margin-top:22px"><a href="/histoire/">← L'histoire des ${codes.length} pays du monde</a></p>`
 
   const jsonld = [
     { '@context': 'https://schema.org', '@type': 'Article', headline: `${name} : l'histoire du pays expliquée aux enfants`, description, inLanguage: 'fr', url,
@@ -151,22 +147,33 @@ function indexPage() {
     return `<h2>${esc(r.mascot)} ${esc(r.name)} · ${list.length} pays</h2><div class="grid">${list.map((c) => `<a href="/histoire/${slugs[c]}/"><span>${COUNTRIES[c].flag}</span>${esc(COUNTRIES[c].name)}</a>`).join('')}</div>`
   }).join('')
   const body = `<div class="hero"><div class="flag">🌍</div><h1>L'histoire des ${codes.length} pays du monde expliquée aux enfants</h1>
-  <p class="lead">Pour chaque pays : ses grandes périodes, ses héros, des anecdotes et un petit quiz. Idéal pour un exposé, les devoirs ou simplement la curiosité.</p>
+  <p class="lead">Pour chaque pays : ses grandes périodes racontées en histoires vraies lues à voix haute, avec un quiz à chaque chapitre. De 4 à 12 ans, sans publicité.</p>
   <div style="margin-top:18px"><a class="btn" href="/">▶ Essayer l'app gratuitement</a></div></div>${sections}`
   return layout({
     title: `L'histoire des ${codes.length} pays du monde expliquée aux enfants | Mokalibo`,
-    description: `Découvre l'histoire de tous les pays du monde, racontée pour les enfants de 4 à 12 ans : périodes, héros, anecdotes et quiz. ${codes.length} pays.`,
+    description: `Découvre l'histoire de tous les pays du monde, racontée pour les enfants de 4 à 12 ans : grandes périodes, histoires lues à voix haute et quiz. ${codes.length} pays.`,
     canonical: url, body,
     jsonld: [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Histoire des pays du monde pour les enfants', url, inLanguage: 'fr' }],
   })
 }
 
-// Pages pays désactivées (le contenu des chapitres reste réservé à l'app)
-const urls = [`${SITE}/`, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
+const pages = []
+for (const code of codes) {
+  const c = await fullCountry(code)
+  if (!c?.chapters?.length) continue
+  const dir = path.join(OUT, 'histoire', slugs[code])
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, 'index.html'), countryPage(code, c))
+  pages.push(`${SITE}/histoire/${slugs[code]}/`)
+}
+fs.mkdirSync(path.join(OUT, 'histoire'), { recursive: true })
+fs.writeFileSync(path.join(OUT, 'histoire', 'index.html'), indexPage())
+
+const urls = [`${SITE}/`, `${SITE}/histoire/`, ...pages, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
 </urlset>
 `)
-fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /histoire/\nDisallow: /media/\n\nSitemap: ${SITE}/sitemap.xml\n`)
-console.log(`SEO : sitemap (${urls.length} URL), pages pays désactivées`)
+fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /media/\n\nSitemap: ${SITE}/sitemap.xml\n`)
+console.log(`SEO : ${pages.length} pages pays (vitrine), sitemap (${urls.length} URL)`)

@@ -87,6 +87,7 @@ export default function App() {
   const [quizScore, setQuizScore] = useState(0)
   const [xpAnim, setXpAnim] = useState(null)
   const [lang, setLangState] = useState(getLang)
+  useEffect(() => { document.documentElement.lang = lang }, [lang])
 
   const [expert, setExpert] = useState({ code: null, data: null })
   const [levelPickerOpen, setLevelPickerOpen] = useState(false)
@@ -521,7 +522,7 @@ export default function App() {
   const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: hasPremium, guest: isGuest }
 
   // ── Auth gates ────────────────────────────────────────────────
-  if (authLoading) return <Spinner msg="Démarrage..." />
+  if (authLoading) return <Spinner msg={t(lang, 'starting')} />
   if (!user && !isGuest) {
     if (authMode) {
       return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)} />

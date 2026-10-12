@@ -8,6 +8,7 @@ const pct = (a, b) => (b ? `${Math.round((a / b) * 1000) / 10} %` : '—')
 
 const FUNNEL = [
   ['landing_view', '👀 Visites'],
+  ['demo_click', '🎧 Clic « Écouter une histoire »'],
   ['demo_open', '📖 Histoire de démo essayée'],
   ['cta_click', '👆 Clic « Commencer »'],
   ['demo_cta', '👆 Clic après la démo'],
@@ -175,6 +176,19 @@ export default function AdminDashboard({ user, onClose }) {
                   <div style={{ fontWeight: 900 }}>{r.school} · {r.students || '?'} élèves{r.city ? ` · ${r.city}` : ''}</div>
                   <div>{r.name} · <a href={`mailto:${r.email}?subject=${encodeURIComponent('Mokalibo pour ' + r.school)}`}>{r.email}</a> · {r.at ? new Date(r.at).toLocaleDateString('fr-FR') : ''}</div>
                   {r.message && <div style={{ color: '#546E7A' }}>{r.message}</div>}
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background: 'white', borderRadius: 18, padding: 14, marginTop: 14 }}>
+              <div style={{ fontWeight: 900, marginBottom: 4 }}>🐞 Bugs chez les utilisateurs ({(data.errors || []).reduce((a, e) => a + (e.n || 0), 0)})</div>
+              <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginBottom: 8 }}>Erreurs signalées automatiquement par l'app (sans donnée personnelle). Envoie-les à Claude pour correction.</div>
+              {(data.errors || []).length === 0 ? (
+                <div style={{ fontSize: 13, color: '#2E7D4F', fontWeight: 800 }}>✅ Aucun bug signalé sur la période.</div>
+              ) : data.errors.map((e) => (
+                <div key={e.day + e.id} style={{ fontSize: 12, fontWeight: 700, padding: '8px 0', borderTop: '1px solid #F1F4F8', lineHeight: 1.45, wordBreak: 'break-word' }}>
+                  <div style={{ fontWeight: 900, color: '#C62828' }}>{e.n}× {e.m}</div>
+                  <div style={{ color: '#78909C' }}>{e.day} · {e.page || '/'} · {e.src || ''} · {e.ua || ''} · v{e.v || '?'}</div>
                 </div>
               ))}
             </div>

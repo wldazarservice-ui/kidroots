@@ -125,7 +125,7 @@ export async function syncSubscription(uid, sub) {
 // purchase = nouvel abonne ; payment = chaque prelevement encaisse (revenueCents) ; cancel = resiliation
 // Un document par jour : metrics/AAAA-MM-JJ = { landing_view: 12, signup: 3, ... }
 // Aucune donnee personnelle (ni IP, ni identifiant) n'est enregistree.
-export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial', 'school_request', 'support', 'gift_purchase', 'gift_redeem', 'cta_click', 'demo_open', 'demo_cta']
+export const EVENTS = ['landing_view', 'guest_start', 'signup_view', 'signup', 'limit_hit', 'paywall_open', 'checkout_start', 'purchase', 'payment', 'cancel', 'install', 'referral', 'trial', 'school_request', 'support', 'gift_purchase', 'gift_redeem', 'cta_click', 'demo_open', 'demo_cta', 'demo_click']
 export const today = () => new Date().toISOString().slice(0, 10)
 
 export async function countEvent(event, { source, revenueCents, plan } = {}) {

@@ -11,6 +11,21 @@
   SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyD2rOoIjILi0CsM3qVpghqwEKVcwoYSs9w"
   SECRETS_SCAN_OMIT_PATHS = "dist/assets/*"
 
+# En-tetes de securite sur tout le site (anti-iframe d'un autre site, anti-sniffing, pas d'acces camera/micro/position)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# Fichiers de l'app avec un nom unique a chaque version : le navigateur peut les garder 1 an
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Le service worker ne doit jamais etre mis en cache par le navigateur
 [[headers]]
   for = "/sw.js"

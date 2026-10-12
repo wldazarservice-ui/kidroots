@@ -22,7 +22,11 @@ export default async (req) => {
   // Derniers messages du support
   const supSnap = await db().collection('supportRequests').orderBy('at', 'desc').limit(40).get().catch(() => null)
   const support = supSnap ? supSnap.docs.map((d) => { const x = d.data(); return { ...x, id: d.id, at: x.at?.toDate?.()?.toISOString() || null } }) : []
-  return json(200, { rows, schools, support, totals: { users: users.data().count, premium: paid.data().count } })
+  // Bugs signales par l'app (clientErrors/AAAA-MM-JJ)
+  const errSnap = await db().collection('clientErrors').where('day', '>=', from).get().catch(() => null)
+  const errors = errSnap ? errSnap.docs.flatMap((d) => Object.entries(d.data().errs || {}).map(([id, e]) => ({ id, day: d.id, ...e })))
+    .sort((a, b) => (b.last || '').localeCompare(a.last || '')).slice(0, 50) : []
+  return json(200, { rows, schools, support, errors, totals: { users: users.data().count, premium: paid.data().count } })
 }
 
 export const config = { path: '/api/metrics' }

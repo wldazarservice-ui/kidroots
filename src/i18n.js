@@ -266,6 +266,10 @@ export const UI = {
     games_left: "🎮 Encore {n} partie(s) gratuite(s) aujourd'hui",
     games_none: "🌙 Plus de parties gratuites aujourd'hui · Illimité avec la Formule Famille",
     support_link: "Aide et contact",
+    crash_title: "Oups, petit souci de boussole !",
+    crash_sub: "Un écran ne s’est pas chargé correctement. On a été prévenus. Recharge la page pour continuer l’aventure.",
+    crash_btn: "Recharger",
+    starting: "Démarrage…",
     support_faq: "Une autre question ? Écrivez-nous",
     support_question: "Une question avant de vous abonner ? Écrivez-nous",
     autoread_on: "Lecture auto : oui",
@@ -555,6 +559,10 @@ export const UI = {
     games_left: "🎮 {n} free game(s) left today",
     games_none: "🌙 No free games left today · Unlimited with the Family Plan",
     support_link: "Help & contact",
+    crash_title: "Oops, our compass got confused!",
+    crash_sub: "A screen didn’t load properly. We’ve been notified. Reload the page to continue the adventure.",
+    crash_btn: "Reload",
+    starting: "Starting…",
     support_faq: "Another question? Write to us",
     support_question: "A question before subscribing? Write to us",
     autoread_on: "Auto-read: on",
@@ -844,6 +852,10 @@ export const UI = {
     games_left: "🎮 Heute noch {n} kostenlose(s) Spiel(e)",
     games_none: "🌙 Heute keine kostenlosen Spiele mehr · Unbegrenzt mit dem Familien-Abo",
     support_link: "Hilfe & Kontakt",
+    crash_title: "Hoppla, der Kompass spinnt!",
+    crash_sub: "Ein Bildschirm wurde nicht richtig geladen. Wir wurden benachrichtigt. Lade die Seite neu, um weiterzuspielen.",
+    crash_btn: "Neu laden",
+    starting: "Wird gestartet…",
     support_faq: "Noch eine Frage? Schreiben Sie uns",
     support_question: "Eine Frage vor dem Abo? Schreiben Sie uns",
     autoread_on: "Automatisch vorlesen: an",
@@ -935,6 +947,10 @@ export const UI = {
     reading_level: "Kalan dakan",
   },
   ar: {
+    crash_title: "عفوًا، البوصلة تاهت قليلًا!",
+    crash_sub: "لم تُحمَّل هذه الشاشة بشكل صحيح. لقد تم إبلاغنا. أعد تحميل الصفحة لمتابعة المغامرة.",
+    crash_btn: "إعادة التحميل",
+    starting: "جارٍ البدء…",
     tagline: 'اكتشف تاريخ دول العالم',
     play: 'ابدأ الرحلة! 🚀',
     progress: 'التقدم الكلي',
@@ -1058,6 +1074,10 @@ export const UI = {
     dons_link: "تبرعاتنا",
   },
   pt: {
+    crash_title: "Ups, a bússola ficou confusa!",
+    crash_sub: "Um ecrã não carregou bem. Já fomos avisados. Recarrega a página para continuar a aventura.",
+    crash_btn: "Recarregar",
+    starting: "A iniciar…",
     tagline: 'Descubra a historia dos paises do mundo',
     play: 'Comecar a expedicao! 🚀',
     progress: 'PROGRESSO GERAL',
@@ -1190,6 +1210,11 @@ export const t = (lang, key, vars = {}) => {
 const LANG_KEY = 'kidroots_lang'
 // Langue enregistree, sinon celle du navigateur (de / en), sinon le francais
 export const getLang = () => {
+  // Lien avec ?lang=de (pubs, Instagram, Google) : prioritaire et retenu
+  try {
+    const q = new URLSearchParams(window.location.search).get('lang')
+    if (isLang(q)) { localStorage.setItem(LANG_KEY, q); return q }
+  } catch {}
   try {
     const saved = localStorage.getItem(LANG_KEY)
     if (isLang(saved)) return saved

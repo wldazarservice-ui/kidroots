@@ -11,11 +11,14 @@ const GIFT_TXT = {
   fr: { title: 'Offrir Mokalibo', sub: 'Un cadeau qui dure toute l’année : 195 pays, des histoires vraies lues à voix haute, des quiz et des jeux. Pour les enfants de 4 à 12 ans, sans publicité.', points: ['🎁 1 an de Formule Famille (jusqu’à 5 enfants) · 14,99 €', '⚡ Code cadeau reçu tout de suite après le paiement', '🖨️ Jolie carte à imprimer ou à envoyer par WhatsApp', '👵 Idéal pour les grands-parents, parrains et marraines', '💛 5 % vont à la protection de l’enfance'], cta: '🎁 Offrir Mokalibo · 14,99 €', note: 'Paiement unique, sans abonnement · valable 3 ans' },
   en: { title: 'Give Mokalibo', sub: 'A gift that lasts all year: 195 countries, true stories read aloud, quizzes and games. For children aged 4 to 12, no ads.', points: ['🎁 1 year of the Family Plan (up to 5 children) · €14.99', '⚡ Gift code right after payment', '🖨️ A lovely card to print or send on WhatsApp', '👵 Perfect for grandparents and godparents', '💛 5% goes to child protection'], cta: '🎁 Give Mokalibo · €14.99', note: 'One-time payment, no subscription · valid for 3 years' },
   de: { title: 'Mokalibo verschenken', sub: 'Ein Geschenk, das das ganze Jahr hält: 195 Länder, wahre Geschichten zum Vorlesen, Quiz und Spiele. Für Kinder von 4 bis 12, ohne Werbung.', points: ['🎁 1 Jahr Familien-Abo (bis zu 5 Kinder) · 14,99 €', '⚡ Geschenkcode sofort nach der Zahlung', '🖨️ Schöne Karte zum Ausdrucken oder per WhatsApp', '👵 Ideal für Großeltern, Paten und Patinnen', '💛 5 % gehen an den Kinderschutz'], cta: '🎁 Mokalibo verschenken · 14,99 €', note: 'Einmalzahlung, kein Abo · 3 Jahre gültig' },
+  pt: { title: 'Oferecer Mokalibo', sub: 'Um presente que dura o ano todo: 195 países, histórias verdadeiras lidas em voz alta, quizzes e jogos. Para crianças dos 4 aos 12 anos, sem publicidade.', points: ['🎁 1 ano do Plano Família (até 5 crianças) · 14,99 €', '⚡ Código de presente logo após o pagamento', '🖨️ Um cartão bonito para imprimir ou enviar por WhatsApp', '👵 Ideal para avós, padrinhos e madrinhas', '💛 5 % vão para a proteção da infância'], cta: '🎁 Oferecer Mokalibo · 14,99 €', note: 'Pagamento único, sem assinatura · válido 3 anos' },
+  ar: { title: 'أهدِ Mokalibo', sub: 'هدية تدوم طوال العام: 195 دولة، وقصص حقيقية تُقرأ بصوت عالٍ، واختبارات وألعاب. للأطفال من 4 إلى 12 سنة، بدون إعلانات.', points: ['🎁 سنة كاملة من باقة العائلة (حتى 5 أطفال) · 14,99 €', '⚡ رمز الهدية فور الدفع', '🖨️ بطاقة جميلة للطباعة أو للإرسال عبر واتساب', '👵 مثالية للأجداد والعرّابين', '💛 5 % تذهب لحماية الطفولة'], cta: '🎁 أهدِ Mokalibo · 14,99 €', note: 'دفعة واحدة، بدون اشتراك · صالحة 3 سنوات' },
 }
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode, fromSocial } from '../track'
 import DemoStory from './DemoStory'
+import { REVIEWS } from '../data/reviews'
 import { t } from '../i18n'
 import { openSupport } from '../support'
 import { countryName } from '../names'
@@ -33,6 +36,10 @@ const TXT = {
     try_note: 'Compte parent gratuit en 1 clic · sans carte bancaire · 2 histoires offertes par jour',
     have_account: "J'ai déjà un compte → Se connecter",
     reassure: ['Gratuit', 'Sans carte bancaire', '1 clic avec Google'],
+    demo_btn: '🎧 Écouter une histoire, sans compte',
+    rev_kicker: 'Ils ont essayé',
+    rev_title: 'Ce qu’en disent les parents',
+    rev_voice: '🎙️ Message vocal retranscrit',
     social: '👋 Bienvenue ! 3 jours d’accès illimité offerts à ta famille',
     cont: '▶ Continuer avec {name}',
     signup: 'Créer un compte parent',
@@ -86,7 +93,7 @@ const TXT = {
       ['Mon enfant ne sait pas encore lire.', 'Pas de souci : l’app peut lire à voix haute toutes les histoires et toutes les questions.'],
       ['Sur quels appareils ?', 'Téléphone, tablette et ordinateur, dans le navigateur. Vous pouvez aussi l’installer sur l’écran d’accueil, sans passer par un store.'],
       ['Et les données de mon enfant ?', 'Nous demandons seulement un prénom (ou un surnom) et un âge. Pas de publicité, pas de traceur, aucune donnée vendue. Vous pouvez supprimer le compte à tout moment.'],
-      ['Faut-il un compte pour essayer ?', 'Oui, un compte parent gratuit, créé en 1 clic avec Google ou avec votre e-mail, sans carte bancaire. Il garde la progression de chaque enfant sur tous vos appareils.'],
+      ['Faut-il un compte pour essayer ?', 'Vous pouvez écouter une histoire de démonstration sans compte. Pour jouer, il suffit d’un compte parent gratuit, créé en 1 clic avec Google ou avec votre e-mail, sans carte bancaire. Il garde la progression de chaque enfant sur tous vos appareils.'],
     ],
     final_title: 'Prêt pour le voyage ?',
     final_sub: 'Le premier voyage est gratuit, tous les jours.',
@@ -106,6 +113,10 @@ const TXT = {
     try_note: 'Free parent account in 1 click · no card · 2 free stories a day',
     have_account: 'I already have an account → Sign in',
     reassure: ['Free', 'No card needed', '1 click with Google'],
+    demo_btn: '🎧 Listen to a story, no account needed',
+    rev_kicker: 'They tried it',
+    rev_title: 'What parents say',
+    rev_voice: '🎙️ Transcribed voice message',
     social: '👋 Welcome! 3 days of unlimited access for your family',
     cont: '▶ Continue with {name}',
     signup: 'Create a parent account',
@@ -159,7 +170,7 @@ const TXT = {
       ['My child cannot read yet.', 'No problem: the app can read every story and every question aloud.'],
       ['Which devices?', 'Phone, tablet and computer, in the browser. You can also add it to your home screen, without any app store.'],
       ['What about my child’s data?', 'We only ask for a first name (or nickname) and an age. No ads, no trackers, no data sold. You can delete the account at any time.'],
-      ['Do I need an account to try?', 'Yes, a free parent account, created in 1 click with Google or with your e-mail, no card needed. It keeps each child’s progress on all your devices.'],
+      ['Do I need an account to try?', 'You can listen to a demo story without an account. To play, all you need is a free parent account, created in 1 click with Google or with your e-mail, no card needed. It keeps each child’s progress on all your devices.'],
     ],
     final_title: 'Ready for the journey?',
     final_sub: 'The first journey is free, every day.',
@@ -179,6 +190,10 @@ const TXT = {
     try_note: 'Kostenloses Elternkonto mit 1 Klick · ohne Karte · 2 Gratis-Geschichten pro Tag',
     have_account: 'Ich habe schon ein Konto → Anmelden',
     reassure: ['Kostenlos', 'Ohne Karte', '1 Klick mit Google'],
+    demo_btn: '🎧 Eine Geschichte anhören, ohne Konto',
+    rev_kicker: 'Sie haben es ausprobiert',
+    rev_title: 'Das sagen Eltern',
+    rev_voice: '🎙️ Abgeschriebene Sprachnachricht',
     social: '👋 Willkommen! 3 Tage unbegrenzter Zugang für deine Familie',
     cont: '▶ Weiter mit {name}',
     signup: 'Elternkonto erstellen',
@@ -232,7 +247,7 @@ const TXT = {
       ['Mein Kind kann noch nicht lesen.', 'Kein Problem: Die App liest alle Geschichten und Fragen vor.'],
       ['Auf welchen Geräten?', 'Handy, Tablet und Computer, im Browser. Sie können die App auch ohne Store auf dem Startbildschirm installieren.'],
       ['Und die Daten meines Kindes?', 'Wir fragen nur nach einem Vornamen (oder Spitznamen) und dem Alter. Keine Werbung, kein Tracking, kein Datenverkauf. Sie können das Konto jederzeit löschen.'],
-      ['Brauche ich zum Testen ein Konto?', 'Ja, ein kostenloses Elternkonto – mit 1 Klick über Google oder mit Ihrer E-Mail, ohne Karte. Es speichert den Fortschritt jedes Kindes auf all Ihren Geräten.'],
+      ['Brauche ich zum Testen ein Konto?', 'Eine Demo-Geschichte können Sie ohne Konto anhören. Zum Spielen genügt ein kostenloses Elternkonto – mit 1 Klick über Google oder mit Ihrer E-Mail, ohne Karte. Es speichert den Fortschritt jedes Kindes auf all Ihren Geräten.'],
     ],
     final_title: 'Bereit für die Reise?',
     final_sub: 'Die erste Reise ist kostenlos, jeden Tag.',
@@ -244,8 +259,188 @@ const TXT = {
     m_story: 'Die Samurai Japans',
     m_bravo: 'Super! +30 XP',
   },
+  pt: {
+    login: 'Entrar',
+    h1: 'A história do mundo, contada às crianças',
+    h1_sub: 'Histórias verdadeiras, quizzes e uma voz que lê tudo em voz alta. {n} países, 3 níveis de leitura, dos 4 aos 12 anos.',
+    try: '▶ Começar grátis',
+    try_note: 'Conta de pais grátis em 1 clique · sem cartão · 2 histórias grátis por dia',
+    have_account: 'Já tenho conta → Entrar',
+    reassure: ['Grátis', 'Sem cartão', '1 clique com Google'],
+    demo_btn: '🎧 Ouvir uma história, sem conta',
+    rev_kicker: 'Já experimentaram',
+    rev_title: 'O que dizem os pais',
+    rev_voice: '🎙️ Mensagem de voz transcrita',
+    social: '👋 Bem-vindo! 3 dias de acesso ilimitado para a tua família',
+    cont: '▶ Continuar com {name}',
+    signup: 'Criar conta de pais',
+    proof: ['🚫 Sem publicidade', '🔒 Sem rastreadores', '🇪🇺 Conforme o RGPD', '💛 Pela proteção da infância'],
+    story_kicker: 'Porquê Mokalibo?',
+    story_q: '«Pai, onde fica o Mali?»',
+    story_text: 'Uma noite, o meu filho fez-me esta pergunta. Procurei uma app que contasse às crianças a história dos países, com os seus heróis, datas e culturas, e não só a da Europa. Não encontrei. Então criei-a.',
+    story_sign: 'Walid, pai e criador do Mokalibo',
+    mission_slogan: 'Aprender o mundo, proteger as crianças.',
+    mission_text: '5 % de cada assinatura vão para associações de proteção da infância, todos os trimestres. O resto mantém a app viva e a crescer: servidores, novas histórias, novos países.',
+    mission_kicker: 'O nosso compromisso',
+    how_title: 'Como funciona?',
+    how: [
+      ['🌍', 'Escolhe um país', '{n} países em 5 continentes, cada um com um guia criança desse país.'],
+      ['📖', 'Descobre a sua história', 'Cartões ilustrados com datas, personagens e curiosidades, lidos em voz alta.'],
+      ['🛂', 'Preenche o passaporte', 'Um quiz em cada capítulo, um carimbo por cada país terminado, medalhas e jogos para ganhar estrelas.'],
+    ],
+    feat_title: 'Pensado para as crianças… e para os pais',
+    feats: [
+      ['📚', '3 níveis de leitura', 'Pequeno explorador (4-5), Explorador (6-7), Grande explorador (8-12) com histórias mais longas e datadas.'],
+      ['🔊', 'Voz off', 'Cada história e cada pergunta podem ser lidas em voz alta.'],
+      ['🗣️', 'Várias línguas', 'Português, francês, inglês e alemão.'],
+      ['📊', 'Espaço dos pais', 'Tempo passado e países explorados, para cada criança.'],
+      ['🛂', 'Passaporte e medalhas', 'Um carimbo por cada país terminado e medalhas para colecionar.'],
+      ['🗺️', 'Mapa e caça ao tesouro', 'Um mapa-múndi interativo para encontrar os países a jogar.'],
+      ['🦊', 'Animais e monumentos', 'O animal de cada país, como protegê-lo, e enigmas sobre os monumentos.'],
+      ['🧩', 'Jogos de lógica', 'Memória das bandeiras e o quiz «Quem vive onde?».'],
+      ['👧', 'Toda a família', 'Até 5 crianças e 5 dispositivos, cada uma com o seu progresso.'],
+      ['📱', 'Telemóvel, tablet, computador', 'Instala-se como uma app, sem loja, e funciona offline.'],
+    ],
+    countries_title: '{n} países para explorar',
+    countries_sub: 'Todos os países do mundo, com novidades todas as semanas.',
+    price_title: 'Preços simples, sem surpresas',
+    free_name: 'Grátis',
+    free_items: ['Todos os países', '2 capítulos novos por dia e por criança', 'Os 3 níveis, voz off e quizzes', '3 jogos por dia', 'Mapa-múndi e passaporte'],
+    free_cta: 'Experimentar agora',
+    full_name: 'Plano Família',
+    launch: 'O mais escolhido',
+    per_year: '/ ano', per_month: '/ mês', or_month: 'ou {p} por mês', once: 'cancela quando quiseres',
+    full_items: ['Histórias e jogos ilimitados, todos os dias', 'Os {n} países e todos os novos', 'Todos os carimbos e medalhas do passaporte', '5 crianças · 5 dispositivos', 'Estatísticas para os pais'],
+    full_cta: 'Teste grátis de 3 dias',
+    full_note: '3 dias grátis, depois a assinatura começa automaticamente. Cancela antes do fim do teste: não pagas nada.',
+    trial_badge: '🎁 3 dias grátis',
+    faq_title: 'Perguntas frequentes',
+    faq: [
+      ['Para onde vai o dinheiro das assinaturas?', '5 % de cada assinatura vão para associações de proteção da infância, todos os trimestres. Os outros 95 % financiam a app: servidores, novas histórias, novos países.'],
+      ['Como funciona o teste de 3 dias?', 'Tens o Plano Família completo durante 3 dias sem pagar. No fim do teste, a assinatura escolhida começa automaticamente. Podes cancelar em dois cliques antes do fim e não pagas nada.'],
+      ['É mesmo grátis?', 'Sim. Cada criança pode jogar 2 capítulos novos e 3 jogos por dia, em todos os países, sem limite de tempo. O Plano Família desbloqueia aventuras ilimitadas para 5 crianças.'],
+      ['Como cancelo?', 'Em dois cliques, na app («A minha assinatura») ou na página «Verträge hier kündigen». O acesso continua ativo até ao fim do período pago.'],
+      ['Para que idade?', 'Dos 4 aos 12 anos. Escolhes um nível de leitura para cada criança e podes mudá-lo a qualquer momento.'],
+      ['O meu filho ainda não sabe ler.', 'Não há problema: a app pode ler em voz alta todas as histórias e todas as perguntas.'],
+      ['Em que dispositivos?', 'Telemóvel, tablet e computador, no navegador. Também podes instalá-la no ecrã inicial, sem passar por uma loja.'],
+      ['E os dados do meu filho?', 'Pedimos apenas um nome (ou alcunha) e uma idade. Sem publicidade, sem rastreadores, nenhum dado vendido. Podes apagar a conta a qualquer momento.'],
+      ['Preciso de conta para experimentar?', 'Podes ouvir uma história de demonstração sem conta. Para jogar, basta uma conta de pais grátis, criada em 1 clique com Google ou com o teu e-mail, sem cartão. Guarda o progresso de cada criança em todos os teus dispositivos.'],
+    ],
+    final_title: 'Pronto para a viagem?',
+    final_sub: 'A primeira viagem é grátis, todos os dias.',
+    guest_title: 'Quem vai explorar?',
+    guest_name: 'Nome da criança',
+    guest_age: 'Idade',
+    guest_go: 'Vamos! 🚀',
+    m_hello: 'Olá Lina!',
+    m_story: 'Os samurais do Japão',
+    m_bravo: 'Boa! +30 XP',
+  },
+  ar: {
+    login: 'تسجيل الدخول',
+    h1: 'تاريخ العالم، يُحكى للأطفال',
+    h1_sub: 'قصص حقيقية واختبارات وصوت يقرأ كل شيء بصوت عالٍ. {n} دولة، 3 مستويات للقراءة، من 4 إلى 12 سنة.',
+    try: '▶ ابدأ مجانًا',
+    try_note: 'حساب أولياء أمور مجاني بنقرة واحدة · بدون بطاقة · قصتان مجانيتان يوميًا',
+    have_account: 'لدي حساب بالفعل ← تسجيل الدخول',
+    reassure: ['مجاني', 'بدون بطاقة بنكية', 'نقرة واحدة مع Google'],
+    demo_btn: '🎧 استمع إلى قصة، بدون حساب',
+    rev_kicker: 'لقد جرّبوه',
+    rev_title: 'ماذا يقول الآباء والأمهات',
+    rev_voice: '🎙️ رسالة صوتية مكتوبة',
+    social: '👋 أهلًا بك! 3 أيام من الوصول غير المحدود لعائلتك',
+    cont: '▶ المتابعة مع {name}',
+    signup: 'إنشاء حساب أولياء الأمور',
+    proof: ['🚫 بدون إعلانات', '🔒 بدون تتبّع', '🇪🇺 متوافق مع اللائحة الأوروبية لحماية البيانات', '💛 لدعم حماية الطفولة'],
+    story_kicker: 'لماذا Mokalibo؟',
+    story_q: '«بابا، أين تقع مالي؟»',
+    story_text: 'في إحدى الأمسيات سألني ابني هذا السؤال. بحثت عن تطبيق يحكي للأطفال تاريخ الدول، بأبطالها وتواريخها وثقافاتها، وليس تاريخ أوروبا فقط. لم أجده، فصنعته بنفسي.',
+    story_sign: 'وليد، أب ومؤسس Mokalibo',
+    mission_slogan: 'نتعلّم العالم، ونحمي الأطفال.',
+    mission_text: '5 % من كل اشتراك تُمنح لجمعيات حماية الطفولة كل ثلاثة أشهر. والباقي يُبقي التطبيق حيًّا وينمّيه: الخوادم، وقصص جديدة، ودول جديدة.',
+    mission_kicker: 'التزامنا',
+    how_title: 'كيف يعمل؟',
+    how: [
+      ['🌍', 'اختر دولة', '{n} دولة في 5 قارات، ولكل دولة مرشد طفل منها.'],
+      ['📖', 'اكتشف تاريخها', 'بطاقات مصوّرة فيها تواريخ وشخصيات وحقائق طريفة، تُقرأ بصوت عالٍ.'],
+      ['🛂', 'املأ جواز سفرك', 'اختبار في كل فصل، وختم لكل دولة تنهيها، وأوسمة وألعاب لتربح النجوم.'],
+    ],
+    feat_title: 'مصمَّم للأطفال… وللآباء والأمهات',
+    feats: [
+      ['📚', '3 مستويات للقراءة', 'المستكشف الصغير (4-5)، المستكشف (6-7)، المستكشف الكبير (8-12) مع قصص أطول ومؤرّخة.'],
+      ['🔊', 'تعليق صوتي', 'يمكن قراءة كل قصة وكل سؤال بصوت عالٍ.'],
+      ['🗣️', 'عدة لغات', 'العربية والفرنسية والإنجليزية والألمانية.'],
+      ['📊', 'مساحة الأولياء', 'الوقت المستغرق والدول المكتشفة، لكل طفل.'],
+      ['🛂', 'جواز سفر وأوسمة', 'ختم لكل دولة تنتهي منها وأوسمة للجمع.'],
+      ['🗺️', 'خريطة وبحث عن الكنز', 'خريطة تفاعلية للعالم للعثور على الدول أثناء اللعب.'],
+      ['🦊', 'حيوانات ومعالم', 'حيوان كل دولة وكيف نحميه، وألغاز عن المعالم.'],
+      ['🧩', 'ألعاب ذكاء', 'لعبة ذاكرة الأعلام واختبار «من يعيش أين؟».'],
+      ['👧', 'العائلة كلها', 'حتى 5 أطفال و5 أجهزة، ولكلٍّ تقدّمه الخاص.'],
+      ['📱', 'هاتف، لوحي، حاسوب', 'يُثبَّت كتطبيق دون متجر، ويعمل دون إنترنت.'],
+    ],
+    countries_title: '{n} دولة للاستكشاف',
+    countries_sub: 'كل دول العالم، وجديد كل أسبوع.',
+    price_title: 'أسعار بسيطة، بلا مفاجآت',
+    free_name: 'مجاني',
+    free_items: ['كل الدول', 'فصلان جديدان يوميًا لكل طفل', 'المستويات الثلاثة والتعليق الصوتي والاختبارات', '3 ألعاب يوميًا', 'خريطة العالم وجواز السفر'],
+    free_cta: 'جرّب الآن',
+    full_name: 'باقة العائلة',
+    launch: 'الأكثر اختيارًا',
+    per_year: '/ سنة', per_month: '/ شهر', or_month: 'أو {p} شهريًا', once: 'يمكن الإلغاء في أي وقت',
+    full_items: ['قصص وألعاب بلا حدود، كل يوم', 'كل الدول الـ{n} وكل دولة جديدة', 'كل أختام وأوسمة جواز السفر', '5 أطفال · 5 أجهزة', 'إحصائيات للأولياء'],
+    full_cta: 'تجربة مجانية 3 أيام',
+    full_note: '3 أيام مجانًا، ثم يبدأ الاشتراك تلقائيًا. ألغِ قبل نهاية التجربة: لن تدفع شيئًا.',
+    trial_badge: '🎁 3 أيام مجانًا',
+    faq_title: 'أسئلة شائعة',
+    faq: [
+      ['أين تذهب أموال الاشتراكات؟', '5 % من كل اشتراك تُمنح لجمعيات حماية الطفولة كل ثلاثة أشهر. والـ95 % الباقية تموّل التطبيق: الخوادم، وقصص جديدة، ودول جديدة.'],
+      ['كيف تعمل تجربة الأيام الثلاثة؟', 'تستفيد من باقة العائلة كاملة لمدة 3 أيام دون دفع. في نهاية التجربة يبدأ الاشتراك الذي اخترته تلقائيًا. يمكنك الإلغاء بنقرتين قبل النهاية فلا تدفع شيئًا.'],
+      ['هل هو مجاني حقًا؟', 'نعم. يمكن لكل طفل لعب فصلين جديدين و3 ألعاب يوميًا، في كل الدول، دون حدّ زمني. باقة العائلة تفتح مغامرات بلا حدود لـ5 أطفال.'],
+      ['كيف ألغي الاشتراك؟', 'بنقرتين، في التطبيق («اشتراكي») أو في صفحة «Verträge hier kündigen». يبقى الوصول فعّالًا حتى نهاية الفترة المدفوعة.'],
+      ['لأي عمر؟', 'من 4 إلى 12 سنة. تختار مستوى القراءة لكل طفل ويمكنك تغييره في أي وقت.'],
+      ['طفلي لا يعرف القراءة بعد.', 'لا مشكلة: يمكن للتطبيق قراءة كل القصص وكل الأسئلة بصوت عالٍ.'],
+      ['على أي أجهزة؟', 'الهاتف واللوحي والحاسوب، عبر المتصفح. ويمكنك أيضًا تثبيته على الشاشة الرئيسية دون المرور بمتجر.'],
+      ['وماذا عن بيانات طفلي؟', 'نطلب فقط اسمًا (أو لقبًا) وعمرًا. بلا إعلانات، بلا تتبّع، ولا نبيع أي بيانات. يمكنك حذف الحساب في أي وقت.'],
+      ['هل أحتاج إلى حساب للتجربة؟', 'يمكنك الاستماع إلى قصة تجريبية دون حساب. وللعب يكفي حساب أولياء أمور مجاني يُنشأ بنقرة واحدة مع Google أو ببريدك الإلكتروني، دون بطاقة. يحفظ تقدّم كل طفل على كل أجهزتك.'],
+    ],
+    final_title: 'مستعد للرحلة؟',
+    final_sub: 'الرحلة الأولى مجانية، كل يوم.',
+    guest_title: 'من سيستكشف؟',
+    guest_name: 'اسم الطفل',
+    guest_age: 'العمر',
+    guest_go: 'هيا بنا! 🚀',
+    m_hello: 'مرحبًا لينا!',
+    m_story: 'ساموراي اليابان',
+    m_bravo: 'أحسنت! +30 XP',
+  },
 }
 
+
+// Avis de vrais parents (src/data/reviews.js) : rien ne s'affiche tant qu'il n'y en a pas
+function Reviews({ T, lang }) {
+  if (!REVIEWS.length) return null
+  return (
+    <section style={{ padding: '50px 16px 20px' }}>
+      <div className="lp-wrap">
+        <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 900, color: '#FF6F00', letterSpacing: 1, textTransform: 'uppercase' }}>{T.rev_kicker}</div>
+        <h2 className="reveal" style={{ fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, textAlign: 'center', margin: '4px 0 22px', lineHeight: 1.15 }}>{T.rev_title}</h2>
+        <div className="lp-grid3 reveal-stagger">
+          {REVIEWS.map((r) => (
+            <figure key={r.name + r.place} style={{ margin: 0, background: 'white', borderRadius: 26, padding: '22px 20px', boxShadow: '0 10px 28px rgba(26,42,79,0.07)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ color: '#FFB300', fontSize: 20, letterSpacing: 2 }}>★★★★★</div>
+              <blockquote style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#37474F', lineHeight: 1.65 }}>« {r.text[lang] || r.text.fr} »</blockquote>
+              <figcaption style={{ marginTop: 'auto', fontWeight: 900, color: INK }}>
+                {r.name}{r.place ? ` · ${r.place}` : ''}
+                {r.kids && <div style={{ fontSize: 13, fontWeight: 800, color: '#78909C' }}>{r.kids}</div>}
+                {r.voice && <div style={{ fontSize: 12, fontWeight: 800, color: '#90A4AE', marginTop: 2 }}>{T.rev_voice}</div>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 function PhoneMockup({ T, lang }) {
   const regions = Object.values(REGIONS).filter((r) => r.countries.length).slice(0, 4)
@@ -295,6 +490,8 @@ const NAV = {
   fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', offrir: '🎁 Offrir', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: '🎁 Offrir Mokalibo →', offrir: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
   en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', offrir: '🎁 Gift', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: '🎁 Give Mokalibo →', offrir: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries', dons: 'See our donation report' },
   de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', offrir: '🎁 Schenken', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: '🎁 Mokalibo verschenken →', offrir: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
+  pt: { home: 'Início', discover: 'Descobrir', countries: 'Os países', pricing: 'Preços', offrir: '🎁 Oferecer', ecoles: 'Escolas', faq: 'FAQ', menu: 'Menu', next: { home: 'Descobrir a app →', discover: 'Ver os países →', countries: 'Ver os preços →', pricing: '🎁 Oferecer Mokalibo →', offrir: 'Professores e escolas →', ecoles: 'Perguntas frequentes →' }, all_countries: 'Todos os países', dons: '' },
+  ar: { home: 'الرئيسية', discover: 'اكتشف', countries: 'الدول', pricing: 'الأسعار', offrir: '🎁 أهدِ', ecoles: 'المدارس', faq: 'أسئلة', menu: 'القائمة', next: { home: 'اكتشف التطبيق ←', discover: 'شاهد الدول ←', countries: 'شاهد الأسعار ←', pricing: '🎁 أهدِ Mokalibo ←', offrir: 'المعلّمون والمدارس ←', ecoles: 'أسئلة شائعة ←' }, all_countries: 'كل الدول', dons: '' },
 }
 const pageFromHash = () => {
   const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
@@ -304,7 +501,7 @@ const pageFromHash = () => {
 // Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ. Jouer demande un compte parent (gratuit).
 export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   const N = String(Object.keys(COUNTRIES).length)
-  const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || TXT.en).replaceAll('{n}', N)), [lang, N])
+  const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || (lang === 'bm' ? TXT.fr : TXT.en)).replaceAll('{n}', N)), [lang, N])
   const [openFaq, setOpenFaq] = useState(0)
   const [page, setPage] = useState(pageFromHash)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -326,8 +523,8 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   const secondary = { background: 'white', color: '#2E7D4F', padding: '14px 22px', fontSize: 16, borderRadius: 20, boxShadow: '0 4px 14px rgba(46,158,91,0.15)' }
   const h2 = { fontFamily: FONT_TITLE, fontSize: 32, fontWeight: 700, color: INK, textAlign: 'center', margin: '0 0 22px', lineHeight: 1.15 }
 
-  const NV = NAV[lang] || NAV.en
-  const GT = GIFT_TXT[lang] || GIFT_TXT.en
+  const NV = NAV[lang] || (lang === 'bm' ? NAV.fr : NAV.en)
+  const GT = GIFT_TXT[lang] || (lang === 'bm' ? GIFT_TXT.fr : GIFT_TXT.en)
   const go = (p) => {
     setMenuOpen(false)
     if (p === page) return
@@ -342,7 +539,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   )
 
   return (
-    <div style={{ fontFamily: 'Nunito, sans-serif', color: INK, background: '#FFFDF7', minHeight: '100vh' }}>
+    <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={{ fontFamily: 'Nunito, sans-serif', color: INK, background: '#FFFDF7', minHeight: '100vh' }}>
 
       {/* ── Menu (toujours visible en haut) ── */}
       <header className="lp-topbar">
@@ -400,6 +597,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
             <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.55, margin: '0 0 24px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
+              <button className="btn-kid soft" onClick={() => { track('demo_click'); document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', marginTop: 12, fontSize: 14, fontWeight: 900, color: '#2E7D4F' }}>
               {T.reassure.map((r) => <span key={r}>✅ {r}</span>)}
@@ -415,6 +613,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
         </div>
       </section>
       <DemoStory lang={lang} onSignup={onSignup} />
+      <Reviews T={T} lang={lang} />
 
       {/* ── Histoire du createur ── */}
       <section style={{ padding: '56px 16px' }}>

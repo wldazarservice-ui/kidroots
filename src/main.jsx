@@ -16,13 +16,19 @@ import '@fontsource/fredoka/600.css'
 import '@fontsource/fredoka/700.css'
 import './index.css'
 import './pwaInstall' // capture tot de l'evenement d'installation
+import ErrorBoundary from './components/ErrorBoundary'
+import { installErrorReporting } from './errorReport'
+
+installErrorReporting()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56 }}>🌍</div>}>
-        <App />
-      </Suspense>
+      <ErrorBoundary>
+        <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56 }}>🌍</div>}>
+          <App />
+        </Suspense>
+      </ErrorBoundary>
       <SupportSheet />
       <WelcomePremium />
       <OfflineBanner />
