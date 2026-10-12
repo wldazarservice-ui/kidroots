@@ -15,7 +15,7 @@ const TXT = {
     s_items: ['Paiement par virement sur facture (30 jours)', 'Mise en place accompagnée', 'Tarif selon le nombre d’élèves'],
     form_title: 'Demander un devis pour votre école',
     f_school: 'Nom de l’école *', f_name: 'Votre nom *', f_email: 'E-mail professionnel *', f_city: 'Ville', f_students: 'Nombre d’élèves', f_msg: 'Message (facultatif)',
-    f_send: 'Envoyer la demande', f_wait: 'Envoi…', f_ok: '✅ Merci ! Nous vous répondons sous 48 heures avec un devis.', f_err: 'L’envoi a échoué. Écrivez-nous à contact@azarconsulting.eu',
+    f_send: 'Envoyer la demande', f_wait: 'Envoi…', f_ok: '✅ Merci ! Nous vous répondons sous 48 heures avec un devis.', f_err: 'L’envoi a échoué. Écrivez-nous à bonjour@mokalibo.com',
     f_privacy: 'Vos coordonnées servent uniquement à répondre à votre demande.', privacy: 'Confidentialité',
   },
   en: {
@@ -28,7 +28,7 @@ const TXT = {
     s_items: ['Pay by bank transfer on invoice (30 days)', 'Guided setup', 'Price based on the number of pupils'],
     form_title: 'Request a quote for your school',
     f_school: 'School name *', f_name: 'Your name *', f_email: 'Work e-mail *', f_city: 'City', f_students: 'Number of pupils', f_msg: 'Message (optional)',
-    f_send: 'Send request', f_wait: 'Sending…', f_ok: '✅ Thank you! We will reply within 48 hours with a quote.', f_err: 'Sending failed. Write to us at contact@azarconsulting.eu',
+    f_send: 'Send request', f_wait: 'Sending…', f_ok: '✅ Thank you! We will reply within 48 hours with a quote.', f_err: 'Sending failed. Write to us at bonjour@mokalibo.com',
     f_privacy: 'Your details are only used to answer your request.', privacy: 'Privacy',
   },
   de: {
@@ -41,7 +41,7 @@ const TXT = {
     s_items: ['Zahlung per Überweisung auf Rechnung (30 Tage)', 'Begleitete Einrichtung', 'Preis nach Schülerzahl'],
     form_title: 'Angebot für Ihre Schule anfragen',
     f_school: 'Name der Schule *', f_name: 'Ihr Name *', f_email: 'Dienstliche E-Mail *', f_city: 'Ort', f_students: 'Anzahl Schüler', f_msg: 'Nachricht (optional)',
-    f_send: 'Anfrage senden', f_wait: 'Wird gesendet…', f_ok: '✅ Danke! Wir melden uns innerhalb von 48 Stunden mit einem Angebot.', f_err: 'Senden fehlgeschlagen. Schreiben Sie uns: contact@azarconsulting.eu',
+    f_send: 'Anfrage senden', f_wait: 'Wird gesendet…', f_ok: '✅ Danke! Wir melden uns innerhalb von 48 Stunden mit einem Angebot.', f_err: 'Senden fehlgeschlagen. Schreiben Sie uns: bonjour@mokalibo.com',
     f_privacy: 'Ihre Angaben werden nur zur Beantwortung Ihrer Anfrage verwendet.', privacy: 'Datenschutz',
   },
 }

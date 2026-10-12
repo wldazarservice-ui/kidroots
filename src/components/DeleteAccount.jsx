@@ -18,7 +18,7 @@ export default function DeleteAccount({ user, premium, onClose }) {
       await signOut()
     } catch (e) {
       console.error(e)
-      setError('La suppression a échoué. Réessaie ou écris à contact@azarconsulting.eu.')
+      setError('La suppression a échoué. Réessaie ou écris à bonjour@mokalibo.com.')
       setBusy(false)
     }
   }

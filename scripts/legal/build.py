@@ -10,7 +10,7 @@ COMPANY = {
     'street': 'Zur Schweiz 3a, Whg. 3',
     'city': '54516 Wittlich',
     'country': 'Deutschland',
-    'email': 'contact@azarconsulting.eu',
+    'email': 'bonjour@mokalibo.com',
     'phone': '+49 151 704 25620',
     'web': 'https://azarconsulting.eu',
     'widnr': 'DE462026365-00001',

@@ -32,7 +32,7 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
     } catch (e) {
       console.error(e)
       setError(e.message === 'swap-limit'
-        ? 'Tu as déjà remplacé 3 appareils ce mois-ci. Tu pourras en retirer un autre le mois prochain, ou écris-nous : contact@azarconsulting.eu'
+        ? 'Tu as déjà remplacé 3 appareils ce mois-ci. Tu pourras en retirer un autre le mois prochain, ou écris-nous : bonjour@mokalibo.com'
         : 'La suppression a échoué. Réessaie.')
     } finally {
       setBusy(null)

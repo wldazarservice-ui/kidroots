@@ -47,7 +47,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 > Mit freundlichen Grüßen
 > Walid Azar
 > Mokalibo – mokalibo.com
-> contact@azarconsulting.eu
+> bonjour@mokalibo.com
 
 ---
 
@@ -70,7 +70,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 > Bien cordialement,
 > Walid Azar
 > Mokalibo – mokalibo.com
-> contact@azarconsulting.eu
+> bonjour@mokalibo.com
 
 ---
 
@@ -92,7 +92,7 @@ Conseil : commence par **1 association en Allemagne et 1 en France**, puis élar
 > Kind regards,
 > Walid Azar
 > Mokalibo – mokalibo.com
-> contact@azarconsulting.eu
+> bonjour@mokalibo.com
 
 ---
 

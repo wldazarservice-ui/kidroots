@@ -49,9 +49,9 @@ const FOOT = {
   en: (u) => `\n\n—\nMokalibo · The history of the world, told to children\n💛 5% of every subscription goes to child protection\nUnsubscribe: ${u}`,
 }
 const SERVICE_FOOT = {
-  fr: '\n\n—\nMokalibo · contact@azarconsulting.eu',
-  de: '\n\n—\nMokalibo · contact@azarconsulting.eu',
-  en: '\n\n—\nMokalibo · contact@azarconsulting.eu',
+  fr: '\n\n—\nMokalibo · bonjour@mokalibo.com',
+  de: '\n\n—\nMokalibo · bonjour@mokalibo.com',
+  en: '\n\n—\nMokalibo · bonjour@mokalibo.com',
 }
 
 export function trialEndMail({ lang, until, price }) {

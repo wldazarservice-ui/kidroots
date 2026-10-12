@@ -109,7 +109,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
         {teacher && (
           <div style={{ background: 'white', borderRadius: 16, padding: '10px 12px', marginBottom: 14, textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#37474F', lineHeight: 1.45 }}>
             🏫 {t(lang, 'pw_school', { p: SCHOOL_FROM })}{' '}
-            <a href={`mailto:contact@azarconsulting.eu?subject=${encodeURIComponent('Mokalibo : devis école')}`} style={{ color: '#1E88E5', fontWeight: 900 }}>{t(lang, 'pw_school_cta')}</a>
+            <a href={`mailto:bonjour@mokalibo.com?subject=${encodeURIComponent('Mokalibo : devis école')}`} style={{ color: '#1E88E5', fontWeight: 900 }}>{t(lang, 'pw_school_cta')}</a>
           </div>
         )}
 
