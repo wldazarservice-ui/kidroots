@@ -21,6 +21,19 @@
   node_bundler = "esbuild"
   external_node_modules = ["firebase-admin"]
 
+# Connexion Google / Firebase Auth servie depuis mokalibo.com (le parent voit mokalibo.com, pas firebaseapp.com)
+[[redirects]]
+  from = "/__/auth/*"
+  to = "https://kidroots-cdaf0.firebaseapp.com/__/auth/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/__/firebase/*"
+  to = "https://kidroots-cdaf0.firebaseapp.com/__/firebase/:splat"
+  status = 200
+  force = true
+
 # Ancienne adresse -> domaine officiel
 [[redirects]]
   from = "https://kidroots.netlify.app/*"

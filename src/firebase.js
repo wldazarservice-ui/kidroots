@@ -5,7 +5,9 @@ import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD2rOoIjILi0CsM3qVpghqwEKVcwoYSs9w',
-  authDomain: 'kidroots-cdaf0.firebaseapp.com',
+  // Connexion Google affichee sous mokalibo.com (proxy /__/auth dans netlify.toml) une fois
+  // VITE_AUTH_DOMAIN=mokalibo.com defini dans Netlify ; sinon l'adresse Firebase par defaut.
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN || 'kidroots-cdaf0.firebaseapp.com',
   projectId: 'kidroots-cdaf0',
   storageBucket: 'kidroots-cdaf0.firebasestorage.app',
   messagingSenderId: '769602646598',
