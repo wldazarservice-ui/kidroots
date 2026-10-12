@@ -26,7 +26,7 @@ import { registerDevice } from './devices'
 import { setLimits } from './limits'
 import { refreshOfflineIfNeeded } from './offline'
 import { pendingGift, clearPendingGift } from './components/Gift'
-import { redeemGift } from './premium'
+import { redeemGift, openBillingPortal } from './premium'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail, gamesLeft, gamesPlayedToday } from './premium'
 import { isDone } from './levels'
@@ -235,6 +235,21 @@ export default function App() {
 
   // Mode voyage : apres une mise a jour de l'app, retelecharge les pays choisis (en arriere-plan)
   useEffect(() => { if (user) refreshOfflineIfNeeded(lang) }, [user, lang])
+
+  // Lien « Je garde Mokalibo » de l'e-mail de resiliation (?reprendre=1) : espace Stripe pour reprendre l'abonnement
+  useEffect(() => {
+    try {
+      const u = new URL(window.location.href)
+      if (u.searchParams.has('reprendre')) {
+        sessionStorage.setItem('kidroots_reprendre', '1')
+        u.searchParams.delete('reprendre'); window.history.replaceState({}, '', u.pathname + u.search + u.hash)
+      }
+      if (user && sessionStorage.getItem('kidroots_reprendre')) {
+        sessionStorage.removeItem('kidroots_reprendre')
+        openBillingPortal(user).catch(() => {})
+      } else if (!user && sessionStorage.getItem('kidroots_reprendre')) setAuthMode('signin')
+    } catch { /* stockage indisponible */ }
+  }, [user])
 
   // Carte cadeau recue (lien ?cadeau=CODE) : activation automatique une fois connecte
   useEffect(() => {

@@ -12,6 +12,37 @@ const names = (kids) => kids.map((k) => (k.name || '').split(' ')[0]).filter(Boo
 const join = (arr, lang) => arr.length <= 1 ? (arr[0] || '') : `${arr.slice(0, -1).join(', ')} ${lang === 'de' ? 'und' : lang === 'en' ? 'and' : 'et'} ${arr.at(-1)}`
 const countryName = (code, lang) => { try { return new Intl.DisplayNames([lang], { type: 'region' }).of(code) } catch { return code } }
 
+
+// ── Mise en page HTML (aux couleurs de Mokalibo) ──
+// Le texte simple reste envoye a cote (clients mail sans HTML). Paragraphes = lignes vides, liens rendus cliquables.
+const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const linkify = (x) => x.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#1E88E5;font-weight:700">$1</a>')
+export function renderHtml({ heading, text, cta, emoji = '🌍' }) {
+  const [body, foot = ''] = text.split('\n\n—\n')
+  let placed = false
+  const btn = cta ? `<table role="presentation" cellspacing="0" cellpadding="0" style="margin:8px auto 22px"><tr><td style="border-radius:16px;background:#FFC400;box-shadow:0 4px 0 #E6A100"><a href="${cta.url}" style="display:inline-block;padding:15px 30px;font-size:17px;font-weight:800;color:#1A2A4F;text-decoration:none;font-family:Arial,Helvetica,sans-serif">${esc(cta.label)}</a></td></tr></table>` : ''
+  const paras = body.trim().split(/\n\n+/).map((p) => {
+    const lines = p.split('\n')
+    if (cta && lines.includes(cta.url)) { placed = true; const rest = lines.filter((l) => l !== cta.url).join('\n'); return `<p style="margin:0 0 12px;font-size:16px;line-height:1.6;color:#37474F">${linkify(esc(rest)).replace(/\n/g, '<br>')}</p>${btn}` }
+    return `<p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#37474F">${linkify(esc(p)).replace(/\n/g, '<br>')}</p>`
+  }).join('')
+  const footHtml = foot.trim().split('\n').map((l) => linkify(esc(l))).join('<br>')
+  return `<!doctype html><html><body style="margin:0;padding:0;background:#FFF6E8">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#FFF6E8;padding:24px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#ffffff;border-radius:24px;overflow:hidden;font-family:Arial,Helvetica,sans-serif">
+<tr><td style="background:linear-gradient(135deg,#FFB300,#FF6F00);background-color:#FF8F00;padding:26px 28px;text-align:center">
+<div style="font-size:44px;line-height:1">${emoji}</div>
+<div style="font-size:30px;font-weight:900;margin-top:6px"><span style="color:#ffffff">Moka</span><span style="color:#1A2A4F">libo</span></div>
+</td></tr>
+<tr><td style="padding:28px 28px 8px">
+${heading ? `<h1 style="margin:0 0 18px;font-size:23px;line-height:1.3;color:#1A2A4F">${esc(heading)}</h1>` : ''}
+${paras}${placed ? '' : btn}
+</td></tr>
+<tr><td style="padding:16px 28px 24px;background:#FAFBFD;font-size:12px;line-height:1.6;color:#90A4AE;text-align:center">${footHtml}</td></tr>
+</table></td></tr></table></body></html>`
+}
+const withHtml = (mail, opts) => ({ ...mail, html: renderHtml({ ...opts, text: mail.text }) })
+
 const FOOT = {
   fr: (u) => `\n\n—\nMokalibo · L'histoire du monde, racontée aux enfants\n💛 5 % de chaque abonnement vont à la protection de l'enfance\nNe plus recevoir ces e-mails : ${u}`,
   de: (u) => `\n\n—\nMokalibo · Die Geschichte der Welt, für Kinder erzählt\n💛 5 % jedes Abos gehen an den Kinderschutz\nKeine E-Mails mehr erhalten: ${u}`,
@@ -31,7 +62,7 @@ export function trialEndMail({ lang, until, price }) {
     en: { s: `Your free Mokalibo trial ends on ${d}`, b: `Hello,\n\nyour free trial of the Family Plan ends on ${d}.\n\n➡️ If you do nothing, the subscription continues automatically: ${price}. Your children keep unlimited stories and games.\n➡️ If you'd rather stop, cancel in 2 clicks before that date and pay nothing: in the app, 👤 My account → My subscription → Cancel (or ${SITE}/kuendigen).\n\nThank you for trying Mokalibo!` },
   }[lang] || null
   const t = T || trialEndMail({ lang: 'fr', until, price })
-  return T ? { subject: t.s, text: t.b + SERVICE_FOOT[lang] } : t
+  return T ? withHtml({ subject: t.s, text: t.b + SERVICE_FOOT[lang] }, { heading: t.s, emoji: '⏰', cta: { label: { fr: 'Ouvrir Mokalibo', de: 'Mokalibo öffnen', en: 'Open Mokalibo' }[lang], url: SITE } }) : t
 }
 
 export function welcomeMail({ lang, uid }) {
@@ -41,7 +72,7 @@ export function welcomeMail({ lang, uid }) {
     en: { s: 'Welcome to Mokalibo 🌍 3 ideas to get started', b: `Hello and welcome!\n\n3 ideas to help your children get the most out of Mokalibo:\n\n1. 🗺️ Pick a country together: your family's, your holiday destination or a classmate's. Kids love finding "their" country.\n2. 🔊 For little ones, tap the speaker: every card is read aloud (or switch on "Auto-read").\n3. 🛂 Each finished country earns a stamp in the passport – great motivation!\n\n🎁 Want more? The Family Plan unlocks everything (unlimited stories and games, 5 children), with a 3-day free trial: ${SITE}\n\nHappy exploring!\nWalid, dad and creator of Mokalibo` },
   }
   const t = T[lang] || T.fr
-  return { subject: t.s, text: t.b + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }
+  return withHtml({ subject: t.s, text: t.b + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }, { heading: t.s, emoji: '👋', cta: { label: { fr: 'Commencer l’aventure 🚀', de: 'Abenteuer starten 🚀', en: 'Start the adventure 🚀' }[lang] || 'Commencer l’aventure 🚀', url: SITE } })
 }
 
 export function day3Mail({ lang, uid, kids }) {
@@ -52,7 +83,7 @@ export function day3Mail({ lang, uid, kids }) {
     en: { s: who ? `${who} has started a trip around the world 🌍` : 'Your trip around the world has begun 🌍', b: `Hello,\n\n${who ? `${who} has already started exploring Mokalibo. ` : ''}Well done!\n\nWith the free version, each child discovers 2 new stories and 3 games a day. The Family Plan makes it unlimited: all 195 countries, 3 reading levels, up to 5 children.\n\n🎁 Try it free for 3 days (cancel in 2 clicks): ${SITE}\nFrom €1.25 a month with the yearly plan.` },
   }
   const t = T[lang] || T.fr
-  return { subject: t.s, text: t.b + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }
+  return withHtml({ subject: t.s, text: t.b + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }, { heading: t.s, emoji: '🗺️', cta: { label: { fr: '🎁 Essayer 3 jours gratuits', de: '🎁 3 Tage gratis testen', en: '🎁 Try 3 days free' }[lang] || '🎁 Essayer 3 jours gratuits', url: SITE } })
 }
 
 // Bilan de la semaine pour les parents. rows = [{ name, minutes, chapters, xp, countries: [codes] }]
@@ -71,5 +102,60 @@ export function weeklyMail({ lang, uid, rows, premium }) {
     return `• ${r.name} : ⏱️ ${r.minutes} ${T.min} · 📚 ${r.chapters} ${T.ch} · ⭐ +${r.xp} ${T.xp}${c}`
   })
   const text = `${T.h}\n\n${lines.join('\n')}\n\n${T.idea}\n${premium ? '' : `\n${T.free}\n`}\n${T.bye}`
-  return { subject: T.s, text: text + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }
+  return withHtml({ subject: T.s, text: text + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }, { heading: T.s, emoji: '📊', cta: { label: { fr: 'Continuer le voyage 🌍', de: 'Weiterreisen 🌍', en: 'Keep exploring 🌍' }[lang] || 'Continuer le voyage 🌍', url: SITE } })
+}
+
+// Resiliation (abonnement ou essai) : au revoir chaleureux, ce que les enfants ont accompli,
+// reprise en 1 clic, version gratuite rappelee, et une question pour s'ameliorer. E-mail de service (sans accord requis).
+// stats = [{ name, chapters, countries }]
+export function cancelMail({ lang, until, trial, stats = [] }) {
+  const d = until ? fmtDate(until, lang) : ''
+  const who = join(stats.map((s) => s.name).filter(Boolean), lang)
+  const many = stats.filter((s) => s.name).length > 1
+  const ch = stats.reduce((a, s) => a + (s.chapters || 0), 0)
+  const co = stats.reduce((a, s) => a + (s.countries || 0), 0)
+  const L = {
+    fr: {
+      s: who ? `Snif… ${who} ${many ? 'vont' : 'va'} nous manquer 🥲` : 'Snif… vous allez nous manquer 🥲',
+      intro: `C'est bien noté : ${trial ? 'ton essai est résilié, tu ne seras pas débité' : 'ton abonnement est résilié, aucun nouveau prélèvement'}.${d ? ` L'accès illimité reste ouvert jusqu'au ${d}.` : ''}`,
+      done: who && (ch || co) ? `En chemin, ${who} ${many ? 'ont' : 'a'} déjà terminé ${ch} chapitre${ch > 1 ? 's' : ''} et visité ${co} pays 🌍 Notre petit renard 🦊 range sa valise… un peu tristement.` : 'Notre petit renard 🦊 range sa valise… un peu tristement.',
+      back: 'Tu as changé d’avis ? Un seul clic suffit pour garder le voyage, sans rien perdre :',
+      free: 'Et sinon, pas de souci : la version gratuite reste là, avec 2 histoires et 3 jeux par jour, pour continuer le tour du monde à petits pas.',
+      ask: 'Une petite faveur : réponds à cet e-mail avec un mot pour nous dire pourquoi (trop cher ? pas le temps ? pas adapté ?). On lit tout, et ça nous aide vraiment à faire mieux.',
+      bye: 'À bientôt pour de nouvelles aventures ! ✈️\nWalid, papa et créateur de Mokalibo',
+      cta: '💛 Je garde Mokalibo',
+    },
+    de: {
+      s: who ? `Schnief… ${who} ${many ? 'werden' : 'wird'} uns fehlen 🥲` : 'Schnief… ihr werdet uns fehlen 🥲',
+      intro: `Alles klar: ${trial ? 'dein Test ist gekündigt, es wird nichts abgebucht' : 'dein Abo ist gekündigt, es wird nichts mehr abgebucht'}.${d ? ` Der unbegrenzte Zugang bleibt bis zum ${d} offen.` : ''}`,
+      done: who && (ch || co) ? `Unterwegs ${many ? 'haben' : 'hat'} ${who} schon ${ch} Kapitel abgeschlossen und ${co} Länder besucht 🌍 Unser kleiner Fuchs 🦊 packt seinen Koffer… ein bisschen traurig.` : 'Unser kleiner Fuchs 🦊 packt seinen Koffer… ein bisschen traurig.',
+      back: 'Doch umentschieden? Ein Klick genügt, um die Reise weiterzumachen, ohne etwas zu verlieren:',
+      free: 'Und sonst kein Problem: Die Gratis-Version bleibt, mit 2 Geschichten und 3 Spielen pro Tag, für die Weltreise in kleinen Schritten.',
+      ask: 'Eine kleine Bitte: Antworte auf diese E-Mail mit einem Wort, warum (zu teuer? keine Zeit? nicht passend?). Wir lesen alles, und es hilft uns sehr.',
+      bye: 'Bis bald zu neuen Abenteuern! ✈️\nWalid, Papa und Gründer von Mokalibo',
+      cta: '💛 Ich bleibe bei Mokalibo',
+    },
+    en: {
+      s: who ? `Sniff… we'll miss ${who} 🥲` : "Sniff… we'll miss you 🥲",
+      intro: `All done: ${trial ? 'your trial is cancelled, you won’t be charged' : 'your subscription is cancelled, no further payments'}.${d ? ` Unlimited access stays open until ${d}.` : ''}`,
+      done: who && (ch || co) ? `Along the way, ${who} finished ${ch} chapter${ch > 1 ? 's' : ''} and visited ${co} countries 🌍 Our little fox 🦊 is packing its suitcase… a bit sadly.` : 'Our little fox 🦊 is packing its suitcase… a bit sadly.',
+      back: 'Changed your mind? One click keeps the journey going, nothing lost:',
+      free: 'And if not, no worries: the free version stays, with 2 stories and 3 games a day, to keep exploring step by step.',
+      ask: 'A small favour: reply to this e-mail with one word on why (too expensive? no time? not a fit?). We read everything, and it really helps.',
+      bye: 'See you soon for new adventures! ✈️\nWalid, dad and creator of Mokalibo',
+      cta: '💛 Keep Mokalibo',
+    },
+  }
+  const T = L[lang] || L.fr
+  const url = `${SITE}/?reprendre=1`
+  const text = `Bonjour,\n\n${T.intro}\n\n${T.done}\n\n${T.back}\n${url}\n\n${T.free}\n\n${T.ask}\n\n${T.bye}${SERVICE_FOOT[lang] || SERVICE_FOOT.fr}`
+    .replace(/^Bonjour,/, lang === 'de' ? 'Hallo,' : lang === 'en' ? 'Hello,' : 'Bonjour,')
+  return withHtml({ subject: T.s, text }, { heading: T.s, emoji: '🦊', cta: { label: T.cta, url } })
+}
+
+// Carte cadeau achetee : le code et comment l'activer
+export function giftMail({ code, to }) {
+  const url = `${SITE}/?cadeau=${code}`
+  const text = `Merci pour votre achat ! 🎁\n\nVotre code cadeau : ${code}${to ? `\nPour : ${to}` : ''}\n\nPour l'activer (1 an de Formule Famille, jusqu'à 5 enfants) :\n1. Ouvrir ${url}\n2. Créer un compte parent gratuit (ou se connecter)\n3. L'accès illimité s'active automatiquement.\n\nLe code est valable 3 ans. Vous pouvez imprimer ou envoyer la jolie carte depuis la page de confirmation.\n\n—\nMokalibo · L'histoire du monde, racontée aux enfants\n💛 5 % de chaque achat vont à la protection de l'enfance`
+  return withHtml({ subject: '🎁 Votre carte cadeau Mokalibo', text }, { heading: 'Votre carte cadeau est prête 🎉', emoji: '🎁', cta: { label: 'Activer le cadeau 🎁', url } })
 }

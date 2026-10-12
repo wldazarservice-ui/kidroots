@@ -1,6 +1,7 @@
 // Outils communs aux fonctions de paiement (Stripe + Firebase Admin)
 import Stripe from 'stripe'
 import { randomInt } from 'node:crypto'
+import { giftMail, cancelMail } from './emails.mjs'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore, FieldValue } from 'firebase-admin/firestore'
@@ -170,12 +171,12 @@ export const json = (status, body) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
 
 // E-mail via Resend (variables RESEND_API_KEY et MAIL_FROM). Retourne false si non configure.
-export async function sendMail({ to, subject, text, replyTo }) {
+export async function sendMail({ to, subject, text, html, replyTo }) {
   if (!process.env.RESEND_API_KEY || !process.env.MAIL_FROM) return false
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: process.env.MAIL_FROM, to: Array.isArray(to) ? to : [to], subject, text, reply_to: replyTo || process.env.MAIL_REPLY_TO || 'contact@azarconsulting.eu' }),
+    body: JSON.stringify({ from: process.env.MAIL_FROM, to: Array.isArray(to) ? to : [to], subject, text, ...(html && { html }), reply_to: replyTo || process.env.MAIL_REPLY_TO || 'contact@azarconsulting.eu' }),
   }).catch(() => null)
   return !!res?.ok
 }
@@ -217,12 +218,22 @@ export async function ensureGift(session) {
     await countEvent('gift_purchase').catch(() => {})
     await countEvent('payment', { revenueCents: session.amount_total || GIFT.cents }).catch(() => {})
     if (g.buyerEmail) {
-      await sendMail({
-        to: g.buyerEmail,
-        subject: '🎁 Votre carte cadeau Mokalibo',
-        text: `Merci pour votre achat !\n\nCode cadeau : ${res.code}\n${g.to ? `Pour : ${g.to}\n` : ''}\nPour l'activer (1 an de Formule Famille, jusqu'à 5 enfants) :\n1. Ouvrir https://mokalibo.com/?cadeau=${res.code}\n2. Créer un compte parent gratuit (ou se connecter)\n3. L'accès illimité s'active automatiquement.\n\nLe code est valable 3 ans. Vous pouvez imprimer ou envoyer la carte depuis la page de confirmation.\n\nMokalibo · L'histoire du monde, racontée aux enfants\n5 % de chaque achat vont à la protection de l'enfance 💛`,
-      }).catch(() => {})
+      await sendMail({ to: g.buyerEmail, ...giftMail({ code: res.code, to: g.to }) }).catch(() => {})
     }
   }
   return { code: res.code, to: g.to, from: g.from, message: g.message }
+}
+
+// E-mail d'au revoir a la resiliation (une seule fois par abonnement)
+export async function sendCancelMail(uid, sub) {
+  const ref = db().doc(`users/${uid}`)
+  const u = (await ref.get()).data() || {}
+  if (!u.email || u.mail?.cancel === sub.id) return
+  const kidsSnap = await db().collection(`users/${uid}/children`).get()
+  const kids = kidsSnap.docs.map((d) => d.data())
+  const stats = kids.map((k) => ({ name: (k.name || '').split(' ')[0], chapters: Object.keys(k.done || {}).length, countries: Object.keys(k.stats?.countries || {}).length }))
+  const lang = ['fr', 'de', 'en'].includes(kids[0]?.lang) ? kids[0].lang : 'fr'
+  const end = sub.cancel_at || sub.trial_end || sub.items?.data?.[0]?.current_period_end || sub.current_period_end
+  const ok = await sendMail({ to: u.email, ...cancelMail({ lang, until: end ? new Date(end * 1000) : null, trial: sub.status === 'trialing', stats }) })
+  if (ok) await ref.set({ mail: { cancel: sub.id } }, { merge: true })
 }

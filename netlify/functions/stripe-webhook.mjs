@@ -1,7 +1,7 @@
 // Notifications Stripe (source de verite) : debut, renouvellement, resiliation de l'abonnement.
 // Evenements a cocher dans Stripe : checkout.session.completed, customer.subscription.updated,
 // customer.subscription.deleted, invoice.paid
-import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial, ensureGift } from '../lib/shared.mjs'
+import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial, ensureGift, sendCancelMail } from '../lib/shared.mjs'
 
 const uidOf = (obj) => obj?.metadata?.uid || null
 
@@ -43,6 +43,8 @@ export default async (req) => {
       const wasEnding = 'cancel_at_period_end' in prev || 'cancel_at' in prev ? !!(prev.cancel_at_period_end || prev.cancel_at) : willEnd
       const cancelled = event.type === 'customer.subscription.deleted' || (willEnd && !wasEnding)
       if (cancelled) await countEvent('cancel')
+      // Au revoir (sauf si la resiliation vient de la page « Verträge hier kündigen », qui envoie deja sa confirmation)
+      if (willEnd && !wasEnding && !obj.metadata?.cancel_request_at) await sendCancelMail(uid, obj).catch((e) => console.error('cancel mail', e.message))
       // Fin de l'essai gratuit : premier vrai paiement = nouvel abonne
       if (prev.status === 'trialing' && obj.status === 'active') await countEvent('purchase', { plan: obj.items?.data?.[0]?.price?.recurring?.interval })
       break
