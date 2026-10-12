@@ -14,7 +14,15 @@ export default async (req) => {
   const base = { customer: d.stripeCustomerId, return_url: `${origin}/?portal=back` }
 
   let flow_data
-  if (body.flow === 'cancel' && d.subscriptionId && !d.cancelAtPeriodEnd) {
+  // Etat reel chez Stripe (notre copie peut avoir du retard) : deja resilie = pas de parcours « resilier »
+  let alreadyEnding = !!d.cancelAtPeriodEnd
+  if (body.flow === 'cancel' && d.subscriptionId && !alreadyEnding) {
+    try {
+      const sub = await stripe().subscriptions.retrieve(d.subscriptionId)
+      alreadyEnding = !!(sub.cancel_at_period_end || sub.cancel_at) || !['active', 'trialing', 'past_due'].includes(sub.status)
+    } catch (e) { console.error('portal sub', e.message) }
+  }
+  if (body.flow === 'cancel' && d.subscriptionId && !alreadyEnding) {
     flow_data = { type: 'subscription_cancel', subscription_cancel: { subscription: d.subscriptionId }, after_completion: { type: 'redirect', redirect: { return_url: base.return_url } } }
   } else if (body.flow === 'payment') {
     flow_data = { type: 'payment_method_update', after_completion: { type: 'redirect', redirect: { return_url: base.return_url } } }
