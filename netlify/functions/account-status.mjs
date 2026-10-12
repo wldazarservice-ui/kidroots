@@ -1,5 +1,5 @@
 // Appele a la connexion : applique un acces offert (COMP_EMAILS) et renvoie l'etat de l'abonnement
-import { verifyUser, isComp, isOwner, isSchool, db, json, FieldValue, refCodeFor, trialEligible, TRIAL_DAYS, TIERS, giftActive } from '../lib/shared.mjs'
+import { verifyUser, isComp, isOwner, isSchool, db, json, FieldValue, refCodeFor, trialEligible, TRIAL_DAYS, TIERS, giftActive, stripe, syncSubscription } from '../lib/shared.mjs'
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
@@ -7,6 +7,15 @@ export default async (req) => {
   if (!user) return json(401, { error: 'auth' })
   const ref = db().doc(`users/${user.uid}`)
   let data = (await ref.get()).data() || {}
+
+  // Abonnement Stripe : on relit l'etat reel a chaque connexion (au cas ou une notification Stripe aurait ete manquee)
+  if (data.subscriptionId) {
+    try {
+      const sub = await stripe().subscriptions.retrieve(data.subscriptionId)
+      await syncSubscription(user.uid, sub)
+      data = (await ref.get()).data() || {}
+    } catch (e) { console.error('sync sub', e.message) }
+  }
 
   if (isComp(user)) {
     if (user.email_verified !== true) return json(200, { premium: !!data.premium, needVerify: true })

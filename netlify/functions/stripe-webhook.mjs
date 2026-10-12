@@ -39,7 +39,9 @@ export default async (req) => {
       if (!uid) break
       await syncSubscription(uid, obj)
       const prev = event.data.previous_attributes || {}
-      const cancelled = event.type === 'customer.subscription.deleted' || (obj.cancel_at_period_end && prev.cancel_at_period_end === false)
+      const willEnd = !!(obj.cancel_at_period_end || obj.cancel_at)
+      const wasEnding = 'cancel_at_period_end' in prev || 'cancel_at' in prev ? !!(prev.cancel_at_period_end || prev.cancel_at) : willEnd
+      const cancelled = event.type === 'customer.subscription.deleted' || (willEnd && !wasEnding)
       if (cancelled) await countEvent('cancel')
       // Fin de l'essai gratuit : premier vrai paiement = nouvel abonne
       if (prev.status === 'trialing' && obj.status === 'active') await countEvent('purchase', { plan: obj.items?.data?.[0]?.price?.recurring?.interval })

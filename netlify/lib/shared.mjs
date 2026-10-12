@@ -110,7 +110,8 @@ export async function syncSubscription(uid, sub) {
       subStatus: sub.status,
       plan: item?.price?.recurring?.interval || null,
       premiumUntil: periodEnd ? new Date(periodEnd * 1000) : null,
-      cancelAtPeriodEnd: !!sub.cancel_at_period_end,
+      // Resiliation : ancienne notation (cancel_at_period_end) ou nouvelle (date cancel_at) selon la version de Stripe
+      cancelAtPeriodEnd: !!(sub.cancel_at_period_end || sub.cancel_at),
       stripeCustomerId: typeof sub.customer === 'string' ? sub.customer : sub.customer?.id,
       ...(sub.trial_end && { trialUsed: true }),
       ...limits,
