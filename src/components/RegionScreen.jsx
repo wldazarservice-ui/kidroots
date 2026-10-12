@@ -21,7 +21,7 @@ export default function RegionScreen({ lang, changeLang, progress, nav, difficul
       </div>
 
       {/* Onglets continents */}
-      <div className="region-tabs" style={{ display: 'grid', gridTemplateColumns: `repeat(${Object.values(REGIONS).filter((x) => x.countries.length).length}, 1fr)`, gap: 8, marginBottom: 18 }}>
+      <div className="region-tabs" style={{ display: 'grid', gridTemplateColumns: `repeat(${Object.values(REGIONS).filter((x) => x.countries.length).length}, minmax(0, 1fr))`, gap: 8, marginBottom: 18 }}>
         {Object.entries(REGIONS).filter(([, reg]) => reg.countries.length).map(([key, reg]) => {
           const active = key === regionKey
           return (

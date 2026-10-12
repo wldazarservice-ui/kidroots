@@ -521,7 +521,7 @@ export default function App() {
   const shared = { lang, changeLang, progress, nav, activeChild, difficulty, premium: hasPremium, guest: isGuest }
 
   // ── Auth gates ────────────────────────────────────────────────
-  if (authLoading) return <Spinner msg="Demarrage..." />
+  if (authLoading) return <Spinner msg="Démarrage..." />
   if (!user && !isGuest) {
     if (authMode) {
       return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)} />
