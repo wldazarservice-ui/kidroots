@@ -98,6 +98,8 @@ const id = Number(P.get('id') || 0)
 const R = DATA[lang]
 const [flag, cname, emo, question, options, good, ftitle, ftext, [c1, c2], shot] = R.list[id]
 const $ = (i) => document.getElementById(i)
+// Typographie : pas de « ? » ou « ! » seul en debut de ligne, nombres et unites non coupes
+const nb = (x) => x.replace(/ ([?!:;»])/g, '\u00a0$1').replace(/« /g, '«\u00a0').replace(/(\d) (\d)/g, '$1\u00a0$2').replace(/(\d) (ans|km|m)\b/g, '$1\u00a0$2')
 const LETTERS = ['A', 'B', 'C'], LCOL = ['#EF5350', '#42A5F5', '#66BB6A']
 
 // ── decor ──
@@ -107,9 +109,9 @@ $('b2').style.cssText += `;background:${c1};opacity:.6;right:-300px;bottom:-200p
 const DOTS = Array.from({ length: 26 }, (_, i) => { const d = document.createElement('div'); d.className = 'dot'; const s = 8 + (i * 7) % 18; d.style.width = d.style.height = s + 'px'; $('bg').appendChild(d); return { d, x: (i * 137) % 1080, y: (i * 271) % 1920, v: 18 + (i * 13) % 40, a: i } })
 $('badge').textContent = R.badge; $('flag').textContent = flag; $('cname').textContent = cname
 $('mascT').textContent = R.hint
-$('qcard').textContent = question
-options.forEach((o, i) => { const el = document.createElement('div'); el.className = 'opt fr'; el.id = 'o' + i; el.style.top = (880 + i * 162) + 'px'; el.innerHTML = `<b style="background:${LCOL[i]}">${LETTERS[i]}</b><span>${o}</span>`; $('opts').appendChild(el) })
-$('ftitle').textContent = ftitle; $('ftitle').style.color = c2; $('ftext').textContent = ftext; $('fem').textContent = emo
+$('qcard').textContent = nb(question)
+options.forEach((o, i) => { const el = document.createElement('div'); el.className = 'opt fr'; el.id = 'o' + i; el.style.top = (880 + i * 162) + 'px'; el.innerHTML = `<b style="background:${LCOL[i]}">${LETTERS[i]}</b><span>${nb(o)}</span>`; $('opts').appendChild(el) })
+$('ftitle').textContent = nb(ftitle); $('ftitle').style.color = c2; $('ftext').textContent = nb(ftext); $('fem').textContent = emo
 $('pcap').innerHTML = R.cap; $('shot').src = `shots/${lang}/${shot}.png`
 $('tag').innerHTML = R.tag; $('offer').textContent = R.offer; $('small').textContent = R.small
 const CONF = Array.from({ length: 46 }, (_, i) => { const c = document.createElement('div'); c.className = 'conf'; c.style.background = ['#FFD600', '#FF4081', '#40C4FF', '#69F0AE', '#FF9100', '#fff'][i % 6]; $('confs').appendChild(c); return { c, ang: -Math.PI / 2 + ((i * 0.618) % 1 - 0.5) * 2.6, sp: 500 + ((i * 7919) % 1000), dx: ((i * 211) % 600) - 300, rot: (i * 53) % 360 } })
