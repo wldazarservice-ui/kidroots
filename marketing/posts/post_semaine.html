@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="../video/noto-emoji.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;overflow:hidden}
+body{position:relative;font-family:Nunito,sans-serif;color:#1A2A4F}
+.e{font-family:'Noto Color Emoji';line-height:1}
+.fr{font-family:Fredoka,sans-serif;font-weight:700}
+.kick{position:absolute;left:70px;top:80px;color:#fff;border-radius:999px;padding:14px 32px;font-size:40px}
+h1{position:absolute;left:70px;right:70px;top:190px;font-size:76px;line-height:1.08}
+h1 em{font-style:normal}
+.foot{position:absolute;left:70px;right:70px;bottom:70px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:64px}.o{color:#FF6F00}.b{color:#1E88E5}
+.cta{background:#FFD600;border-radius:30px;padding:20px 34px;font-size:42px;box-shadow:0 10px 0 #E6A100;color:#1A2A4F}
+.ph{position:absolute;width:400px;height:720px;border-radius:56px;border:14px solid #111318;background:#111318;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.25)}
+.ph img{display:block;width:100%;border-radius:44px}
+.list{position:absolute;left:70px;top:470px;width:520px;display:flex;flex-direction:column;gap:22px}
+.li{background:#fff;border-radius:26px;padding:22px 26px;font-size:36px;font-weight:900;box-shadow:0 8px 20px rgba(26,42,79,.08)}
+.opt{background:#fff;border-radius:28px;padding:26px 34px;font-size:52px;font-weight:900;box-shadow:0 8px 20px rgba(26,42,79,.1);margin-bottom:24px;display:flex;gap:22px;align-items:center}
+.opt b{display:inline-flex;width:72px;height:72px;border-radius:20px;align-items:center;justify-content:center;color:#fff;font-size:44px}
+</style></head><body>
+<div id="root"></div>
+<script>
+const V = {
+  parents: `<div style="position:absolute;inset:0;background:linear-gradient(160deg,#E8F5E9,#C8E6C9 55%,#FFF8E1)"></div>
+    <div class="kick fr" style="background:#2E7D4F">👨‍👩‍👧 Pour les parents</div>
+    <h1 class="fr">Un écran utile,<br><em style="color:#2E7D4F">sans mauvaise surprise</em></h1>
+    <div class="list">
+      <div class="li">🚫 Aucune publicité</div><div class="li">🔒 Aucun traceur, conforme RGPD</div>
+      <div class="li">🔊 Tout est lu à voix haute</div><div class="li">⏱️ Temps d'écran réglable</div><div class="li">👧 Jusqu'à 5 enfants</div>
+    </div>
+    <div class="ph" style="right:60px;top:440px;transform:rotate(3deg)"><img src="../video/shots/fr/home.png"></div>`,
+  egypte: `<div style="position:absolute;inset:0;background:linear-gradient(170deg,#FFF3C4,#FFD180 55%,#FFB74D)"></div>
+    <div class="kick fr" style="background:#E65100">🇪🇬 Le savais-tu ?</div>
+    <h1 class="fr">La Grande Pyramide a été <em style="color:#BF360C">le plus haut monument du monde</em> pendant près de <span style="white-space:nowrap">3 800 ans</span> !</h1>
+    <div style="position:absolute;left:0;right:0;top:930px;height:60px;background:#E0A458;border-radius:50% 50% 0 0/40px 40px 0 0"></div>
+    <div style="position:absolute;left:330px;top:560px;width:0;height:0;border-left:230px solid transparent;border-right:230px solid transparent;border-bottom:390px solid #D4943F"></div>
+    <div style="position:absolute;left:560px;top:560px;width:0;height:0;border-left:0 solid transparent;border-right:230px solid transparent;border-bottom:390px solid #B9782E"></div>
+    <div style="position:absolute;left:120px;top:720px;width:0;height:0;border-left:150px solid transparent;border-right:150px solid transparent;border-bottom:240px solid #DDA14E"></div>
+    <div style="position:absolute;left:270px;top:720px;width:0;height:0;border-right:150px solid transparent;border-bottom:240px solid #C2843A"></div>
+    <div class="e" style="position:absolute;left:760px;top:860px;font-size:110px">🐪</div>
+    <div class="e" style="position:absolute;right:150px;top:700px;font-size:120px">☀️</div>
+    <div class="fr" style="position:absolute;left:70px;right:70px;top:1030px;text-align:center;font-size:40px;color:#5D4037">Construite il y a plus de 4 500 ans, à Gizeh 🇪🇬</div>`,
+  quiz: `<div style="position:absolute;inset:0;background:linear-gradient(160deg,#E3F2FD,#BBDEFB 55%,#FFF8E1)"></div>
+    <div class="kick fr" style="background:#1565C0">🎯 Quiz du dimanche</div>
+    <h1 class="fr">Quelle est la capitale de <em style="color:#1565C0">l'Australie</em> ? 🇦🇺</h1>
+    <div style="position:absolute;left:70px;right:70px;top:520px">
+      <div class="opt"><b style="background:#EF5350">A</b> Sydney</div>
+      <div class="opt"><b style="background:#42A5F5">B</b> Canberra</div>
+      <div class="opt"><b style="background:#66BB6A">C</b> Melbourne</div>
+    </div>
+    <div class="fr" style="position:absolute;left:70px;right:70px;top:1030px;text-align:center;font-size:44px;color:#1565C0">Réponds en commentaire 👇</div>`,
+  voyage: `<div style="position:absolute;inset:0;background:linear-gradient(160deg,#E1F5FE,#B3E5FC 55%,#FFF3E0)"></div>
+    <div class="kick fr" style="background:#0277BD">✈️ Vacances de la Toussaint</div>
+    <h1 class="fr" style="width:600px;font-size:64px">Même sans internet, le tour du monde <em style="color:#0277BD;white-space:nowrap">continue !</em></h1>
+    <div class="list" style="top:600px;width:540px">
+      <div class="li">📥 Choisis les pays à télécharger</div><div class="li">🎮 Et les jeux aussi</div>
+      <div class="li">🚗 Voiture, train, avion…</div><div class="li">🔄 La progression se synchronise au retour</div>
+    </div>
+    <div class="ph" style="right:60px;top:430px;transform:rotate(3deg)"><img src="../video/shots/fr/map.png"></div>`,
+}
+const v = new URLSearchParams(location.search).get('v')
+document.getElementById('root').innerHTML = V[v] + `<div class="foot"><div class="logo fr"><span class="o">Moka</span><span class="b">libo</span></div><div class="cta fr">🎁 3 jours gratuits</div></div>`
+</script>
+</body></html>
