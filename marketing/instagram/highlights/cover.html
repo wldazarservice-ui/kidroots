@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="../../video/noto-emoji.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+.ring{width:820px;height:820px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 26px rgba(255,255,255,.55)}
+.e{font-family:'Noto Color Emoji';font-size:400px;line-height:1;filter:drop-shadow(0 22px 30px rgba(0,0,0,.18))}
+</style></head><body>
+<div class="ring" id="r"><span class="e" id="i"></span></div>
+<script>
+const V={essai:['🎁','#FFB300','#FF6F00'],comment:['❓','#42A5F5','#1565C0'],quiz:['🎯','#EC407A','#8E24AA'],parents:['🏡','#66BB6A','#2E7D4F'],voyage:['✈️','#26C6DA','#00838F']}
+const [e,a,b]=V[new URLSearchParams(location.search).get('v')]
+document.body.style.background=`linear-gradient(160deg,${a},${b})`
+document.getElementById('r').style.background='rgba(255,255,255,.18)'
+document.getElementById('i').textContent=e
+</script></body></html>
