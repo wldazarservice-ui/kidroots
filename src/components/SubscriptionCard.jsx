@@ -72,7 +72,7 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
     )
   } else if (account.hasCustomer) {
     title = '🌙 Abonnement terminé'
-    lines = ['Tu es revenu à la version gratuite (2 histoires et 3 parties de jeux par jour).']
+    lines = ['Tu es revenu à la version gratuite (3 chapitres et 5 parties de jeux par jour).']
     actions = (
       <>
         {PAYWALL_ENABLED && onOpenOffer && <button type="button" onClick={onOpenOffer} style={btn('linear-gradient(180deg,#43C27A,#2E9E5B)', 'white')}>⭐ Me réabonner</button>}
@@ -81,7 +81,7 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
     )
   } else {
     title = '🆓 Version gratuite'
-    lines = ['2 nouvelles histoires et 3 parties de jeux par jour et par enfant.']
+    lines = ['3 nouveaux chapitres et 5 parties de jeux par jour et par enfant.']
     actions = PAYWALL_ENABLED && onOpenOffer && (
       <button type="button" onClick={onOpenOffer} style={btn('linear-gradient(180deg,#43C27A,#2E9E5B)', 'white')}>
         ⭐ Découvrir la Formule Famille{account.trial > 0 ? ' · 3 jours gratuits' : ''}

@@ -392,7 +392,7 @@ export default function App() {
 
   const hasPremium = premium || !PAYWALL_ENABLED
 
-  // Limite gratuite : 2 nouveaux chapitres par jour et par enfant (rejouer un chapitre fini reste libre)
+  // Limite gratuite : 3 nouveaux chapitres par jour et par enfant (rejouer un chapitre fini reste libre)
   const openChapter = (idx) => {
     const ch = country?.chapters[idx]
     if (!ch) return false
@@ -414,7 +414,7 @@ export default function App() {
     return true
   }
 
-  // Jeux : 3 parties gratuites par jour et par enfant. Retourne false (et affiche la limite) si plus de partie.
+  // Jeux : 5 parties gratuites par jour et par enfant. Retourne false (et affiche la limite) si plus de partie.
   const takeGameRound = () => {
     if (!activeChild) return false
     if (gamesLeft(activeChild, hasPremium) <= 0) {

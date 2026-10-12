@@ -11,7 +11,7 @@ const untilMidnight = () => {
   return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}`
 }
 
-// Limite gratuite atteinte (2 nouveaux chapitres par jour) : facon Duolingo, positif pour l'enfant
+// Limite gratuite atteinte (3 nouveaux chapitres par jour) : facon Duolingo, positif pour l'enfant
 export default function DailyLimit({ lang, onClose, onUnlock, kind = 'chapters' }) {
   const games = kind === 'games'
   const [left, setLeft] = useState(untilMidnight)

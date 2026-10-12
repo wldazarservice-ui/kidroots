@@ -1,8 +1,8 @@
 import { referralCode } from './track'
-// Modele « freemium » : tous les pays sont jouables, avec 2 nouveaux chapitres par jour et par enfant.
+// Modele « freemium » : tous les pays sont jouables, avec 3 nouveaux chapitres par jour et par enfant.
 // La Formule Famille (abonnement mensuel ou annuel, 5 enfants / 5 appareils) rend tout illimite.
 // Les montants doivent correspondre a PLANS dans netlify/lib/shared.mjs.
-export const DAILY_FREE_CHAPTERS = 2
+export const DAILY_FREE_CHAPTERS = 3
 export const PLANS = {
   month: { cents: 199, label: '1,99 €' },
   year: { cents: 1499, label: '14,99 €', perMonth: '1,25 €', savePct: 37 },
@@ -26,8 +26,8 @@ export const todayIds = (child) => (child?.daily?.date === todayKey() ? child.da
 export const chaptersLeft = (child, premium) =>
   !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, DAILY_FREE_CHAPTERS - todayIds(child).length)
 // Un chapitre deja termine ou deja commence aujourd'hui reste toujours accessible
-// Jeux : 3 parties gratuites par jour et par enfant (tous jeux confondus). gameDaily = { date, n }
-export const DAILY_FREE_GAMES = 3
+// Jeux : 5 parties gratuites par jour et par enfant (tous jeux confondus). gameDaily = { date, n }
+export const DAILY_FREE_GAMES = 5
 export const gamesPlayedToday = (child) => (child?.gameDaily?.date === todayKey() ? child.gameDaily.n || 0 : 0)
 export const gamesLeft = (child, premium) =>
   !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, DAILY_FREE_GAMES - gamesPlayedToday(child))
