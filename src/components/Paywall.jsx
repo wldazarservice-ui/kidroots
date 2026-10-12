@@ -4,6 +4,7 @@ import { track, referralCode } from '../track'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
 import { openSupport } from '../support'
+import { isProEmail } from '../proEmail'
 
 const INK = '#1A2A4F'
 
@@ -31,7 +32,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
       if (r.alreadyPremium) onAlreadyPremium?.()
     } catch (e) {
       console.error('Checkout error:', e)
-      setError(t(lang, 'pw_error'))
+      setError(t(lang, e.message === 'pro-email' ? 'pw_t_pro' : 'pw_error'))
       setBusy(false)
     }
   }
@@ -121,6 +122,12 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
               {t(lang, 'pw_create_account')}
             </button>
           </>
+        ) : teacher && !isProEmail(user.email) ? (
+          <div style={{ background: 'white', borderRadius: 18, padding: '16px 14px', textAlign: 'center', border: '3px solid #FFCC80' }}>
+            <div style={{ fontSize: 32 }}>✉️</div>
+            <div style={{ fontSize: 15, fontWeight: 900, color: INK, margin: '6px 0' }}>{t(lang, 'pw_t_pro_title')}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.5 }}>{t(lang, 'pw_t_pro', { email: user.email || '' })}</div>
+          </div>
         ) : step === 'gate' ? (
           <ParentGate onPass={() => setStep('pay')} title={t(lang, 'pw_gate')}
             question={(a, b) => t(lang, 'pw_gate_q', { a, b })} okLabel={t(lang, 'pw_gate_ok')} errorLabel={t(lang, 'pw_gate_err')} />

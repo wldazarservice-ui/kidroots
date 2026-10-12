@@ -57,3 +57,11 @@ test('classes et ecoles : au moins une tablette par eleve', async () => {
   assert.ok(TIERS.school.maxDevices >= TIERS.school.maxChildren)
   assert.ok(TIERS.school.maxDevices <= 999, 'les regles Firestore acceptent d1..d999')
 })
+
+test('formule enseignant : e-mail professionnel obligatoire', async () => {
+  const { isProEmail } = await import('../src/proEmail.js')
+  for (const e of ['prof@gmail.com', 'a@hotmail.fr', 'b@outlook.de', 'c@gmx.net', 'd@web.de', 'e@orange.fr', 'f@yahoo.co.uk', 'g@icloud.com', 'pas-un-email'])
+    assert.equal(isProEmail(e), false, e)
+  for (const e of ['jean.dupont@ac-versailles.fr', 'm.mueller@grundschule-wittlich.de', 'teacher@school.org', 'x@education.lu'])
+    assert.equal(isProEmail(e), true, e)
+})

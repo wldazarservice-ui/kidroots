@@ -1,3 +1,4 @@
+import { isProEmail } from '../proEmail'
 import { useState } from 'react'
 import { PLANS, SCHOOL_FROM } from '../premium'
 
@@ -10,7 +11,7 @@ const TXT = {
     sub: 'Faites voyager toute la classe dans l’histoire du monde : des histoires vraies lues à voix haute, à projeter au tableau, et un quiz pour vérifier ce qui est retenu.',
     points: ['📺 Se projette sur le tableau numérique', '🧒 Un profil par élève, avec sa progression', '🔊 Voix off : même les non-lecteurs suivent', '🚫 Sans publicité, sans traceur, conforme RGPD'],
     t_name: 'Enseignant', t_for: '1 enseignant · jusqu’à 35 élèves · une tablette par élève (36 appareils)',
-    per_year: '/ an', or_month: 'ou {p} par mois', t_cta: 'Essai gratuit 3 jours', t_note: 'Facture au nom de l’école. Résiliable à tout moment.',
+    per_year: '/ an', or_month: 'ou {p} par mois', t_cta: 'Essai gratuit 3 jours', t_note: 'Facture au nom de l’école. Résiliable à tout moment.', t_pro: '✉️ Compte avec votre adresse e-mail professionnelle (école, académie). Gmail, Hotmail, Orange… ne sont pas acceptés.', f_pro: 'Merci d’utiliser l’adresse e-mail professionnelle de l’école ou de l’académie (pas de Gmail, Hotmail, Orange…).',
     s_name: 'École', s_from: 'à partir de', s_for: 'Tous les enseignants · jusqu’à 300 élèves · 330 appareils',
     s_items: ['Paiement par virement sur facture (30 jours)', 'Mise en place accompagnée', 'Tarif selon le nombre d’élèves'],
     form_title: 'Demander un devis pour votre école',
@@ -23,7 +24,7 @@ const TXT = {
     sub: 'Take the whole class on a journey through world history: true stories read aloud, ready to show on the board, with a quiz to check what was learned.',
     points: ['📺 Works on the classroom smartboard', '🧒 One profile per pupil, with their own progress', '🔊 Voice-over: even non-readers can follow', '🚫 No ads, no trackers, GDPR compliant'],
     t_name: 'Teacher', t_for: '1 teacher · up to 35 pupils · one tablet per pupil (36 devices)',
-    per_year: '/ year', or_month: 'or {p} a month', t_cta: '3-day free trial', t_note: 'Invoice in the school’s name. Cancel anytime.',
+    per_year: '/ year', or_month: 'or {p} a month', t_cta: '3-day free trial', t_note: 'Invoice in the school’s name. Cancel anytime.', t_pro: '✉️ Account with your work e-mail (school or education authority). Gmail, Hotmail, Yahoo… are not accepted.', f_pro: 'Please use the school’s or education authority’s work e-mail (no Gmail, Hotmail, Yahoo…).',
     s_name: 'School', s_from: 'from', s_for: 'All teachers · up to 300 pupils · 330 devices',
     s_items: ['Pay by bank transfer on invoice (30 days)', 'Guided setup', 'Price based on the number of pupils'],
     form_title: 'Request a quote for your school',
@@ -36,7 +37,7 @@ const TXT = {
     sub: 'Nehmen Sie die ganze Klasse mit auf eine Reise durch die Weltgeschichte: wahre Geschichten zum Vorlesen, auf dem Whiteboard zeigbar, mit einem Quiz zum Abschluss.',
     points: ['📺 Läuft auf dem digitalen Whiteboard', '🧒 Ein Profil pro Kind, mit eigenem Fortschritt', '🔊 Vorlesefunktion: auch für Kinder, die noch nicht lesen', '🚫 Ohne Werbung, ohne Tracker, DSGVO-konform'],
     t_name: 'Lehrkraft', t_for: '1 Lehrkraft · bis zu 35 Schüler · ein Tablet pro Kind (36 Geräte)',
-    per_year: '/ Jahr', or_month: 'oder {p} pro Monat', t_cta: '3 Tage kostenlos testen', t_note: 'Rechnung auf die Schule. Jederzeit kündbar.',
+    per_year: '/ Jahr', or_month: 'oder {p} pro Monat', t_cta: '3 Tage kostenlos testen', t_note: 'Rechnung auf die Schule. Jederzeit kündbar.', t_pro: '✉️ Konto mit Ihrer dienstlichen E-Mail-Adresse (Schule, Schulamt). Gmail, GMX, Web.de, Hotmail… werden nicht akzeptiert.', f_pro: 'Bitte verwenden Sie die dienstliche E-Mail-Adresse der Schule (kein Gmail, GMX, Web.de, Hotmail…).',
     s_name: 'Schule', s_from: 'ab', s_for: 'Alle Lehrkräfte · bis zu 300 Schüler · 330 Geräte',
     s_items: ['Zahlung per Überweisung auf Rechnung (30 Tage)', 'Begleitete Einrichtung', 'Preis nach Schülerzahl'],
     form_title: 'Angebot für Ihre Schule anfragen',
@@ -59,10 +60,12 @@ export default function SchoolsPage({ lang, onSignup, h2, primary }) {
   }
   const send = async (e) => {
     e.preventDefault()
+    if (!isProEmail(f.email)) { setState('pro'); return }
     setState('busy')
     try {
       const r = await fetch('/api/school-request', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...f, lang }) })
-      setState(r.ok ? 'ok' : 'err')
+      const d = await r.json().catch(() => ({}))
+      setState(r.ok ? 'ok' : d.error === 'pro-email' ? 'pro' : 'err')
     } catch { setState('err') }
   }
 
@@ -83,7 +86,8 @@ export default function SchoolsPage({ lang, onSignup, h2, primary }) {
             <div style={{ fontSize: 18, fontWeight: 900, color: '#E65100' }}>🧑‍🏫 {T.t_name}</div>
             <div style={{ fontFamily: FONT_TITLE, fontSize: 44, fontWeight: 700, margin: '6px 0 0' }}>{PLANS.teacher_year.label} <span style={{ fontSize: 18 }}>{T.per_year}</span></div>
             <div style={{ fontSize: 14, fontWeight: 900, color: '#607D8B' }}>{T.or_month.replace('{p}', PLANS.teacher_month.label)}</div>
-            <div style={{ fontSize: 15, fontWeight: 800, color: '#37474F', margin: '12px 0' }}>✓ {T.t_for}</div>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#37474F', margin: '12px 0 6px' }}>✓ {T.t_for}</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: '#00796B', marginBottom: 12, lineHeight: 1.45 }}>{T.t_pro}</div>
             <button className="btn-kid soft" onClick={teacherSignup} style={{ ...primary, marginTop: 'auto', fontSize: 18 }}>{T.t_cta}</button>
             <div style={{ fontSize: 12, fontWeight: 800, color: '#78909C', marginTop: 10, textAlign: 'center' }}>{T.t_note}</div>
           </div>
@@ -116,6 +120,7 @@ export default function SchoolsPage({ lang, onSignup, h2, primary }) {
               style={{ background: 'linear-gradient(180deg,#26A69A,#00796B)', color: 'white', padding: '16px', fontSize: 18, borderRadius: 22, boxShadow: '0 6px 0 #00564D', opacity: state === 'busy' ? 0.6 : 1 }}>
               {state === 'busy' ? T.f_wait : T.f_send}
             </button>
+            {state === 'pro' && <div style={{ textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#C62828' }}>{T.f_pro}</div>}
             {state === 'err' && <div style={{ textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#C62828' }}>{T.f_err}</div>}
             <div style={{ fontSize: 12, fontWeight: 700, color: '#78909C', textAlign: 'center' }}>
               {T.f_privacy} <a href="/datenschutz" target="_blank" rel="noopener" style={{ color: 'inherit' }}>{T.privacy}</a>

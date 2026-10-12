@@ -1,5 +1,6 @@
 // Cree une session d'abonnement Stripe (Formule Famille, mensuelle ou annuelle) pour le compte parent connecte
 import { stripe, verifyUser, db, json, PLANS, countEvent, ensureRefCoupon, findReferrer, TRIAL_DAYS, trialEligible } from '../lib/shared.mjs'
+import { isProEmail } from '../../src/proEmail.js'
 
 const KLEIN = process.env.KLEINUNTERNEHMER !== 'false'
 const TAX_NOTE = 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet. · TVA non applicable (§ 19 UStG, Kleinunternehmer).'
@@ -16,6 +17,8 @@ export default async (req) => {
   // Contenu numerique : le parent demande l'execution immediate et renonce
   // expressement a son droit de retractation (§ 356 Abs. 5 BGB) avant de payer.
   if (body.waiver !== true) return json(400, { error: 'waiver' })
+  // Formule Enseignant : adresse professionnelle verifiee obligatoire (pas de Gmail, Hotmail…)
+  if (P.tier === 'teacher' && (!isProEmail(user.email) || user.email_verified === false)) return json(403, { error: 'pro-email' })
   const waiverAt = new Date().toISOString()
 
   const snap = await db().doc(`users/${user.uid}`).get()
@@ -59,7 +62,7 @@ export default async (req) => {
     subscription_data: {
       metadata: meta,
       description: P.tier === 'teacher'
-        ? 'Mokalibo Enseignant : 35 élèves, 5 appareils, histoires illimitées. Résiliable à tout moment.'
+        ? 'Mokalibo Enseignant : 35 élèves, 36 appareils, histoires illimitées. Résiliable à tout moment.'
         : 'Mokalibo Famille : 5 enfants, 5 appareils, aventures illimitées. Résiliable à tout moment.',
       ...(trial && { trial_period_days: TRIAL_DAYS, trial_settings: { end_behavior: { missing_payment_method: 'cancel' } } }),
     },

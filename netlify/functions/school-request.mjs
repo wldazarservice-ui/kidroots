@@ -1,6 +1,7 @@
 // Demande de devis « Ecole » (formulaire public de la page Ecoles).
 // Enregistree dans schoolRequests (lisible seulement par le serveur), visible dans le tableau de bord proprietaire.
 import { db, json, FieldValue, countEvent } from '../lib/shared.mjs'
+import { isProEmail } from '../../src/proEmail.js'
 
 const clip = (v, n) => String(v ?? '').trim().slice(0, n)
 
@@ -18,6 +19,7 @@ export default async (req) => {
     lang: clip(b.lang, 5),
   }
   if (!r.school || !r.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(r.email)) return json(400, { error: 'fields' })
+  if (!isProEmail(r.email)) return json(400, { error: 'pro-email' })
   await db().collection('schoolRequests').add({ ...r, status: 'new', at: FieldValue.serverTimestamp() })
   await countEvent('school_request').catch(() => {})
   return json(200, { ok: true })
