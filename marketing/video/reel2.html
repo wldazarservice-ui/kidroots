@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="noto-emoji.css" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+  body { font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; color: #1A2A4F; }
+  .e { font-family: 'Noto Color Emoji'; line-height: 1; display: inline-block; }
+  .fr { font-family: 'Fredoka', sans-serif; font-weight: 700; }
+  .abs { position: absolute; }
+  #bg { position: absolute; inset: 0; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+  .dot { position: absolute; border-radius: 50%; background: rgba(255,255,255,.55); }
+  .layer { position: absolute; inset: 0; visibility: hidden; }
+  #prog { position: absolute; left: 40px; right: 40px; top: 40px; height: 12px; border-radius: 6px; background: rgba(255,255,255,.3); overflow: hidden; z-index: 20; }
+  #prog i { display: block; height: 100%; background: #fff; border-radius: 6px; }
+  .shadowtxt { color: #fff; text-shadow: 0 6px 0 rgba(0,0,0,.12), 0 14px 30px rgba(0,0,0,.25); }
+  .card { background: #fff; border-radius: 48px; box-shadow: 0 24px 60px rgba(0,0,0,.22); }
+  .opt { position: absolute; left: 90px; right: 90px; height: 136px; display: flex; align-items: center; gap: 28px; padding: 0 34px; border-radius: 40px; background: #fff; box-shadow: 0 14px 0 rgba(0,0,0,.08), 0 20px 40px rgba(0,0,0,.18); font-size: 56px; }
+  .opt b { flex-shrink: 0; width: 88px; height: 88px; border-radius: 26px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 54px; }
+  .conf { position: absolute; width: 22px; height: 34px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div id="bg"><div class="blob" id="b1" style="width:900px;height:900px"></div><div class="blob" id="b2" style="width:760px;height:760px"></div></div>
+<div id="prog"><i></i></div>
+
+<!-- 1. Accroche -->
+<div class="layer" id="S1">
+  <div class="abs card fr" id="badge" style="left:50%;top:300px;padding:22px 52px;font-size:66px;white-space:nowrap;background:#FFD600;border-radius:999px">💡 Le savais-tu ?</div>
+  <div class="abs e" id="flag" style="left:50%;top:560px;font-size:400px"></div>
+  <div class="abs fr shadowtxt" id="cname" style="left:0;right:0;top:1040px;text-align:center;font-size:128px"></div>
+</div>
+
+<!-- 2-3. Question, reponses, revelation -->
+<div class="layer" id="S2">
+  <div class="abs" id="masc" style="left:90px;top:250px;display:flex;align-items:center;gap:22px">
+    <span class="e" id="mascE" style="font-size:150px">🤔</span>
+    <span class="card fr" id="mascT" style="padding:20px 36px;font-size:56px;border-radius:36px"></span>
+  </div>
+  <div class="abs card fr" id="qcard" style="left:70px;right:70px;top:470px;padding:44px 50px;font-size:66px;line-height:1.18;text-align:center"></div>
+  <div id="opts"></div>
+  <div class="abs" id="cd" style="left:50%;top:1390px;width:180px;height:180px;margin-left:-90px">
+    <svg width="180" height="180" style="position:absolute;inset:0"><circle cx="90" cy="90" r="78" fill="rgba(255,255,255,.95)"/><circle id="ring" cx="90" cy="90" r="78" fill="none" stroke="#FF6F00" stroke-width="14" stroke-linecap="round" transform="rotate(-90 90 90)" stroke-dasharray="490" stroke-dashoffset="0"/></svg>
+    <div class="abs fr" id="cdn" style="inset:0;display:flex;align-items:center;justify-content:center;font-size:96px;color:#FF6F00"></div>
+  </div>
+  <div id="confs"></div>
+  <div class="abs card" id="fcard" style="left:70px;right:70px;top:880px;padding:46px 50px 50px">
+    <div class="fr" id="ftitle" style="font-size:70px;line-height:1.1;margin-bottom:22px"></div>
+    <div id="ftext" style="font-size:50px;font-weight:800;line-height:1.38;color:#37474F"></div>
+  </div>
+  <div class="abs e" id="fem" style="left:50%;top:560px;font-size:260px"></div>
+</div>
+
+<!-- 4. L'app -->
+<div class="layer" id="S4">
+  <div class="abs fr shadowtxt" id="pcap" style="left:60px;right:60px;top:250px;text-align:center;font-size:74px;line-height:1.12"></div>
+  <div class="abs" id="phone" style="left:280px;top:520px;width:520px;height:1100px;border-radius:74px;background:#111318;padding:16px;box-shadow:0 50px 100px rgba(0,0,0,.35)">
+    <div style="width:100%;height:100%;border-radius:60px;overflow:hidden;background:#FFF8EC"><img id="shot" style="width:100%;display:block"></div>
+  </div>
+</div>
+
+<!-- 5. Fin -->
+<div class="layer" id="S5">
+  <div class="abs e" id="globe" style="left:50%;top:270px;font-size:210px">🌍</div>
+  <div class="abs card fr" id="logo" style="left:50%;top:540px;padding:26px 84px 34px;font-size:156px;white-space:nowrap;border-radius:999px"><span style="color:#FF7A00">Moka</span><span style="color:#1E88E5">libo</span></div>
+  <div class="abs fr shadowtxt" id="tag" style="left:0;right:0;top:850px;text-align:center;font-size:76px;line-height:1.12"></div>
+  <div class="abs fr" id="offer" style="left:50%;top:1100px;background:#FFD600;border-radius:44px;padding:32px 64px;font-size:92px;white-space:nowrap;box-shadow:0 16px 0 #E6A100,0 30px 60px rgba(0,0,0,.25)"></div>
+  <div class="abs fr shadowtxt" id="url" style="left:0;right:0;top:1340px;text-align:center;font-size:84px">mokalibo.com</div>
+  <div class="abs shadowtxt" id="small" style="left:0;right:0;top:1460px;text-align:center;font-size:44px;font-weight:900"></div>
+</div>
+
+<script>
+// ── Contenu des Reels « Devine ! » ──  [drapeau, pays, emoji, question, [A,B,C], bonne, titre reponse, explication, [c1,c2], ecran]
+const DATA = {
+  fr: {
+    hint: 'Devine !', reveal: 'Trop fort !', cap: 'Des centaines d’histoires vraies<br>pour les 4-12 ans', tag: 'L’histoire du monde,<br>racontée aux enfants', offer: '🎁 3 jours gratuits', small: 'Lu à voix haute · Quiz et jeux · Sans pub', badge: '💡 Le savais-tu ?',
+    list: [
+      ['🇦🇺', 'Australie', '🎲', 'Quel animal fait des crottes… en forme de cube ?', ['Le kangourou', 'Le wombat', 'Le koala'], 1, 'Le wombat ! 😂', 'Ses crottes carrées ne roulent pas : il s’en sert pour marquer son territoire sur les rochers.', ['#FF8A65', '#E64A19'], 'home'],
+      ['🇲🇳', 'Mongolie', '🐎', 'Dans quel pays y a-t-il plus de chevaux que d’habitants ?', ['Au Japon', 'En Mongolie', 'En France'], 1, 'En Mongolie ! 🐎', 'Les enfants y montent à cheval tout petits, et font même des courses pendant la grande fête du Naadam.', ['#42A5F5', '#1565C0'], 'map'],
+      ['🇻🇦', 'Vatican', '⛪', 'Quel est le plus petit pays du monde ?', ['Monaco', 'Le Vatican', 'Malte'], 1, 'Le Vatican ! ⛪', 'Il se trouve au cœur de Rome : on le traverse à pied en une vingtaine de minutes.', ['#FFCA28', '#F57F17'], 'country'],
+      ['🇺🇾', 'Uruguay', '⚽', 'Qui a gagné la toute première Coupe du monde de football ?', ['Le Brésil', 'L’Uruguay', 'La France'], 1, 'L’Uruguay ! ⚽', 'En 1930, chez lui, il a battu l’Argentine 4 à 2 en finale.', ['#4FC3F7', '#0277BD'], 'quiz_ok'],
+      ['🇳🇵', 'Népal', '🚩', 'Quel pays a un drapeau qui n’est pas rectangulaire ?', ['Le Népal', 'L’Inde', 'Le Canada'], 0, 'Le Népal ! 🚩', 'Son drapeau est fait de deux triangles, avec une lune et un soleil.', ['#EF5350', '#B71C1C'], 'passport'],
+      ['🇾🇪', 'Yémen', '☕', 'D’où vient le mot « moka » ?', ['D’un port du Yémen', 'D’une ville d’Italie', 'D’un fruit du Brésil'], 0, 'Du Yémen ! ☕', 'Il y a des siècles, le café partait du port de Mocha vers le monde entier.', ['#A1887F', '#4E342E'], 'card1_open'],
+      ['🇰🇮', 'Kiribati', '🎆', 'Quel pays fête le Nouvel An en premier ?', ['L’Australie', 'Kiribati', 'Le Japon'], 1, 'Kiribati ! 🎆', 'Certaines de ses îles du Pacifique sont les premières du monde à passer minuit.', ['#7E57C2', '#311B92'], 'map'],
+      ['🇧🇹', 'Bhoutan', '😊', 'Quel pays mesure le bonheur de ses habitants ?', ['Le Bhoutan', 'La Chine', 'Le Pérou'], 0, 'Le Bhoutan ! 😊', 'On y parle de « bonheur national brut » : le bien-être compte autant que la richesse.', ['#FFA726', '#E65100'], 'home'],
+      ['🇨🇦', 'Canada', '🏞️', 'Quel pays compte le plus de lacs au monde ?', ['La Russie', 'Le Canada', 'La Finlande'], 1, 'Le Canada ! 🏞️', 'Il a plus de lacs que tous les autres pays du monde réunis.', ['#66BB6A', '#1B5E20'], 'games'],
+      ['🇪🇬', 'Égypte', '🐪', 'Quel âge a la Grande Pyramide de Gizeh ?', ['500 ans', 'Plus de 4 500 ans', '1 000 ans'], 1, 'Plus de 4 500 ans ! 🐪', 'Elle a été le plus haut monument du monde pendant près de 3 800 ans.', ['#FFB300', '#E65100'], 'country'],
+    ],
+  },
+}
+const P = new URLSearchParams(location.search)
+const lang = P.get('lang') || 'fr'
+const id = Number(P.get('id') || 0)
+const R = DATA[lang]
+const [flag, cname, emo, question, options, good, ftitle, ftext, [c1, c2], shot] = R.list[id]
+const $ = (i) => document.getElementById(i)
+const LETTERS = ['A', 'B', 'C'], LCOL = ['#EF5350', '#42A5F5', '#66BB6A']
+
+// ── decor ──
+$('bg').style.background = `linear-gradient(165deg, ${c1}, ${c2})`
+$('b1').style.cssText += `;background:#fff;opacity:.22;left:-280px;top:-240px`
+$('b2').style.cssText += `;background:${c1};opacity:.6;right:-300px;bottom:-200px`
+const DOTS = Array.from({ length: 26 }, (_, i) => { const d = document.createElement('div'); d.className = 'dot'; const s = 8 + (i * 7) % 18; d.style.width = d.style.height = s + 'px'; $('bg').appendChild(d); return { d, x: (i * 137) % 1080, y: (i * 271) % 1920, v: 18 + (i * 13) % 40, a: i } })
+$('badge').textContent = R.badge; $('flag').textContent = flag; $('cname').textContent = cname
+$('mascT').textContent = R.hint
+$('qcard').textContent = question
+options.forEach((o, i) => { const el = document.createElement('div'); el.className = 'opt fr'; el.id = 'o' + i; el.style.top = (880 + i * 162) + 'px'; el.innerHTML = `<b style="background:${LCOL[i]}">${LETTERS[i]}</b><span>${o}</span>`; $('opts').appendChild(el) })
+$('ftitle').textContent = ftitle; $('ftitle').style.color = c2; $('ftext').textContent = ftext; $('fem').textContent = emo
+$('pcap').innerHTML = R.cap; $('shot').src = `shots/${lang}/${shot}.png`
+$('tag').innerHTML = R.tag; $('offer').textContent = R.offer; $('small').textContent = R.small
+const CONF = Array.from({ length: 46 }, (_, i) => { const c = document.createElement('div'); c.className = 'conf'; c.style.background = ['#FFD600', '#FF4081', '#40C4FF', '#69F0AE', '#FF9100', '#fff'][i % 6]; $('confs').appendChild(c); return { c, ang: -Math.PI / 2 + ((i * 0.618) % 1 - 0.5) * 2.6, sp: 500 + ((i * 7919) % 1000), dx: ((i * 211) % 600) - 300, rot: (i * 53) % 360 } })
+
+// ── outils d'animation ──
+const clamp = (x) => Math.max(0, Math.min(1, x))
+const prog = (t, a, b) => clamp((t - a) / (b - a))
+const eo = (x) => 1 - Math.pow(1 - x, 3)
+const eio = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
+const spring = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.exp(-6 * x) * Math.cos(9 * x))  // rebond doux
+const pop = (el, t, at, dur = 0.45, base = 'translateX(-50%) ') => { const p = prog(t, at, at + dur); el.style.opacity = p > 0 ? Math.min(1, p * 4) : 0; el.style.transform = `${base}scale(${spring(p)})` }
+
+// ── chronologie (identique a reel2_audio.py) ──
+const T = { s2: 2, reveal: 8, fact: 9, s4: 12, s5: 14, end: 18 }
+const SCENES = [['S1', 0, T.s2], ['S2', T.s2, T.s4], ['S4', T.s4, T.s5], ['S5', T.s5, T.end + 1]]
+
+window.render = function (t) {
+  // fond vivant
+  $('b1').style.transform = `translate(${Math.sin(t * 0.5) * 80}px, ${Math.cos(t * 0.4) * 60}px)`
+  $('b2').style.transform = `translate(${Math.cos(t * 0.45) * 90}px, ${Math.sin(t * 0.35) * 70}px)`
+  DOTS.forEach((o) => { o.d.style.transform = `translate(${o.x + Math.sin(t * 0.8 + o.a) * 30}px, ${((o.y - t * o.v) % 1920 + 1920) % 1920}px)` })
+  $('prog').firstElementChild.style.width = `${Math.min(100, (t / T.end) * 100)}%`
+
+  // scenes + transition en cercle (centree sur l'ecran, synchronisee au « whoosh »)
+  for (const [L, a, b] of SCENES) {
+    const el = $(L)
+    const on = t >= a - 0.18 && t < b + 0.2
+    el.style.visibility = on ? 'visible' : 'hidden'
+    const r = a === 0 ? 2000 : eio(prog(t, a - 0.18, a + 0.22)) * 1250
+    el.style.clipPath = `circle(${r}px at 540px 960px)`
+    el.style.zIndex = Math.round(a * 10)
+  }
+
+  // 1. accroche
+  pop($('badge'), t, 0.05)
+  const fp = prog(t, 0.45, 1.0)
+  $('flag').style.opacity = fp > 0 ? 1 : 0
+  $('flag').style.transform = `translateX(-50%) scale(${spring(fp)}) rotate(${Math.sin(t * 3) * 4}deg) skewY(${Math.sin(t * 5) * 2}deg)`
+  pop($('cname'), t, 0.95, 0.45, '')
+
+  // 2. question
+  pop($('masc'), t, T.s2 + 0.1, 0.45, '')
+  $('mascE').textContent = t < T.reveal ? '🤔' : '🤩'
+  $('mascT').textContent = t < T.reveal ? R.hint : R.reveal
+  if (t >= T.reveal && t < T.reveal + 0.5) $('masc').style.transform = `scale(${1 + Math.sin(prog(t, T.reveal, T.reveal + 0.5) * Math.PI) * 0.15})`
+  const qp = prog(t, T.s2 + 0.25, T.s2 + 0.75)
+  const qout = prog(t, T.fact - 0.05, T.fact + 0.35)
+  $('qcard').style.opacity = Math.min(qp * 3, 1) * (1 - qout)
+  $('qcard').style.transform = `translateY(${(1 - spring(qp)) * 120 - qout * 160}px)`
+  options.forEach((_, i) => {
+    const el = $('o' + i), at = 4.0 + i * 0.5
+    const p = prog(t, at, at + 0.4)
+    const isGood = i === good
+    const rv = prog(t, T.reveal, T.reveal + 0.35)
+    let sc = spring(p)
+    if (isGood && t >= T.reveal) sc *= 1 + Math.sin(rv * Math.PI) * 0.1
+    el.style.opacity = (p > 0 ? 1 : 0) * (isGood ? 1 : 1 - 0.7 * rv) * (1 - qout)
+    el.style.transform = `translateX(${(1 - eo(p)) * (i % 2 ? 700 : -700)}px) scale(${sc}) translateY(${-qout * 160}px)`
+    el.style.background = isGood && t >= T.reveal ? '#2E9E5B' : '#fff'
+    el.style.color = isGood && t >= T.reveal ? '#fff' : '#1A2A4F'
+    el.querySelector('b').textContent = isGood && t >= T.reveal ? '✓' : LETTERS[i]
+  })
+  // compte a rebours 3-2-1 (6 / 6,5 / 7 s), anneau qui se vide jusqu'a 8 s
+  const cdOn = t >= 5.8 && t < T.reveal
+  $('cd').style.opacity = cdOn ? Math.min(1, prog(t, 5.8, 6.0) * 3) : 0
+  const n = t < 6.5 ? 3 : t < 7 ? 2 : 1
+  $('cdn').textContent = n
+  const beat = [6, 6.5, 7][3 - n]
+  $('cdn').style.transform = `scale(${1 + 0.35 * (1 - eo(prog(t, beat, beat + 0.3)))})`
+  $('ring').setAttribute('stroke-dashoffset', String(490 * prog(t, 6, T.reveal)))
+  // confettis a la revelation (depuis la bonne reponse)
+  const ct = t - T.reveal
+  const oy = 880 + good * 162 + 68
+  CONF.forEach((o) => {
+    const vis = ct > 0 && ct < 2.2
+    o.c.style.opacity = vis ? Math.max(0, 1 - ct / 2.2) : 0
+    const x = 540 + o.dx + Math.cos(o.ang) * o.sp * ct
+    const y = oy + Math.sin(o.ang) * o.sp * ct + 1100 * ct * ct
+    o.c.style.transform = `translate(${x}px, ${y}px) rotate(${o.rot + ct * 600}deg)`
+  })
+  // explication
+  const fpp = prog(t, T.fact, T.fact + 0.5)
+  $('fcard').style.opacity = Math.min(1, fpp * 3)
+  $('fcard').style.transform = `translateY(${(1 - spring(fpp)) * 300}px)`
+  const ep = prog(t, T.fact + 0.1, T.fact + 0.55)
+  $('fem').style.opacity = ep > 0 ? 1 : 0
+  $('fem').style.transform = `translateX(-50%) scale(${spring(ep)}) translateY(${Math.sin(t * 2.5) * 14}px)`
+
+  // 4. l'app
+  pop($('pcap'), t, T.s4 + 0.15, 0.45, '')
+  const pp = prog(t, T.s4, T.s4 + 0.6)
+  $('phone').style.transform = `translateY(${(1 - eo(pp)) * 900}px) rotate(${Math.sin(t * 1.4) * 1.5}deg)`
+  $('shot').style.transform = `translateY(${-prog(t, T.s4 + 0.7, T.s5) * 6}%)`
+
+  // 5. fin
+  pop($('globe'), t, T.s5, 0.5)
+  $('globe').style.transform += ` rotate(${Math.sin(t * 2) * 8}deg)`
+  pop($('logo'), t, T.s5 + 0.05, 0.5)
+  pop($('tag'), t, T.s5 + 0.5, 0.45, '')
+  pop($('offer'), t, T.s5 + 1.0, 0.5)
+  if (t > T.s5 + 1.6) $('offer').style.transform = `translateX(-50%) scale(${1 + Math.sin((t - T.s5) * 6) * 0.025})`
+  pop($('url'), t, T.s5 + 1.5, 0.45, '')
+  pop($('small'), t, T.s5 + 1.9, 0.45, '')
+}
+window.ready = async function () {
+  await document.fonts.ready
+  await $('shot').decode().catch(() => {})
+  await document.fonts.load('100px "Noto Color Emoji"', R.list.map((r) => r[0] + r[2]).join('') + '💡🤔🤩🌍🎁✓😂⛪⚽🚩☕🎆😊🏞️🐪🐎')
+  await document.fonts.load('700 100px Fredoka'); await document.fonts.load('900 100px Nunito'); await document.fonts.load('800 100px Nunito')
+  return true
+}
+render(0)
+</script>
+</body>
+</html>
