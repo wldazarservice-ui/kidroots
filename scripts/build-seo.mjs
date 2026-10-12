@@ -168,5 +168,5 @@ fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="U
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
 </urlset>
 `)
-fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /histoire/\n\nSitemap: ${SITE}/sitemap.xml\n`)
+fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /histoire/\nDisallow: /media/\n\nSitemap: ${SITE}/sitemap.xml\n`)
 console.log(`SEO : sitemap (${urls.length} URL), pages pays désactivées`)
