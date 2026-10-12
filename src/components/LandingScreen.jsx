@@ -14,7 +14,8 @@ const GIFT_TXT = {
 }
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
-import { referralCode } from '../track'
+import { referralCode, fromSocial } from '../track'
+import DemoStory from './DemoStory'
 import { t } from '../i18n'
 import { openSupport } from '../support'
 import { countryName } from '../names'
@@ -30,7 +31,9 @@ const TXT = {
     h1_sub: 'Des histoires vraies, des quiz et une voix qui lit tout à voix haute. {n} pays, 3 niveaux de lecture, de 4 à 12 ans.',
     try: '▶ Commencer gratuitement',
     try_note: 'Compte parent gratuit en 1 clic · sans carte bancaire · 2 histoires offertes par jour',
-    have_account: "J'ai déjà un compte",
+    have_account: "J'ai déjà un compte → Se connecter",
+    reassure: ['Gratuit', 'Sans carte bancaire', '1 clic avec Google'],
+    social: '👋 Bienvenue ! 3 jours d’accès illimité offerts à ta famille',
     cont: '▶ Continuer avec {name}',
     signup: 'Créer un compte parent',
     proof: ['🚫 Sans publicité', '🔒 Sans traceur', '🇪🇺 Conforme RGPD', '💛 Pour la protection de l’enfance'],
@@ -92,7 +95,7 @@ const TXT = {
     guest_age: 'Âge',
     guest_go: "C'est parti ! 🚀",
     m_hello: 'Salut Lina !',
-    m_story: 'Le voyage de Mansa Moussa',
+    m_story: 'Les samouraïs du Japon',
     m_bravo: 'Bravo ! +30 XP',
   },
   en: {
@@ -101,7 +104,9 @@ const TXT = {
     h1_sub: 'True stories, quizzes and a voice that reads everything aloud. {n} countries, 3 reading levels, ages 4 to 12.',
     try: '▶ Start for free',
     try_note: 'Free parent account in 1 click · no card · 2 free stories a day',
-    have_account: 'I already have an account',
+    have_account: 'I already have an account → Sign in',
+    reassure: ['Free', 'No card needed', '1 click with Google'],
+    social: '👋 Welcome! 3 days of unlimited access for your family',
     cont: '▶ Continue with {name}',
     signup: 'Create a parent account',
     proof: ['🚫 No ads', '🔒 No trackers', '🇪🇺 GDPR compliant', '💛 Supporting child protection'],
@@ -163,7 +168,7 @@ const TXT = {
     guest_age: 'Age',
     guest_go: "Let's go! 🚀",
     m_hello: 'Hi Lina!',
-    m_story: 'The journey of Mansa Musa',
+    m_story: 'The samurai of Japan',
     m_bravo: 'Well done! +30 XP',
   },
   de: {
@@ -172,7 +177,9 @@ const TXT = {
     h1_sub: 'Wahre Geschichten, Quizze und eine Stimme, die alles vorliest. {n} Länder, 3 Lesestufen, von 4 bis 12 Jahren.',
     try: '▶ Kostenlos starten',
     try_note: 'Kostenloses Elternkonto mit 1 Klick · ohne Karte · 2 Gratis-Geschichten pro Tag',
-    have_account: 'Ich habe schon ein Konto',
+    have_account: 'Ich habe schon ein Konto → Anmelden',
+    reassure: ['Kostenlos', 'Ohne Karte', '1 Klick mit Google'],
+    social: '👋 Willkommen! 3 Tage unbegrenzter Zugang für deine Familie',
     cont: '▶ Weiter mit {name}',
     signup: 'Elternkonto erstellen',
     proof: ['🚫 Keine Werbung', '🔒 Kein Tracking', '🇪🇺 DSGVO-konform', '💛 Für den Kinderschutz'],
@@ -234,7 +241,7 @@ const TXT = {
     guest_age: 'Alter',
     guest_go: 'Los geht’s! 🚀',
     m_hello: 'Hallo Lina!',
-    m_story: 'Die Reise von Mansa Musa',
+    m_story: 'Die Samurai Japans',
     m_bravo: 'Super! +30 XP',
   },
 }
@@ -268,9 +275,9 @@ function PhoneMockup({ T, lang }) {
         </div>
       </div>
       <div className="lp-float lp-float-story float">
-        <div style={{ fontSize: 30 }}>🕌</div>
+        <div style={{ fontSize: 30 }}>⚔️</div>
         <div>
-          <div style={{ fontSize: 11, fontWeight: 900, color: '#2E9E5B' }}>📅 1324 · 🇲🇱</div>
+          <div style={{ fontSize: 11, fontWeight: 900, color: '#2E9E5B' }}>📅 1185 · 🇯🇵</div>
           <div style={{ fontSize: 13, fontWeight: 900, color: INK, lineHeight: 1.2 }}>{T.m_story}</div>
         </div>
         <div style={{ fontSize: 18, background: '#FFF3E0', borderRadius: '50%', width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>🔊</div>
@@ -312,7 +319,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   useEffect(() => { window.scrollTo(0, 0) }, [page])
   useReveal([lang, page])
 
-  const tryNow = () => onSignup()
+  const tryNow = () => { track('cta_click'); onSignup() }
   const tryLabel = T.try
 
   const primary = { background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 20, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 14px 28px rgba(255,196,0,0.35)' }
@@ -371,6 +378,11 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
           {t(lang, 'gift_banner')} →
         </button>
       )}
+      {!referralCode() && !pendingGift() && fromSocial() && (
+        <button onClick={tryNow} style={{ display: 'block', width: '100%', border: 'none', cursor: 'pointer', background: 'linear-gradient(90deg,#8E24AA,#E91E63,#FF9800)', color: 'white', textAlign: 'center', fontWeight: 900, fontSize: 15, padding: '11px 14px', fontFamily: 'inherit' }}>
+          {T.social} →
+        </button>
+      )}
       {referralCode() && (
         <div style={{ background: 'linear-gradient(90deg,#FF9A1F,#FF6F00)', color: 'white', textAlign: 'center', fontWeight: 900, fontSize: 15, padding: '10px 14px' }}>
           {t(lang, 'lp_ami')}
@@ -388,9 +400,11 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
             <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.55, margin: '0 0 24px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
-              <button className="btn-kid soft" onClick={onLogin} style={secondary}>{T.have_account}</button>
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: '#607D8B', marginTop: 12 }}>{T.try_note}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', marginTop: 12, fontSize: 14, fontWeight: 900, color: '#2E7D4F' }}>
+              {T.reassure.map((r) => <span key={r}>✅ {r}</span>)}
+            </div>
+            <button onClick={onLogin} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#1565C0', fontFamily: 'inherit', fontWeight: 800, fontSize: 14, cursor: 'pointer', textDecoration: 'underline' }}>{T.have_account}</button>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }} className="lp-proof">
               {T.proof.map((p) => (
                 <span key={p} style={{ background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '6px 12px', fontSize: 13, fontWeight: 900, color: '#2E7D4F' }}>{p}</span>
@@ -400,6 +414,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
           <PhoneMockup T={T} lang={lang} />
         </div>
       </section>
+      <DemoStory lang={lang} onSignup={onSignup} />
 
       {/* ── Histoire du createur ── */}
       <section style={{ padding: '56px 16px' }}>

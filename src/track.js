@@ -13,6 +13,10 @@ function source() {
   }
 }
 
+export const visitSource = source
+// Visiteur venu d'un reseau social (lien utm ou navigateur integre Instagram/Facebook/TikTok)
+export const fromSocial = () => /^(ig|instagram|story|reel|facebook|fb|tiktok|tt|youtube|yt)$/i.test(source()) || /Instagram|FBAN|FBAV|musical_ly|TikTok/i.test(navigator.userAgent || '')
+
 const sent = new Set()
 export function track(e, { once = false } = {}) {
   if (!import.meta.env.PROD) return

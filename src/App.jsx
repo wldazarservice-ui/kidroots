@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, lazy } from 'react'
 import { COUNTRIES, REGIONS } from './data/countries'
 import { getLang, setLang, t, isLang } from './i18n'
 import { applyLevel, doneKey, defaultLevelForAge } from './levels'
@@ -20,44 +20,47 @@ import {
   readLegacyProgress,
   clearLegacyProgress,
 } from './cloud'
-import HomeScreen from './components/HomeScreen'
-import RegionScreen from './components/RegionScreen'
-import CountryScreen from './components/CountryScreen'
-import ChapterIntro from './components/ChapterIntro'
-import CardLevel from './components/CardLevel'
-import QuizLevel from './components/QuizLevel'
-import ResultScreen from './components/ResultScreen'
 import AuthScreen from './components/AuthScreen'
-import ChildPickerScreen from './components/ChildPickerScreen'
-import LevelPicker from './components/LevelPicker'
 import BottomNav from './components/BottomNav'
-import Paywall from './components/Paywall'
-import DevicesManager from './components/DevicesManager'
 import { registerDevice } from './devices'
 import { setLimits } from './limits'
 import { refreshOfflineIfNeeded } from './offline'
 import { pendingGift, clearPendingGift } from './components/Gift'
 import { redeemGift } from './premium'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
-import ScreenTimeLock from './components/ScreenTimeLock'
-import ParentStats from './components/ParentStats'
 import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail, gamesLeft, gamesPlayedToday } from './premium'
 import { isDone } from './levels'
 import LandingScreen from './components/LandingScreen'
-import PassportScreen from './components/PassportScreen'
-import MapScreen from './components/MapScreen'
-import GamesScreen from './components/GamesScreen'
-import HuntGame from './components/HuntGame'
-import MemoryGame from './components/MemoryGame'
-import ChoiceGame from './components/ChoiceGame'
-import StampToast from './components/StampToast'
 import { countryState } from './explore'
-import DailyLimit from './components/DailyLimit'
-import AdminDashboard from './components/AdminDashboard'
 import { loadGuest, saveGuest, clearGuest } from './guest'
 import { track } from './track'
 import { signOut, verifyEmail } from './auth'
 import { isStandalone } from './pwaInstall'
+// Ecrans de l'app charges a la demande (la page d'accueil s'affiche plus vite), prechargés apres la connexion
+const lazyP = (f) => { const C = lazy(f); C.preload = f; return C }
+const HomeScreen = lazyP(() => import('./components/HomeScreen'))
+const RegionScreen = lazyP(() => import('./components/RegionScreen'))
+const CountryScreen = lazyP(() => import('./components/CountryScreen'))
+const ChapterIntro = lazyP(() => import('./components/ChapterIntro'))
+const CardLevel = lazyP(() => import('./components/CardLevel'))
+const QuizLevel = lazyP(() => import('./components/QuizLevel'))
+const ResultScreen = lazyP(() => import('./components/ResultScreen'))
+const ChildPickerScreen = lazyP(() => import('./components/ChildPickerScreen'))
+const LevelPicker = lazyP(() => import('./components/LevelPicker'))
+const Paywall = lazyP(() => import('./components/Paywall'))
+const DevicesManager = lazyP(() => import('./components/DevicesManager'))
+const ScreenTimeLock = lazyP(() => import('./components/ScreenTimeLock'))
+const ParentStats = lazyP(() => import('./components/ParentStats'))
+const PassportScreen = lazyP(() => import('./components/PassportScreen'))
+const MapScreen = lazyP(() => import('./components/MapScreen'))
+const GamesScreen = lazyP(() => import('./components/GamesScreen'))
+const HuntGame = lazyP(() => import('./components/HuntGame'))
+const MemoryGame = lazyP(() => import('./components/MemoryGame'))
+const ChoiceGame = lazyP(() => import('./components/ChoiceGame'))
+const StampToast = lazyP(() => import('./components/StampToast'))
+const DailyLimit = lazyP(() => import('./components/DailyLimit'))
+const AdminDashboard = lazyP(() => import('./components/AdminDashboard'))
+const LAZY = [HomeScreen, RegionScreen, CountryScreen, ChapterIntro, CardLevel, QuizLevel, ResultScreen, ChildPickerScreen, LevelPicker, Paywall, DevicesManager, ScreenTimeLock, ParentStats, PassportScreen, MapScreen, GamesScreen, HuntGame, MemoryGame, ChoiceGame, StampToast, DailyLimit, AdminDashboard]
 
 function Spinner({ msg = 'Chargement...' }) {
   return (
@@ -221,6 +224,14 @@ export default function App() {
     })()
     return () => { cancelled = true }
   }, [user, userReload])
+
+  // Une fois connecte : precharge tous les ecrans de l'app (et les garde pour le mode hors-ligne)
+  useEffect(() => {
+    if (!user) return
+    const go = () => LAZY.forEach((C) => C.preload().catch(() => {}))
+    const id = 'requestIdleCallback' in window ? window.requestIdleCallback(go) : setTimeout(go, 1500)
+    return () => ('cancelIdleCallback' in window ? window.cancelIdleCallback(id) : clearTimeout(id))
+  }, [user])
 
   // Mode voyage : apres une mise a jour de l'app, retelecharge les pays choisis (en arriere-plan)
   useEffect(() => { if (user) refreshOfflineIfNeeded(lang) }, [user, lang])

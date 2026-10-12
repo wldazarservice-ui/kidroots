@@ -90,6 +90,22 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
           ))}
         </div>
 
+        {isSignup && (
+          <div style={{ background: '#F1F8F2', borderRadius: 16, padding: '10px 14px', marginBottom: 14, fontSize: 14, fontWeight: 800, color: '#2E7D4F', lineHeight: 1.7 }}>
+            ✅ Gratuit, sans carte bancaire<br />📖 2 histoires et 3 jeux offerts chaque jour<br />🎁 3 jours illimités offerts à essayer
+          </div>
+        )}
+        {isSignup ? (<>
+        <button type="button" className="btn-kid" onClick={google} disabled={busy}
+          style={{ width: '100%', background: 'white', color: '#3c4043', padding: '16px', fontSize: 17, fontWeight: 900, border: '3px solid #4285F4', boxShadow: '0 5px 0 #D2E3FC', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, opacity: busy ? 0.6 : 1 }}>
+          <span style={{ fontSize: 18, fontWeight: 900, color: '#4285F4' }}>G</span>
+          Continuer avec Google
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 14px', color: '#8DB39A', fontSize: 12, fontWeight: 900 }}>
+          <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
+          OU AVEC TON E-MAIL
+          <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
+        </div>
         <form onSubmit={submit}>
           <input type="email" placeholder="Email du parent" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email"
             style={{ ...input, marginBottom: 10 }} />
@@ -122,18 +138,50 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
             {busy ? '...' : isSignup ? '✨ Créer mon compte' : '🚀 Se connecter'}
           </button>
         </form>
+        </>) : (<>
+        <form onSubmit={submit}>
+          <input type="email" placeholder="Email du parent" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email"
+            style={{ ...input, marginBottom: 10 }} />
+          <input type="password" placeholder="Mot de passe (6 caractères min.)" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={isSignup ? 'new-password' : 'current-password'}
+            style={{ ...input, marginBottom: 14 }} />
 
+          {!isSignup && (
+            <button type="button" onClick={forgot}
+              style={{ background: 'none', border: 'none', padding: 0, margin: '-6px 0 12px', color: '#2E7D4F', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, cursor: 'pointer' }}>
+              Mot de passe oublié ?
+            </button>
+          )}
+          {info && (
+            <div style={{ background: '#E8F8EA', border: '2px solid #A5D6A7', borderRadius: 14, padding: '10px 14px', marginBottom: 14, color: '#1B5E20', fontSize: 14, fontWeight: 800 }}>{info}</div>
+          )}
+          {error && (
+            <div style={{ background: '#FFEBEE', border: '2px solid #EF9A9A', borderRadius: 14, padding: '10px 14px', marginBottom: 14, color: '#B71C1C', fontSize: 14, fontWeight: 800 }}>
+              ⚠️ {error}
+            </div>
+          )}
+
+          {isSignup && (
+            <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 14, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.45 }}>
+              <input type="checkbox" checked={optIn} onChange={(e) => setOpt(e.target.checked)} style={{ width: 20, height: 20, marginTop: 1, accentColor: GREEN, flexShrink: 0 }} />
+              <span>📧 Je veux recevoir le bilan de la semaine de mes enfants et des conseils par e-mail (désinscription en 1 clic).</span>
+            </label>
+          )}
+          <button type="submit" className="btn-kid" disabled={busy}
+            style={{ width: '100%', background: 'linear-gradient(180deg,#43C27A,#2E9E5B)', color: 'white', padding: '16px', fontSize: 18, borderRadius: 20, marginBottom: 12, boxShadow: '0 6px 0 #1F7A43', opacity: busy ? 0.6 : 1 }}>
+            {busy ? '...' : isSignup ? '✨ Créer mon compte' : '🚀 Se connecter'}
+          </button>
+        </form>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 14px', color: '#8DB39A', fontSize: 12, fontWeight: 900 }}>
           <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
           OU
           <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
         </div>
-
         <button type="button" className="btn-kid" onClick={google} disabled={busy}
           style={{ width: '100%', background: 'white', color: '#3c4043', padding: '14px', fontSize: 15, border: '3px solid #E3EAF2', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, opacity: busy ? 0.6 : 1 }}>
           <span style={{ fontSize: 18, fontWeight: 900, color: '#4285F4' }}>G</span>
           Continuer avec Google
         </button>
+        </>)}
 
         <div style={{ marginTop: 16, fontSize: 12, color: '#6B8F77', textAlign: 'center', fontWeight: 800, lineHeight: 1.6 }}>
           🔒 Le compte est créé par un parent.<br />

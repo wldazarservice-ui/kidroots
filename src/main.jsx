@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import SupportSheet from './components/SupportSheet'
@@ -20,7 +20,9 @@ import './pwaInstall' // capture tot de l'evenement d'installation
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56 }}>🌍</div>}>
+        <App />
+      </Suspense>
       <SupportSheet />
       <WelcomePremium />
       <OfflineBanner />

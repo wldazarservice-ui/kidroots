@@ -8,6 +8,10 @@ const pct = (a, b) => (b ? `${Math.round((a / b) * 1000) / 10} %` : '—')
 
 const FUNNEL = [
   ['landing_view', '👀 Visites'],
+  ['demo_open', '📖 Histoire de démo essayée'],
+  ['cta_click', '👆 Clic « Commencer »'],
+  ['demo_cta', '👆 Clic après la démo'],
+  ['signup_view', '📝 Écran d’inscription vu'],
   ['guest_start', '▶ Essais sans compte'],
   ['signup', '✍️ Comptes créés'],
   ['limit_hit', '🌙 Limite du jour atteinte'],
