@@ -48,7 +48,7 @@ export default function SupportSheet() {
     const on = (e) => {
       const d = e.detail || {}
       setLang(getLang()); setState('')
-      setGate(!!d.gate) // contrôle parental quand on vient de l'espace enfant
+      setGate(false) // pas de controle parental pour le support (decision du 12/10/2026)
       setF((x) => ({ ...x, topic: d.topic || 'question', email: x.email || user?.email || '', message: '' }))
       setOpen({ where: d.where || 'app' })
     }
