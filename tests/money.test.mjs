@@ -50,3 +50,10 @@ test('les evenements suivis par l’app sont acceptes par le serveur', () => {
   }
   for (const e of used) assert.ok(EVENTS.includes(e), `evenement ${e} refuse par /api/track`)
 })
+
+test('classes et ecoles : au moins une tablette par eleve', async () => {
+  const { TIERS } = await import('../netlify/lib/shared.mjs')
+  assert.ok(TIERS.teacher.maxDevices > TIERS.teacher.maxChildren)
+  assert.ok(TIERS.school.maxDevices >= TIERS.school.maxChildren)
+  assert.ok(TIERS.school.maxDevices <= 999, 'les regles Firestore acceptent d1..d999')
+})

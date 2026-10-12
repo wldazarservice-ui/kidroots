@@ -18,8 +18,8 @@ export const PLANS = {
 // Limites par type de compte (profils enfants / eleves et appareils), appliquees par firestore.rules
 export const TIERS = {
   family: { maxChildren: 5, maxDevices: 5 },
-  teacher: { maxChildren: 35, maxDevices: 5 },
-  school: { maxChildren: 300, maxDevices: 30 },
+  teacher: { maxChildren: 35, maxDevices: 36 }, // une tablette par eleve + le tableau numerique
+  school: { maxChildren: 300, maxDevices: 330 }, // une tablette par eleve + 30 tableaux
 }
 // Ecoles (sur devis, payees par facture) : emails listes dans la variable Netlify SCHOOL_EMAILS
 export const schoolEmails = () => (process.env.SCHOOL_EMAILS || '').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean)

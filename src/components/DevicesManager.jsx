@@ -11,7 +11,7 @@ const fmt = (ts) => {
   return d ? d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
 }
 
-// Gestion des appareils du compte (5 max).
+// Gestion des appareils du compte (5 en famille, 36 pour une classe, 330 pour une ecole).
 // blocked = true : cet appareil n'a pas de place, il faut en retirer un pour continuer.
 export default function DevicesManager({ user, blocked = false, onDone, onClose }) {
   const [devices, setDevices] = useState(null)
@@ -32,7 +32,7 @@ export default function DevicesManager({ user, blocked = false, onDone, onClose 
     } catch (e) {
       console.error(e)
       setError(e.message === 'swap-limit'
-        ? 'Tu as déjà remplacé 3 appareils ce mois-ci. Tu pourras en retirer un autre le mois prochain, ou écris-nous : bonjour@mokalibo.com'
+        ? 'Tu as atteint le nombre de remplacements d’appareils autorisés ce mois-ci. Tu pourras en retirer un autre le mois prochain, ou écris-nous : bonjour@mokalibo.com'
         : 'La suppression a échoué. Réessaie.')
     } finally {
       setBusy(null)

@@ -11,7 +11,7 @@ COMPANY = {
     'city': '54516 Wittlich',
     'country': 'Deutschland',
     'email': 'bonjour@mokalibo.com',
-    'web': 'https://azarconsulting.eu',
+    'web': 'https://mokalibo.com',
     'widnr': 'DE462026365-00001',
     'app': 'Mokalibo',
     'site': 'https://mokalibo.com',
@@ -131,7 +131,7 @@ DS_DE = f"""
 <h3>b) Kinderprofile</h3>
 <p>Vorname oder Spitzname, Alter, Avatar, Sprache, Leseniveau, Lernfortschritt (abgeschlossene Kapitel, Punkte) sowie Nutzungsstatistiken (Nutzungsdauer pro Tag und Land, zuletzt aktiv), die nur den Eltern im Elternbereich angezeigt werden. Wir empfehlen, nur einen Vornamen oder Spitznamen zu verwenden. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO; die Angaben werden vom Elternteil im Rahmen der elterlichen Verantwortung gemacht.</p>
 <h3>c) Geräte</h3>
-<p>Pro Konto sind höchstens 5 Geräte erlaubt. Dafür speichern wir eine zufällige Geräte-ID, die Gerätebezeichnung (z. B. „iPhone · Safari“) und den Zeitpunkt der letzten Nutzung. Zweck: Schutz vor missbräuchlicher Weitergabe des Kontos. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO.</p>
+<p>Pro Konto sind höchstens 5 Geräte erlaubt (Lehrer-Abo: 36, Schul-Lizenz: 330). Dafür speichern wir eine zufällige Geräte-ID, die Gerätebezeichnung (z. B. „iPhone · Safari“) und den Zeitpunkt der letzten Nutzung. Zweck: Schutz vor missbräuchlicher Weitergabe des Kontos. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO.</p>
 <h3>d) Zahlung</h3>
 <p>Die Zahlung erfolgt über Stripe (Stripe Payments Europe, Ltd., 1 Grand Canal Street Lower, Dublin 2, Irland). Zahlungsdaten (z. B. Kartendaten) werden ausschließlich von Stripe verarbeitet; wir erhalten nur den Zahlungsstatus, die E-Mail-Adresse, Betrag und eine Transaktionskennung. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und c DSGVO (Vertrag, steuerrechtliche Aufbewahrungspflichten). Datenschutzerklärung von Stripe: <a href="https://stripe.com/de/privacy">stripe.com/de/privacy</a>.</p>
 <h3>e) Hosting und Server-Logs</h3>
@@ -183,7 +183,7 @@ DS_FR = f"""
 <h3>b) Profils enfants</h3>
 <p>Prénom ou surnom, âge, avatar, langue, niveau de lecture, progression (chapitres terminés, points) et statistiques d'utilisation (temps passé par jour et par pays, dernière activité), visibles uniquement par les parents dans l'espace parent. Nous recommandons d'utiliser seulement un prénom ou un surnom. Base légale : art. 6 §1 b) RGPD, informations fournies par le parent dans le cadre de l'autorité parentale.</p>
 <h3>c) Appareils</h3>
-<p>5 appareils maximum par compte : nous enregistrons un identifiant aléatoire, le type d'appareil (ex. « iPhone · Safari ») et la date de dernière utilisation, afin d'éviter le partage abusif du compte. Base légale : art. 6 §1 b) et f) RGPD.</p>
+<p>5 appareils maximum par compte (Formule Enseignant : 36, Licence École : 330) : nous enregistrons un identifiant aléatoire, le type d'appareil (ex. « iPhone · Safari ») et la date de dernière utilisation, afin d'éviter le partage abusif du compte. Base légale : art. 6 §1 b) et f) RGPD.</p>
 <h3>d) Paiement</h3>
 <p>Le paiement est traité par Stripe (Stripe Payments Europe, Ltd., Dublin, Irlande). Nous ne recevons jamais vos données de carte, seulement le statut du paiement, l'e-mail, le montant et un identifiant de transaction. Base légale : art. 6 §1 b) et c) RGPD (contrat, obligations comptables et fiscales).</p>
 <h3>e) Hébergement</h3>
@@ -226,11 +226,11 @@ AGB_DE = f"""
 <h2>§ 2 Leistungen</h2>
 <p><strong>Kostenlose Nutzung:</strong> Alle Länder können kostenlos genutzt werden, begrenzt auf 2 neue Kapitel und 3 Spielrunden pro Tag und Kinderprofil. Bereits abgeschlossene Kapitel können jederzeit wiederholt werden. Für die Nutzung ist ein kostenloses Elternkonto erforderlich.</p>
 <p><strong>Familien-Abo:</strong> Das kostenpflichtige Abonnement hebt die tägliche Begrenzung für alle Kinderprofile des Elternkontos auf (höchstens 5 Kinder und 5 Geräte).</p>
-<p><strong>Lehrer-Abo:</strong> Für eine Lehrkraft und ihre Klasse, zur Nutzung im Unterricht: unbegrenzte Kapitel für höchstens 35 Schülerprofile und 5 Geräte (einschließlich digitaler Tafel).</p>
-<p><strong>Schul-Lizenz:</strong> Für alle Lehrkräfte einer Schule (höchstens 300 Schülerprofile und 30 Geräte). Preis und Laufzeit werden im individuellen Angebot festgelegt; die Zahlung erfolgt per Überweisung auf Rechnung. Der Zugang wird nach Zahlungseingang freigeschaltet.</p>
+<p><strong>Lehrer-Abo:</strong> Für eine Lehrkraft und ihre Klasse, zur Nutzung im Unterricht: unbegrenzte Kapitel für höchstens 35 Schülerprofile und 36 Geräte (ein Tablet pro Kind und die digitale Tafel).</p>
+<p><strong>Schul-Lizenz:</strong> Für alle Lehrkräfte einer Schule (höchstens 300 Schülerprofile und 330 Geräte). Preis und Laufzeit werden im individuellen Angebot festgelegt; die Zahlung erfolgt per Überweisung auf Rechnung. Der Zugang wird nach Zahlungseingang freigeschaltet.</p>
 <p>Kunden, die vor Einführung des Abonnements einen einmaligen Vollzugang erworben haben, behalten diesen Zugang unverändert.</p>
 <h2>§ 3 Konto und Nutzungsgrenzen</h2>
-<p>Das Elternkonto darf nur von volljährigen Personen angelegt werden. Pro Konto sind höchstens 5 Kinderprofile und 5 Geräte zulässig (Lehrer-Abo: 35 Schülerprofile und 5 Geräte; Schul-Lizenz: 300 Schülerprofile und 30 Geräte). Der Zugang zum Familien-Abo ist für die private Nutzung innerhalb der Familie bestimmt, das Lehrer-Abo für den Unterricht der jeweiligen Lehrkraft; eine Weitergabe der Zugangsdaten an Dritte ist nicht gestattet. Registrierte Geräte können höchstens dreimal pro Kalendermonat ausgetauscht werden. Für Schülerprofile genügen Vornamen oder Pseudonyme; die Lehrkraft bzw. Schule ist für die Einhaltung ihrer schulrechtlichen Datenschutzvorgaben verantwortlich.</p>
+<p>Das Elternkonto darf nur von volljährigen Personen angelegt werden. Pro Konto sind höchstens 5 Kinderprofile und 5 Geräte zulässig (Lehrer-Abo: 35 Schülerprofile und 36 Geräte; Schul-Lizenz: 300 Schülerprofile und 330 Geräte). Der Zugang zum Familien-Abo ist für die private Nutzung innerhalb der Familie bestimmt, das Lehrer-Abo für den Unterricht der jeweiligen Lehrkraft; eine Weitergabe der Zugangsdaten an Dritte ist nicht gestattet. Registrierte Geräte können höchstens dreimal pro Kalendermonat ausgetauscht werden (Lehrer-Abo und Schul-Lizenz: ein Austausch je 10 Geräte). Für Schülerprofile genügen Vornamen oder Pseudonyme; die Lehrkraft bzw. Schule ist für die Einhaltung ihrer schulrechtlichen Datenschutzvorgaben verantwortlich.</p>
 <h2>§ 4 Vertragsschluss</h2>
 <p>Mit Klick auf die Schaltfläche „Abonnieren“ und Abschluss des Bezahlvorgangs bei Stripe gibt der Kunde ein verbindliches Angebot ab. Der Vertrag kommt mit der Freischaltung des Zugangs zustande. Die Vertragssprache ist Deutsch; eine französische Übersetzung wird zur Information bereitgestellt.</p>
 <h2>§ 5 Preis und Zahlung</h2>
@@ -269,11 +269,11 @@ AGB_FR = f"""
 <h2>Art. 2 Services</h2>
 <p><strong>Utilisation gratuite :</strong> tous les pays sont accessibles gratuitement, dans la limite de 2 nouveaux chapitres et 3 parties de jeux par jour et par profil enfant. Les chapitres déjà terminés peuvent être rejoués à tout moment. L'utilisation nécessite un compte parent gratuit.</p>
 <p><strong>Formule Famille :</strong> l'abonnement payant supprime la limite quotidienne pour tous les profils enfants du compte parent (5 enfants et 5 appareils maximum).</p>
-<p><strong>Formule Enseignant :</strong> pour un enseignant et sa classe, en usage scolaire : chapitres illimités pour 35 profils élèves et 5 appareils maximum (tableau numérique compris).</p>
-<p><strong>Licence École :</strong> pour tous les enseignants d'une école (300 profils élèves et 30 appareils maximum). Le prix et la durée sont fixés dans un devis individuel ; le paiement se fait par virement sur facture. L'accès est activé à réception du paiement.</p>
+<p><strong>Formule Enseignant :</strong> pour un enseignant et sa classe, en usage scolaire : chapitres illimités pour 35 profils élèves et 36 appareils maximum (une tablette par élève et le tableau numérique).</p>
+<p><strong>Licence École :</strong> pour tous les enseignants d'une école (300 profils élèves et 330 appareils maximum). Le prix et la durée sont fixés dans un devis individuel ; le paiement se fait par virement sur facture. L'accès est activé à réception du paiement.</p>
 <p>Les clients ayant acheté un accès à vie avant l'introduction de l'abonnement conservent cet accès.</p>
 <h2>Art. 3 Compte et limites d'utilisation</h2>
-<p>Le compte parent est réservé aux personnes majeures. 5 profils enfants et 5 appareils maximum par compte (Formule Enseignant : 35 profils élèves et 5 appareils ; Licence École : 300 profils élèves et 30 appareils). La Formule Famille est destinée à un usage privé et familial, la Formule Enseignant à la classe de l'enseignant ; le partage des identifiants avec des tiers est interdit. Les appareils enregistrés peuvent être remplacés au maximum trois fois par mois civil. Pour les profils élèves, un prénom ou un pseudonyme suffit ; l'enseignant ou l'école reste responsable du respect de ses propres règles de protection des données.</p>
+<p>Le compte parent est réservé aux personnes majeures. 5 profils enfants et 5 appareils maximum par compte (Formule Enseignant : 35 profils élèves et 36 appareils ; Licence École : 300 profils élèves et 330 appareils). La Formule Famille est destinée à un usage privé et familial, la Formule Enseignant à la classe de l'enseignant ; le partage des identifiants avec des tiers est interdit. Les appareils enregistrés peuvent être remplacés au maximum trois fois par mois civil (Formule Enseignant et Licence École : un remplacement pour 10 appareils). Pour les profils élèves, un prénom ou un pseudonyme suffit ; l'enseignant ou l'école reste responsable du respect de ses propres règles de protection des données.</p>
 <h2>Art. 4 Conclusion du contrat</h2>
 <p>En cliquant sur « S'abonner » et en validant le paiement sur Stripe, le client fait une offre ferme ; le contrat est conclu au déblocage de l'accès. La langue du contrat est l'allemand ; cette traduction est fournie à titre informatif.</p>
 <h2>Art. 5 Prix et paiement</h2>

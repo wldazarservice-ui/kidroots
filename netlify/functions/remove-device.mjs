@@ -1,8 +1,9 @@
 // Retire un appareil du compte. Passe par le serveur pour limiter les remplacements
-// (3 par mois) : empeche de faire tourner un meme compte entre plusieurs familles.
+// (3 par mois en famille, davantage pour les classes) : empeche de faire tourner un meme compte entre plusieurs familles.
 import { verifyUser, db, json, today } from '../lib/shared.mjs'
 
-const MAX_SWAPS_PER_MONTH = 3
+// Famille : 3 par mois ; classe / ecole : 1 pour 10 appareils (renouvellement des tablettes)
+const maxSwaps = (maxDevices) => Math.max(3, Math.ceil((maxDevices || 5) / 10))
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { error: 'method' })
@@ -19,12 +20,13 @@ export default async (req) => {
     if (!d.exists) return { ok: true }
     const sw = u.data()?.deviceSwaps
     const n = sw?.month === month ? sw.n || 0 : 0
-    if (n >= MAX_SWAPS_PER_MONTH) return { ok: false }
+    const max = maxSwaps(u.data()?.maxDevices)
+    if (n >= max) return { ok: false, max }
     tx.delete(devRef)
     tx.set(userRef, { deviceSwaps: { month, n: n + 1 } }, { merge: true })
-    return { ok: true, left: MAX_SWAPS_PER_MONTH - n - 1 }
+    return { ok: true, left: max - n - 1 }
   })
-  return res.ok ? json(200, res) : json(429, { error: 'swap-limit', max: MAX_SWAPS_PER_MONTH })
+  return res.ok ? json(200, res) : json(429, { error: 'swap-limit', max: res.max })
 }
 
 export const config = { path: '/api/remove-device' }

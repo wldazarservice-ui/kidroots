@@ -28,7 +28,7 @@ export default async (req) => {
   // Ecole (devis + facture) : acces active tant que l'email figure dans SCHOOL_EMAILS
   if (isSchool(user)) {
     if (user.email_verified !== true) return json(200, { premium: !!data.premium, needVerify: true })
-    if (!data.school || !data.premium || data.maxChildren !== TIERS.school.maxChildren) {
+    if (!data.school || !data.premium || data.maxChildren !== TIERS.school.maxChildren || data.maxDevices !== TIERS.school.maxDevices) {
       const upd = { premium: true, school: true, tier: 'school', ...TIERS.school, premiumAt: data.premiumAt || FieldValue.serverTimestamp() }
       await ref.set(upd, { merge: true })
       data = { ...data, ...upd }
