@@ -153,6 +153,49 @@ export function cancelMail({ lang, until, trial, stats = [] }) {
   return withHtml({ subject: T.s, text }, { heading: T.s, emoji: '🦊', cta: { label: T.cta, url } })
 }
 
+// Abonnement confirme (1er paiement, ou fin de l'essai) : confirmation du contrat sur support durable (§ 312f BGB)
+// avec la formule, le prix, la prochaine echeance, la resiliation et les CGV. E-mail de service (sans accord requis).
+export function confirmMail({ lang, plan, price, next }) {
+  const d = next ? new Date(next).toLocaleDateString(lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+  const year = plan === 'year'
+  const L = {
+    fr: {
+      s: 'Merci ! Votre abonnement Mokalibo est confirmé 🎉',
+      intro: 'Merci de faire confiance à Mokalibo ! Votre paiement est bien arrivé et votre Formule Famille est active.',
+      details: `Ce que vous avez choisi :\n• Formule Famille, ${year ? 'abonnement annuel' : 'abonnement mensuel'} : ${price} ${year ? 'par an' : 'par mois'}\n• Histoires illimitées dans les 195 pays, jusqu'à 5 enfants et 5 appareils, sans publicité${d ? `\n• Prochain renouvellement automatique : ${d}` : ''}`,
+      cancel: `Vous pouvez résilier à tout moment, en 2 clics, dans l'app (Espace parents → Mon abonnement) ou sans vous connecter sur ${SITE}/kuendigen. L'accès reste ouvert jusqu'à la fin de la période payée.`,
+      legal: `Conditions générales : ${SITE}/agb.html · Mentions légales : ${SITE}/impressum.html. Votre facture est disponible dans Espace parents → Mon abonnement → Factures.`,
+      help: 'Une question ? Répondez simplement à cet e-mail.',
+      bye: "Bon voyage dans l'histoire du monde ! 🌍\nL'équipe Mokalibo",
+      cta: '🌍 Ouvrir Mokalibo',
+    },
+    de: {
+      s: 'Danke! Dein Mokalibo-Abo ist bestätigt 🎉',
+      intro: 'Danke für dein Vertrauen in Mokalibo! Deine Zahlung ist angekommen und dein Familien-Abo ist aktiv.',
+      details: `Deine Auswahl:\n• Familien-Abo, ${year ? 'Jahresabo' : 'Monatsabo'}: ${price} ${year ? 'pro Jahr' : 'pro Monat'}\n• Unbegrenzte Geschichten in allen 195 Ländern, bis zu 5 Kinder und 5 Geräte, ohne Werbung${d ? `\n• Nächste automatische Verlängerung: ${d}` : ''}`,
+      cancel: `Du kannst jederzeit mit 2 Klicks kündigen, in der App (Elternbereich → Mein Abo) oder ohne Anmeldung unter ${SITE}/kuendigen. Der Zugang bleibt bis zum Ende des bezahlten Zeitraums offen.`,
+      legal: `AGB: ${SITE}/agb.html · Impressum: ${SITE}/impressum.html. Deine Rechnung findest du im Elternbereich → Mein Abo → Rechnungen.`,
+      help: 'Eine Frage? Antworte einfach auf diese E-Mail.',
+      bye: 'Gute Reise durch die Weltgeschichte! 🌍\nDas Mokalibo-Team',
+      cta: '🌍 Mokalibo öffnen',
+    },
+    en: {
+      s: 'Thank you! Your Mokalibo subscription is confirmed 🎉',
+      intro: 'Thank you for trusting Mokalibo! Your payment has arrived and your Family plan is active.',
+      details: `What you chose:\n• Family plan, ${year ? 'yearly' : 'monthly'} subscription: ${price} ${year ? 'per year' : 'per month'}\n• Unlimited stories in all 195 countries, up to 5 children and 5 devices, no ads${d ? `\n• Next automatic renewal: ${d}` : ''}`,
+      cancel: `You can cancel anytime in 2 clicks, in the app (Parent area → My subscription) or without signing in at ${SITE}/kuendigen. Access stays open until the end of the paid period.`,
+      legal: `Terms: ${SITE}/agb.html · Legal notice: ${SITE}/impressum.html. Your invoice is in Parent area → My subscription → Invoices.`,
+      help: 'A question? Just reply to this e-mail.',
+      bye: 'Enjoy your journey through world history! 🌍\nThe Mokalibo team',
+      cta: '🌍 Open Mokalibo',
+    },
+  }
+  const T = L[lang] || L.fr
+  const hello = lang === 'de' ? 'Hallo,' : lang === 'en' ? 'Hello,' : 'Bonjour,'
+  const text = `${hello}\n\n${T.intro}\n\n${T.details}\n\n${T.cancel}\n\n${T.legal}\n\n${T.help}\n\n${T.bye}${SERVICE_FOOT[lang] || SERVICE_FOOT.fr}`
+  return withHtml({ subject: T.s, text }, { heading: T.s, emoji: '🎉', cta: { label: T.cta, url: SITE } })
+}
+
 // Carte cadeau achetee : le code et comment l'activer
 export function giftMail({ code, to }) {
   const url = `${SITE}/?cadeau=${code}`

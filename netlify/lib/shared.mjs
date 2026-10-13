@@ -1,7 +1,7 @@
 // Outils communs aux fonctions de paiement (Stripe + Firebase Admin)
 import Stripe from 'stripe'
 import { randomInt } from 'node:crypto'
-import { giftMail, cancelMail } from './emails.mjs'
+import { giftMail, cancelMail, confirmMail } from './emails.mjs'
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore, FieldValue } from 'firebase-admin/firestore'
@@ -236,4 +236,21 @@ export async function sendCancelMail(uid, sub) {
   const end = sub.cancel_at || sub.trial_end || sub.items?.data?.[0]?.current_period_end || sub.current_period_end
   const ok = await sendMail({ to: u.email, ...cancelMail({ lang, until: end ? new Date(end * 1000) : null, trial: sub.status === 'trialing', stats }) })
   if (ok) await ref.set({ mail: { cancel: sub.id } }, { merge: true })
+}
+
+// Confirmation d'abonnement : une seule fois par abonnement, au 1er paiement reel (achat direct ou fin de l'essai)
+export async function sendConfirmMail(uid, sub, amountCents) {
+  const ref = db().doc(`users/${uid}`)
+  const u = (await ref.get()).data() || {}
+  if (!u.email || u.mail?.confirm === sub.id) return
+  const kidsSnap = await db().collection(`users/${uid}/children`).get()
+  const kid = kidsSnap.docs.map((d) => d.data()).find((k) => k.lang) || {}
+  const lang = ['fr', 'de', 'en'].includes(kid.lang) ? kid.lang : 'fr'
+  const item = sub.items?.data?.[0]
+  const plan = item?.price?.recurring?.interval === 'year' ? 'year' : 'month'
+  const cents = amountCents || item?.price?.unit_amount || 0
+  const price = `${(cents / 100).toFixed(2).replace('.', lang === 'en' ? '.' : ',')} €`
+  const end = item?.current_period_end || sub.current_period_end
+  const ok = await sendMail({ to: u.email, ...confirmMail({ lang, plan, price, next: end ? new Date(end * 1000) : null }) })
+  if (ok) await ref.set({ mail: { confirm: sub.id } }, { merge: true })
 }

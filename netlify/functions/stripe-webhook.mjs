@@ -1,7 +1,7 @@
 // Notifications Stripe (source de verite) : debut, renouvellement, resiliation de l'abonnement.
 // Evenements a cocher dans Stripe : checkout.session.completed, customer.subscription.updated,
 // customer.subscription.deleted, invoice.paid
-import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial, ensureGift, sendCancelMail } from '../lib/shared.mjs'
+import { stripe, syncSubscription, countEvent, json, db, FieldValue, PLANS, guardTrial, ensureGift, sendCancelMail, sendConfirmMail } from '../lib/shared.mjs'
 
 const uidOf = (obj) => obj?.metadata?.uid || null
 
@@ -51,6 +51,15 @@ export default async (req) => {
     }
     case 'invoice.paid': {
       if (obj.amount_paid > 0) await countEvent('payment', { revenueCents: obj.amount_paid })
+      // 1er vrai paiement d'un abonnement : e-mail de confirmation (une seule fois par abonnement)
+      const subId = obj.subscription || obj.parent?.subscription_details?.subscription
+      if (obj.amount_paid > 0 && subId && ['subscription_create', 'subscription_cycle', 'subscription_update'].includes(obj.billing_reason)) {
+        try {
+          const sub = await stripe().subscriptions.retrieve(typeof subId === 'string' ? subId : subId.id)
+          const uid = uidOf(sub) || obj.parent?.subscription_details?.metadata?.uid
+          if (uid) await sendConfirmMail(uid, sub, obj.amount_paid)
+        } catch (e) { console.error('confirm mail', e.message) }
+      }
       break
     }
   }
