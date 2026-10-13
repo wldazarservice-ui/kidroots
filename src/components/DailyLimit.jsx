@@ -12,7 +12,7 @@ const untilMidnight = () => {
 }
 
 // Limite gratuite atteinte (3 nouveaux chapitres par jour) : facon Duolingo, positif pour l'enfant
-export default function DailyLimit({ lang, onClose, onUnlock, kind = 'chapters' }) {
+export default function DailyLimit({ lang, onClose, onUnlock, onGames, kind = 'chapters' }) {
   const games = kind === 'games'
   const total = kind === 'total' // 30 chapitres gratuits utilises : seule la Formule Famille permet de continuer
   const [left, setLeft] = useState(untilMidnight)
@@ -39,9 +39,9 @@ export default function DailyLimit({ lang, onClose, onUnlock, kind = 'chapters' 
             <>
               <button className="btn-kid soft" onClick={onUnlock}
                 style={{ background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 18, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
-                🔐 {t(lang, 'lim_t_unlock')}
+                {t(lang, 'lim_t_unlock')}
               </button>
-              <button className="btn-kid soft" onClick={onClose}
+              <button className="btn-kid soft" onClick={onGames || onClose}
                 style={{ background: 'white', color: '#2E7D4F', padding: '13px', fontSize: 15, borderRadius: 18 }}>
                 {t(lang, 'lim_t_back')}
               </button>

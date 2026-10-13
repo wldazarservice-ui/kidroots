@@ -653,7 +653,7 @@ export default function App() {
           onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
       )}
       {limitOpen && (
-        <DailyLimit lang={lang} kind={limitKind} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country'); if (screen === 'game') setScreen('games') }}
+        <DailyLimit lang={lang} kind={limitKind} onGames={() => { setLimitOpen(false); setScreen('games') }} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country'); if (screen === 'game') setScreen('games') }}
           onUnlock={() => { setLimitOpen(false); setPaywallOpen(true) }} />
       )}
       {toast && (
