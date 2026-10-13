@@ -129,7 +129,7 @@ export default function Paywall({ lang, user, onClose, onAlreadyPremium, onNeedA
             <div style={{ fontSize: 13, fontWeight: 700, color: '#37474F', lineHeight: 1.5 }}>{t(lang, 'pw_t_pro', { email: user.email || '' })}</div>
           </div>
         ) : step === 'gate' ? (
-          <ParentGate onPass={() => setStep('pay')} title={t(lang, 'pw_gate')}
+          <ParentGate always onPass={() => setStep('pay')} title={t(lang, 'pw_gate')}
             question={(a, b) => t(lang, 'pw_gate_q', { a, b })} okLabel={t(lang, 'pw_gate_ok')} errorLabel={t(lang, 'pw_gate_err')} />
         ) : (
           <>

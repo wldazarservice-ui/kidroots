@@ -1,19 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+// Une fois le calcul reussi, les autres outils parents ne le redemandent pas pendant 10 minutes
+// (sauf `always` : paiement, suppression du compte, deblocage du temps d'ecran).
+const PASS_KEY = 'kidroots_parent_pass'
+const PASS_MS = 10 * 60 * 1000
+const recentlyPassed = () => { try { return Date.now() - Number(sessionStorage.getItem(PASS_KEY) || 0) < PASS_MS } catch { return false } }
+const rememberPass = () => { try { sessionStorage.setItem(PASS_KEY, String(Date.now())) } catch {} }
 
 const rnd = () => 3 + Math.floor(Math.random() * 7) // 3..9
 
 // Controle parental : une multiplication a resoudre avant une action reservee aux adultes
-export default function ParentGate({ onPass, title = 'Demande à un parent 🔐', question = (a, b) => `Combien font ${a} × ${b} ?`, okLabel = 'Valider', errorLabel = "Ce n'est pas ça. Demande à un adulte !" }) {
+export default function ParentGate({ onPass, always = false, title = 'Demande à un parent 🔐', question = (a, b) => `Combien font ${a} × ${b} ?`, okLabel = 'Valider', errorLabel = "Ce n'est pas ça. Demande à un adulte !" }) {
   const [gate, setGate] = useState(() => ({ a: rnd(), b: rnd() }))
   const [answer, setAnswer] = useState('')
   const [error, setError] = useState(false)
+  const skip = !always && recentlyPassed()
+  useEffect(() => { if (skip) onPass() }, [skip]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const submit = (e) => {
     e.preventDefault()
-    if (Number(answer) === gate.a * gate.b) { setError(false); onPass() }
+    if (Number(answer) === gate.a * gate.b) { setError(false); rememberPass(); onPass() }
     else { setError(true); setAnswer(''); setGate({ a: rnd(), b: rnd() }) }
   }
 
+  if (skip) return null
   return (
     <form onSubmit={submit} style={{ background: '#FFF8E1', border: '3px solid #FFE082', borderRadius: 22, padding: 14 }}>
       <div style={{ fontSize: 16, fontWeight: 900, color: '#E65100', marginBottom: 4 }}>{title}</div>

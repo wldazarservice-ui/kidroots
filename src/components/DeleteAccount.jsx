@@ -33,7 +33,7 @@ export default function DeleteAccount({ user, premium, onClose }) {
           {premium && <><br /><br /><strong style={{ color: '#C62828' }}>Si tu as un abonnement, résilie-le d'abord avec « 💳 Mon abonnement »</strong>, sinon il continuera d'être prélevé.</>}
         </div>
         {step === 'gate' ? (
-          <ParentGate onPass={() => setStep('confirm')} />
+          <ParentGate always onPass={() => setStep('confirm')} />
         ) : (
           <button className="btn-kid soft" onClick={confirm} disabled={busy}
             style={{ width: '100%', background: '#C62828', color: 'white', padding: '16px', fontSize: 17, borderRadius: 18, opacity: busy ? 0.6 : 1 }}>

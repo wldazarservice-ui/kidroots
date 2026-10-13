@@ -22,7 +22,7 @@ export default function ScreenTimeLock({ lang, minutes, onMore, onOff, onSwitch 
               style={{ background: 'white', color: '#2E7D4F', padding: '13px', fontSize: 15, borderRadius: 18 }}>🔐 {t(lang, 'st_parent')}</button>
           </div>
         ) : !ok ? (
-          <div style={{ textAlign: 'left' }}><ParentGate onPass={() => setOk(true)} /></div>
+          <div style={{ textAlign: 'left' }}><ParentGate always onPass={() => setOk(true)} /></div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <button className="btn-kid soft" onClick={onMore} style={{ background: 'white', color: INK, padding: '15px', fontSize: 17, borderRadius: 18 }}>⏱️ {t(lang, 'st_more15')}</button>
