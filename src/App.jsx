@@ -36,6 +36,7 @@ import { loadGuest, saveGuest, clearGuest } from './guest'
 import { track } from './track'
 import { signOut, verifyEmail } from './auth'
 import { isStandalone } from './pwaInstall'
+import { wantMusic } from './music'
 // Ecrans de l'app charges a la demande (la page d'accueil s'affiche plus vite), prechargés apres la connexion
 const lazyP = (f) => { const C = lazy(f); C.preload = f; return C }
 const HomeScreen = lazyP(() => import('./components/HomeScreen'))
@@ -307,7 +308,7 @@ export default function App() {
   }, [user, guestPlaying])
   const isGuest = !user && guestPlaying && !!activeChild
   // Grand ecran : l'app (pas la page de presentation) est agrandie en CSS (body.app-mode)
-  useEffect(() => { document.body.classList.toggle('app-mode', !!(user || isGuest)) }, [user, isGuest])
+  useEffect(() => { document.body.classList.toggle('app-mode', !!(user || isGuest)); wantMusic(!!(user || isGuest)) }, [user, isGuest])
 
   // Met a jour l'enfant actif (Firestore si connecte, stockage local en mode essai)
   const patchChild = (patch, save) => {

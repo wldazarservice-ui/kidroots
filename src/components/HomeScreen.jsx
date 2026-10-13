@@ -2,6 +2,7 @@ import { COUNTRIES, REGIONS } from '../data/countries'
 import LogoutIcon from './LogoutIcon'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
+import MusicButton from './MusicButton'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
 import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
@@ -9,6 +10,7 @@ import LegalFooter from './LegalFooter'
 import StoryBanners from './StoryBanners'
 import { LEVELS, isDone } from '../levels'
 import { passportStats } from '../explore'
+import { countryName } from '../names'
 
 const INK = '#1A2A4F'
 
@@ -36,7 +38,9 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             {activeChild.avatar || '👦'}
           </button>
         )}
+        <div className="fr-logo" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: 1, marginLeft: 4 }}><span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span></div>
         <div style={{ flex: 1 }} />
+        <MusicButton label={t(lang, 'music')} />
         <SpeakButton settings color="#FF6B35" label="" />
         <LangPicker lang={lang} onChange={changeLang} compact />
         <button className="btn-kid" onClick={nav.logout} title="Déconnexion" aria-label="Déconnexion"
@@ -47,26 +51,21 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
 
       <div className="home-main" style={{ position: 'relative', zIndex: 2 }}>
         <div className="home-layout">
-          {/* Accueil de l'enfant + grand bouton principal */}
-          <div className="home-hero" style={{ gridArea: 'hero', textAlign: 'center' }}>
-            <div className="float globe" style={{ fontSize: 70, lineHeight: 1, margin: '0 0 6px', filter: 'drop-shadow(0 10px 14px rgba(21,101,192,0.25))' }}>🌍</div>
-            <div>
-              <div className="logo" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 38, lineHeight: 1, letterSpacing: 0.5 }}>
-                <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
+          {/* Accueil de l'enfant + la grande carte « destination » (point focal de l'ecran) */}
+          <div className="home-hero2" style={{ gridArea: 'hero' }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px 12px', marginBottom: 12 }}>
+              <div style={{ flex: '1 1 auto' }}>
+                {firstName && <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 30, fontWeight: 700, color: INK, lineHeight: 1.05 }}>{t(lang, 'hello', { name: firstName })}</div>}
+                <div style={{ fontSize: 16, color: '#546E7A', fontWeight: 800, marginTop: 4 }}>{t(lang, 'where_go')}</div>
               </div>
-              {firstName && <div className="hello" style={{ fontSize: 24, fontWeight: 900, color: INK, marginTop: 12 }}>{t(lang, 'hello', { name: firstName })}</div>}
-              <div className="sub" style={{ fontSize: 16, color: '#546E7A', fontWeight: 700, marginTop: 4 }}>{t(lang, 'where_go')}</div>
               <button className="btn-kid soft" onClick={nav.openLevelPicker} aria-label={t(lang, 'choose_level')}
-                style={{ marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 8, background: 'white', color: INK, borderRadius: 999, padding: '7px 8px 7px 12px', fontSize: 14, fontWeight: 900, boxShadow: '0 3px 10px rgba(26,42,79,0.10)', border: `2px solid ${LEVELS[difficulty]?.color || '#1E88E5'}33` }}>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'white', color: INK, borderRadius: 999, padding: '7px 8px 7px 12px', fontSize: 14, fontWeight: 900, boxShadow: '0 3px 10px rgba(26,42,79,0.10)', border: `2px solid ${LEVELS[difficulty]?.color || '#1E88E5'}33` }}>
                 <span style={{ fontSize: 22, lineHeight: 1 }}>{LEVELS[difficulty]?.emoji}</span>
                 <span>{t(lang, `lvl_${difficulty}`)}</span>
                 <span style={{ background: LEVELS[difficulty]?.color || '#1E88E5', color: 'white', borderRadius: 999, padding: '3px 10px', fontSize: 12 }}>{t(lang, 'lvl_change')}</span>
               </button>
-              <button className="btn-kid soft play-btn shine" onClick={() => nav.goRegions()}
-                style={{ marginTop: 18, background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 21, width: '100%', maxWidth: 420, borderRadius: 26, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.45)' }}>
-                {t(lang, 'play')}
-              </button>
             </div>
+            <Destination lang={lang} nav={nav} progress={progress} difficulty={difficulty} />
           </div>
 
           {/* Raccourcis : passeport, carte, jeux */}
@@ -160,6 +159,59 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         )}
       </div>
       <LegalFooter lang={lang} />
+    </div>
+  )
+}
+
+// Pays a explorer : celui deja commence (on continue), sinon la « destination du jour » (meme pays pour tous ce jour-la)
+function pickDestination(progress, difficulty) {
+  const codes = Object.keys(COUNTRIES)
+  const started = codes.find((c) => {
+    const chs = COUNTRIES[c]?.chapters || []
+    const n = chs.filter((ch) => isDone(progress, ch.id, difficulty)).length
+    return n > 0 && n < chs.length
+  })
+  if (started) return { code: started, cont: true }
+  const day = Math.floor(Date.now() / 86400000)
+  const pool = codes.filter((c) => COUNTRIES[c]?.hero && COUNTRIES[c]?.chapters?.length).sort()
+  return { code: pool[(day * 37) % pool.length], cont: false }
+}
+
+function Destination({ lang, nav, progress, difficulty }) {
+  const { code, cont } = pickDestination(progress, difficulty)
+  const c = COUNTRIES[code]
+  if (!c) return null
+  const done = c.chapters.filter((ch) => isDone(progress, ch.id, difficulty)).length
+  return (
+    <div className="dest-card anim-slide-up" style={{ '--c': c.color, '--bg': c.bg || '#FFF3E0' }}>
+      <div className="dest-window">
+        <span className="dest-bubble-dot" style={{ left: '10%', top: '16%' }} />
+        <span className="dest-bubble-dot" style={{ right: '12%', bottom: '18%', width: 46, height: 46 }} />
+        <div className="dest-kicker">{cont ? '🚀 ' + t(lang, 'dest_continue') : '🌟 ' + t(lang, 'dest_today')}</div>
+        <div className="float dest-flag">{c.flag}</div>
+        {c.hero && (
+          <div className="dest-guide">
+            <span className="dest-guide-face">{c.hero.emoji}</span>
+            <span className="dest-guide-say"><b>{c.hero.name}</b> · {t(lang, 'dest_guide')}</span>
+          </div>
+        )}
+      </div>
+      <div className="dest-body">
+        <div className="dest-name">{countryName(code, lang)}</div>
+        {c.tagline && <div className="dest-tag"><TText text={c.tagline} lang={lang} /></div>}
+        <div className="dest-steps">
+          {c.chapters.map((ch, i) => <span key={ch.id} className={i < done ? 'on' : ''} />)}
+          <em>{done} / {c.chapters.length}</em>
+        </div>
+        <button className="btn-kid soft play-btn shine" onClick={() => nav.goCountry(code)}
+          style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '17px 20px', fontSize: 21, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.4)' }}>
+          ▶ {t(lang, cont ? 'dest_go_cont' : 'dest_go')}
+        </button>
+        <button className="btn-kid soft" onClick={() => nav.goRegions()}
+          style={{ width: '100%', marginTop: 10, background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, border: '2px solid #BBDEFB' }}>
+          🧭 {t(lang, 'dest_other')}
+        </button>
+      </div>
     </div>
   )
 }

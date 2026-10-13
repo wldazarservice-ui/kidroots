@@ -43,34 +43,41 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
 
       <div
         key={`card-${animKey}`}
-        className="card-flip-wrapper anim-card-flip"
-        style={{ background: 'white', borderRadius: 30, padding: '26px 22px 22px', textAlign: 'center', border: `4px solid ${ch.color}`, display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: `0 8px 24px ${ch.color}22`, marginBottom: 16, position: 'relative' }}>
-        <div className="float" style={{ fontSize: 76, width: 124, height: 124, borderRadius: '50%', background: ch.light, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, boxShadow: `inset 0 -6px 0 ${ch.color}22` }}>{card.emoji}</div>
-        {card.date && (
-          <div style={{ display: 'inline-block', background: ch.color, color: 'white', borderRadius: 999, padding: '4px 12px', fontSize: 13, fontWeight: 900, marginBottom: 8 }}>📅 {card.date}</div>
-        )}
-        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 27, fontWeight: 700, color: ch.color, marginBottom: 14, lineHeight: 1.15 }}>{card.title}</div>
-        <div className="read-text" style={{ fontSize: card.text.length > 300 ? 17 : 18.5, color: '#263238', fontWeight: 700, lineHeight: 1.65, marginBottom: 16, textAlign: 'left', whiteSpace: 'pre-line', width: '100%', maxWidth: 560 }}>{card.text}</div>
-        {card.fact && (revealed
-          ? <div style={{ animation: 'fadeUp 0.4s ease', background: ch.light, borderRadius: 14, padding: '12px 14px', display: 'flex', gap: 10, textAlign: 'left', marginBottom: 14, width: '100%', boxSizing: 'border-box' }}>
-              <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
-              <div style={{ fontSize: 16, color: ch.color, fontWeight: 900, lineHeight: 1.5 }}>{card.fact}</div>
-            </div>
-          : <button type="button" className="btn-kid soft" onClick={() => setRevealed(true)}
-              style={{ background: ch.light, color: ch.color, border: `3px dashed ${ch.color}`, borderRadius: 16, padding: '12px 14px', fontSize: 15, width: '100%', marginBottom: 14 }}>
-              💡 {t(lang, 'card_fact_tap')}
-            </button>
-        )}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
-          <AutoReadChip lang={lang} color={ch.color} />
-          <SpeakButton
-            key={`card-${idx}-${revealed ? 'f' : 't'}`}
-            text={revealed ? [card.fact] : [card.date, card.title, card.text]}
-            lang={lang}
-            color={ch.color}
-            size={52}
-            autoPlay
-          />
+        className="card-flip-wrapper anim-card-flip book"
+        style={{ '--c': ch.color, '--l': ch.light, background: 'white', borderRadius: 30, textAlign: 'center', border: `4px solid ${ch.color}`, boxShadow: `0 8px 24px ${ch.color}22`, marginBottom: 16, position: 'relative' }}>
+        {/* Page de gauche : l'image, la date et le titre */}
+        <div className="book-left">
+          <div className="float book-pic" style={{ fontSize: 76, width: 124, height: 124, borderRadius: '50%', background: ch.light, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', boxShadow: `inset 0 -6px 0 ${ch.color}22` }}>{card.emoji}</div>
+          {card.date && (
+            <div style={{ display: 'inline-block', background: ch.color, color: 'white', borderRadius: 999, padding: '4px 12px', fontSize: 13, fontWeight: 900, marginBottom: 8 }}>📅 {card.date}</div>
+          )}
+          <div className="book-title" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 27, fontWeight: 700, color: ch.color, marginBottom: 14, lineHeight: 1.15 }}>{card.title}</div>
+          <div className="book-pageno">{c.flag} {idx + 1} / {ch.cards.length}</div>
+        </div>
+        {/* Page de droite : l'histoire, l'anecdote, la voix */}
+        <div className="book-right">
+          <div className="read-text" style={{ fontSize: card.text.length > 300 ? 17 : 18.5, color: '#263238', fontWeight: 700, lineHeight: 1.65, marginBottom: 16, textAlign: 'left', whiteSpace: 'pre-line', width: '100%', maxWidth: 560 }}>{card.text}</div>
+          {card.fact && (revealed
+            ? <div style={{ animation: 'fadeUp 0.4s ease', background: ch.light, borderRadius: 14, padding: '12px 14px', display: 'flex', gap: 10, textAlign: 'left', marginBottom: 14, width: '100%', boxSizing: 'border-box' }}>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
+                <div style={{ fontSize: 16, color: ch.color, fontWeight: 900, lineHeight: 1.5 }}>{card.fact}</div>
+              </div>
+            : <button type="button" className="btn-kid soft" onClick={() => setRevealed(true)}
+                style={{ background: ch.light, color: ch.color, border: `3px dashed ${ch.color}`, borderRadius: 16, padding: '12px 14px', fontSize: 15, width: '100%', marginBottom: 14 }}>
+                💡 {t(lang, 'card_fact_tap')}
+              </button>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
+            <AutoReadChip lang={lang} color={ch.color} />
+            <SpeakButton
+              key={`card-${idx}-${revealed ? 'f' : 't'}`}
+              text={revealed ? [card.fact] : [card.date, card.title, card.text]}
+              lang={lang}
+              color={ch.color}
+              size={52}
+              autoPlay
+            />
+          </div>
         </div>
       </div>
 

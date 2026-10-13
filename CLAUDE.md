@@ -108,3 +108,4 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Page de presentation : `LandingScreen.jsx` (visiteurs non connectes, textes fr/en/de dans le fichier).
 - Stores natifs : Apple/Google imposent leur achat integre (ne pas utiliser Stripe dans l'app native).
 - Limites par compte : 5 enfants (`users/{uid}/children/c1..c5`) et 5 appareils (`users/{uid}/devices/d1..d5`, id local `kidino_device_id`). Imposees par `firestore.rules` (emplacements fixes). Code : `src/devices.js`, `src/cloud.js` (createChild), `DevicesManager.jsx`.
+- Musique de fond : `public/audio/mokalibo_theme.mp3` (boucle 57,6 s generee par `marketing/video/bg_music.py`), logique `src/music.js` (demarre au 1er geste, baisse pendant la voix off, pause en arriere-plan), bouton 🎵 de l'accueil (`MusicButton.jsx`) et interrupteur dans Mon compte. Cle `kidroots_music`.

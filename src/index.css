@@ -476,3 +476,50 @@ body {
 @media (min-width: 1500px) and (min-height: 820px) {
   body.app-mode #root { zoom: 1.32; }
 }
+
+/* ── Accueil : carte « destination » ── */
+.dest-card { background: #fff; border-radius: 30px; overflow: hidden; box-shadow: 0 14px 34px rgba(26,42,79,.14); border: 4px solid #fff; display: flex; flex-direction: column; }
+.dest-window { position: relative; padding: 16px 16px 18px; text-align: center; background: radial-gradient(circle at 50% 110%, color-mix(in srgb, var(--c) 35%, transparent), transparent 60%), linear-gradient(160deg, var(--bg), #fff 140%); overflow: hidden; }
+.dest-bubble-dot { position: absolute; width: 30px; height: 30px; border-radius: 50%; background: color-mix(in srgb, var(--c) 22%, transparent); }
+.dest-kicker { display: inline-block; background: var(--c); color: #fff; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; box-shadow: 0 4px 0 rgba(0,0,0,.12); }
+.dest-flag { font-size: 96px; line-height: 1.05; margin: 10px 0 8px; filter: drop-shadow(0 10px 12px rgba(0,0,0,.18)); }
+.dest-guide { display: inline-flex; align-items: center; gap: 8px; background: #fff; border-radius: 999px; padding: 5px 14px 5px 5px; box-shadow: 0 4px 12px rgba(26,42,79,.12); max-width: 100%; }
+.dest-guide-face { font-size: 30px; width: 42px; height: 42px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.dest-guide-say { font-size: 14px; font-weight: 800; color: #37474F; text-align: left; line-height: 1.25; }
+.dest-guide-say b { color: var(--c); }
+.dest-body { padding: 14px 18px 18px; }
+.dest-name { font-family: Fredoka, Nunito, sans-serif; font-size: 32px; font-weight: 700; color: #1A2A4F; line-height: 1.05; }
+.dest-tag { font-size: 15px; font-weight: 800; color: #607D8B; margin-top: 4px; }
+.dest-steps { display: flex; align-items: center; gap: 5px; margin: 12px 0 14px; }
+.dest-steps span { flex: 1; height: 9px; border-radius: 5px; background: #ECEFF1; }
+.dest-steps span.on { background: var(--c); }
+.dest-steps em { font-style: normal; font-size: 13px; font-weight: 900; color: #90A4AE; margin-left: 6px; }
+@media (min-width: 700px) {
+  .dest-card { flex-direction: row; }
+  .dest-window { flex: 0 0 44%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 22px 14px; }
+  .dest-flag { font-size: 118px; }
+  .dest-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 22px 24px; }
+  .dest-name { font-size: 38px; }
+}
+
+/* ── Lecture : un livre ouvert sur ordinateur et tablette a l'horizontale ── */
+.book { padding: 26px 22px 22px; }
+.book-pageno { display: none; }
+@media (min-width: 900px) and (orientation: landscape), (min-width: 1100px) {
+  .screen-narrow:has(.book) > *:not([aria-hidden]) { max-width: 1040px; }
+  .book { display: grid; grid-template-columns: 1fr 1.25fr; padding: 0 !important; border-width: 6px !important; border-radius: 26px !important; background: #FFFDF7 !important; min-height: 460px; animation: bookOpen .55s ease both !important; }
+  .book::after { content: ""; position: absolute; top: 0; bottom: 0; left: calc(44.4% - 14px); width: 28px; background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.10) 45%, rgba(0,0,0,.18) 50%, rgba(0,0,0,.10) 55%, rgba(0,0,0,0) 100%); pointer-events: none; }
+  .book-left { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 30px 40px; position: relative;
+    background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--l) 85%, #fff), #FFFDF7 72%); border-radius: 20px 0 0 20px; }
+  .book-left .book-pic { width: 190px !important; height: 190px !important; font-size: 118px !important; margin-bottom: 18px !important; }
+  .book-title { font-size: 34px !important; }
+  .book-pageno { display: block; position: absolute; left: 0; right: 0; bottom: 14px; font-size: 13px; font-weight: 900; color: var(--c); opacity: .7; }
+  .book-right { padding: 38px 40px 28px 46px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: left;
+    background: repeating-linear-gradient(180deg, transparent 0 33px, color-mix(in srgb, var(--c) 7%, transparent) 33px 34px); border-radius: 0 20px 20px 0; }
+  .book-right .read-text { font-size: 20px !important; line-height: 1.7 !important; }
+  .screen-narrow:has(.book) .btn-kid { max-width: 460px; }
+}
+@keyframes bookOpen { from { opacity: 0; transform: perspective(1400px) rotateY(-14deg) scale(.97); transform-origin: left center; } to { opacity: 1; transform: none; } }
+.dest-kicker { white-space: nowrap; }
+@media (min-width: 700px) { .dest-kicker { font-size: 12px; padding: 6px 12px; } }
+@media (max-width: 430px) { .fr-logo { display: none; } }

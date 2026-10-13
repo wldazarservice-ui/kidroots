@@ -1,3 +1,4 @@
+import { isMusicOn, setMusicOn, onMusicChange } from '../music'
 import { openSupport } from '../support'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
@@ -94,6 +95,9 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
 
             {/* Accord e-mails */}
             <EmailPrefs user={user} card={card} />
+
+            {/* Musique de fond (sur cet appareil) */}
+            <MusicPref card={card} />
 
             {/* E-mail du compte */}
             <div style={card}>
@@ -199,6 +203,18 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
         )}
       </div>
     </div>
+  )
+}
+
+// Interrupteur « musique de fond » (memorise sur l'appareil)
+function MusicPref({ card }) {
+  const [on, setOn] = useState(isMusicOn)
+  useEffect(() => onMusicChange(setOn), [])
+  return (
+    <button type="button" onClick={() => setMusicOn(!on)} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+      <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
+      <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
+    </button>
   )
 }
 
