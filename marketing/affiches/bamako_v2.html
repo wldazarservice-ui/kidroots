@@ -1,0 +1,64 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@700;800;900&family=Fredoka:wght@700&display=block" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Palette : creme (dominante), bleu nuit (texte, bandeau), orange Mokalibo (accent : Mali, mots cles) */
+:root{--cream:#F7F0E3;--sand:#E7D7BE;--night:#16233F;--orange:#EE7413;--muted:#5B6476}
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:794px;height:1123px}
+body{background:var(--cream);color:var(--night);font-family:Nunito,sans-serif;position:relative;overflow:hidden}
+.top{position:absolute;left:56px;right:56px;top:48px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:Fredoka;font-weight:700;font-size:34px;letter-spacing:-.5px}
+.logo .a{color:var(--orange)}.logo .b{color:#1E88E5}
+.age{font-size:14px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+h1{position:absolute;left:56px;right:56px;top:112px;font-family:Fraunces;font-weight:700;font-size:82px;line-height:.98;letter-spacing:-1.8px}
+h1 em{font-style:normal;color:var(--orange)}
+.map{position:absolute;left:0;right:0;top:286px;height:470px;display:flex;justify-content:center}
+.map svg{height:100%;overflow:visible}
+.answer{position:absolute;left:56px;width:640px;top:772px;font-size:21px;font-weight:800;line-height:1.42;color:var(--night)}
+.answer b{color:var(--orange)}
+.proof{position:absolute;left:56px;right:56px;top:872px;display:flex;gap:18px;font-size:13px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted)}
+.proof span+span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange);margin:0 18px 2px 0;vertical-align:middle}
+.band{position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--night);display:flex;align-items:center;gap:30px;padding:0 56px}
+#qr{background:#fff;padding:10px;border-radius:10px;flex-shrink:0}
+.cta b{display:block;font-family:Fraunces;font-weight:700;font-size:36px;color:#fff;line-height:1.05}
+.cta .free{display:block;margin-top:8px;font-size:17px;font-weight:900;color:#FFB36B}
+.cta .url{display:block;margin-top:12px;font-size:28px;font-weight:900;color:#fff;letter-spacing:.3px}
+.credit{position:absolute;right:14px;bottom:6px;font-size:8px;color:#7C86A0}
+</style></head><body>
+<div class="top"><div class="logo"><span class="a">Moka</span><span class="b">libo</span></div><div class="age">Pour les 4 – 12 ans</div></div>
+<h1>« Papa, c’est où<br>le <em>Mali</em>&nbsp;? »</h1>
+<div class="map"><svg id="af" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="answer">Mokalibo répond, et raconte aux enfants l’histoire du <b>Mali</b>, de Soundiata Keïta à Tombouctou… puis celle des 194 autres pays du monde.</div>
+<div class="proof"><span>Lu à voix haute</span><span>Fonctionne sans internet</span><span>Sans publicité</span></div>
+<div class="band">
+  <div id="qr"></div>
+  <div class="cta"><b>Scannez et essayez<br>gratuitement</b><span class="free">3 chapitres offerts chaque jour</span><span class="url">mokalibo.com</span></div>
+</div>
+<div class="credit">Carte : @svg-maps/world, CC BY 4.0</div>
+<script>
+fetch('africa.json').then((r) => r.json()).then((locs) => {
+  const svg = document.getElementById('af'), NS = 'http://www.w3.org/2000/svg'
+  const g = document.createElementNS(NS, 'g'); svg.appendChild(g)
+  for (const l of locs) {
+    const p = document.createElementNS(NS, 'path'); p.setAttribute('d', l.d)
+    p.setAttribute('fill', l.id === 'ml' ? '#EE7413' : '#E7D7BE'); p.setAttribute('stroke', '#F7F0E3'); p.setAttribute('stroke-width', '0.6'); p.setAttribute('stroke-linejoin', 'round')
+    p.id = 'c-' + l.id; g.appendChild(p)
+  }
+  const bb = g.getBBox(), pad = 4
+  svg.setAttribute('viewBox', `${bb.x - pad} ${bb.y - pad} ${bb.width + pad * 2} ${bb.height + pad * 2}`)
+  svg.setAttribute('width', ((bb.width + pad * 2) / (bb.height + pad * 2)) * 470)
+  // Bamako (12.64 N, -8.0 E) : place a partir de la boite du Mali (approx. projection du fond de carte)
+  const ml = document.getElementById('c-ml').getBBox()
+  const bx = ml.x + ml.width * 0.30, by = ml.y + ml.height * 0.86
+  const dot = document.createElementNS(NS, 'circle'); dot.setAttribute('cx', bx); dot.setAttribute('cy', by); dot.setAttribute('r', 1.9); dot.setAttribute('fill', '#16233F'); dot.setAttribute('stroke', '#fff'); dot.setAttribute('stroke-width', '0.6'); g.appendChild(dot)
+  const lab = (x, y, txt, size, w, color, anchor = 'start', halo) => { const t = document.createElementNS(NS, 'text'); if (halo) { t.setAttribute('stroke', '#F7F0E3'); t.setAttribute('stroke-width', '1.4'); t.setAttribute('paint-order', 'stroke'); t.setAttribute('stroke-linejoin', 'round') } t.setAttribute('x', x); t.setAttribute('y', y); t.setAttribute('font-family', 'Nunito'); t.setAttribute('font-weight', w); t.setAttribute('font-size', size); t.setAttribute('fill', color); t.setAttribute('text-anchor', anchor); t.textContent = txt; g.appendChild(t) }
+  lab(ml.x + ml.width * 0.55, ml.y + ml.height * 0.42, 'MALI', 6.4, 900, '#fff', 'middle')
+  lab(bx - 2.8, by + 1.6, 'Bamako', 4.4, 900, '#16233F', 'end', true)
+  window.mapReady = true
+})
+new QRCode(document.getElementById('qr'), { text: 'https://mokalibo.com/?utm_source=affiche&utm_medium=bamako', width: 150, height: 150, colorDark: '#16233F', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H })
+window.ready = async () => { await document.fonts.ready; for (let i = 0; i < 50 && !window.mapReady; i++) await new Promise((r) => setTimeout(r, 100)) }
+</script>
+</body></html>
