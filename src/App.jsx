@@ -38,7 +38,18 @@ import { signOut, verifyEmail } from './auth'
 import { isStandalone } from './pwaInstall'
 import { wantMusic } from './music'
 // Ecrans de l'app charges a la demande (la page d'accueil s'affiche plus vite), prechargés apres la connexion
-const lazyP = (f) => { const C = lazy(f); C.preload = f; return C }
+// Apres une mise en ligne, un onglet reste ouvert sur l'ancienne version et ses fichiers n'existent plus :
+// on recharge la page une fois (au lieu d'afficher une erreur) pour recuperer la nouvelle version.
+const retryImport = (f) => () => f().then((m) => { try { sessionStorage.removeItem('kidroots_chunk_reload') } catch {} return m }).catch((e) => {
+  let again = false
+  try { again = !sessionStorage.getItem('kidroots_chunk_reload'); if (again) sessionStorage.setItem('kidroots_chunk_reload', '1') } catch {}
+  if (again && /dynamically imported module|Importing a module script failed|Loading chunk/i.test(e?.message || '')) {
+    location.reload()
+    return new Promise(() => {})
+  }
+  throw e
+})
+const lazyP = (f) => { const g = retryImport(f); const C = lazy(g); C.preload = g; return C }
 const HomeScreen = lazyP(() => import('./components/HomeScreen'))
 const RegionScreen = lazyP(() => import('./components/RegionScreen'))
 const CountryScreen = lazyP(() => import('./components/CountryScreen'))

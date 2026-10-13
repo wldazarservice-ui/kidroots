@@ -8,7 +8,7 @@ export function reportError(message, source = '') {
   const m = String(message || '').slice(0, 300)
   if (!m || sent.has(m) || count >= 5) return
   // Bruit des extensions et des navigateurs, sans rapport avec l'app
-  if (/ResizeObserver loop|Script error\.?$|extension:\/\/|Non-Error promise rejection/i.test(m + source)) return
+  if (/ResizeObserver loop|Script error\.?$|extension:\/\/|Non-Error promise rejection|Java object is gone|iabjs:\/\//i.test(m + source)) return
   sent.add(m); count++
   const body = JSON.stringify({ m, s: String(source).slice(0, 160), p: location.pathname + location.hash, ua: navigator.userAgent.replace(/\([^)]*\)/g, '').slice(0, 120), v: __APP_VERSION__ })
   try {
