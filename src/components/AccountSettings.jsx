@@ -77,7 +77,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
   return (
     <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet"
-        style={{ width: '100%', maxWidth: 440, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif', background: '#F4F7FB' }}>
+        style={{ width: '100%', maxWidth: 440, maxHeight: '94vh', overflowY: 'auto', overflowX: 'hidden', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif', background: '#F4F7FB' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
           <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>👨‍👩‍👧 Espace parents</div>
           <button onClick={onClose} aria-label="Fermer" style={{ background: '#E3EAF2', color: '#546E7A', width: 38, height: 38, borderRadius: '50%', border: 'none', fontSize: 16, cursor: 'pointer' }}>✕</button>
@@ -242,14 +242,12 @@ function MusicPref({ card }) {
         <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
         <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
       </button>
-      <div data-music-toggle style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, opacity: on ? 1 : 0.5 }}>
+      <div data-music-toggle style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, opacity: on ? 1 : 0.5 }}>
         <button type="button" aria-label="Baisser le volume" onClick={() => change(v - 0.1)} style={round}>−</button>
-        <span style={{ fontSize: 18 }}>🔈</span>
         <input type="range" min="0" max="1" step="0.1" value={v} onChange={(e) => change(parseFloat(e.target.value))} aria-label="Volume de la musique"
-          style={{ flex: 1, accentColor: '#1E88E5', height: 28, cursor: 'pointer' }} />
-        <span style={{ fontSize: 18 }}>🔊</span>
+          style={{ flex: 1, minWidth: 0, accentColor: '#1E88E5', height: 28, cursor: 'pointer' }} />
         <button type="button" aria-label="Monter le volume" onClick={() => change(v + 0.1)} style={round}>+</button>
-        <span style={{ minWidth: 44, textAlign: 'right', fontSize: 14, fontWeight: 900, color: '#1565C0' }}>{Math.round(v * 100)} %</span>
+        <span style={{ minWidth: 40, flexShrink: 0, textAlign: 'right', fontSize: 14, fontWeight: 900, color: '#1565C0' }}>{Math.round(v * 100)} %</span>
       </div>
     </div>
   )

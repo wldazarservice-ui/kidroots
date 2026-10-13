@@ -79,14 +79,10 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           </div>
           <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <NotificationCenter lang={lang} account={account} onInvite={account.refCode ? () => setInviteOpen(true) : null} onGift={openGift} />
-          <button className="btn-kid" onClick={() => setAccountOpen(true)}
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#1565C0', padding: '8px 14px', fontSize: 13, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
-            👨‍👩‍👧 {t(lang, 'parent_space')}
-          </button>
           <button className="btn-kid" onClick={() => signOut()} aria-label="Déconnexion" title="Déconnexion"
-            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', padding: '8px 12px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', width: 40, height: 40, borderRadius: '50%', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
             <LogoutIcon size={14} />
           </button>
         </div>
