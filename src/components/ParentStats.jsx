@@ -38,9 +38,9 @@ function ChildStats({ kid, lang }) {
   const L = LEVELS[kid.difficulty]
 
   const tile = (icon, value, label, color) => (
-    <div style={{ background: 'white', borderRadius: 18, padding: '12px 8px', textAlign: 'center', boxShadow: '0 4px 12px rgba(26,42,79,0.07)' }}>
+    <div style={{ background: 'white', borderRadius: 18, padding: '12px 8px', textAlign: 'center', boxShadow: '0 4px 12px rgba(26,42,79,0.07)', minWidth: 0 }}>
       <div style={{ fontSize: 22 }}>{icon}</div>
-      <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 21, fontWeight: 700, color, lineHeight: 1.15 }}>{value}</div>
+      <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 22, fontWeight: 700, color, lineHeight: 1.15, whiteSpace: 'nowrap' }}>{value}</div>
       <div style={{ fontSize: 11, color: '#607D8B', fontWeight: 800 }}>{label}</div>
     </div>
   )
@@ -61,14 +61,14 @@ function ChildStats({ kid, lang }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 8, marginBottom: 14 }}>
         {tile('☀️', fmtTime(perDay[6]), t(lang, 'ps_today'), '#FF8F00')}
         {tile('📅', fmtTime(weekTotal), t(lang, 'ps_week'), '#1E88E5')}
         {tile('⏱️', fmtTime(st.totalSeconds), t(lang, 'ps_total'), '#2E9E5B')}
         {tile('📖', doneIds.length, t(lang, 'ps_chapters'), '#8E24AA')}
       </div>
 
-      <div style={{ fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>{t(lang, 'ps_week')}</div>
+      <div style={{ fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>{t(lang, 'ps_week')} <span style={{ textTransform: 'none', letterSpacing: 0, fontWeight: 800, color: '#90A4AE' }}>(min)</span></div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 110, background: 'white', borderRadius: 18, padding: '10px 10px 6px', marginBottom: 14 }}>
         {days.map((d, i) => (
           <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', minWidth: 0 }}>
