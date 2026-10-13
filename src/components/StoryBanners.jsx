@@ -12,6 +12,12 @@ const INK = '#1A2A4F'
 export default function StoryBanners({ lang, onOpen }) {
   const ref = useRef(null)
   const pausedRef = useRef(false)
+  const items = useMemo(() => {
+    const codes = Object.keys(COUNTRIES).filter((c) => TEASERS[c] || COUNTRIES[c].teaser)
+    const day = Math.floor(Date.now() / 86400000)
+    return Array.from({ length: Math.min(8, codes.length) }, (_, i) => codes[(day * 3 + i) % codes.length])
+  }, [])
+
   useEffect(() => {
     const el = ref.current
     if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return

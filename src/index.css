@@ -472,9 +472,13 @@ body {
 /* ── App sur grand ecran : tout un peu plus grand (l'interface est dessinee pour le telephone) ── */
 @media (min-width: 1100px) and (min-height: 680px) {
   body.app-mode #root { zoom: 1.18; }
+  /* Les fenetres posees par-dessus l'app (Mon compte, offre, aide…) annulent l'agrandissement :
+     sinon le fond ne couvre plus l'ecran et c'est la page derriere qui defile */
+  body.app-mode #root [style*="position: fixed"] { zoom: calc(1 / 1.18); }
 }
 @media (min-width: 1500px) and (min-height: 820px) {
   body.app-mode #root { zoom: 1.32; }
+  body.app-mode #root [style*="position: fixed"] { zoom: calc(1 / 1.32); }
 }
 
 /* ── Accueil : carte « destination » ── */
