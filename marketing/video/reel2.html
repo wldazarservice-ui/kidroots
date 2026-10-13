@@ -30,9 +30,9 @@
 
 <!-- 1. Accroche -->
 <div class="layer" id="S1">
-  <div class="abs card fr" id="badge" style="left:50%;top:300px;padding:22px 52px;font-size:66px;white-space:nowrap;background:#FFD600;border-radius:999px">💡 Le savais-tu ?</div>
+  <div class="abs card fr" id="badge" style="left:50%;top:300px;padding:22px 52px;font-size:66px;white-space:nowrap;background:#FFD600;border-radius:999px"></div>
   <div class="abs e" id="flag" style="left:50%;top:560px;font-size:400px"></div>
-  <div class="abs fr shadowtxt" id="cname" style="left:0;right:0;top:1040px;text-align:center;font-size:128px"></div>
+  <div class="abs fr shadowtxt" id="cname" style="left:60px;right:60px;top:1040px;text-align:center;font-size:96px;line-height:1.1"></div>
 </div>
 
 <!-- 2-3. Question, reponses, revelation -->
@@ -77,7 +77,7 @@
 // ── Contenu des Reels « Devine ! » ──  [drapeau, pays, emoji, question, [A,B,C], bonne, titre reponse, explication, [c1,c2], ecran]
 const DATA = {
   fr: {
-    hint: 'Devine !', reveal: 'Trop fort !', cap: 'Des centaines d’histoires vraies<br>pour les 4-12 ans', tag: 'L’histoire du monde,<br>racontée aux enfants', offer: '🎁 3 jours gratuits', small: 'Lu à voix haute · Quiz et jeux · Sans pub', badge: '💡 Le savais-tu ?',
+    hint: 'Devine !', reveal: 'Trop fort !', hook: 'Réponds avant<br>la fin ! ⏱️', cap: 'Des centaines d’histoires vraies<br>pour les 4-12 ans', tag: 'L’histoire du monde,<br>racontée aux enfants', offer: '🎁 3 jours gratuits', small: 'Lu à voix haute · Quiz et jeux · Sans pub', badge: '🤔 Défi du jour',
     list: [
       ['🇦🇺', 'Australie', '🎲', 'Quel animal fait des crottes… en forme de cube ?', ['Le kangourou', 'Le wombat', 'Le koala'], 1, 'Le wombat ! 😂', 'Ses crottes carrées ne roulent pas : il s’en sert pour marquer son territoire sur les rochers.', ['#FF8A65', '#E64A19'], 'home'],
       ['🇲🇳', 'Mongolie', '🐎', 'Dans quel pays y a-t-il plus de chevaux que d’habitants ?', ['Au Japon', 'En Mongolie', 'En France'], 1, 'En Mongolie ! 🐎', 'Les enfants y montent à cheval tout petits, et font même des courses pendant la grande fête du Naadam.', ['#42A5F5', '#1565C0'], 'map'],
@@ -107,11 +107,12 @@ $('bg').style.background = `linear-gradient(165deg, ${c1}, ${c2})`
 $('b1').style.cssText += `;background:#fff;opacity:.22;left:-280px;top:-240px`
 $('b2').style.cssText += `;background:${c1};opacity:.6;right:-300px;bottom:-200px`
 const DOTS = Array.from({ length: 26 }, (_, i) => { const d = document.createElement('div'); d.className = 'dot'; const s = 8 + (i * 7) % 18; d.style.width = d.style.height = s + 'px'; $('bg').appendChild(d); return { d, x: (i * 137) % 1080, y: (i * 271) % 1920, v: 18 + (i * 13) % 40, a: i } })
-$('badge').textContent = R.badge; $('flag').textContent = flag; $('cname').textContent = cname
+// Accroche : jamais le pays (ce serait la reponse) ; on montre l'emoji du theme
+$('badge').textContent = R.badge; $('flag').textContent = emo; $('cname').innerHTML = R.hook
 $('mascT').textContent = R.hint
 $('qcard').textContent = nb(question)
 options.forEach((o, i) => { const el = document.createElement('div'); el.className = 'opt fr'; el.id = 'o' + i; el.style.top = (880 + i * 162) + 'px'; el.innerHTML = `<b style="background:${LCOL[i]}">${LETTERS[i]}</b><span>${nb(o)}</span>`; $('opts').appendChild(el) })
-$('ftitle').textContent = nb(ftitle); $('ftitle').style.color = c2; $('ftext').textContent = nb(ftext); $('fem').textContent = emo
+$('ftitle').textContent = nb(ftitle); $('ftitle').style.color = c2; $('ftext').textContent = nb(ftext); $('fem').textContent = flag
 $('pcap').innerHTML = R.cap; $('shot').src = `shots/${lang}/${shot}.png`
 $('tag').innerHTML = R.tag; $('offer').textContent = R.offer; $('small').textContent = R.small
 const CONF = Array.from({ length: 46 }, (_, i) => { const c = document.createElement('div'); c.className = 'conf'; c.style.background = ['#FFD600', '#FF4081', '#40C4FF', '#69F0AE', '#FF9100', '#fff'][i % 6]; $('confs').appendChild(c); return { c, ang: -Math.PI / 2 + ((i * 0.618) % 1 - 0.5) * 2.6, sp: 500 + ((i * 7919) % 1000), dx: ((i * 211) % 600) - 300, rot: (i * 53) % 360 } })
