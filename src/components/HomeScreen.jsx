@@ -3,6 +3,7 @@ import LogoutIcon from './LogoutIcon'
 import { t } from '../i18n'
 import LangPicker from './LangPicker'
 import MusicButton from './MusicButton'
+import NotificationCenter from './NotificationCenter'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
 import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
@@ -40,6 +41,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
         )}
         <div className="fr-logo" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: 1, marginLeft: 4 }}><span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span></div>
         <div style={{ flex: 1 }} />
+        <NotificationCenter lang={lang} onCountry={nav.goCountry} />
         <MusicButton label={t(lang, 'music')} />
         <SpeakButton settings color="#FF6B35" label="" />
         <LangPicker lang={lang} onChange={changeLang} compact />

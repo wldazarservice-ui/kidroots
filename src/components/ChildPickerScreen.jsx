@@ -13,6 +13,7 @@ import { t } from '../i18n'
 import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
 import { LIMITS } from '../limits'
 import { openSupport } from '../support'
+import NotificationCenter from './NotificationCenter'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
 const INK = '#1A2A4F'
@@ -56,6 +57,19 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
     }
   }
 
+  // Outils reserves aux parents (affiches dans l'espace parents, apres le calcul)
+  const tools = [
+    kids.length > 0 && onOpenStats && { icon: '📊', label: t(lang, 'ps_open'), color: '#1565C0', run: onOpenStats },
+    kids.length > 0 && { icon: '⏱️', label: 'Temps d’écran', color: '#6A1B9A', run: () => setTiming(true) },
+    onManageDevices && { icon: '📱', label: 'Mes appareils', color: '#2E7D4F', run: onManageDevices },
+    kids.length > 0 && { icon: '✈️', label: t(lang, 'trip_btn').replace(/^✈️\s*/, ''), color: '#0D47A1', run: () => setTrip(true) },
+    account.refCode && { icon: '🎁', label: t(lang, 'inv_btn'), color: '#E65100', run: () => setInviteOpen(true) },
+    { icon: '💝', label: t(lang, 'gift_btn').replace(/^🎁\s*/, ''), color: '#E65100', run: openGift },
+    onOpenPro && !premium && { icon: '🏫', label: t(lang, 'picker_pro').replace(/^🏫\s*/, ''), color: '#00695C', run: onOpenPro },
+    kids.length > 0 && { icon: '🔄', label: 'Réinitialiser la progression', color: '#E65100', run: () => setResetting(true) },
+    onOpenAdmin && { icon: '📈', label: 'Tableau de bord Mokalibo', color: '#1A2A4F', run: onOpenAdmin },
+  ].filter(Boolean)
+
   return (
     <div className="home-sky screen-mid" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', padding: '18px 16px 28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
@@ -66,9 +80,10 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
+          <NotificationCenter lang={lang} account={account} onInvite={account.refCode ? () => setInviteOpen(true) : null} onGift={openGift} />
           <button className="btn-kid" onClick={() => setAccountOpen(true)}
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#1565C0', padding: '8px 14px', fontSize: 13, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
-            👤 Mon compte
+            👨‍👩‍👧 {t(lang, 'parent_space')}
           </button>
           <button className="btn-kid" onClick={() => signOut()} aria-label="Déconnexion" title="Déconnexion"
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', padding: '8px 12px', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
@@ -130,7 +145,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             })}
           </div>
 
-          <div className="picker-actions">
+          <div style={{ maxWidth: 420, margin: '0 auto' }}>
           {full ? (
             <div style={{ background: 'white', borderRadius: 18, padding: '12px 14px', textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#607D8B' }}>
               🧒 {LIMITS.children} / {LIMITS.children} enfants : le maximum par compte est atteint.
@@ -141,83 +156,16 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
               ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {LIMITS.children})</span>
             </button>
           )}
-          {account.refCode && (
-            <button className="btn-kid soft" onClick={() => setInviteOpen(true)}
-              style={{ width: '100%', background: 'linear-gradient(135deg,#FFF3E0,#FFE0B2)', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.15)' }}>
-              🎁 {t(lang, 'inv_btn')}
-            </button>
-          )}
-          {kids.length > 0 && (
-            <button className="btn-kid soft" onClick={() => setTrip(true)}
-              style={{ width: '100%', background: 'linear-gradient(135deg,#E3F2FD,#BBDEFB)', color: '#0D47A1', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.15)' }}>
-              {t(lang, 'trip_btn')}
-            </button>
-          )}
-          <button className="btn-kid soft" onClick={openGift}
-            style={{ width: '100%', background: 'linear-gradient(135deg,#FFF3E0,#FFE0B2)', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.15)' }}>
-            {t(lang, 'gift_btn')}
+          <button className="btn-kid soft" onClick={() => setAccountOpen(true)}
+            style={{ width: '100%', marginTop: 12, background: 'white', color: '#1565C0', padding: '13px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
+            👨‍👩‍👧 {t(lang, 'parent_space')} : abonnement, statistiques, temps d’écran…
           </button>
-          <button className="btn-kid soft" onClick={() => openSupport({ where: 'picker', gate: true })}
-            style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
-            💬 {t(lang, 'support_link')}
-          </button>
-          {onOpenPro && !premium && (
-            <button className="btn-kid soft" onClick={onOpenPro}
-              style={{ width: '100%', background: 'white', color: '#00695C', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(0,105,92,0.12)' }}>
-              {t(lang, 'picker_pro')}
-            </button>
-          )}
-          {onOpenStats && kids.length > 0 && (
-            <button className="btn-kid soft" onClick={onOpenStats}
-              style={{ width: '100%', background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
-              📊 {t(lang, 'ps_open')}
-            </button>
-          )}
-          {kids.length > 0 && (
-            <button className="btn-kid soft" onClick={() => setTiming(true)}
-              style={{ width: '100%', background: 'white', color: '#6A1B9A', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(106,27,154,0.12)' }}>
-              ⏱️ Temps d'écran
-            </button>
-          )}
-          {onManageDevices && (
-            <button className="btn-kid soft" onClick={onManageDevices}
-              style={{ width: '100%', background: 'white', color: '#2E7D4F', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(46,158,91,0.12)' }}>
-              📱 Mes appareils
-            </button>
-          )}
-          {premium && account.kind !== 'subscription' && (
-            <div style={{ background: 'white', borderRadius: 18, padding: '12px', textAlign: 'center', fontSize: 15, fontWeight: 900, color: '#2E7D4F', boxShadow: '0 4px 12px rgba(46,158,91,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              ✅ {account.kind === 'school' ? 'Licence École active' : account.kind === 'gift' ? 'Accès illimité offert' : 'Accès illimité à vie'}
-            </div>
-          )}
-          {(account.kind === 'subscription' || account.kind === 'free' || !account.kind) && (
-            <button className="btn-kid soft" onClick={() => setAccountOpen(true)}
-              style={{ width: '100%', background: 'white', color: '#E65100', padding: '12px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(255,122,0,0.12)' }}>
-              💳 {t(lang, 'manage_sub')}
-            </button>
-          )}
-          {onOpenAdmin && (
-            <button className="btn-kid soft" onClick={onOpenAdmin}
-              style={{ width: '100%', background: '#1A2A4F', color: 'white', padding: '12px', fontSize: 15, borderRadius: 18 }}>
-              📈 Tableau de bord Mokalibo
-            </button>
-          )}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 18, display: 'flex', justifyContent: 'center', gap: 18, flexWrap: 'wrap' }}>
-            <button onClick={() => setResetting(true)}
-              style={{ background: 'none', border: 'none', color: '#E65100', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, textDecoration: 'underline', cursor: 'pointer' }}>
-              🔄 Réinitialiser la progression
-            </button>
-            <button onClick={() => setDeleting(true)}
-              style={{ background: 'none', border: 'none', color: '#90A4AE', fontFamily: 'inherit', fontWeight: 800, fontSize: 12, textDecoration: 'underline', cursor: 'pointer' }}>
-              Supprimer mon compte
-            </button>
           </div>
         </>
       )}
       {trip && <TripDownload lang={lang} onClose={() => setTrip(false)} />}
       {inviteOpen && <InviteFamily lang={lang} account={account} onClose={() => setInviteOpen(false)} />}
-      {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} account={account} onOpenOffer={onOpenOffer} />}
+      {accountOpen && <AccountSettings user={user} kids={kids} onClose={() => setAccountOpen(false)} onKidsChange={onKidsChange} account={account} onOpenOffer={onOpenOffer} tools={tools} onDeleteAccount={() => setDeleting(true)} />}
       {timing && <ScreenTimeSettings user={user} kids={kids} onClose={() => setTiming(false)} onSaved={onLimitSaved} />}
       {resetting && <ResetProgress user={user} kids={kids} onClose={() => setResetting(false)} onDone={onKidsReset} />}
       {deleting && <DeleteAccount user={user} premium={premium} onClose={() => setDeleting(false)} />}

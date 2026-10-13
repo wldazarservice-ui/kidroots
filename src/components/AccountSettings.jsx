@@ -25,7 +25,7 @@ function errText(code = '') {
 }
 
 // Espace « Mon compte » du parent : e-mail, mot de passe, profils des enfants
-export default function AccountSettings({ user, kids, onClose, onKidsChange, account, onOpenOffer }) {
+export default function AccountSettings({ user, kids, onClose, onKidsChange, account, onOpenOffer, tools = [], onDeleteAccount }) {
   const [unlocked, setUnlocked] = useState(false)
   const [msg, setMsg] = useState(null) // { ok, text, zone }
   const [busy, setBusy] = useState('')
@@ -79,7 +79,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet"
         style={{ width: '100%', maxWidth: 440, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif', background: '#F4F7FB' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
-          <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>👤 Mon compte</div>
+          <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>👨‍👩‍👧 Espace parents</div>
           <button onClick={onClose} aria-label="Fermer" style={{ background: '#E3EAF2', color: '#546E7A', width: 38, height: 38, borderRadius: '50%', border: 'none', fontSize: 16, cursor: 'pointer' }}>✕</button>
         </div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#546E7A', marginBottom: 14 }}>Espace réservé aux parents.</div>
@@ -87,6 +87,21 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
         {!unlocked ? <ParentGate onPass={() => setUnlocked(true)} /> : (
           <>
             <SubscriptionCard user={user} account={account} onOpenOffer={onOpenOffer && (() => { onClose(); onOpenOffer() })} />
+
+            {/* Outils des parents : statistiques, temps d'ecran, appareils, voyage, partager… */}
+            {tools.length > 0 && (
+              <div style={{ ...card }}>
+                <div style={h}>🧰 Outils</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
+                  {tools.map((x) => (
+                    <button key={x.label} type="button" onClick={() => { onClose(); x.run() }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', background: '#F4F7FB', border: 'none', borderRadius: 14, padding: '11px 10px', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 900, color: x.color, cursor: 'pointer', lineHeight: 1.25 }}>
+                      <span style={{ fontSize: 20, flexShrink: 0 }}>{x.icon}</span><span>{x.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <button type="button" onClick={() => openSupport({ where: 'account' })}
               style={{ ...card, width: '100%', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', border: 'none', fontSize: 15, fontWeight: 900, color: '#1565C0' }}>
@@ -199,6 +214,14 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
               ))}
               {msg && msg.zone.startsWith('kid-') && !editing && note(msg.zone)}
             </div>
+            {onDeleteAccount && (
+              <div style={{ textAlign: 'center', marginTop: 6 }}>
+                <button type="button" onClick={() => { onClose(); onDeleteAccount() }}
+                  style={{ background: 'none', border: 'none', color: '#90A4AE', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, textDecoration: 'underline', cursor: 'pointer' }}>
+                  Supprimer mon compte
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

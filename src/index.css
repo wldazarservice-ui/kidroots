@@ -549,3 +549,4 @@ body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .strip-arrow.small { width: 32px; height: 32px; font-size: 22px; margin-top: -19px; padding-bottom: 3px; }
 .strip-arrow.small.left { left: -8px; } .strip-arrow.small.right { right: -8px; }
+.notif-badge { position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: #E53935; color: #fff; font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff; font-family: Nunito, sans-serif; }
