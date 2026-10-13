@@ -16,7 +16,8 @@ const countryName = (code, lang) => { try { return new Intl.DisplayNames([lang],
 // ── Mise en page HTML (aux couleurs de Mokalibo) ──
 // Le texte simple reste envoye a cote (clients mail sans HTML). Paragraphes = lignes vides, liens rendus cliquables.
 const esc = (x) => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-const linkify = (x) => x.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#1E88E5;font-weight:700">$1</a>')
+// Lien cliquable, sans avaler la ponctuation finale (« …/kuendigen. » → lien vers …/kuendigen)
+const linkify = (x) => x.replace(/(https?:\/\/[^\s<]*[^\s<.,;:!?)])/g, '<a href="$1" style="color:#1E88E5;font-weight:700">$1</a>')
 export function renderHtml({ heading, text, cta, emoji = '🌍' }) {
   const [body, foot = ''] = text.split('\n\n—\n')
   let placed = false
