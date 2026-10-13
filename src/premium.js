@@ -26,11 +26,11 @@ export const todayIds = (child) => (child?.daily?.date === todayKey() ? child.da
 export const chaptersLeft = (child, premium) =>
   !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, DAILY_FREE_CHAPTERS - todayIds(child).length)
 // Un chapitre deja termine ou deja commence aujourd'hui reste toujours accessible
-// Jeux : 5 parties gratuites par jour et par enfant (tous jeux confondus). gameDaily = { date, n }
-export const DAILY_FREE_GAMES = 5
+// Jeux : illimites pour tout le monde depuis le 13/10/2026 (seuls les nouveaux chapitres sont limites).
+// gameDaily = { date, n } reste compte pour les statistiques, sans limite.
+export const DAILY_FREE_GAMES = Infinity
 export const gamesPlayedToday = (child) => (child?.gameDaily?.date === todayKey() ? child.gameDaily.n || 0 : 0)
-export const gamesLeft = (child, premium) =>
-  !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, DAILY_FREE_GAMES - gamesPlayedToday(child))
+export const gamesLeft = () => Infinity
 export const canOpenChapter = (child, chapterId, isDone, premium) =>
   !PAYWALL_ENABLED || premium || isDone || todayIds(child).includes(chapterId) || todayIds(child).length < DAILY_FREE_CHAPTERS
 

@@ -439,7 +439,7 @@ export default function App() {
     return true
   }
 
-  // Jeux : 5 parties gratuites par jour et par enfant. Retourne false (et affiche la limite) si plus de partie.
+  // Jeux : illimites (gamesLeft = Infinity). Retourne false (et affiche la limite) si une limite revenait un jour.
   const takeGameRound = () => {
     if (!activeChild) return false
     if (gamesLeft(activeChild, hasPremium) <= 0) {

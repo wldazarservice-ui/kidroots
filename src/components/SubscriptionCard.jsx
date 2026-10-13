@@ -73,7 +73,7 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
     )
   } else if (account.hasCustomer) {
     title = L('🌙 Abonnement terminé')
-    lines = [L('Tu es revenu à la version gratuite (3 chapitres et 5 parties de jeux par jour).')]
+    lines = [L('Tu es revenu à la version gratuite (3 chapitres par jour, jeux illimités).')]
     actions = (
       <>
         {PAYWALL_ENABLED && onOpenOffer && <button type="button" onClick={onOpenOffer} style={btn('linear-gradient(180deg,#43C27A,#2E9E5B)', 'white')}>{L('⭐ Me réabonner')}</button>}
@@ -82,7 +82,7 @@ export default function SubscriptionCard({ user, account = {}, onOpenOffer }) {
     )
   } else {
     title = L('🆓 Version gratuite')
-    lines = [L('3 nouveaux chapitres et 5 parties de jeux par jour et par enfant.')]
+    lines = [L('3 nouveaux chapitres par jour et par enfant, jeux illimités.')]
     actions = PAYWALL_ENABLED && onOpenOffer && (
       <button type="button" onClick={onOpenOffer} style={btn('linear-gradient(180deg,#43C27A,#2E9E5B)', 'white')}>
         {L('⭐ Découvrir la Formule Famille')}{account.trial > 0 ? L(' · 3 jours gratuits') : ''}

@@ -78,9 +78,9 @@ export function welcomeMail({ lang, uid }) {
 export function day3Mail({ lang, uid, kids }) {
   const who = join(names(kids), lang)
   const T = {
-    fr: { s: who ? `${who} a commencé son tour du monde 🌍` : 'Votre tour du monde a commencé 🌍', b: `Bonjour,\n\n${who ? `${who} a déjà commencé à explorer Mokalibo. ` : ''}Bravo !\n\nAvec la version gratuite, chaque enfant découvre 3 nouveaux chapitres et 5 jeux par jour. Avec la Formule Famille, c'est illimité : les 195 pays, les 3 niveaux de lecture, et jusqu'à 5 enfants.\n\n🎁 Essayez-la 3 jours gratuitement (résiliable en 2 clics) : ${SITE}\nDès 1,25 € par mois avec la formule annuelle.` },
-    de: { s: who ? `${who} hat die Weltreise begonnen 🌍` : 'Eure Weltreise hat begonnen 🌍', b: `Hallo,\n\n${who ? `${who} hat schon angefangen, Mokalibo zu entdecken. ` : ''}Super!\n\nIn der Gratis-Version entdeckt jedes Kind täglich 3 neue Kapitel und 5 Spiele. Mit dem Familien-Abo ist alles unbegrenzt: 195 Länder, 3 Lesestufen, bis zu 5 Kinder.\n\n🎁 3 Tage kostenlos testen (mit 2 Klicks kündbar): ${SITE}\nAb 1,25 € pro Monat im Jahresabo.` },
-    en: { s: who ? `${who} has started a trip around the world 🌍` : 'Your trip around the world has begun 🌍', b: `Hello,\n\n${who ? `${who} has already started exploring Mokalibo. ` : ''}Well done!\n\nWith the free version, each child discovers 3 new chapters and 5 games a day. The Family Plan makes it unlimited: all 195 countries, 3 reading levels, up to 5 children.\n\n🎁 Try it free for 3 days (cancel in 2 clicks): ${SITE}\nFrom €1.25 a month with the yearly plan.` },
+    fr: { s: who ? `${who} a commencé son tour du monde 🌍` : 'Votre tour du monde a commencé 🌍', b: `Bonjour,\n\n${who ? `${who} a déjà commencé à explorer Mokalibo. ` : ''}Bravo !\n\nAvec la version gratuite, chaque enfant découvre 3 nouveaux chapitres par jour et joue aux jeux sans limite. Avec la Formule Famille, c'est illimité : les 195 pays, les 3 niveaux de lecture, et jusqu'à 5 enfants.\n\n🎁 Essayez-la 3 jours gratuitement (résiliable en 2 clics) : ${SITE}\nDès 1,25 € par mois avec la formule annuelle.` },
+    de: { s: who ? `${who} hat die Weltreise begonnen 🌍` : 'Eure Weltreise hat begonnen 🌍', b: `Hallo,\n\n${who ? `${who} hat schon angefangen, Mokalibo zu entdecken. ` : ''}Super!\n\nIn der Gratis-Version entdeckt jedes Kind täglich 3 neue Kapitel und spielt die Spiele unbegrenzt. Mit dem Familien-Abo ist alles unbegrenzt: 195 Länder, 3 Lesestufen, bis zu 5 Kinder.\n\n🎁 3 Tage kostenlos testen (mit 2 Klicks kündbar): ${SITE}\nAb 1,25 € pro Monat im Jahresabo.` },
+    en: { s: who ? `${who} has started a trip around the world 🌍` : 'Your trip around the world has begun 🌍', b: `Hello,\n\n${who ? `${who} has already started exploring Mokalibo. ` : ''}Well done!\n\nWith the free version, each child discovers 3 new chapters a day and plays the games without limit. The Family Plan makes it unlimited: all 195 countries, 3 reading levels, up to 5 children.\n\n🎁 Try it free for 3 days (cancel in 2 clicks): ${SITE}\nFrom €1.25 a month with the yearly plan.` },
   }
   const t = T[lang] || T.fr
   return withHtml({ subject: t.s, text: t.b + (FOOT[lang] || FOOT.fr)(unsubLink(uid)) }, { heading: t.s, emoji: '🗺️', cta: { label: { fr: '🎁 Essayer 3 jours gratuits', de: '🎁 3 Tage gratis testen', en: '🎁 Try 3 days free' }[lang] || '🎁 Essayer 3 jours gratuits', url: SITE } })
@@ -120,7 +120,7 @@ export function cancelMail({ lang, until, trial, stats = [] }) {
       intro: `C'est bien noté : ${trial ? 'ton essai est résilié, tu ne seras pas débité' : 'ton abonnement est résilié, aucun nouveau prélèvement'}.${d ? ` L'accès illimité reste ouvert jusqu'au ${d}.` : ''}`,
       done: who && (ch || co) ? `En chemin, ${who} ${many ? 'ont' : 'a'} déjà terminé ${ch} chapitre${ch > 1 ? 's' : ''} et visité ${co} pays 🌍 Notre petit renard 🦊 range sa valise… un peu tristement.` : 'Notre petit renard 🦊 range sa valise… un peu tristement.',
       back: 'Tu as changé d’avis ? Un seul clic suffit pour garder le voyage, sans rien perdre :',
-      free: 'Et sinon, pas de souci : la version gratuite reste là, avec 3 chapitres et 5 jeux par jour, pour continuer le tour du monde à petits pas.',
+      free: 'Et sinon, pas de souci : la version gratuite reste là, avec 3 chapitres par jour et les jeux en illimité, pour continuer le tour du monde à petits pas.',
       ask: 'Une petite faveur : réponds à cet e-mail avec un mot pour nous dire pourquoi (trop cher ? pas le temps ? pas adapté ?). On lit tout, et ça nous aide vraiment à faire mieux.',
       bye: 'À bientôt pour de nouvelles aventures ! ✈️\nWalid, papa et créateur de Mokalibo',
       cta: '💛 Je garde Mokalibo',
@@ -130,7 +130,7 @@ export function cancelMail({ lang, until, trial, stats = [] }) {
       intro: `Alles klar: ${trial ? 'dein Test ist gekündigt, es wird nichts abgebucht' : 'dein Abo ist gekündigt, es wird nichts mehr abgebucht'}.${d ? ` Der unbegrenzte Zugang bleibt bis zum ${d} offen.` : ''}`,
       done: who && (ch || co) ? `Unterwegs ${many ? 'haben' : 'hat'} ${who} schon ${ch} Kapitel abgeschlossen und ${co} Länder besucht 🌍 Unser kleiner Fuchs 🦊 packt seinen Koffer… ein bisschen traurig.` : 'Unser kleiner Fuchs 🦊 packt seinen Koffer… ein bisschen traurig.',
       back: 'Doch umentschieden? Ein Klick genügt, um die Reise weiterzumachen, ohne etwas zu verlieren:',
-      free: 'Und sonst kein Problem: Die Gratis-Version bleibt, mit 3 Kapiteln und 5 Spielen pro Tag, für die Weltreise in kleinen Schritten.',
+      free: 'Und sonst kein Problem: Die Gratis-Version bleibt, mit 3 Kapiteln pro Tag und unbegrenzten Spielen, für die Weltreise in kleinen Schritten.',
       ask: 'Eine kleine Bitte: Antworte auf diese E-Mail mit einem Wort, warum (zu teuer? keine Zeit? nicht passend?). Wir lesen alles, und es hilft uns sehr.',
       bye: 'Bis bald zu neuen Abenteuern! ✈️\nWalid, Papa und Gründer von Mokalibo',
       cta: '💛 Ich bleibe bei Mokalibo',
@@ -140,7 +140,7 @@ export function cancelMail({ lang, until, trial, stats = [] }) {
       intro: `All done: ${trial ? 'your trial is cancelled, you won’t be charged' : 'your subscription is cancelled, no further payments'}.${d ? ` Unlimited access stays open until ${d}.` : ''}`,
       done: who && (ch || co) ? `Along the way, ${who} finished ${ch} chapter${ch > 1 ? 's' : ''} and visited ${co} countries 🌍 Our little fox 🦊 is packing its suitcase… a bit sadly.` : 'Our little fox 🦊 is packing its suitcase… a bit sadly.',
       back: 'Changed your mind? One click keeps the journey going, nothing lost:',
-      free: 'And if not, no worries: the free version stays, with 3 chapters and 5 games a day, to keep exploring step by step.',
+      free: 'And if not, no worries: the free version stays, with 3 chapters a day and unlimited games, to keep exploring step by step.',
       ask: 'A small favour: reply to this e-mail with one word on why (too expensive? no time? not a fit?). We read everything, and it really helps.',
       bye: 'See you soon for new adventures! ✈️\nWalid, dad and creator of Mokalibo',
       cta: '💛 Keep Mokalibo',
