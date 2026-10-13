@@ -75,7 +75,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
   )
 
   return (
-    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 450, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet"
         style={{ width: '100%', maxWidth: 440, maxHeight: '94vh', overflowY: 'auto', overflowX: 'hidden', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif', background: '#F4F7FB' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
@@ -94,7 +94,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
                 <div style={h}>🧰 Outils</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
                   {tools.map((x) => (
-                    <button key={x.label} type="button" onClick={() => { onClose(); x.run() }}
+                    <button key={x.label} type="button" onClick={() => x.run()}
                       style={{ display: 'flex', alignItems: 'center', gap: 8, textAlign: 'left', background: '#F4F7FB', border: 'none', borderRadius: 14, padding: '11px 10px', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 900, color: x.color, cursor: 'pointer', lineHeight: 1.25 }}>
                       <span style={{ fontSize: 20, flexShrink: 0 }}>{x.icon}</span><span>{x.label}</span>
                     </button>

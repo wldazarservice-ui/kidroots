@@ -91,9 +91,17 @@ export default function App() {
   const [activeChild, setActiveChildState] = useState(null)
   const [legacyToMigrate, setLegacyToMigrate] = useState(null)
 
-  const [screen, setScreen] = useState('home')
-  const [countryCode, setCountryCode] = useState(null)
-  const [regionKey, setRegionKey] = useState('africa')
+  // Ecran en cours memorise pour la session : un rechargement ramene au meme endroit (pas a l'accueil)
+  const [savedNav] = useState(() => { try { return JSON.parse(sessionStorage.getItem('kidroots_nav') || 'null') } catch { return null } })
+  const [screen, setScreen] = useState(() => {
+    const n = savedNav
+    if (!n?.screen) return 'home'
+    if (['chapter', 'result', 'country'].includes(n.screen)) return n.countryCode && COUNTRIES[n.countryCode] ? 'country' : 'home'
+    if (n.screen === 'game') return 'games'
+    return ['regions', 'map', 'passport', 'games'].includes(n.screen) ? n.screen : 'home'
+  })
+  const [countryCode, setCountryCode] = useState(() => (savedNav?.countryCode && COUNTRIES[savedNav.countryCode] ? savedNav.countryCode : null))
+  const [regionKey, setRegionKey] = useState(() => savedNav?.regionKey || 'africa')
   const [chapterIdx, setChapterIdx] = useState(null)
   const [step, setStep] = useState('intro')
   const [quizScore, setQuizScore] = useState(0)
@@ -114,7 +122,10 @@ export default function App() {
   const [statsOpen, setStatsOpen] = useState(false)
   const [limitOpen, setLimitOpen] = useState(false)
   const [gameKey, setGameKey] = useState(null)
-  const [countryFrom, setCountryFrom] = useState('regions') // écran d'où l'on vient avant un pays
+  const [countryFrom, setCountryFrom] = useState(() => savedNav?.countryFrom || 'regions') // écran d'où l'on vient avant un pays
+  useEffect(() => {
+    try { sessionStorage.setItem('kidroots_nav', JSON.stringify({ screen, countryCode, regionKey, countryFrom })) } catch {}
+  }, [screen, countryCode, regionKey, countryFrom])
   const [backTick, setBackTick] = useState(0)
   const [newStamp, setNewStamp] = useState(null)
   // Temps d'écran du jour (limite réglée par les parents)
