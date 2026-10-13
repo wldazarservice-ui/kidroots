@@ -14,7 +14,10 @@ const TXT = {
   ar: { kicker: 'جرّب الآن', title: 'قصة حقيقية من Mokalibo', sub: 'المس 🔊 للاستماع، كما سيفعل طفلك.', fact: 'هل تعلم؟ المس للاكتشاف', next: '← البطاقة التالية', end_t: 'أكثر من 3500 قصة في انتظارك!', end_s: '195 دولة، واختبارات، وألعاب، وجواز سفر للختم. مجانًا، بدون بطاقة.', cta: '▶ تابع المغامرة مجانًا', again: '↺ أعد مشاهدة البطاقات' },
 }
 // Deux cartes du Japon : les samourais, puis les jeux video
-const RAW = [COUNTRIES.JP?.chapters?.[1]?.cards?.[0], COUNTRIES.JP?.chapters?.[3]?.cards?.[1]].filter(Boolean)
+const RAW = [
+  { emoji: '⚔️', title: 'Les Samouraïs', text: 'Les samouraïs sont les guerriers nobles du Japon. Ils servent leur seigneur (daimyo) avec une fidélité absolue. Leur arme principale, le katana (sabre), est considérée comme une œuvre d’art.', fact: 'Pour forger un seul katana, un forgeron repliait l’acier des dizaines de fois : il fallait souvent plusieurs semaines de travail !' },
+  { emoji: '🎮', title: 'Les Jeux Vidéo', text: 'Nintendo (Mario, Zelda), Sega (Sonic), Sony (PlayStation)… Le Japon a créé quelques-uns des jeux vidéo les plus célèbres du monde. En 1985, Super Mario Bros redonne envie de jouer à des millions d’enfants.', fact: 'Shigeru Miyamoto, le créateur de Mario et de Zelda, s’est inspiré de ses promenades d’enfant dans les collines et les grottes autour de Kyoto !' },
+]
 
 // Apercu interactif sur la page d'accueil : on goute une histoire avant de creer son compte
 export default function DemoStory({ lang, onSignup }) {

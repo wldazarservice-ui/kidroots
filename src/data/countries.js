@@ -1966,6 +1966,15 @@ export const REGIONS = {
 // Les chapitres contiennent des emplacements vides pour que les compteurs fonctionnent.
 export const RICH_CODES = Object.keys(COUNTRIES)
 for (const [code, m] of Object.entries(WORLD_META)) {
+  const placeholders = () => m.ch.map(([id, era, title, subtitle, emoji, color, light, nCards, nQuiz]) => ({
+    id, era, title, subtitle, emoji, color, light,
+    cards: Array(nCards).fill(null), quiz: Array(nQuiz).fill(null),
+  }))
+  if (COUNTRIES[code]) {
+    // Pays riche dont l'histoire a ete rallongee : on garde sa fiche, ses chapitres sont charges a l'ouverture
+    COUNTRIES[code] = { ...COUNTRIES[code], lazy: true, chapters: placeholders() }
+    continue
+  }
   COUNTRIES[code] = {
     name: m.name, flag: m.flag, region: m.region, color: m.color, dark: m.color, bg: m.bg,
     tagline: m.tagline, teaser: m.teaser, hero: m.hero, lazy: true,

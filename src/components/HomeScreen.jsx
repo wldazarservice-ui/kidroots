@@ -27,8 +27,8 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
   return (
     <div className="home-sky screen-wide" style={{ minHeight: '100vh', fontFamily: 'Nunito, sans-serif', position: 'relative', overflow: 'hidden' }}>
       {/* Decor */}
-      <div aria-hidden style={{ position: 'absolute', top: 70, left: -10, fontSize: 54, opacity: 0.9 }} className="drift">☁️</div>
-      <div aria-hidden style={{ position: 'absolute', top: 190, right: -14, fontSize: 44, opacity: 0.8, animationDelay: '-4s' }} className="drift">☁️</div>
+      <div aria-hidden style={{ position: 'absolute', top: 70, left: -10, fontSize: 54, opacity: 0.9 }} className="drift home-cloud">☁️</div>
+      <div aria-hidden style={{ position: 'absolute', top: 190, right: -14, fontSize: 44, opacity: 0.8, animationDelay: '-4s' }} className="drift home-cloud">☁️</div>
       <div aria-hidden style={{ position: 'absolute', top: 96, right: 26, fontSize: 40 }} className="spin-slow">☀️</div>
 
       {/* Barre du haut */}
@@ -58,7 +58,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
             <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px 12px', marginBottom: 12 }}>
               <div style={{ flex: '1 1 auto' }}>
                 {firstName && <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 30, fontWeight: 700, color: INK, lineHeight: 1.05 }}>{t(lang, 'hello', { name: firstName })}</div>}
-                <div style={{ fontSize: 16, color: '#546E7A', fontWeight: 800, marginTop: 4 }}>{t(lang, 'where_go')}</div>
+                <div style={{ fontSize: 17, color: '#263859', fontWeight: 800, marginTop: 4, textShadow: '0 1px 0 rgba(255,255,255,0.8)' }}>{t(lang, 'where_go')}</div>
               </div>
               <button className="btn-kid soft" onClick={nav.openLevelPicker} aria-label={t(lang, 'choose_level')}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'white', color: INK, borderRadius: 999, padding: '7px 8px 7px 12px', fontSize: 14, fontWeight: 900, boxShadow: '0 3px 10px rgba(26,42,79,0.10)', border: `2px solid ${LEVELS[difficulty]?.color || '#1E88E5'}33` }}>

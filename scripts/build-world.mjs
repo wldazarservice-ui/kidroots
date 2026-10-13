@@ -13,11 +13,10 @@ for (const f of readdirSync(dir).filter((f) => /^[A-Z]{2}\.js$/.test(f)).sort())
   const code = f.slice(0, 2)
   const c = (await import(new URL(f, dir))).default
   const err = (m) => errors.push(`${code}: ${m}`)
-  if (RICH.includes(code)) err('existe deja dans countries.js')
   for (const k of ['name', 'flag', 'region', 'color', 'bg', 'tagline', 'teaser']) if (!c[k]) err(`sans ${k}`)
   if (!REGIONS.includes(c.region)) err(`region inconnue ${c.region}`)
   if (!c.hero?.name || !c.hero?.emoji) err('sans hero')
-  if (c.chapters.length !== 5) err(`${c.chapters.length} chapitres`)
+  if (c.chapters.length < 5 || c.chapters.length > 8) err(`${c.chapters.length} chapitres`)
   for (const ch of c.chapters) {
     if (ids.has(ch.id)) err(`id en double ${ch.id}`)
     ids.add(ch.id)

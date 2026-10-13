@@ -17,7 +17,7 @@ const cut = (s, n) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n - 1))
 
 // Données complètes : pays « riches » dans countries.js, les autres dans src/data/world/XX.js
 async function fullCountry(code) {
-  if (RICH_CODES.includes(code)) return COUNTRIES[code]
+  if (RICH_CODES.includes(code) && !COUNTRIES[code].lazy) return COUNTRIES[code]
   const f = path.resolve('src/data/world', `${code}.js`)
   return (await import(pathToFileURL(f).href)).default
 }
