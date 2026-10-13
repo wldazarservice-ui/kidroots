@@ -306,6 +306,8 @@ export default function App() {
     if (!user && guestPlaying && guest) setActiveChildState(guest)
   }, [user, guestPlaying])
   const isGuest = !user && guestPlaying && !!activeChild
+  // Grand ecran : l'app (pas la page de presentation) est agrandie en CSS (body.app-mode)
+  useEffect(() => { document.body.classList.toggle('app-mode', !!(user || isGuest)) }, [user, isGuest])
 
   // Met a jour l'enfant actif (Firestore si connecte, stockage local en mode essai)
   const patchChild = (patch, save) => {

@@ -61,11 +61,14 @@ export default function PassportScreen({ lang, progress, nav, activeChild }) {
           {BADGES.map(([id, emoji]) => {
             const ok = earned.includes(id)
             return (
-              <div key={id} style={{ background: ok ? 'white' : 'rgba(255,255,255,0.55)', borderRadius: 18, padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, boxShadow: ok ? '0 4px 14px rgba(255,152,0,0.25)' : 'none', border: ok ? '2px solid #FFC400' : '2px dashed #CFD8DC' }}>
-                <span style={{ fontSize: 28, filter: ok ? 'none' : 'grayscale(1)', opacity: ok ? 1 : 0.4 }}>{emoji}</span>
+              <div key={id} className={ok ? 'badge-card is-ok' : 'badge-card'}>
+                <span className="badge-medal">
+                  <span style={{ fontSize: 28, opacity: ok ? 1 : 0.55 }}>{emoji}</span>
+                  {!ok && <span className="badge-lock">🔒</span>}
+                </span>
                 <span style={{ minWidth: 0 }}>
-                  <span style={{ display: 'block', fontSize: 13, fontWeight: 900, color: ok ? INK : '#90A4AE' }}>{t(lang, `badge_${id}`)}</span>
-                  <span style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#90A4AE' }}>{ok ? '✓' : t(lang, `badge_${id}_d`)}</span>
+                  <span style={{ display: 'block', fontSize: 14, fontWeight: 900, color: INK, lineHeight: 1.2 }}>{t(lang, `badge_${id}`)}</span>
+                  <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: ok ? '#2E7D32' : '#607D8B', marginTop: 2 }}>{ok ? '✓ ' + t(lang, 'badge_won') : t(lang, `badge_${id}_d`)}</span>
                 </span>
               </div>
             )
