@@ -35,7 +35,7 @@ const TXT = {
     try: '▶ Commencer gratuitement',
     try_note: 'Compte parent gratuit en 1 clic · sans carte bancaire · 3 chapitres offerts par jour',
     have_account: "J'ai déjà un compte → Se connecter",
-    reassure: ['Gratuit', 'Sans carte bancaire', '1 clic avec Google'],
+    reassure: ['🎁 Gratuit chaque jour : 3 chapitres et 5 jeux par enfant', '⭐ Tout illimité avec la Formule Famille : 1,99 €/mois ou 14,99 €/an'],
     demo_btn: '🎧 Écouter une histoire, sans compte',
     rev_kicker: 'Ils ont essayé',
     rev_title: 'Ce qu’en disent les parents',
@@ -112,7 +112,7 @@ const TXT = {
     try: '▶ Start for free',
     try_note: 'Free parent account in 1 click · no card · 3 free chapters a day',
     have_account: 'I already have an account → Sign in',
-    reassure: ['Free', 'No card needed', '1 click with Google'],
+    reassure: ['🎁 Free every day: 3 chapters and 5 games per child', '⭐ Unlimited with the Family plan: €1.99/month or €14.99/year'],
     demo_btn: '🎧 Listen to a story, no account needed',
     rev_kicker: 'They tried it',
     rev_title: 'What parents say',
@@ -189,7 +189,7 @@ const TXT = {
     try: '▶ Kostenlos starten',
     try_note: 'Kostenloses Elternkonto mit 1 Klick · ohne Karte · 3 Gratis-Kapitel pro Tag',
     have_account: 'Ich habe schon ein Konto → Anmelden',
-    reassure: ['Kostenlos', 'Ohne Karte', '1 Klick mit Google'],
+    reassure: ['🎁 Jeden Tag kostenlos: 3 Kapitel und 5 Spiele pro Kind', '⭐ Alles unbegrenzt mit dem Familien-Abo: 1,99 €/Monat oder 14,99 €/Jahr'],
     demo_btn: '🎧 Eine Geschichte anhören, ohne Konto',
     rev_kicker: 'Sie haben es ausprobiert',
     rev_title: 'Das sagen Eltern',
@@ -266,7 +266,7 @@ const TXT = {
     try: '▶ Começar grátis',
     try_note: 'Conta de pais grátis em 1 clique · sem cartão · 3 capítulos grátis por dia',
     have_account: 'Já tenho conta → Entrar',
-    reassure: ['Grátis', 'Sem cartão', '1 clique com Google'],
+    reassure: ['🎁 Grátis todos os dias: 3 capítulos e 5 jogos por criança', '⭐ Tudo ilimitado com o Plano Família: 1,99 €/mês ou 14,99 €/ano'],
     demo_btn: '🎧 Ouvir uma história, sem conta',
     rev_kicker: 'Já experimentaram',
     rev_title: 'O que dizem os pais',
@@ -343,7 +343,7 @@ const TXT = {
     try: '▶ ابدأ مجانًا',
     try_note: 'حساب أولياء أمور مجاني بنقرة واحدة · بدون بطاقة · 3 فصول مجانية يوميًا',
     have_account: 'لدي حساب بالفعل ← تسجيل الدخول',
-    reassure: ['مجاني', 'بدون بطاقة بنكية', 'نقرة واحدة مع Google'],
+    reassure: ['🎁 مجانًا كل يوم: 3 فصول و5 ألعاب لكل طفل', '⭐ كل شيء بلا حدود مع باقة العائلة: 1,99 € شهريًا أو 14,99 € سنويًا'],
     demo_btn: '🎧 استمع إلى قصة، بدون حساب',
     rev_kicker: 'لقد جرّبوه',
     rev_title: 'ماذا يقول الآباء والأمهات',
@@ -593,14 +593,23 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
         <div aria-hidden className="drift lp-cloud" style={{ position: 'absolute', top: 260, right: '4%', fontSize: 46, opacity: 0.8, animationDelay: '-4s' }}>☁️</div>
         <div className="lp-wrap lp-hero" style={{ position: 'relative', zIndex: 2 }}>
           <div className="lp-hero-text screen-enter">
-            <h1 className="lp-h1" style={{ fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 40, lineHeight: 1.08, margin: '28px 0 14px', color: INK }}>{T.h1}</h1>
-            <p style={{ fontSize: 18, fontWeight: 700, color: '#455A64', lineHeight: 1.55, margin: '0 0 24px' }}>{T.h1_sub}</p>
+            {/* Les enfants guides de quelques pays : de la couleur et des visages des la premiere seconde */}
+            <div className="lp-kids" aria-hidden>
+              {[['👧🏻', '🇯🇵', '#FFE3E3'], ['👦🏽', '🇧🇷', '#DFF5E1'], ['👦🏿', '🇲🇱', '#FFF0D6'], ['👧🏼', '🇫🇷', '#E1EEFF'], ['👦🏽', '🇪🇬', '#FFF6CC']].map(([kid, flag, bg], i) => (
+                <span key={flag} className="lp-kid" style={{ background: bg, animationDelay: `${-i * 0.6}s` }}>
+                  {kid}<span className="lp-kid-flag">{flag}</span>
+                </span>
+              ))}
+            </div>
+            <h1 className="lp-h1" style={{ fontFamily: FONT_TITLE, fontWeight: 700, fontSize: 36, lineHeight: 1.08, margin: '18px 0 12px', color: INK }}>{T.h1}</h1>
+            <p style={{ fontSize: 17, fontWeight: 700, color: '#37474F', lineHeight: 1.55, margin: '0 0 20px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
               <button className="btn-kid soft" onClick={() => { track('demo_click'); document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', marginTop: 12, fontSize: 14, fontWeight: 900, color: '#2E7D4F' }}>
-              {T.reassure.map((r) => <span key={r}>✅ {r}</span>)}
+            {/* Ce qui est gratuit et ce qui est payant, dit clairement */}
+            <div style={{ marginTop: 14, background: 'rgba(255,255,255,0.88)', borderRadius: 18, padding: '10px 14px', display: 'grid', gap: 4, fontSize: 14, fontWeight: 800, color: '#37474F', lineHeight: 1.45 }}>
+              {T.reassure.map((r) => <div key={r}>{r}</div>)}
             </div>
             <button onClick={onLogin} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#1565C0', fontFamily: 'inherit', fontWeight: 800, fontSize: 14, cursor: 'pointer', textDecoration: 'underline' }}>{T.have_account}</button>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }} className="lp-proof">
