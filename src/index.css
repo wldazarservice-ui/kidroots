@@ -400,8 +400,8 @@ body {
 .full-dvh { height: 100vh; height: 100dvh; }
 
 /* ── Memory des drapeaux ── */
-.mem-progress { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.9); border-radius: 999px; padding: 8px 14px; margin: 4px 0 12px; box-shadow: 0 4px 14px rgba(26,42,79,.08); font-size: 15px; }
-.mem-board { background: linear-gradient(160deg, rgba(255,255,255,.75), rgba(255,255,255,.45)); border: 3px solid rgba(255,255,255,.9); border-radius: 28px; padding: 12px; box-shadow: 0 14px 34px rgba(26,42,79,.10); }
+.mem-progress, .game-progress { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.9); border-radius: 999px; padding: 8px 14px; margin: 4px 0 12px; box-shadow: 0 4px 14px rgba(26,42,79,.08); font-size: 15px; }
+.mem-board, .game-board { background: linear-gradient(160deg, rgba(255,255,255,.75), rgba(255,255,255,.45)); border: 3px solid rgba(255,255,255,.9); border-radius: 28px; padding: 12px; box-shadow: 0 14px 34px rgba(26,42,79,.10); }
 .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .mem-card { aspect-ratio: 3 / 4; border: none; padding: 0; background: none; cursor: pointer; perspective: 800px; -webkit-tap-highlight-color: transparent; }
 .mem-inner { position: relative; display: block; width: 100%; height: 100%; transition: transform .45s cubic-bezier(.3,1.4,.5,1); transform-style: preserve-3d; }
@@ -434,4 +434,30 @@ body {
   .mem-flag { font-size: clamp(36px, 4.2vw, 62px); }
   .mem-name { font-size: 13px; }
   .mem-globe { font-size: clamp(30px, 3.4vw, 48px); }
+}
+
+/* ── Jeux a choix (animaux, monuments) et chasse au tresor ── */
+.game-card { background: #fff; border-radius: 28px; box-shadow: 0 12px 30px rgba(26,42,79,.10); border: 3px solid rgba(255,255,255,.9); }
+.round-dot { width: 26px; height: 26px; border-radius: 50%; background: #E3EAF2; color: #90A4AE; font-size: 12px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; transition: all .25s; }
+.round-dot.now { background: #1E88E5; color: #fff; transform: scale(1.15); box-shadow: 0 0 0 4px rgba(30,136,229,.2); }
+.round-dot.ok { background: linear-gradient(145deg,#FFD54F,#FF9800); color: #fff; font-size: 14px; }
+.round-dot.ko { background: #FFCDD2; color: #E53935; font-size: 20px; }
+.choice-layout { display: grid; gap: 14px; }
+.choice-emoji { font-size: 74px; line-height: 1; width: 120px; height: 120px; margin: 10px auto -46px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(26,42,79,.18); position: relative; }
+.choice-answers { display: flex; flex-direction: column; gap: 10px; }
+.choice-btn { display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 20px; font-size: 17px; color: #1A2A4F; background: #fff; border: 3px solid #fff; box-shadow: 0 5px 0 rgba(26,42,79,.10), 0 8px 18px rgba(26,42,79,.06); cursor: pointer; font-family: inherit; transition: transform .15s, opacity .2s; }
+.choice-btn:hover { transform: translateY(-2px); }
+.choice-btn.is-right { background: #E8F8EA; border-color: #43C27A; }
+.choice-btn.is-wrong { background: #FFEBEE; border-color: #EF5350; }
+.choice-letter { width: 34px; height: 34px; border-radius: 12px; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.choice-icon { font-size: 36px; line-height: 1; }
+.choice-label { flex: 1; font-weight: 900; }
+.choice-mark { font-size: 22px; }
+.hunt-target { display: flex; align-items: center; gap: 14px; background: linear-gradient(150deg,#4FC3F7,#1E88E5 60%,#1565C0); border-radius: 26px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 10px 24px rgba(30,136,229,.30); }
+.hunt-flag { font-size: 46px; line-height: 1; width: 72px; height: 72px; flex-shrink: 0; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 14px rgba(0,0,0,.15); }
+
+@media (min-width: 700px) and (orientation: landscape), (min-width: 1000px) {
+  .choice-layout { grid-template-columns: 1fr 1fr; align-items: start; gap: 20px; }
+  .choice-btn { padding: 16px 18px; font-size: 19px; }
+  .choice-icon { font-size: 42px; }
 }
