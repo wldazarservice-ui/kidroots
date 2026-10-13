@@ -179,7 +179,6 @@ function Destination({ lang, nav, progress, difficulty, childId }) {
     return (
       <div className="dest-card anim-slide-up" style={{ '--c': '#1E88E5', '--bg': '#E3F2FD' }}>
         <div className="dest-window">
-          <span className="dest-bubble-dot" style={{ left: '10%', top: '16%' }} />
           <div className="dest-kicker">⏳ {t(lang, 'trip_kicker')}</div>
           <div className="float dest-flag">🌍</div>
         </div>
@@ -200,8 +199,6 @@ function Destination({ lang, nav, progress, difficulty, childId }) {
   return (
     <div className="dest-card anim-slide-up" style={{ '--c': c.color, '--bg': c.bg || '#FFF3E0' }}>
       <div className="dest-window">
-        <span className="dest-bubble-dot" style={{ left: '10%', top: '16%' }} />
-        <span className="dest-bubble-dot" style={{ right: '12%', bottom: '18%', width: 46, height: 46 }} />
         <div className="dest-kicker">{finished ? '🏆 ' + t(lang, 'trip_done') : '⏳ ' + t(lang, 'trip_kicker')}</div>
         <div className="float dest-flag">{c.flag}</div>
         {c.hero && !finished && (

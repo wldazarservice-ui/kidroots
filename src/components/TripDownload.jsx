@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import StripArrows from './StripArrows'
+import { useMemo, useRef, useState } from 'react'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { countryName } from '../names'
 import { t } from '../i18n'
@@ -15,6 +16,7 @@ export default function TripDownload({ lang, onClose }) {
   const saved = useMemo(() => getOffline(), [])
   const have = new Set(saved.lang === lang ? saved.codes : [])
   const [region, setRegion] = useState('africa')
+  const regRef = useRef(null)
   const [sel, setSel] = useState(() => new Set())
   const [games, setGames] = useState(!(saved.lang === lang && saved.games))
   const [prog, setProg] = useState(null) // { done, total, label } | 'ok' | 'err'
@@ -75,13 +77,16 @@ export default function TripDownload({ lang, onClose }) {
             </button>
 
             {/* Continents */}
-            <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 6, marginBottom: 6 }}>
+            <div style={{ position: 'relative' }}>
+            <StripArrows target={regRef} small />
+            <div ref={regRef} className="no-scrollbar" style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 6, marginBottom: 6, scrollBehavior: 'smooth' }}>
               {Object.entries(REGIONS).filter(([, r]) => r.countries.length).map(([k, r]) => (
                 <button key={k} type="button" onClick={() => setRegion(k)}
                   style={{ flexShrink: 0, border: 'none', borderRadius: 999, padding: '7px 12px', fontWeight: 900, fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', background: region === k ? r.color : 'white', color: region === k ? 'white' : INK }}>
                   {r.mascot} {t(lang, `region_${k}`) !== `region_${k}` ? t(lang, `region_${k}`) : r.name}
                 </button>
               ))}
+            </div>
             </div>
             <button type="button" onClick={toggleAll} style={{ background: 'none', border: 'none', color: '#1565C0', fontWeight: 900, fontSize: 13, fontFamily: 'inherit', cursor: 'pointer', padding: '2px 0 8px' }}>
               {allOn ? t(lang, 'trip_none') : t(lang, 'trip_all')}

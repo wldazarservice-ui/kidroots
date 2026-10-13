@@ -1,4 +1,4 @@
-import { isMusicOn, setMusicOn, onMusicChange } from '../music'
+import { isMusicOn, setMusicOn, onMusicChange, getMusicVolume, setMusicVolume } from '../music'
 import { openSupport } from '../support'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
@@ -206,15 +206,29 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
   )
 }
 
-// Interrupteur « musique de fond » (memorise sur l'appareil)
+// Musique de fond : marche / arret et volume (memorises sur l'appareil)
 function MusicPref({ card }) {
   const [on, setOn] = useState(isMusicOn)
+  const [v, setV] = useState(getMusicVolume)
   useEffect(() => onMusicChange(setOn), [])
+  const change = (x) => { const y = Math.round(Math.min(1, Math.max(0, x)) * 10) / 10; setV(y); setMusicVolume(y); if (y > 0 && !on) setMusicOn(true) }
+  const round = { width: 40, height: 40, borderRadius: '50%', border: 'none', background: '#E3F2FD', color: '#1565C0', fontSize: 22, fontWeight: 900, cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0 }
   return (
-    <button type="button" data-music-toggle onClick={() => setMusicOn(!on)} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
-      <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
-      <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
-    </button>
+    <div style={{ ...card }}>
+      <button type="button" data-music-toggle onClick={() => setMusicOn(!on)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
+        <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
+        <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
+      </button>
+      <div data-music-toggle style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, opacity: on ? 1 : 0.5 }}>
+        <button type="button" aria-label="Baisser le volume" onClick={() => change(v - 0.1)} style={round}>−</button>
+        <span style={{ fontSize: 18 }}>🔈</span>
+        <input type="range" min="0" max="1" step="0.1" value={v} onChange={(e) => change(parseFloat(e.target.value))} aria-label="Volume de la musique"
+          style={{ flex: 1, accentColor: '#1E88E5', height: 28, cursor: 'pointer' }} />
+        <span style={{ fontSize: 18 }}>🔊</span>
+        <button type="button" aria-label="Monter le volume" onClick={() => change(v + 0.1)} style={round}>+</button>
+        <span style={{ minWidth: 44, textAlign: 'right', fontSize: 14, fontWeight: 900, color: '#1565C0' }}>{Math.round(v * 100)} %</span>
+      </div>
+    </div>
   )
 }
 

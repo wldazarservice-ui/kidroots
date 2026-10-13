@@ -5,7 +5,12 @@
 const KEY = 'kidroots_music'
 const SRC = '/audio/mokalibo_theme.mp3'
 const LOOP = 57.6
-const VOL = 0.16, VOL_DUCK = 0.035
+const VKEY = 'kidroots_music_vol'
+const MAX = 0.3 // gain maximal (volume a 100 %)
+// Volume choisi par le parent, de 0 a 1 (60 % par defaut)
+export const getMusicVolume = () => { try { const v = parseFloat(localStorage.getItem(VKEY)); return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.6 } catch { return 0.6 } }
+const vol = () => MAX * getMusicVolume()
+const volDuck = () => vol() * 0.22
 
 let ctx, gain, source, buffer, loading, started = false, wanted = false
 const subs = new Set()
@@ -41,7 +46,7 @@ async function start() {
     source.loopStart = 0; source.loopEnd = Math.min(LOOP, buffer.duration)
     source.connect(gain); source.start()
     live.add({ s: source, g: gain })
-    fadeTo(VOL, 2.5)
+    fadeTo(vol(), 2.5)
   } catch { started = false }
 }
 
@@ -59,6 +64,13 @@ function stop() {
 function fadeTo(v, sec = 0.6) {
   if (!gain || !ctx) return
   try { gain.gain.cancelScheduledValues(ctx.currentTime); gain.gain.setTargetAtTime(v, ctx.currentTime, sec / 3) } catch {}
+}
+
+export function setMusicVolume(v) {
+  const x = Math.min(1, Math.max(0, v))
+  try { localStorage.setItem(VKEY, String(x)) } catch {}
+  fadeTo(vol(), 0.25)
+  subs.forEach((fn) => fn(isMusicOn()))
 }
 
 export function setMusicOn(on) {
@@ -86,6 +98,6 @@ if (typeof window !== 'undefined') {
   setInterval(() => {
     if (!started || !('speechSynthesis' in window)) return
     const speaking = window.speechSynthesis.speaking
-    if (speaking !== ducked) { ducked = speaking; fadeTo(speaking ? VOL_DUCK : VOL, speaking ? 0.3 : 1.2) }
+    if (speaking !== ducked) { ducked = speaking; fadeTo(speaking ? volDuck() : vol(), speaking ? 0.3 : 1.2) }
   }, 300)
 }

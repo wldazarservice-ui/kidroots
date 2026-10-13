@@ -540,3 +540,8 @@ body {
 .strip-arrow.left { left: -10px; }
 .strip-arrow.right { right: -10px; }
 @media (max-width: 699px) { .strip-arrow { width: 40px; height: 40px; font-size: 28px; margin-top: -24px; } .strip-arrow.left { left: -6px; } .strip-arrow.right { right: -6px; } }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.strip-arrow.small { width: 32px; height: 32px; font-size: 22px; margin-top: -19px; padding-bottom: 3px; }
+.strip-arrow.small.left { left: -8px; } .strip-arrow.small.right { right: -8px; }
