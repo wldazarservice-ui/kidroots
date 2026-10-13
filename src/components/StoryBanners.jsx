@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { COUNTRIES } from '../data/countries'
 import { TEASERS } from '../data/teasers'
 import { TText } from '../useTranslated'
@@ -10,6 +10,23 @@ const INK = '#1A2A4F'
 // La selection change chaque jour ; defilement automatique, glisser au doigt.
 export default function StoryBanners({ lang, onOpen }) {
   const ref = useRef(null)
+  const [edge, setEdge] = useState({ start: true, end: false })
+  const pausedRef = useRef(false)
+  // Fleches : une carte a gauche / a droite (et l'enfant reprend la main sur le defilement automatique)
+  const step = (dir) => {
+    const el = ref.current
+    if (!el || !el.firstChild) return
+    pausedRef.current = true
+    const w = el.firstChild.getBoundingClientRect().width + 14
+    el.scrollBy({ left: dir * w, behavior: 'smooth' })
+  }
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const upd = () => setEdge({ start: el.scrollLeft <= 4, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4 })
+    upd(); el.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd)
+    return () => { el.removeEventListener('scroll', upd); window.removeEventListener('resize', upd) }
+  }, [])
   const items = useMemo(() => {
     const codes = Object.keys(COUNTRIES).filter((c) => TEASERS[c] || COUNTRIES[c].teaser)
     const day = Math.floor(Date.now() / 86400000)
@@ -19,12 +36,11 @@ export default function StoryBanners({ lang, onOpen }) {
   useEffect(() => {
     const el = ref.current
     if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    let paused = false
-    const stop = () => { paused = true }
+    const stop = () => { pausedRef.current = true }
     el.addEventListener('pointerdown', stop, { passive: true })
     el.addEventListener('wheel', stop, { passive: true })
     const id = setInterval(() => {
-      if (paused || !el.firstChild) return
+      if (pausedRef.current || !el.firstChild) return
       const w = el.firstChild.getBoundingClientRect().width + 14
       const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8
       el.scrollTo({ left: atEnd ? 0 : el.scrollLeft + w, behavior: 'smooth' })
@@ -35,6 +51,9 @@ export default function StoryBanners({ lang, onOpen }) {
   return (
     <div style={{ marginBottom: 22 }}>
       <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 20, fontWeight: 700, color: INK, margin: '0 2px 10px' }}>✨ {t(lang, 'did_you_know')}</div>
+      <div style={{ position: 'relative' }}>
+      <button type="button" className="strip-arrow left" onClick={() => step(-1)} disabled={edge.start} aria-label="←">‹</button>
+      <button type="button" className="strip-arrow right" onClick={() => step(1)} disabled={edge.end} aria-label="→">›</button>
       <div ref={ref} className="story-strip">
         {items.map((code) => {
           const c = COUNTRIES[code]
@@ -51,6 +70,7 @@ export default function StoryBanners({ lang, onOpen }) {
             </button>
           )
         })}
+      </div>
       </div>
     </div>
   )
