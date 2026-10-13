@@ -6,9 +6,9 @@ const KEY = 'kidroots_music'
 const SRC = '/audio/mokalibo_theme.mp3?v=2'
 const LOOP = 57.6
 const VKEY = 'kidroots_music_vol'
-const MAX = 0.3 // gain maximal (volume a 100 %)
-// Volume choisi par le parent, de 0 a 1 (60 % par defaut)
-export const getMusicVolume = () => { try { const v = parseFloat(localStorage.getItem(VKEY)); return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.6 } catch { return 0.6 } }
+const MAX = 0.12 // gain maximal (volume a 100 %) : musique de fond discrete
+// Volume choisi par le parent, de 0 a 1 (50 % par defaut)
+export const getMusicVolume = () => { try { const v = parseFloat(localStorage.getItem(VKEY)); return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.5 } catch { return 0.5 } }
 const vol = () => MAX * getMusicVolume()
 const volDuck = () => vol() * 0.22
 
