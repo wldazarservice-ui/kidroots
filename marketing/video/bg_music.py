@@ -65,5 +65,5 @@ pcm = (MUS * 32767).astype('<i2')
 with wave.open('out/mokalibo_theme.wav', 'wb') as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
 dst = os.path.join('..', '..', 'public', 'audio'); os.makedirs(dst, exist_ok=True)
-subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', 'out/mokalibo_theme.wav', '-ac', '2', '-b:a', '96k', os.path.join(dst, 'mokalibo_theme.mp3')], check=True)
+subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', 'out/mokalibo_theme.wav', '-ac', '2', '-ar', '48000', '-b:a', '160k', os.path.join(dst, 'mokalibo_theme.mp3')], check=True)
 print('ok', L / SR, 's')

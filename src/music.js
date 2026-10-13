@@ -3,7 +3,7 @@
 // Les navigateurs interdisent le son avant un geste : elle demarre au premier toucher dans l'app.
 // Elle se fait toute petite pendant la lecture a voix haute, et se met en pause quand l'app passe en arriere-plan.
 const KEY = 'kidroots_music'
-const SRC = '/audio/mokalibo_theme.mp3'
+const SRC = '/audio/mokalibo_theme.mp3?v=2'
 const LOOP = 57.6
 const VKEY = 'kidroots_music_vol'
 const MAX = 0.3 // gain maximal (volume a 100 %)
@@ -21,7 +21,9 @@ export const onMusicChange = (fn) => { subs.add(fn); return () => subs.delete(fn
 async function load() {
   if (buffer) return buffer
   loading ||= (async () => {
-    ctx ||= new (window.AudioContext || window.webkitAudioContext)()
+    // « playback » : tampon audio plus grand, evite les craquements sur les telephones (le delai ne compte pas pour une musique de fond)
+    const AC = window.AudioContext || window.webkitAudioContext
+    try { ctx ||= new AC({ latencyHint: 'playback' }) } catch { ctx ||= new AC() }
     const res = await fetch(SRC)
     buffer = await ctx.decodeAudioData(await res.arrayBuffer())
     return buffer
