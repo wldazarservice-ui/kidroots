@@ -211,7 +211,7 @@ function MusicPref({ card }) {
   const [on, setOn] = useState(isMusicOn)
   useEffect(() => onMusicChange(setOn), [])
   return (
-    <button type="button" onClick={() => setMusicOn(!on)} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+    <button type="button" data-music-toggle onClick={() => setMusicOn(!on)} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
       <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
       <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
     </button>

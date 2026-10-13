@@ -24,26 +24,36 @@ async function load() {
   return loading
 }
 
+// Chaque demarrage a un numero : si on coupe pendant le chargement, le demarrage en cours est annule
+let gen = 0
+const live = new Set() // toutes les sources en cours (au cas ou plusieurs auraient ete lancees)
+
 async function start() {
   if (started || !isMusicOn() || !wanted) return
   started = true
+  const my = ++gen
   try {
     await load()
     if (ctx.state === 'suspended') await ctx.resume()
+    if (my !== gen || !started || !isMusicOn() || !wanted) return   // coupe entre-temps
     gain = ctx.createGain(); gain.gain.value = 0; gain.connect(ctx.destination)
     source = ctx.createBufferSource(); source.buffer = buffer; source.loop = true
     source.loopStart = 0; source.loopEnd = Math.min(LOOP, buffer.duration)
     source.connect(gain); source.start()
+    live.add({ s: source, g: gain })
     fadeTo(VOL, 2.5)
   } catch { started = false }
 }
 
 function stop() {
-  if (!started) return
+  gen++
   started = false
-  const s = source, g = gain
-  try { g.gain.cancelScheduledValues(ctx.currentTime); g.gain.setTargetAtTime(0, ctx.currentTime, 0.25) } catch {}
-  setTimeout(() => { try { s.stop() } catch {} }, 1200)
+  for (const n of live) {
+    try { n.g.gain.cancelScheduledValues(ctx.currentTime); n.g.gain.setValueAtTime(n.g.gain.value, ctx.currentTime); n.g.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4) } catch {}
+    setTimeout(() => { try { n.s.stop(); n.s.disconnect(); n.g.disconnect() } catch {} }, 500)
+  }
+  live.clear()
+  source = null; gain = null
 }
 
 function fadeTo(v, sec = 0.6) {
@@ -64,7 +74,7 @@ export function wantMusic(on) {
 }
 
 if (typeof window !== 'undefined') {
-  const kick = () => { if (wanted && isMusicOn()) start() }
+  const kick = (e) => { if (e?.target?.closest?.('[data-music-toggle]')) return; if (wanted && isMusicOn()) start() }
   window.addEventListener('pointerdown', kick, { passive: true })
   window.addEventListener('keydown', kick)
   document.addEventListener('visibilitychange', () => {
