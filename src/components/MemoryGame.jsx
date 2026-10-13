@@ -43,19 +43,19 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
       {done ? (
         <GameEnd lang={lang} stars={stars} max={3} onAgain={() => { if (!onRound || onRound()) again() }} onBack={onBack} onSave={() => onFinish('memory', stars)} />
       ) : (
-        <div style={{ padding: '10px 16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+        <div className="memory-grid" style={{ '--mem-cols': pairs, padding: '10px 16px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
           {cards.map((card) => {
             const shown = open.includes(card.id) || found.includes(card.code)
             const ok = found.includes(card.code)
             return (
-              <button key={card.id} onClick={() => flip(card)} className="btn-kid soft"
+              <button key={card.id} onClick={() => flip(card)} className="btn-kid soft mem-card"
                 style={{ aspectRatio: '3 / 4', borderRadius: 18, border: ok ? '3px solid #43C27A' : '3px solid white', background: shown ? 'white' : 'linear-gradient(150deg,#42A5F5,#3949AB)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 4, boxShadow: '0 5px 0 rgba(26,42,79,0.15)' }}>
                 {shown ? (
                   <>
-                    <span style={{ fontSize: 'clamp(30px, 9vw, 52px)', lineHeight: 1 }}>{COUNTRIES[card.code].flag}</span>
+                    <span className="mem-flag" style={{ fontSize: 'clamp(30px, 9vw, 52px)', lineHeight: 1 }}>{COUNTRIES[card.code].flag}</span>
                     <span style={{ fontSize: 11, fontWeight: 900, color: INK, marginTop: 4, lineHeight: 1.1, textAlign: 'center' }}>{countryName(card.code, lang)}</span>
                   </>
-                ) : <span style={{ fontSize: 30 }}>🌍</span>}
+                ) : <span className="mem-back" style={{ fontSize: 30 }}>🌍</span>}
               </button>
             )
           })}

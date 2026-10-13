@@ -398,3 +398,11 @@ body {
 .sheet { max-height: 92vh !important; max-height: 92dvh !important; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .sheet::after { content: ''; display: block; flex-shrink: 0; height: env(safe-area-inset-bottom, 0px); }
 .full-dvh { height: 100vh; height: 100dvh; }
+
+/* Memory : en paysage sur ordinateur et tablette, toutes les cartes tiennent a l'ecran (2 lignes) */
+@media (min-width: 700px) and (orientation: landscape), (min-width: 1000px) {
+  .memory-grid { grid-template-columns: repeat(var(--mem-cols), 1fr) !important; max-width: 1180px !important; margin: 0 auto; }
+  .memory-grid .mem-card { aspect-ratio: 4 / 5 !important; }
+  .memory-grid .mem-flag { font-size: clamp(34px, 4.2vw, 60px) !important; }
+  .memory-grid .mem-back { font-size: clamp(30px, 3.4vw, 48px) !important; }
+}
