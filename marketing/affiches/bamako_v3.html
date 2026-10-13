@@ -1,0 +1,77 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+/* Couleurs Mokalibo : soleil, orange, bleu, vert, rose, violet ; texte bleu nuit */
+:root{--sun:#FFD23F;--orange:#FF7A00;--blue:#1E88E5;--green:#2EAD67;--pink:#EC4F8C;--purple:#7E57C2;--night:#16233F}
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:794px;height:1123px}
+body{background:var(--sun);color:var(--night);font-family:Nunito,sans-serif;position:relative;overflow:hidden}
+#deco{position:absolute;inset:0}
+.logo{position:absolute;left:50%;top:40px;transform:translateX(-50%);background:#fff;border-radius:999px;padding:6px 30px 12px;font-family:Fredoka;font-weight:700;font-size:44px;box-shadow:0 6px 0 rgba(22,35,63,.12)}
+.logo .a{color:var(--orange)}.logo .b{color:var(--blue)}
+.bubble{position:absolute;left:70px;right:70px;top:142px;background:#fff;border-radius:46px;padding:26px 30px 30px;text-align:center;box-shadow:0 10px 0 rgba(22,35,63,.10)}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-34px;margin-left:-26px;border:26px solid transparent;border-top:36px solid #fff;border-bottom:0}
+.bubble .who{font-size:16px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--pink)}
+.bubble h1{font-family:Fredoka;font-weight:700;font-size:68px;line-height:1.02;margin-top:4px}
+.bubble h1 em{font-style:normal;color:var(--orange)}
+.map{position:absolute;left:0;right:0;top:368px;height:450px;display:flex;justify-content:center}
+.map svg{height:100%;overflow:visible}
+.answer{position:absolute;left:56px;right:56px;top:812px;text-align:center;font-family:Fredoka;font-weight:600;font-size:25px;line-height:1.25}
+.answer b{color:var(--orange);font-weight:700}
+.chips{position:absolute;left:0;right:0;top:886px;display:flex;justify-content:center;gap:10px}
+.chip{border-radius:999px;padding:8px 16px;font-size:15px;font-weight:900;color:#fff}
+.band{position:absolute;left:0;right:0;bottom:0;height:178px;background:var(--blue);display:flex;align-items:center;gap:26px;padding:0 56px;border-radius:44px 44px 0 0}
+#qr{background:#fff;padding:9px;border-radius:16px;flex-shrink:0}
+.cta b{display:block;font-family:Fredoka;font-weight:700;font-size:38px;color:#fff;line-height:1.04}
+.cta .row{display:flex;align-items:center;gap:12px;margin-top:12px}
+.cta .free{background:var(--sun);color:var(--night);border-radius:999px;padding:6px 14px;font-size:16px;font-weight:900}
+.cta .url{font-family:Fredoka;font-size:30px;font-weight:700;color:#fff}
+.credit{position:absolute;right:16px;bottom:5px;font-size:8px;color:#BBDEFB}
+</style></head><body>
+<svg id="deco" viewBox="0 0 794 1123" xmlns="http://www.w3.org/2000/svg"></svg>
+<div class="logo"><span class="a">Moka</span><span class="b">libo</span></div>
+<div class="bubble"><div class="who">La question qui a tout commencé</div><h1>« Papa, c’est où<br>le <em>Mali</em>&nbsp;? »</h1></div>
+<div class="map"><svg id="af" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="answer">Mokalibo raconte aux enfants l’histoire du <b>Mali</b>…<br>et des 194 autres pays du monde !</div>
+<div class="chips"><span class="chip" style="background:var(--pink)">Lu à voix haute</span><span class="chip" style="background:var(--green)">Marche sans internet</span><span class="chip" style="background:var(--purple)">Quiz et jeux</span><span class="chip" style="background:var(--orange)">De 4 à 12 ans</span></div>
+<div class="band">
+  <div id="qr"></div>
+  <div class="cta"><b>Scanne et pars à l’aventure&nbsp;!</b><div class="row"><span class="free">3 chapitres gratuits par jour</span><span class="url">mokalibo.com</span></div></div>
+</div>
+<div class="credit">Carte : @svg-maps/world, CC BY 4.0</div>
+<script>
+const NS = 'http://www.w3.org/2000/svg'
+const el = (parent, tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e }
+// Confettis dessines (ronds, etoiles, vagues) seulement dans les marges, jamais sur le texte
+const deco = document.getElementById('deco')
+const star = (cx, cy, r, fill, rot = 0) => { let d = ''; for (let i = 0; i < 10; i++) { const a = Math.PI / 5 * i - Math.PI / 2; const rr = i % 2 ? r * 0.45 : r; d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ' ' + (cy + rr * Math.sin(a)).toFixed(1) } el(deco, 'path', { d: d + 'Z', fill, transform: `rotate(${rot} ${cx} ${cy})`, 'stroke-linejoin': 'round' }) }
+const wave = (x, y, color, rot = 0) => el(deco, 'path', { d: `M${x} ${y} q 10 -12 20 0 t 20 0 t 20 0`, stroke: color, 'stroke-width': 7, fill: 'none', 'stroke-linecap': 'round', transform: `rotate(${rot} ${x} ${y})` })
+el(deco, 'circle', { cx: 60, cy: 70, r: 26, fill: '#FF7A00' }); el(deco, 'circle', { cx: 735, cy: 92, r: 18, fill: '#EC4F8C' })
+star(118, 118, 20, '#fff', 12); star(690, 40, 16, '#7E57C2', -10); wave(620, 120, '#1E88E5', -8); wave(30, 140, '#2EAD67', 10)
+el(deco, 'circle', { cx: 70, cy: 470, r: 14, fill: '#1E88E5' }); star(110, 560, 24, '#FF7A00', 8); wave(40, 680, '#EC4F8C', -12); el(deco, 'circle', { cx: 120, cy: 740, r: 9, fill: '#7E57C2' })
+el(deco, 'circle', { cx: 720, cy: 450, r: 20, fill: '#2EAD67' }); star(690, 560, 18, '#fff', -14); wave(660, 660, '#FF7A00', 14); el(deco, 'circle', { cx: 740, cy: 745, r: 12, fill: '#EC4F8C' }); star(760, 380, 13, '#1E88E5', 20)
+
+// Carte de l'Afrique : chaque pays d'une couleur gaie, le Mali en orange avec un repere sur Bamako
+const PALETTE = ['#7FC8F8', '#9BE3B4', '#FFB3CF', '#C9B6F2', '#FFE08A', '#8FD9E6']
+fetch('africa.json').then((r) => r.json()).then((locs) => {
+  const svg = document.getElementById('af'), g = el(svg, 'g', {})
+  locs.forEach((l, i) => el(g, 'path', { d: l.d, id: 'c-' + l.id, fill: l.id === 'ml' ? '#FF7A00' : PALETTE[i % PALETTE.length], stroke: '#fff', 'stroke-width': 0.9, 'stroke-linejoin': 'round' }))
+  const bb = g.getBBox(), pad = 6
+  svg.setAttribute('viewBox', `${bb.x - pad} ${bb.y - pad - 8} ${bb.width + pad * 2} ${bb.height + pad * 2 + 8}`)
+  svg.setAttribute('width', ((bb.width + pad * 2) / (bb.height + pad * 2 + 8)) * 450)
+  const ml = document.getElementById('c-ml').getBBox()
+  const bx = ml.x + ml.width * 0.30, by = ml.y + ml.height * 0.86
+  // Repere (goutte) sur Bamako
+  const s = 7
+  el(g, 'path', { d: `M${bx} ${by} C ${bx - s * 0.2} ${by - s * 0.6}, ${bx - s} ${by - s * 1.1}, ${bx - s} ${by - s * 1.7} A ${s} ${s} 0 1 1 ${bx + s} ${by - s * 1.7} C ${bx + s} ${by - s * 1.1}, ${bx + s * 0.2} ${by - s * 0.6}, ${bx} ${by} Z`, fill: '#EC4F8C', stroke: '#fff', 'stroke-width': 1.2 })
+  el(g, 'circle', { cx: bx, cy: by - s * 1.7, r: s * 0.38, fill: '#fff' })
+  const t = el(g, 'text', { x: bx - s - 3, y: by - s * 1.2, 'font-family': 'Fredoka', 'font-weight': 700, 'font-size': 6.2, fill: '#16233F', 'text-anchor': 'end', stroke: '#FFD23F', 'stroke-width': 2.4, 'paint-order': 'stroke', 'stroke-linejoin': 'round' }); t.textContent = 'Bamako'
+  const m = el(g, 'text', { x: ml.x + ml.width * 0.56, y: ml.y + ml.height * 0.42, 'font-family': 'Fredoka', 'font-weight': 700, 'font-size': 7.5, fill: '#fff', 'text-anchor': 'middle' }); m.textContent = 'MALI'
+  window.mapReady = true
+})
+new QRCode(document.getElementById('qr'), { text: 'https://mokalibo.com/?utm_source=affiche&utm_medium=bamako', width: 142, height: 142, colorDark: '#16233F', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H })
+window.ready = async () => { await document.fonts.ready; for (let i = 0; i < 50 && !window.mapReady; i++) await new Promise((r) => setTimeout(r, 100)) }
+</script>
+</body></html>

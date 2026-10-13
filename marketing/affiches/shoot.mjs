@@ -6,7 +6,7 @@ const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.
 const p = await b.newPage()
 // 1. Image tres haute definition (A4 a ~300 dpi)
 await p.setViewport({ width: 794, height: 1123, deviceScaleFactor: 3.125 })
-await p.goto(`file://${dir}/bamako_v2.html`, { waitUntil: 'networkidle0' })
+await p.goto(`file://${dir}/bamako_v3.html`, { waitUntil: 'networkidle0' })
 await p.evaluate(() => window.ready())
 await new Promise((r) => setTimeout(r, 700))
 const png = path.join(dir, 'affiche_mokalibo_bamako.png')
