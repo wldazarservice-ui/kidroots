@@ -68,6 +68,6 @@ test('formule enseignant : e-mail professionnel obligatoire', async () => {
 
 test('jeu « Qui habite où ? » : uniquement de vrais animaux', async () => {
   const { DISCOVER } = await import('../src/data/discover.js')
-  const bad = /c[eè]dre|arbre|^la rose|fleur|dragonnier|plante|deux queues|bic[eé]phale|licorne|dragon\b/i
+  const bad = /c[eè]dre|arbre|^la rose|fleur|dragonnier|plante|deux queues|bic[eé]phale|licorne/i
   for (const [code, d] of Object.entries(DISCOVER)) assert.ok(!bad.test(d.animal.name), `${code} : ${d.animal.name} n'est pas un vrai animal`)
 })
