@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="../../video/noto-emoji.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden}
+body{font-family:Nunito,sans-serif;color:#1A2A4F;position:relative}
+.e{font-family:'Noto Color Emoji';line-height:1}
+.logo{position:absolute;left:50%;top:150px;transform:translateX(-50%);background:#fff;border-radius:999px;padding:8px 40px 14px;font-family:Fredoka;font-weight:700;font-size:58px;box-shadow:0 12px 30px rgba(0,0,0,.15)}
+.logo .a{color:#FF7A00}.logo .b{color:#1E88E5}
+.kick{position:absolute;left:0;right:0;top:300px;text-align:center;font-weight:900;font-size:40px;color:#fff;letter-spacing:1px;text-shadow:0 4px 14px rgba(0,0,0,.2)}
+h1{position:absolute;left:70px;right:70px;top:370px;text-align:center;font-family:Fredoka;font-weight:700;font-size:80px;line-height:1.06;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.25)}
+.phone{position:absolute;left:50%;top:720px;width:440px;height:900px;margin-left:-220px;border-radius:62px;background:#111318;padding:13px;box-shadow:0 40px 80px rgba(0,0,0,.35);transform:rotate(-3deg)}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:50px}
+.opts{position:absolute;left:110px;right:110px;top:760px;display:flex;flex-direction:column;gap:30px}
+.opt{background:#fff;border-radius:34px;padding:34px 40px;font-size:58px;font-weight:900;box-shadow:0 10px 0 rgba(0,0,0,.12)}
+.list{position:absolute;left:110px;right:110px;top:740px;display:flex;flex-direction:column;gap:26px}
+.li{background:rgba(255,255,255,.95);border-radius:30px;padding:28px 34px;font-size:46px;font-weight:900;display:flex;gap:22px;align-items:center}
+.big{position:absolute;left:0;right:0;top:760px;text-align:center;font-size:300px}
+.sticker{position:absolute;left:0;right:0;top:1640px;text-align:center;color:#fff;font-weight:900;font-size:46px;text-shadow:0 4px 14px rgba(0,0,0,.25)}
+.f{position:absolute;font-size:110px}
+</style></head><body><div id="root"></div>
+<script>
+const q = new URLSearchParams(location.search), s = +q.get('s'), lang = q.get('lang') || 'fr'
+const shot = (n) => `../../video/shots/${lang}/${n}.png`
+const STICK = { fr: '👇 Touche le lien pour essayer', de: '👇 Tippe auf den Link zum Testen' }
+const D = {
+ fr: [
+  { bg: 'linear-gradient(160deg,#FF9A1F,#FF6F00 55%,#1E88E5)', kick: '🌍 QUESTION DU JOUR', h: 'Ton enfant connaît combien de pays&nbsp;?', shot: 'map', f: ['🇯🇵', '🇧🇷', '🇪🇬', '🇨🇦'] },
+  { bg: 'linear-gradient(160deg,#E53935,#B71C1C)', kick: '🇯🇵 LE SAVAIS-TU ?', h: 'Au Japon, «&nbsp;gohan&nbsp;» veut dire repas… et riz cuit&nbsp;!', shot: 'card1_open' },
+  { bg: 'linear-gradient(160deg,#43C27A,#1E88E5)', kick: '🎯 QUIZ', h: 'Quelle est la capitale de l’Australie&nbsp;?', opts: ['🅰️ Sydney', '🅱️ Canberra', '🅲️ Melbourne'], note: 'Réponse demain ! 👀' },
+  { bg: 'linear-gradient(160deg,#7E57C2,#1E88E5)', kick: '👨‍👩‍👧 POUR LES PARENTS', h: 'Un écran utile, sans mauvaise surprise', list: [['🚫', 'Aucune publicité'], ['🔒', 'Aucun traceur, RGPD'], ['🔊', 'Tout est lu à voix haute'], ['⏱️', 'Temps d’écran réglable'], ['👧', 'Jusqu’à 5 enfants']] },
+  { bg: 'linear-gradient(160deg,#FFB300,#FF6F00)', kick: '🔊 IL NE SAIT PAS ENCORE LIRE ?', h: 'Pas grave&nbsp;: Mokalibo lui raconte tout&nbsp;!', shot: 'levels' },
+  { bg: 'linear-gradient(160deg,#26A69A,#00695C)', kick: '🛂 SON PASSEPORT', h: 'Un tampon pour chaque pays découvert', shot: 'passport' },
+  { bg: 'linear-gradient(160deg,#FF7A00,#E91E63)', kick: '🎁 OFFERT', h: '3 jours gratuits pour toute la famille', shot: 'games', f: ['⭐', '🎉'] },
+ ],
+ de: [
+  { bg: 'linear-gradient(160deg,#FF9A1F,#FF6F00 55%,#1E88E5)', kick: '🌍 FRAGE DES TAGES', h: 'Wie viele Länder kennt dein Kind?', shot: 'map', f: ['🇯🇵', '🇧🇷', '🇪🇬', '🇨🇦'] },
+  { bg: 'linear-gradient(160deg,#E53935,#B71C1C)', kick: '🇯🇵 WUSSTEST DU?', h: 'In Japan heißt „Gohan“ Mahlzeit… und gekochter Reis!', shot: 'card1_open' },
+  { bg: 'linear-gradient(160deg,#43C27A,#1E88E5)', kick: '🎯 QUIZ', h: 'Was ist die Hauptstadt von Australien?', opts: ['🅰️ Sydney', '🅱️ Canberra', '🅲️ Melbourne'], note: 'Auflösung morgen! 👀' },
+  { bg: 'linear-gradient(160deg,#7E57C2,#1E88E5)', kick: '👨‍👩‍👧 FÜR ELTERN', h: 'Bildschirmzeit, die sich lohnt', list: [['🚫', 'Keine Werbung'], ['🔒', 'Kein Tracking, DSGVO'], ['🔊', 'Alles wird vorgelesen'], ['⏱️', 'Bildschirmzeit einstellbar'], ['👧', 'Bis zu 5 Kinder']] },
+  { bg: 'linear-gradient(160deg,#FFB300,#FF6F00)', kick: '🔊 KANN NOCH NICHT LESEN?', h: 'Kein Problem: Mokalibo liest alles vor!', shot: 'levels' },
+  { bg: 'linear-gradient(160deg,#26A69A,#00695C)', kick: '🛂 SEIN REISEPASS', h: 'Ein Stempel für jedes entdeckte Land', shot: 'passport' },
+  { bg: 'linear-gradient(160deg,#FF7A00,#E91E63)', kick: '🎁 GESCHENKT', h: '3 Tage gratis für die ganze Familie', shot: 'games', f: ['⭐', '🎉'] },
+ ],
+}
+const d = D[lang][s]
+document.body.style.background = d.bg
+let h = `<div class="logo"><span class="a">Moka</span><span class="b">libo</span></div><div class="kick">${d.kick}</div><h1>${d.h}</h1>`
+if (d.shot) h += `<div class="phone"><img src="${shot(d.shot)}"></div>`
+if (d.opts) h += `<div class="opts">${d.opts.map((o) => `<div class="opt">${o}</div>`).join('')}<div style="text-align:center;color:#fff;font-size:52px;font-weight:900;margin-top:20px">${d.note}</div></div>`
+if (d.list) h += `<div class="list">${d.list.map(([i, t]) => `<div class="li"><span class="e" style="font-size:56px">${i}</span>${t}</div>`).join('')}</div>`
+const pos = [[70, 760], [880, 900], [80, 1350], [900, 1420]]
+;(d.f || []).forEach((f, i) => { h += `<span class="f e" style="left:${pos[i][0]}px;top:${pos[i][1]}px">${f}</span>` })
+h += `<div class="sticker">${STICK[lang]}</div>`
+document.getElementById('root').innerHTML = h
+window.ready = async () => { await document.fonts.ready; await document.fonts.load('80px "Noto Color Emoji"', document.body.innerText); await Promise.all([...document.images].map((i) => i.decode().catch(() => {}))); return true }
+</script></body></html>
