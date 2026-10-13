@@ -17,7 +17,7 @@ const GIFT_TXT = {
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode, fromSocial } from '../track'
-import DemoStory from './DemoStory'
+import DemoStory, { playDemo } from './DemoStory'
 import { REVIEWS } from '../data/reviews'
 import { t } from '../i18n'
 import { openSupport } from '../support'
@@ -605,7 +605,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
             <p style={{ fontSize: 17, fontWeight: 700, color: '#37474F', lineHeight: 1.55, margin: '0 0 20px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
-              <button className="btn-kid soft" onClick={() => { track('demo_click'); document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
+              <button className="btn-kid soft" onClick={() => { track('demo_click'); playDemo() }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
             </div>
             {/* Ce qui est gratuit et ce qui est payant, dit clairement */}
             <div style={{ marginTop: 14, background: 'rgba(255,255,255,0.88)', borderRadius: 18, padding: '10px 14px', display: 'grid', gap: 4, fontSize: 14, fontWeight: 800, color: '#37474F', lineHeight: 1.45 }}>

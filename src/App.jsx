@@ -432,6 +432,7 @@ export default function App() {
       const daily = { date: todayKey(), ids: [...todayIds(activeChild), ch.id] }
       patchChild({ daily }, () => saveChildDaily(user.uid, activeChild.id, daily))
     }
+    if (!Object.keys(progress.done || {}).length) track('first_story', { once: true })
     setChapterIdx(idx)
     setStep('intro')
     setQuizScore(0)
@@ -468,8 +469,18 @@ export default function App() {
     signOut()
   }
 
+  // Premiere minute : un tap sur un drapeau de l'accueil ouvre directement le 1er chapitre du pays (une fois charge)
+  const [autoStart, setAutoStart] = useState(null)
+  useEffect(() => {
+    if (!autoStart || autoStart !== countryCode || screen !== 'country' || !worldReady || (needsExpert && !expertReady)) return
+    if (!country?.chapters?.[0]?.cards?.[0]) return
+    setAutoStart(null)
+    openChapter(0)
+  }) // eslint-disable-line react-hooks/exhaustive-deps
+
   const nav = {
     goHome: () => setScreen('home'),
+    goFirstStory: (code) => { nav.goCountry(code); setAutoStart(code) },
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
     goCountry: (code) => {
       if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
@@ -486,6 +497,7 @@ export default function App() {
     startCards: () => setStep('cards'),
     startQuiz: () => setStep('quiz'),
     finishChapter: (score) => {
+      if (!Object.keys(progress.done || {}).length) track('first_story_done', { once: true })
       const xp = chapter.cards.length * 20 + chapter.quiz.length * 30
       // Pays terminé ? => nouveau tampon dans le passeport
       const before = countryState(progress, countryCode).stamp

@@ -173,6 +173,12 @@ function pickJourney(progress, difficulty, childId) {
   return Object.keys(COUNTRIES).find((c) => (COUNTRIES[c]?.chapters || []).some((ch) => isDone(progress, ch.id, difficulty))) || null
 }
 
+// Premiers pays proposes selon la langue (des histoires refaites, longues et datees)
+const FIRST_PICKS = {
+  fr: ['FR', 'JP', 'EG', 'BR'], de: ['DE', 'JP', 'EG', 'BR'], en: ['GB', 'JP', 'EG', 'US'],
+  pt: ['BR', 'JP', 'EG', 'FR'], ar: ['EG', 'MA', 'JP', 'FR'], bm: ['ML', 'SN', 'JP', 'EG'],
+}
+
 function Destination({ lang, nav, progress, difficulty, childId }) {
   const code = pickJourney(progress, difficulty, childId)
   const c = code && COUNTRIES[code]
@@ -187,8 +193,18 @@ function Destination({ lang, nav, progress, difficulty, childId }) {
         <div className="dest-body">
           <div className="dest-name">{t(lang, 'trip_first')}</div>
           <div className="dest-tag">{t(lang, 'trip_first_sub')}</div>
-          <button className="btn-kid soft play-btn shine" onClick={() => nav.goRegions()}
-            style={{ marginTop: 16, width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '17px 20px', fontSize: 21, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.4)' }}>
+          {/* Un seul tap : le drapeau ouvre directement la 1re histoire du pays */}
+          <div className="first-flags">
+            {(FIRST_PICKS[lang] || FIRST_PICKS.fr).filter((k) => COUNTRIES[k]).map((k) => (
+              <button key={k} type="button" className="btn-kid soft first-flag" onClick={() => nav.goFirstStory(k)} style={{ '--c': COUNTRIES[k].color }}>
+                <span className="first-flag-emoji">{COUNTRIES[k].flag}</span>
+                <span className="first-flag-name">{countryName(k, lang)}</span>
+                <span className="first-flag-go">▶</span>
+              </button>
+            ))}
+          </div>
+          <button type="button" onClick={() => nav.goRegions()}
+            style={{ marginTop: 12, background: 'none', border: 'none', color: '#1565C0', fontFamily: 'inherit', fontWeight: 900, fontSize: 15, cursor: 'pointer', textDecoration: 'underline' }}>
             🧭 {t(lang, 'trip_pick')}
           </button>
         </div>
