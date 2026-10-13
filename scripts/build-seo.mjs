@@ -169,7 +169,34 @@ for (const code of codes) {
 fs.mkdirSync(path.join(OUT, 'histoire'), { recursive: true })
 fs.writeFileSync(path.join(OUT, 'histoire', 'index.html'), indexPage())
 
-const urls = [`${SITE}/`, `${SITE}/histoire/`, ...pages, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
+// Accueil traduit : /de/, /en/, /pt/, /ar/ = la meme app, avec titre, description et image d'apercu dans la langue
+// (WhatsApp, Facebook et Google ne lancent pas le JavaScript : ils lisent seulement ces balises)
+const HOME_META = {
+  de: { locale: 'de_DE', title: 'Mokalibo — Die Weltgeschichte, für Kinder erzählt (4-12 Jahre)', desc: 'Wahre Geschichten zum Vorlesen, Quiz und Spiele, um die Geschichte der 195 Länder der Welt zu entdecken. Für Kinder von 4 bis 12 Jahren, ohne Werbung.', ogTitle: 'Mokalibo — Die Weltgeschichte, für Kinder erzählt', ogDesc: 'Wahre Geschichten, Quiz und eine Stimme, die alles vorliest. Für 4- bis 12-Jährige, ohne Werbung.', alt: 'Mokalibo: die Weltgeschichte für Kinder, auf dem Handy' },
+  en: { locale: 'en_GB', title: 'Mokalibo — World history told for kids (ages 4-12)', desc: 'True stories read aloud, quizzes and games to discover the history of the 195 countries of the world. For children aged 4 to 12, no ads.', ogTitle: 'Mokalibo — World history, told for kids', ogDesc: 'True stories, quizzes and a voice that reads everything aloud. For ages 4-12, no ads.', alt: 'Mokalibo: world history told for kids, on a phone' },
+  pt: { locale: 'pt_PT', title: 'Mokalibo — A história do mundo contada às crianças (4-12 anos)', desc: 'Histórias verdadeiras lidas em voz alta, quizzes e jogos para descobrir a história dos 195 países do mundo. Para crianças dos 4 aos 12 anos, sem anúncios.', ogTitle: 'Mokalibo — A história do mundo contada às crianças', ogDesc: 'Histórias verdadeiras, quizzes e uma voz que lê tudo em voz alta. Dos 4 aos 12 anos, sem anúncios.', alt: 'Mokalibo: a história do mundo para crianças, no telemóvel' },
+  ar: { locale: 'ar_AR', title: 'موكاليبو — تاريخ العالم يُروى للأطفال (4-12 سنة)', desc: 'قصص حقيقية تُقرأ بصوت عالٍ، واختبارات وألعاب لاكتشاف تاريخ 195 دولة. للأطفال من 4 إلى 12 سنة، بدون إعلانات.', ogTitle: 'موكاليبو — تاريخ العالم يُروى للأطفال', ogDesc: 'قصص حقيقية واختبارات وصوت يقرأ كل شيء. من 4 إلى 12 سنة، بدون إعلانات.', alt: 'موكاليبو: تاريخ العالم للأطفال على الهاتف' },
+}
+const baseHome = fs.readFileSync(path.join(OUT, 'index.html'), 'utf8')
+const setMeta = (html, attr, key, value) => html.replace(new RegExp(`(<meta ${attr}="${key}" content=")[^"]*(")`), `$1${esc(value)}$2`)
+for (const [lang, m] of Object.entries(HOME_META)) {
+  let h = baseHome
+    .replace(/<html lang="fr">/, `<html lang="${lang}"${lang === 'ar' ? ' dir="rtl"' : ''}>`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(m.title)}</title>`)
+  h = setMeta(h, 'name', 'description', m.desc)
+  h = setMeta(h, 'property', 'og:title', m.ogTitle)
+  h = setMeta(h, 'property', 'og:description', m.ogDesc)
+  h = setMeta(h, 'property', 'og:image', `${SITE}/og-image-${lang}.jpg`)
+  h = setMeta(h, 'property', 'og:image:alt', m.alt)
+  h = setMeta(h, 'property', 'og:url', `${SITE}/${lang}/`)
+  h = setMeta(h, 'property', 'og:locale', m.locale)
+  h = setMeta(h, 'name', 'twitter:image', `${SITE}/og-image-${lang}.jpg`)
+  h = h.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${SITE}/${lang}/$2`)
+  fs.mkdirSync(path.join(OUT, lang), { recursive: true })
+  fs.writeFileSync(path.join(OUT, lang, 'index.html'), h)
+}
+
+const urls = [`${SITE}/`, ...Object.keys(HOME_META).map((l) => `${SITE}/${l}/`), `${SITE}/histoire/`, ...pages, `${SITE}/impressum.html`, `${SITE}/datenschutz.html`, `${SITE}/agb.html`]
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}

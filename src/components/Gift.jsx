@@ -25,7 +25,7 @@ const TXT = {
     how: 'To activate it: go to mokalibo.com, create a free parent account, then enter the code (or open the card’s link directly).',
     print: '🖨️ Print the card', share: '📤 Send the card', copy: '📋 Copy the code', copied: '✅ Copied!', close: 'Close', pending: 'Confirming payment…',
     card_title: 'A year of journeys around the world!', card_for: 'For', card_from: 'From', card_steps: '1. Open mokalibo.com/?cadeau=CODE  2. Create a free parent account  3. Enjoy 1 year of adventures!',
-    share_text: (c, to) => `🎁 ${to ? to + ', here is' : 'Here is'} your gift: 1 year of Mokalibo, the history of 195 countries told to children! Activate it here: https://mokalibo.com/?cadeau=${c} (code ${c})`,
+    share_text: (c, to) => `🎁 ${to ? to + ', here is' : 'Here is'} your gift: 1 year of Mokalibo, the history of 195 countries told to children! Activate it here: https://mokalibo.com/en/?cadeau=${c} (code ${c})`,
   },
   de: {
     title: 'Mokalibo verschenken', sub: '1 Jahr Familien-Abo: 195 Länder, unbegrenzte Geschichten und Spiele, bis zu 5 Kinder, ohne Werbung. Das perfekte Geschenk für Kinder von 4 bis 12.',
@@ -36,7 +36,7 @@ const TXT = {
     how: 'Zum Aktivieren: mokalibo.com öffnen, ein kostenloses Elternkonto anlegen und den Code eingeben (oder direkt den Link der Karte öffnen).',
     print: '🖨️ Karte drucken', share: '📤 Karte senden', copy: '📋 Code kopieren', copied: '✅ Kopiert!', close: 'Schließen', pending: 'Zahlung wird bestätigt…',
     card_title: 'Ein Jahr Reisen um die Welt!', card_for: 'Für', card_from: 'Von', card_steps: '1. mokalibo.com/?cadeau=CODE öffnen  2. Kostenloses Elternkonto anlegen  3. 1 Jahr Abenteuer!',
-    share_text: (c, to) => `🎁 ${to ? to + ', hier ist' : 'Hier ist'} dein Geschenk: 1 Jahr Mokalibo, die Geschichte aller 195 Länder für Kinder! Hier aktivieren: https://mokalibo.com/?cadeau=${c} (Code ${c})`,
+    share_text: (c, to) => `🎁 ${to ? to + ', hier ist' : 'Hier ist'} dein Geschenk: 1 Jahr Mokalibo, die Geschichte aller 195 Länder für Kinder! Hier aktivieren: https://mokalibo.com/de/?cadeau=${c} (Code ${c})`,
   },
 }
 export const openGift = () => window.dispatchEvent(new CustomEvent('mokalibo:gift'))

@@ -14,12 +14,14 @@ import { LEVELS, LEVEL_KEYS, defaultLevelForAge, levelTotals } from '../levels'
 import { LIMITS } from '../limits'
 import { openSupport } from '../support'
 import NotificationCenter from './NotificationCenter'
+import LangPicker from './LangPicker'
+import { L as tr } from '../i18nParents'
 
 const AVATARS = ['👦', '👧', '👦🏻', '👧🏻', '👦🏽', '👧🏽', '👦🏿', '👧🏿', '🧒', '👶']
 const INK = '#1A2A4F'
 const label = { fontSize: 12, fontWeight: 900, color: '#607D8B', letterSpacing: 1, marginBottom: 8, textTransform: 'uppercase' }
 
-export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, onOpenPro, onOpenOffer, premium, account = {}, lang = 'fr' }) {
+export default function ChildPickerScreen({ changeLang, user, kids, onPick, onCreate, hasLegacy, onMigrate, onManageDevices, onOpenStats, onOpenAdmin, onKidsReset, onLimitSaved, onKidsChange, onOpenPro, onOpenOffer, premium, account = {}, lang = 'fr' }) {
   const full = kids.length >= LIMITS.children
   const [creating, setCreating] = useState(kids.length === 0)
   const [name, setName] = useState('')
@@ -51,7 +53,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
       setName('')
       setCreating(false)
     } catch (err) {
-      setCreateError(err.message === 'child-limit' ? `Maximum ${LIMITS.children} enfants par compte.` : 'La création a échoué. Réessaie.')
+      setCreateError(err.message === 'child-limit' ? tr('Maximum {n} enfants par compte.', { n: LIMITS.children }) : tr('La création a échoué. Réessaie.'))
     } finally {
       setBusy(false)
     }
@@ -60,14 +62,14 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
   // Outils reserves aux parents (affiches dans l'espace parents, apres le calcul)
   const tools = [
     kids.length > 0 && onOpenStats && { icon: '📊', label: t(lang, 'ps_open'), color: '#1565C0', run: onOpenStats },
-    kids.length > 0 && { icon: '⏱️', label: 'Temps d’écran', color: '#6A1B9A', run: () => setTiming(true) },
-    onManageDevices && { icon: '📱', label: 'Mes appareils', color: '#2E7D4F', run: onManageDevices },
+    kids.length > 0 && { icon: '⏱️', label: tr('Temps d’écran'), color: '#6A1B9A', run: () => setTiming(true) },
+    onManageDevices && { icon: '📱', label: tr('Mes appareils'), color: '#2E7D4F', run: onManageDevices },
     kids.length > 0 && { icon: '✈️', label: t(lang, 'trip_btn').replace(/^✈️\s*/, ''), color: '#0D47A1', run: () => setTrip(true) },
     account.refCode && { icon: '🎁', label: t(lang, 'inv_btn'), color: '#E65100', run: () => setInviteOpen(true) },
     { icon: '💝', label: t(lang, 'gift_btn').replace(/^🎁\s*/, ''), color: '#E65100', run: openGift },
     onOpenPro && !premium && { icon: '🏫', label: t(lang, 'picker_pro').replace(/^🏫\s*/, ''), color: '#00695C', run: onOpenPro },
-    kids.length > 0 && { icon: '🔄', label: 'Réinitialiser la progression', color: '#E65100', run: () => setResetting(true) },
-    onOpenAdmin && { icon: '📈', label: 'Tableau de bord Mokalibo', color: '#1A2A4F', run: onOpenAdmin },
+    kids.length > 0 && { icon: '🔄', label: tr('Réinitialiser la progression'), color: '#E65100', run: () => setResetting(true) },
+    onOpenAdmin && { icon: '📈', label: tr('Tableau de bord Mokalibo'), color: '#1A2A4F', run: onOpenAdmin },
   ].filter(Boolean)
 
   return (
@@ -77,11 +79,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
             <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
           </div>
-          <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || 'Compte parent'}</div>
+          <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || tr('Compte parent')}</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {changeLang && <LangPicker lang={lang} onChange={changeLang} compact />}
           <NotificationCenter lang={lang} account={account} onInvite={account.refCode ? () => setInviteOpen(true) : null} onGift={openGift} />
-          <button className="btn-kid" onClick={() => signOut()} aria-label="Déconnexion" title="Déconnexion"
+          <button className="btn-kid" onClick={() => signOut()} aria-label={tr('Déconnexion')} title={tr('Déconnexion')}
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'white', color: '#78909C', width: 40, height: 40, borderRadius: '50%', fontSize: 12, boxShadow: '0 3px 10px rgba(26,42,79,0.12)' }}>
             <LogoutIcon size={14} />
           </button>
@@ -95,22 +98,22 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           ))}
         </div>
         <div className="picker-title" style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 28, color: INK }}>
-          {kids.length === 0 || creating ? 'Crée un profil' : 'Qui joue ?'}
+          {kids.length === 0 || creating ? tr('Crée un profil') : tr('Qui joue ?')}
         </div>
         <div style={{ fontSize: 14, color: '#607D8B', fontWeight: 700, marginTop: 4 }}>
-          Chaque enfant a sa propre progression et son niveau.
+          {tr('Chaque enfant a sa propre progression et son niveau.')}
         </div>
       </div>
 
       {hasLegacy && kids.length === 0 && (
         <div style={{ background: '#FFF8E1', border: '2px solid #FFD54F', borderRadius: 18, padding: '14px 16px', marginBottom: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 900, color: '#E65100', marginBottom: 4 }}>📦 Progression existante détectée</div>
+          <div style={{ fontSize: 14, fontWeight: 900, color: '#E65100', marginBottom: 4 }}>📦 {tr('Progression existante détectée')}</div>
           <div style={{ fontSize: 13, color: '#5D4037', fontWeight: 700, lineHeight: 1.5, marginBottom: 10 }}>
-            Une partie a déjà été jouée sur cet appareil. Elle sera transférée sur le 1er profil que tu crées.
+            {tr('Une partie a déjà été jouée sur cet appareil. Elle sera transférée sur le 1er profil que tu crées.')}
           </div>
           <button className="btn-kid" onClick={onMigrate}
             style={{ background: '#FFC400', color: INK, padding: '10px 16px', fontSize: 13 }}>
-            Activer le transfert ⏬
+            {tr('Activer le transfert')} ⏬
           </button>
         </div>
       )}
@@ -127,7 +130,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 20, fontWeight: 600, color: INK }}>{k.name}</div>
                     <div style={{ fontSize: 12, color: '#78909C', fontWeight: 800 }}>
-                      {k.age} ans · ⭐ {k.xp || 0} XP · Niv. {k.level || 1}
+                      {tr('{n} ans', { n: k.age })} · ⭐ {k.xp || 0} XP · {tr('Niv. {n}', { n: k.level || 1 })}
                     </div>
                     {L && (
                       <div style={{ display: 'inline-block', marginTop: 4, fontSize: 11, fontWeight: 900, color: 'white', background: L.color, borderRadius: 999, padding: '2px 9px' }}>
@@ -144,17 +147,17 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
           <div style={{ maxWidth: 420, margin: '0 auto' }}>
           {full ? (
             <div style={{ background: 'white', borderRadius: 18, padding: '12px 14px', textAlign: 'center', fontSize: 14, fontWeight: 800, color: '#607D8B' }}>
-              🧒 {LIMITS.children} / {LIMITS.children} enfants : le maximum par compte est atteint.
+              🧒 {tr('{n} / {n} enfants : le maximum par compte est atteint.', { n: LIMITS.children })}
             </div>
           ) : (
             <button className="btn-kid soft" onClick={() => setCreating(true)}
               style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 22, boxShadow: '0 6px 0 #E6A100' }}>
-              ➕ Ajouter un enfant <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {LIMITS.children})</span>
+              ➕ {tr('Ajouter un enfant')} <span style={{ fontSize: 13, opacity: 0.7 }}>({kids.length} / {LIMITS.children})</span>
             </button>
           )}
           <button className="btn-kid soft" onClick={() => setAccountOpen(true)}
             style={{ width: '100%', marginTop: 12, background: 'white', color: '#1565C0', padding: '13px', fontSize: 15, borderRadius: 18, boxShadow: '0 4px 12px rgba(30,136,229,0.12)' }}>
-            👨‍👩‍👧 {t(lang, 'parent_space')} : abonnement, statistiques, temps d’écran…
+            👨‍👩‍👧 {tr('Espace parents : abonnement, statistiques, temps d’écran…')}
           </button>
           </div>
         </>
@@ -168,7 +171,7 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
 
       {creating && (
         <form onSubmit={submitNew} style={{ maxWidth: 600, background: 'white', borderRadius: 26, padding: 18, boxShadow: '0 10px 28px rgba(26,42,79,0.10)' }}>
-          <div style={label}>Avatar</div>
+          <div style={label}>{tr('Avatar')}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, marginBottom: 16 }}>
             {AVATARS.map((a) => (
               <button key={a} type="button" onClick={() => setAvatar(a)} aria-pressed={avatar === a}
@@ -178,11 +181,11 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             ))}
           </div>
 
-          <div style={label}>Prénom</div>
+          <div style={label}>{tr('Prénom')}</div>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Lina" maxLength={20}
             style={{ width: '100%', padding: '14px 16px', borderRadius: 16, border: '3px solid #E3EAF2', background: '#FAFBFD', color: INK, fontSize: 17, fontFamily: 'inherit', fontWeight: 800, marginBottom: 16, outline: 'none' }} />
 
-          <div style={label}>Âge</div>
+          <div style={label}>{tr('Âge')}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 5, marginBottom: 18 }}>
             {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((a) => (
               <button key={a} type="button" onClick={() => pickAge(a)} aria-pressed={age === a}
@@ -203,8 +206,8 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
                   style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 18, cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', border: `3px solid ${active ? L.color : '#EEF3F8'}`, background: active ? `${L.color}12` : 'white' }}>
                   <span style={{ fontSize: 30 }}>{L.emoji}</span>
                   <span style={{ flex: 1, minWidth: 0 }}>
-                    <span style={{ display: 'block', fontSize: 15, fontWeight: 900, color: INK }}>{t(lang, `lvl_${k}`)} <span style={{ color: '#90A4AE', fontWeight: 800, fontSize: 12 }}>· {L.ages} ans</span></span>
-                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.stories.toLocaleString('fr-FR')} {t(lang, 'stories_word')} · 🎯 {s.quiz.toLocaleString('fr-FR')} {t(lang, 'questions_word')}</span>
+                    <span style={{ display: 'block', fontSize: 15, fontWeight: 900, color: INK }}>{t(lang, `lvl_${k}`)} <span style={{ color: '#90A4AE', fontWeight: 800, fontSize: 12 }}>· {tr('{n} ans', { n: L.ages })}</span></span>
+                    <span style={{ display: 'block', fontSize: 12, fontWeight: 800, color: L.color }}>📖 {s.stories.toLocaleString()} {t(lang, 'stories_word')} · 🎯 {s.quiz.toLocaleString()} {t(lang, 'questions_word')}</span>
                   </span>
                   <span style={{ width: 22, height: 22, borderRadius: '50%', border: `3px solid ${active ? L.color : '#CFD8DC'}`, background: active ? L.color : 'white', color: 'white', fontSize: 12, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{active ? '✓' : ''}</span>
                 </button>
@@ -218,12 +221,12 @@ export default function ChildPickerScreen({ user, kids, onPick, onCreate, hasLeg
             {kids.length > 0 && (
               <button type="button" className="btn-kid" onClick={() => setCreating(false)}
                 style={{ flex: 1, background: '#EEF3F8', color: '#607D8B', padding: '14px', fontSize: 15 }}>
-                Annuler
+                {tr('Annuler')}
               </button>
             )}
             <button type="submit" className="btn-kid" disabled={busy || !name.trim()}
               style={{ flex: 2, background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 17, borderRadius: 20, boxShadow: '0 5px 0 #E6A100', opacity: busy || !name.trim() ? 0.5 : 1 }}>
-              {busy ? '...' : '✓ Créer le profil'}
+              {busy ? '...' : '✓ ' + tr('Créer le profil')}
             </button>
           </div>
         </form>

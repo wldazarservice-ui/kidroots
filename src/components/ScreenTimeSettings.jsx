@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import ParentGate from './ParentGate'
+import { L } from '../i18nParents'
 import { saveChildScreenLimit } from '../cloud'
 
 const INK = '#1A2A4F'
@@ -24,9 +25,9 @@ export default function ScreenTimeSettings({ user, kids, onClose, onSaved }) {
     <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet green-bg"
         style={{ width: '100%', maxWidth: 420, maxHeight: '94vh', overflowY: 'auto', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif' }}>
-        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>⏱️ Temps d'écran</div>
+        <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>⏱️ {L("Temps d'écran")}</div>
         <div style={{ fontSize: 14, fontWeight: 700, color: '#546E7A', lineHeight: 1.5, margin: '4px 0 14px' }}>
-          Choisis combien de minutes par jour chaque enfant peut utiliser Mokalibo. Quand le temps est écoulé, l'app propose une pause jusqu'au lendemain.
+          {L("Choisis combien de minutes par jour chaque enfant peut utiliser Mokalibo. Quand le temps est écoulé, l'app propose une pause jusqu'au lendemain.")}
         </div>
         {!unlocked ? <ParentGate onPass={() => setUnlocked(true)} /> : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -43,7 +44,7 @@ export default function ScreenTimeSettings({ user, kids, onClose, onSaved }) {
                     return (
                       <button key={m} type="button" onClick={() => set(k.id, m)}
                         style={{ padding: '8px 12px', borderRadius: 999, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontWeight: 900, fontSize: 13, background: on ? '#2E9E5B' : '#EEF3F8', color: on ? 'white' : INK }}>
-                        {m === 0 ? 'Sans limite' : m < 60 ? `${m} min` : `${m / 60} h${m % 60 ? ' 30' : ''}`}
+                        {m === 0 ? L('Sans limite') : m < 60 ? `${m} min` : `${m / 60} h${m % 60 ? ' 30' : ''}`}
                       </button>
                     )
                   })}

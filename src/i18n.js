@@ -1294,9 +1294,9 @@ export const t = (lang, key, vars = {}) => {
 const LANG_KEY = 'kidroots_lang'
 // Langue enregistree, sinon celle du navigateur (de / en), sinon le francais
 export const getLang = () => {
-  // Lien avec ?lang=de (pubs, Instagram, Google) : prioritaire et retenu
+  // Lien avec ?lang=de ou /de/ (partages, pubs, Instagram, Google) : prioritaire et retenu
   try {
-    const q = new URLSearchParams(window.location.search).get('lang')
+    const q = new URLSearchParams(window.location.search).get('lang') || (window.location.pathname.match(/^\/(de|en|pt|ar)(\/|$)/) || [])[1]
     if (isLang(q)) { localStorage.setItem(LANG_KEY, q); return q }
   } catch {}
   try {
@@ -1308,4 +1308,11 @@ export const getLang = () => {
 }
 export const setLang = (lang) => {
   try { localStorage.setItem(LANG_KEY, lang) } catch {}
+  // Arrive par un lien /de/ puis change de langue : on quitte /de/ pour que le choix tienne au rechargement
+  try { if (/^\/(de|en|pt|ar)(\/|$)/.test(location.pathname)) history.replaceState(history.state, '', '/' + location.search + location.hash) } catch {}
 }
+
+// Adresse du site dans la langue choisie : mokalibo.com/de/… a un apercu (WhatsApp, Facebook…) traduit.
+// Les pages /de/, /en/, /pt/, /ar/ sont generees par scripts/build-seo.mjs.
+export const SITE_LANGS = ['de', 'en', 'pt', 'ar']
+export const siteUrl = (lang, query = '') => `https://mokalibo.com/${SITE_LANGS.includes(lang) ? lang + '/' : ''}${query}`

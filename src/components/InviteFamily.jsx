@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { t } from '../i18n'
+import { t, siteUrl } from '../i18n'
 
 const INK = '#1A2A4F'
 
-// Parrainage : le parent partage son lien mokalibo.com/?ami=CODE
+// Parrainage : le parent partage son lien mokalibo.com/(langue/)?ami=CODE
 export default function InviteFamily({ lang, account, onClose }) {
   const [copied, setCopied] = useState(false)
-  const link = `https://mokalibo.com/?ami=${account.refCode}`
+  const link = siteUrl(lang, `?ami=${account.refCode}`)
   const msg = `${t(lang, 'inv_msg')} ${link}`
   const share = async () => {
     try {

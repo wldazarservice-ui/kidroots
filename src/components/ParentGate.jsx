@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { L } from '../i18nParents'
 
 // Une fois le calcul reussi, les autres outils parents ne le redemandent pas pendant 10 minutes
 // (sauf `always` : paiement, suppression du compte, deblocage du temps d'ecran).
@@ -10,7 +11,7 @@ const rememberPass = () => { try { sessionStorage.setItem(PASS_KEY, String(Date.
 const rnd = () => 3 + Math.floor(Math.random() * 7) // 3..9
 
 // Controle parental : une multiplication a resoudre avant une action reservee aux adultes
-export default function ParentGate({ onPass, always = false, title = 'Demande à un parent 🔐', question = (a, b) => `Combien font ${a} × ${b} ?`, okLabel = 'Valider', errorLabel = "Ce n'est pas ça. Demande à un adulte !" }) {
+export default function ParentGate({ onPass, always = false, title = L('Demande à un parent 🔐'), question = (a, b) => L('Combien font {a} × {b} ?', { a, b }), okLabel = L('Valider'), errorLabel = L("Ce n'est pas ça. Demande à un adulte !") }) {
   const [gate, setGate] = useState(() => ({ a: rnd(), b: rnd() }))
   const [answer, setAnswer] = useState('')
   const [error, setError] = useState(false)

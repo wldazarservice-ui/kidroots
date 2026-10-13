@@ -17,6 +17,7 @@ h1{position:absolute;left:64px;top:182px;width:640px;font-family:Fredoka;font-we
 .phone{position:absolute;right:86px;top:40px;width:300px;height:620px;border-radius:44px;background:#111318;padding:10px;box-shadow:0 30px 60px rgba(26,42,79,.35);transform:rotate(4deg)}
 .phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:36px}
 .f{position:absolute;font-size:58px}
+[dir=rtl] h1,[dir=rtl] .sub{direction:rtl;text-align:right;font-family:'Geeza Pro','Noto Sans Arabic',sans-serif}
 </style></head><body>
 <div class="logo"><span class="a">Moka</span><span class="b">libo</span></div>
 <h1>L'histoire du monde, racontée aux enfants</h1>
@@ -27,4 +28,21 @@ h1{position:absolute;left:64px;top:182px;width:640px;font-family:Fredoka;font-we
 <span class="f e" style="right:410px;top:385px">🇪🇬</span>
 <span class="f e" style="right:20px;top:270px">🇧🇷</span>
 <span class="f e" style="right:30px;top:520px">🌍</span>
+<script>
+// Textes par langue : og.html?lang=de (lance par shoot.mjs pour chaque langue)
+const L = {
+  fr: ["L'histoire du monde, racontée aux enfants", "Histoires vraies lues à voix haute, quiz et jeux. 195 pays, de 4 à 12 ans.", ["Essai gratuit", "Sans pub", "Lu à voix haute"], 'fr'],
+  de: ["Die Weltgeschichte, für Kinder erzählt", "Wahre Geschichten zum Vorlesen, Quiz und Spiele. 195 Länder, für 4 bis 12 Jahre.", ["Gratis testen", "Ohne Werbung", "Wird vorgelesen"], 'de'],
+  en: ["World history, told for kids", "True stories read aloud, quizzes and games. 195 countries, ages 4 to 12.", ["Free trial", "No ads", "Read aloud"], 'en'],
+  pt: ["A história do mundo contada às crianças", "Histórias verdadeiras lidas em voz alta, quizzes e jogos. 195 países, dos 4 aos 12 anos.", ["Teste grátis", "Sem anúncios", "Lido em voz alta"], 'en'],
+  ar: ["تاريخ العالم يُروى للأطفال", "قصص حقيقية تُقرأ بصوت عالٍ، مع اختبارات وألعاب. 195 دولة، من 4 إلى 12 سنة.", ["تجربة مجانية", "بدون إعلانات", "قراءة بصوت عالٍ"], 'en'],
+}
+const lang = new URLSearchParams(location.search).get('lang') || 'fr'
+const [h, sub, chips, shot] = L[lang] || L.fr
+document.querySelector('h1').textContent = h
+document.querySelector('.sub').textContent = sub
+document.querySelectorAll('.chip').forEach((c, i) => { c.lastChild.textContent = ' ' + chips[i] })
+document.querySelector('.phone img').src = `../video/shots/${shot}/country.png`
+if (lang === 'ar') document.body.dir = 'rtl'
+</script>
 </body></html>

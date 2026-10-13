@@ -2,6 +2,7 @@ import { isMusicOn, setMusicOn, onMusicChange, getMusicVolume, setMusicVolume } 
 import { openSupport } from '../support'
 import { useEffect, useState } from 'react'
 import ParentGate from './ParentGate'
+import { L } from '../i18nParents'
 import SubscriptionCard from './SubscriptionCard'
 import { changePassword, changeEmail, hasPassword, isGoogleAccount, resetPassword, verifyEmail } from '../auth'
 import { updateChildProfile, deleteChild, setEmailOptIn, getEmailOptIn } from '../cloud'
@@ -14,14 +15,14 @@ const input = { width: '100%', padding: '12px 14px', borderRadius: 14, border: '
 const btn = (bg, color) => ({ width: '100%', background: bg, color, padding: '12px', fontSize: 15, borderRadius: 16, border: 'none', fontFamily: 'inherit', fontWeight: 900, cursor: 'pointer' })
 
 function errText(code = '') {
-  if (code.includes('wrong-password') || code.includes('invalid-credential')) return 'Le mot de passe actuel est incorrect.'
-  if (code.includes('weak-password')) return 'Le nouveau mot de passe doit contenir au moins 6 caractères.'
-  if (code.includes('email-already-in-use')) return 'Cette adresse e-mail est déjà utilisée par un autre compte.'
-  if (code.includes('invalid-email')) return 'Adresse e-mail invalide.'
-  if (code.includes('too-many-requests')) return 'Trop de tentatives. Réessaie dans quelques minutes.'
-  if (code.includes('requires-recent-login')) return 'Pour ta sécurité, reconnecte-toi puis réessaie.'
-  if (code.includes('network')) return 'Pas de connexion internet.'
-  return 'Une erreur est survenue. Réessaie.'
+  if (code.includes('wrong-password') || code.includes('invalid-credential')) return L('Le mot de passe actuel est incorrect.')
+  if (code.includes('weak-password')) return L('Le nouveau mot de passe doit contenir au moins 6 caractères.')
+  if (code.includes('email-already-in-use')) return L('Cette adresse e-mail est déjà utilisée par un autre compte.')
+  if (code.includes('invalid-email')) return L('Adresse e-mail invalide.')
+  if (code.includes('too-many-requests')) return L('Trop de tentatives. Réessaie dans quelques minutes.')
+  if (code.includes('requires-recent-login')) return L('Pour ta sécurité, reconnecte-toi puis réessaie.')
+  if (code.includes('network')) return L('Pas de connexion internet.')
+  return L('Une erreur est survenue. Réessaie.')
 }
 
 // Espace « Mon compte » du parent : e-mail, mot de passe, profils des enfants
@@ -44,18 +45,18 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
 
   const submitPw = (e) => {
     e.preventDefault()
-    if (pw.next.length < 6) return say('pw', false, 'Le nouveau mot de passe doit contenir au moins 6 caractères.')
-    if (pw.next !== pw.confirm) return say('pw', false, 'Les deux nouveaux mots de passe ne sont pas identiques.')
-    run('pw', async () => { await changePassword(user, pw.cur, pw.next); setPw({ cur: '', next: '', confirm: '' }) }, '✅ Mot de passe modifié.')
+    if (pw.next.length < 6) return say('pw', false, L('Le nouveau mot de passe doit contenir au moins 6 caractères.'))
+    if (pw.next !== pw.confirm) return say('pw', false, L('Les deux nouveaux mots de passe ne sont pas identiques.'))
+    run('pw', async () => { await changePassword(user, pw.cur, pw.next); setPw({ cur: '', next: '', confirm: '' }) }, L('✅ Mot de passe modifié.'))
   }
   const submitMail = (e) => {
     e.preventDefault()
-    if (!mail.next.includes('@')) return say('mail', false, 'Adresse e-mail invalide.')
+    if (!mail.next.includes('@')) return say('mail', false, L('Adresse e-mail invalide.'))
     run('mail', async () => { await changeEmail(user, mail.cur, mail.next.trim()); setMail({ next: '', cur: '' }) },
-      `📩 Un lien de confirmation a été envoyé à ${mail.next.trim()}. Ton adresse changera dès que tu auras cliqué dessus.`)
+      L('📩 Un lien de confirmation a été envoyé à {email}. Ton adresse changera dès que tu auras cliqué dessus.', { email: mail.next.trim() }))
   }
-  const sendReset = () => run('pw', () => resetPassword(user.email), `📩 Un lien pour choisir un nouveau mot de passe a été envoyé à ${user.email}.`)
-  const sendVerify = () => run('verify', () => verifyEmail(user), `📩 E-mail de vérification envoyé à ${user.email}.`)
+  const sendReset = () => run('pw', () => resetPassword(user.email), L('📩 Un lien pour choisir un nouveau mot de passe a été envoyé à {email}.', { email: user.email }))
+  const sendVerify = () => run('verify', () => verifyEmail(user), L('📩 E-mail de vérification envoyé à {email}.', { email: user.email }))
 
   const startEdit = (k) => { setEditing(k.id); setDraft({ name: k.name || '', age: k.age || 5, avatar: k.avatar || '🧒' }); setMsg(null) }
   const saveKid = (k) => run('kid-' + k.id, async () => {
@@ -63,12 +64,12 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
     await updateChildProfile(user.uid, k.id, data)
     onKidsChange?.((all) => all.map((x) => (x.id === k.id ? { ...x, ...data } : x)))
     setEditing(null)
-  }, '✅ Profil enregistré.')
+  }, L('✅ Profil enregistré.'))
   const removeKid = (k) => run('kid-' + k.id, async () => {
     await deleteChild(user.uid, k.id)
     onKidsChange?.((all) => all.filter((x) => x.id !== k.id))
     setConfirmDel(null)
-  }, `Profil de ${k.name} supprimé.`)
+  }, L('Profil de {name} supprimé.', { name: k.name }))
 
   const note = (zone) => msg && msg.zone === zone && (
     <div style={{ fontSize: 13, fontWeight: 800, color: msg.ok ? '#2E7D4F' : '#C62828', margin: '2px 0 10px', lineHeight: 1.45 }}>{msg.text}</div>
@@ -79,10 +80,10 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
       <div onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet"
         style={{ width: '100%', maxWidth: 440, maxHeight: '94vh', overflowY: 'auto', overflowX: 'hidden', borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif', background: '#F4F7FB' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
-          <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>👨‍👩‍👧 Espace parents</div>
-          <button onClick={onClose} aria-label="Fermer" style={{ background: '#E3EAF2', color: '#546E7A', width: 38, height: 38, borderRadius: '50%', border: 'none', fontSize: 16, cursor: 'pointer' }}>✕</button>
+          <div style={{ flex: 1, fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: INK }}>👨‍👩‍👧 {L('Espace parents')}</div>
+          <button onClick={onClose} aria-label={L('Fermer')} style={{ background: '#E3EAF2', color: '#546E7A', width: 38, height: 38, borderRadius: '50%', border: 'none', fontSize: 16, cursor: 'pointer' }}>✕</button>
         </div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#546E7A', marginBottom: 14 }}>Espace réservé aux parents.</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#546E7A', marginBottom: 14 }}>{L('Espace réservé aux parents.')}</div>
 
         {!unlocked ? <ParentGate onPass={() => setUnlocked(true)} /> : (
           <>
@@ -91,7 +92,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
             {/* Outils des parents : statistiques, temps d'ecran, appareils, voyage, partager… */}
             {tools.length > 0 && (
               <div style={{ ...card }}>
-                <div style={h}>🧰 Outils</div>
+                <div style={h}>🧰 {L('Outils')}</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8 }}>
                   {tools.map((x) => (
                     <button key={x.label} type="button" onClick={() => x.run()}
@@ -105,7 +106,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
 
             <button type="button" onClick={() => openSupport({ where: 'account' })}
               style={{ ...card, width: '100%', textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit', border: 'none', fontSize: 15, fontWeight: 900, color: '#1565C0' }}>
-              💬 Aide et contact : une question, un souci ? Écris-nous
+              💬 {L('Aide et contact : une question, un souci ? Écris-nous')}
             </button>
 
             {/* Accord e-mails */}
@@ -116,20 +117,20 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
 
             {/* E-mail du compte */}
             <div style={card}>
-              <div style={h}>📧 Adresse e-mail</div>
+              <div style={h}>📧 {L('Adresse e-mail')}</div>
               <div style={{ fontSize: 15, fontWeight: 900, color: INK, wordBreak: 'break-all' }}>{user.email}</div>
               <div style={{ fontSize: 13, fontWeight: 800, marginTop: 4, color: user.emailVerified ? '#2E7D4F' : '#E65100' }}>
-                {user.emailVerified ? '✅ Adresse vérifiée' : '⚠️ Adresse pas encore vérifiée'}
+                {user.emailVerified ? '✅ ' + L('Adresse vérifiée') : '⚠️ ' + L('Adresse pas encore vérifiée')}
               </div>
               {!user.emailVerified && (
                 <button type="button" onClick={sendVerify} disabled={busy === 'verify'} style={{ ...btn('#FFF3E0', '#E65100'), marginTop: 10 }}>
-                  {busy === 'verify' ? '…' : "Renvoyer l'e-mail de vérification"}
+                  {busy === 'verify' ? '…' : L("Renvoyer l'e-mail de vérification")}
                 </button>
               )}
               {note('verify')}
               {isGoogleAccount(user) && !pwAccount && (
                 <div style={{ fontSize: 13, fontWeight: 700, color: '#607D8B', marginTop: 10, lineHeight: 1.5 }}>
-                  Tu te connectes avec Google : ton adresse et ton mot de passe se gèrent dans ton compte Google.
+                  {L('Tu te connectes avec Google : ton adresse et ton mot de passe se gèrent dans ton compte Google.')}
                 </div>
               )}
             </div>
@@ -138,32 +139,32 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
               <>
                 {/* Mot de passe */}
                 <form onSubmit={submitPw} style={card}>
-                  <div style={h}>🔑 Changer le mot de passe</div>
-                  <input style={input} type="password" autoComplete="current-password" placeholder="Mot de passe actuel" value={pw.cur} onChange={(e) => setPw({ ...pw, cur: e.target.value })} required />
-                  <input style={input} type="password" autoComplete="new-password" placeholder="Nouveau mot de passe (6 caractères min.)" value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} required />
-                  <input style={input} type="password" autoComplete="new-password" placeholder="Confirmer le nouveau mot de passe" value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} required />
+                  <div style={h}>🔑 {L('Changer le mot de passe')}</div>
+                  <input style={input} type="password" autoComplete="current-password" placeholder={L('Mot de passe actuel')} value={pw.cur} onChange={(e) => setPw({ ...pw, cur: e.target.value })} required />
+                  <input style={input} type="password" autoComplete="new-password" placeholder={L('Nouveau mot de passe (6 caractères min.)')} value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} required />
+                  <input style={input} type="password" autoComplete="new-password" placeholder={L('Confirmer le nouveau mot de passe')} value={pw.confirm} onChange={(e) => setPw({ ...pw, confirm: e.target.value })} required />
                   {note('pw')}
-                  <button type="submit" disabled={busy === 'pw'} style={btn('linear-gradient(180deg,#FFE04D,#FFC400)', INK)}>{busy === 'pw' ? '…' : 'Enregistrer le nouveau mot de passe'}</button>
+                  <button type="submit" disabled={busy === 'pw'} style={btn('linear-gradient(180deg,#FFE04D,#FFC400)', INK)}>{busy === 'pw' ? '…' : L('Enregistrer le nouveau mot de passe')}</button>
                   <button type="button" onClick={sendReset} style={{ background: 'none', border: 'none', color: '#1E88E5', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, textDecoration: 'underline', cursor: 'pointer', marginTop: 10, width: '100%' }}>
-                    Mot de passe actuel oublié ? Recevoir un lien par e-mail
+                    {L('Mot de passe actuel oublié ? Recevoir un lien par e-mail')}
                   </button>
                 </form>
 
                 {/* E-mail */}
                 <form onSubmit={submitMail} style={card}>
-                  <div style={h}>✉️ Changer l'adresse e-mail</div>
-                  <input style={input} type="email" autoComplete="email" placeholder="Nouvelle adresse e-mail" value={mail.next} onChange={(e) => setMail({ ...mail, next: e.target.value })} required />
-                  <input style={input} type="password" autoComplete="current-password" placeholder="Mot de passe actuel" value={mail.cur} onChange={(e) => setMail({ ...mail, cur: e.target.value })} required />
+                  <div style={h}>✉️ {L("Changer l'adresse e-mail")}</div>
+                  <input style={input} type="email" autoComplete="email" placeholder={L('Nouvelle adresse e-mail')} value={mail.next} onChange={(e) => setMail({ ...mail, next: e.target.value })} required />
+                  <input style={input} type="password" autoComplete="current-password" placeholder={L('Mot de passe actuel')} value={mail.cur} onChange={(e) => setMail({ ...mail, cur: e.target.value })} required />
                   {note('mail')}
-                  <button type="submit" disabled={busy === 'mail'} style={btn('#E3F2FD', '#1565C0')}>{busy === 'mail' ? '…' : 'Changer mon adresse e-mail'}</button>
+                  <button type="submit" disabled={busy === 'mail'} style={btn('#E3F2FD', '#1565C0')}>{busy === 'mail' ? '…' : L('Changer mon adresse e-mail')}</button>
                 </form>
               </>
             )}
 
             {/* Profils enfants */}
             <div style={card}>
-              <div style={h}>🧒 Profils des enfants</div>
-              {kids.length === 0 && <div style={{ fontSize: 14, fontWeight: 700, color: '#607D8B' }}>Aucun profil pour l'instant.</div>}
+              <div style={h}>🧒 {L('Profils des enfants')}</div>
+              {kids.length === 0 && <div style={{ fontSize: 14, fontWeight: 700, color: '#607D8B' }}>{L("Aucun profil pour l'instant.")}</div>}
               {kids.map((k) => (
                 <div key={k.id} style={{ borderTop: '1px solid #EEF3F8', padding: '10px 0' }}>
                   {editing !== k.id ? (
@@ -171,9 +172,9 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
                       <span style={{ fontSize: 30 }}>{k.avatar || '🧒'}</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontWeight: 900, color: INK }}>{k.name}</div>
-                        <div style={{ fontSize: 12, fontWeight: 800, color: '#90A4AE' }}>{k.age} ans</div>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#90A4AE' }}>{L('{n} ans', { n: k.age })}</div>
                       </div>
-                      <button onClick={() => startEdit(k)} style={{ background: '#E3F2FD', color: '#1565C0', border: 'none', borderRadius: 12, padding: '8px 12px', fontFamily: 'inherit', fontWeight: 900, cursor: 'pointer' }}>✏️ Modifier</button>
+                      <button onClick={() => startEdit(k)} style={{ background: '#E3F2FD', color: '#1565C0', border: 'none', borderRadius: 12, padding: '8px 12px', fontFamily: 'inherit', fontWeight: 900, cursor: 'pointer' }}>✏️ {L('Modifier')}</button>
                     </div>
                   ) : (
                     <div>
@@ -183,7 +184,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
                             style={{ fontSize: 26, padding: '4px 0', borderRadius: 12, border: draft.avatar === a ? '3px solid #FF9800' : '3px solid #F1F4F8', background: draft.avatar === a ? '#FFF3E0' : '#FAFBFD', cursor: 'pointer' }}>{a}</button>
                         ))}
                       </div>
-                      <input style={input} value={draft.name} maxLength={30} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder="Prénom" />
+                      <input style={input} value={draft.name} maxLength={30} onChange={(e) => setDraft({ ...draft, name: e.target.value })} placeholder={L('Prénom')} />
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 4, marginBottom: 10 }}>
                         {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((a) => (
                           <button key={a} type="button" onClick={() => setDraft({ ...draft, age: a })}
@@ -192,19 +193,19 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
                       </div>
                       {note('kid-' + k.id)}
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => setEditing(null)} style={{ ...btn('#EEF3F8', '#607D8B'), flex: 1 }}>Annuler</button>
-                        <button onClick={() => saveKid(k)} disabled={busy === 'kid-' + k.id} style={{ ...btn('linear-gradient(180deg,#FFE04D,#FFC400)', INK), flex: 2 }}>{busy === 'kid-' + k.id ? '…' : 'Enregistrer'}</button>
+                        <button onClick={() => setEditing(null)} style={{ ...btn('#EEF3F8', '#607D8B'), flex: 1 }}>{L('Annuler')}</button>
+                        <button onClick={() => saveKid(k)} disabled={busy === 'kid-' + k.id} style={{ ...btn('linear-gradient(180deg,#FFE04D,#FFC400)', INK), flex: 2 }}>{busy === 'kid-' + k.id ? '…' : L('Enregistrer')}</button>
                       </div>
                       {confirmDel !== k.id ? (
                         <button onClick={() => setConfirmDel(k.id)} style={{ background: 'none', border: 'none', color: '#C62828', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, textDecoration: 'underline', cursor: 'pointer', marginTop: 10, width: '100%' }}>
-                          Supprimer ce profil
+                          {L('Supprimer ce profil')}
                         </button>
                       ) : (
                         <div style={{ background: '#FFEBEE', borderRadius: 14, padding: 12, marginTop: 10 }}>
-                          <div style={{ fontSize: 13, fontWeight: 800, color: '#C62828', marginBottom: 8 }}>Supprimer le profil de {k.name} ? Sa progression (histoires, passeport, badges) sera perdue définitivement.</div>
+                          <div style={{ fontSize: 13, fontWeight: 800, color: '#C62828', marginBottom: 8 }}>{L('Supprimer le profil de {name} ? Sa progression (histoires, passeport, badges) sera perdue définitivement.', { name: k.name })}</div>
                           <div style={{ display: 'flex', gap: 8 }}>
-                            <button onClick={() => setConfirmDel(null)} style={{ ...btn('white', '#607D8B'), flex: 1 }}>Non</button>
-                            <button onClick={() => removeKid(k)} style={{ ...btn('#C62828', 'white'), flex: 1 }}>Oui, supprimer</button>
+                            <button onClick={() => setConfirmDel(null)} style={{ ...btn('white', '#607D8B'), flex: 1 }}>{L('Non')}</button>
+                            <button onClick={() => removeKid(k)} style={{ ...btn('#C62828', 'white'), flex: 1 }}>{L('Oui, supprimer')}</button>
                           </div>
                         </div>
                       )}
@@ -218,7 +219,7 @@ export default function AccountSettings({ user, kids, onClose, onKidsChange, acc
               <div style={{ textAlign: 'center', marginTop: 6 }}>
                 <button type="button" onClick={() => { onClose(); onDeleteAccount() }}
                   style={{ background: 'none', border: 'none', color: '#90A4AE', fontFamily: 'inherit', fontWeight: 800, fontSize: 13, textDecoration: 'underline', cursor: 'pointer' }}>
-                  Supprimer mon compte
+                  {L('Supprimer mon compte')}
                 </button>
               </div>
             )}
@@ -240,13 +241,13 @@ function MusicPref({ card }) {
     <div style={{ ...card }}>
       <button type="button" data-music-toggle onClick={() => setMusicOn(!on)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', padding: 0 }}>
         <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
-        <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.</span>
+        <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>🎵 {L('Musique de fond dans l’app (sur cet appareil). Elle se baisse toute seule pendant la lecture à voix haute.')}</span>
       </button>
       <div data-music-toggle style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, opacity: on ? 1 : 0.5 }}>
-        <button type="button" aria-label="Baisser le volume" onClick={() => change(v - 0.1)} style={round}>−</button>
-        <input type="range" min="0" max="1" step="0.1" value={v} onChange={(e) => change(parseFloat(e.target.value))} aria-label="Volume de la musique"
+        <button type="button" aria-label={L('Baisser le volume')} onClick={() => change(v - 0.1)} style={round}>−</button>
+        <input type="range" min="0" max="1" step="0.1" value={v} onChange={(e) => change(parseFloat(e.target.value))} aria-label={L('Volume de la musique')}
           style={{ flex: 1, minWidth: 0, accentColor: '#1E88E5', height: 28, cursor: 'pointer' }} />
-        <button type="button" aria-label="Monter le volume" onClick={() => change(v + 0.1)} style={round}>+</button>
+        <button type="button" aria-label={L('Monter le volume')} onClick={() => change(v + 0.1)} style={round}>+</button>
         <span style={{ minWidth: 40, flexShrink: 0, textAlign: 'right', fontSize: 14, fontWeight: 900, color: '#1565C0' }}>{Math.round(v * 100)} %</span>
       </div>
     </div>
@@ -262,7 +263,7 @@ function EmailPrefs({ user, card }) {
   return (
     <button type="button" onClick={toggle} style={{ ...card, width: '100%', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
       <span style={{ fontSize: 22 }}>{on ? '✅' : '⬜'}</span>
-      <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>📧 Recevoir le bilan de la semaine de mes enfants et des conseils par e-mail</span>
+      <span style={{ fontSize: 14, fontWeight: 800, color: '#1A2A4F', lineHeight: 1.45 }}>📧 {L('Recevoir le bilan de la semaine de mes enfants et des conseils par e-mail')}</span>
     </button>
   )
 }

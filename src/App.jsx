@@ -588,6 +588,7 @@ export default function App() {
         onCreate={handleCreateChild}
         hasLegacy={!!legacyToMigrate}
         lang={lang}
+        changeLang={changeLang}
         onManageDevices={() => setDevicesOpen(true)}
         onOpenStats={() => setStatsOpen(true)}
         onKidsChange={setKids}
