@@ -523,3 +523,11 @@ body {
 .dest-kicker { white-space: nowrap; }
 @media (min-width: 700px) { .dest-kicker { font-size: 12px; padding: 6px 12px; } }
 @media (max-width: 430px) { .fr-logo { display: none; } }
+
+.dest-next { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; font-size: 15px; font-weight: 800; color: #37474F; line-height: 1.35; }
+.dest-next b { color: var(--c); }
+.dest-era { background: var(--c); color: #fff; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 900; white-space: nowrap; }
+@media (min-width: 700px) {
+  .dest-kicker { white-space: normal; max-width: 100%; font-size: 11px; letter-spacing: .4px; line-height: 1.3; }
+  .dest-body .play-btn { font-size: 19px !important; white-space: nowrap; }
+}

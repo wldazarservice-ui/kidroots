@@ -65,7 +65,7 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
                 <span style={{ background: LEVELS[difficulty]?.color || '#1E88E5', color: 'white', borderRadius: 999, padding: '3px 10px', fontSize: 12 }}>{t(lang, 'lvl_change')}</span>
               </button>
             </div>
-            <Destination lang={lang} nav={nav} progress={progress} difficulty={difficulty} />
+            <Destination lang={lang} nav={nav} progress={progress} difficulty={difficulty} childId={activeChild?.id} />
           </div>
 
           {/* Raccourcis : passeport, carte, jeux */}
@@ -163,54 +163,76 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
   )
 }
 
-// Pays a explorer : celui deja commence (on continue), sinon la « destination du jour » (meme pays pour tous ce jour-la)
-function pickDestination(progress, difficulty) {
-  const codes = Object.keys(COUNTRIES)
-  const started = codes.find((c) => {
-    const chs = COUNTRIES[c]?.chapters || []
-    const n = chs.filter((ch) => isDone(progress, ch.id, difficulty)).length
-    return n > 0 && n < chs.length
-  })
-  if (started) return { code: started, cont: true }
-  const day = Math.floor(Date.now() / 86400000)
-  const pool = codes.filter((c) => COUNTRIES[c]?.hero && COUNTRIES[c]?.chapters?.length).sort()
-  return { code: pool[(day * 37) % pool.length], cont: false }
+// Le voyage dans le temps de l'enfant : le dernier pays ouvert (ou, a defaut, un pays deja commence)
+function pickJourney(progress, difficulty, childId) {
+  let last = null
+  try { last = localStorage.getItem(`kidroots_last_country:${childId || 'guest'}`) } catch {}
+  if (last && COUNTRIES[last]?.chapters?.length) return last
+  return Object.keys(COUNTRIES).find((c) => (COUNTRIES[c]?.chapters || []).some((ch) => isDone(progress, ch.id, difficulty))) || null
 }
 
-function Destination({ lang, nav, progress, difficulty }) {
-  const { code, cont } = pickDestination(progress, difficulty)
-  const c = COUNTRIES[code]
-  if (!c) return null
+function Destination({ lang, nav, progress, difficulty, childId }) {
+  const code = pickJourney(progress, difficulty, childId)
+  const c = code && COUNTRIES[code]
+  // Premier voyage : pas encore de pays choisi
+  if (!c) {
+    return (
+      <div className="dest-card anim-slide-up" style={{ '--c': '#1E88E5', '--bg': '#E3F2FD' }}>
+        <div className="dest-window">
+          <span className="dest-bubble-dot" style={{ left: '10%', top: '16%' }} />
+          <div className="dest-kicker">⏳ {t(lang, 'trip_kicker')}</div>
+          <div className="float dest-flag">🌍</div>
+        </div>
+        <div className="dest-body">
+          <div className="dest-name">{t(lang, 'trip_first')}</div>
+          <div className="dest-tag">{t(lang, 'trip_first_sub')}</div>
+          <button className="btn-kid soft play-btn shine" onClick={() => nav.goRegions()}
+            style={{ marginTop: 16, width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '17px 20px', fontSize: 21, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.4)' }}>
+            🧭 {t(lang, 'trip_pick')}
+          </button>
+        </div>
+      </div>
+    )
+  }
   const done = c.chapters.filter((ch) => isDone(progress, ch.id, difficulty)).length
+  const finished = done === c.chapters.length
+  const next = c.chapters.find((ch) => !isDone(progress, ch.id, difficulty))
   return (
     <div className="dest-card anim-slide-up" style={{ '--c': c.color, '--bg': c.bg || '#FFF3E0' }}>
       <div className="dest-window">
         <span className="dest-bubble-dot" style={{ left: '10%', top: '16%' }} />
         <span className="dest-bubble-dot" style={{ right: '12%', bottom: '18%', width: 46, height: 46 }} />
-        <div className="dest-kicker">{cont ? '🚀 ' + t(lang, 'dest_continue') : '🌟 ' + t(lang, 'dest_today')}</div>
+        <div className="dest-kicker">{finished ? '🏆 ' + t(lang, 'trip_done') : '⏳ ' + t(lang, 'trip_kicker')}</div>
         <div className="float dest-flag">{c.flag}</div>
-        {c.hero && (
+        {c.hero && !finished && (
           <div className="dest-guide">
             <span className="dest-guide-face">{c.hero.emoji}</span>
-            <span className="dest-guide-say"><b>{c.hero.name}</b> · {t(lang, 'dest_guide')}</span>
+            <span className="dest-guide-say"><b>{c.hero.name}</b> · {t(lang, done ? 'trip_guide_cont' : 'trip_guide_start')}</span>
           </div>
         )}
       </div>
       <div className="dest-body">
         <div className="dest-name">{countryName(code, lang)}</div>
-        {c.tagline && <div className="dest-tag"><TText text={c.tagline} lang={lang} /></div>}
+        {next ? (
+          <div className="dest-next">
+            <span className="dest-era">{next.era}</span>
+            <span><b>{t(lang, 'trip_next')}</b> {next.emoji} <TText text={next.title} lang={lang} /></span>
+          </div>
+        ) : c.tagline && <div className="dest-tag"><TText text={c.tagline} lang={lang} /></div>}
         <div className="dest-steps">
-          {c.chapters.map((ch, i) => <span key={ch.id} className={i < done ? 'on' : ''} />)}
+          {c.chapters.map((ch, i) => <span key={ch.id} className={isDone(progress, ch.id, difficulty) ? 'on' : ''} />)}
           <em>{done} / {c.chapters.length}</em>
         </div>
-        <button className="btn-kid soft play-btn shine" onClick={() => nav.goCountry(code)}
+        <button className="btn-kid soft play-btn shine" onClick={() => (finished ? nav.goRegions() : nav.goCountry(code))}
           style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '17px 20px', fontSize: 21, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.4)' }}>
-          ▶ {t(lang, cont ? 'dest_go_cont' : 'dest_go')}
+          {finished ? '🧭 ' + t(lang, 'trip_pick_next') : '▶ ' + t(lang, done ? 'trip_go_cont' : 'trip_go_start')}
         </button>
-        <button className="btn-kid soft" onClick={() => nav.goRegions()}
-          style={{ width: '100%', marginTop: 10, background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, border: '2px solid #BBDEFB' }}>
-          🧭 {t(lang, 'dest_other')}
-        </button>
+        {!finished && (
+          <button className="btn-kid soft" onClick={() => nav.goRegions()}
+            style={{ width: '100%', marginTop: 10, background: 'white', color: '#1565C0', padding: '12px', fontSize: 15, borderRadius: 18, border: '2px solid #BBDEFB' }}>
+            🧭 {t(lang, 'dest_other')}
+          </button>
+        )}
       </div>
     </div>
   )

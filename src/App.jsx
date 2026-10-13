@@ -452,7 +452,10 @@ export default function App() {
     goCountry: (code) => {
       if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
       if (['home', 'regions', 'map', 'passport', 'games'].includes(screen)) setCountryFrom(screen)
-      setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country') },
+      setCountryCode(code); if (COUNTRIES[code]) setRegionKey(COUNTRIES[code].region); setScreen('country')
+      // Dernier pays ouvert par cet enfant : l'accueil propose de continuer son histoire
+      try { localStorage.setItem(`kidroots_last_country:${activeChild?.id || 'guest'}`, code) } catch {}
+    },
     goBack: () => {
       if (screen === 'country') setScreen(countryFrom || 'regions')
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
