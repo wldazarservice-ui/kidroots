@@ -92,7 +92,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
 
         {isSignup && (
           <div style={{ background: '#F1F8F2', borderRadius: 16, padding: '10px 14px', marginBottom: 14, fontSize: 14, fontWeight: 800, color: '#2E7D4F', lineHeight: 1.7 }}>
-            ✅ Gratuit, sans carte bancaire<br />📖 3 chapitres offerts chaque jour, jeux illimités<br />🎁 3 jours illimités offerts à essayer
+            ✅ Gratuit, sans carte bancaire<br />📖 30 chapitres offerts (3 par jour), jeux illimités<br />🎁 3 jours illimités offerts à essayer
           </div>
         )}
         {isSignup ? (<>

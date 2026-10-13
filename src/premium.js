@@ -1,5 +1,5 @@
 import { referralCode } from './track'
-// Modele « freemium » : tous les pays sont jouables, avec 3 nouveaux chapitres par jour et par enfant.
+// Modele « freemium » : tous les pays sont jouables, avec 30 nouveaux chapitres gratuits par enfant (3 par jour).
 // La Formule Famille (abonnement mensuel ou annuel, 5 enfants / 5 appareils) rend tout illimite.
 // Les montants doivent correspondre a PLANS dans netlify/lib/shared.mjs.
 export const DAILY_FREE_CHAPTERS = 3
@@ -23,8 +23,14 @@ export const todayKey = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 export const todayIds = (child) => (child?.daily?.date === todayKey() ? child.daily.ids || [] : [])
+// Plafond gratuit : 30 nouveaux chapitres au total par enfant (depuis le 13/10/2026), toujours 3 par jour maximum.
+// freeIds = chapitres ouverts gratuitement (liste gardee meme apres « Reinitialiser la progression »).
+export const FREE_CHAPTERS_TOTAL = 30
+export const freeIds = (child) => child?.freeIds || []
+export const freeLeft = (child, premium) =>
+  !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, FREE_CHAPTERS_TOTAL - freeIds(child).length)
 export const chaptersLeft = (child, premium) =>
-  !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, DAILY_FREE_CHAPTERS - todayIds(child).length)
+  !PAYWALL_ENABLED || premium ? Infinity : Math.min(Math.max(0, DAILY_FREE_CHAPTERS - todayIds(child).length), freeLeft(child, premium))
 // Un chapitre deja termine ou deja commence aujourd'hui reste toujours accessible
 // Jeux : illimites pour tout le monde depuis le 13/10/2026 (seuls les nouveaux chapitres sont limites).
 // gameDaily = { date, n } reste compte pour les statistiques, sans limite.
@@ -32,7 +38,10 @@ export const DAILY_FREE_GAMES = Infinity
 export const gamesPlayedToday = (child) => (child?.gameDaily?.date === todayKey() ? child.gameDaily.n || 0 : 0)
 export const gamesLeft = () => Infinity
 export const canOpenChapter = (child, chapterId, isDone, premium) =>
-  !PAYWALL_ENABLED || premium || isDone || todayIds(child).includes(chapterId) || todayIds(child).length < DAILY_FREE_CHAPTERS
+  !PAYWALL_ENABLED || premium || isDone || todayIds(child).includes(chapterId) || freeIds(child).includes(chapterId)
+  || (todayIds(child).length < DAILY_FREE_CHAPTERS && freeIds(child).length < FREE_CHAPTERS_TOTAL)
+// Pourquoi un chapitre est bloque : 'total' (30 chapitres gratuits utilises) ou 'chapters' (3 du jour)
+export const limitReason = (child) => (freeIds(child).length >= FREE_CHAPTERS_TOTAL ? 'total' : 'chapters')
 
 async function call(path, user, body) {
   const token = await user.getIdToken()

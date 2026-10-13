@@ -26,7 +26,7 @@ import { registerDevice } from './devices'
 import { setLimits } from './limits'
 import { refreshOfflineIfNeeded } from './offline'
 import { pendingGift, clearPendingGift } from './components/Gift'
-import { redeemGift, openBillingPortal } from './premium'
+import { redeemGift, openBillingPortal, limitReason, freeIds } from './premium'
 import { useUsageTracker, trackCountryVisit, dayKey } from './stats'
 import { confirmCheckout, fetchAccountStatus, PAYWALL_ENABLED, canOpenChapter, todayIds, todayKey, isOwnerEmail, gamesLeft, gamesPlayedToday } from './premium'
 import { isDone } from './levels'
@@ -424,13 +424,14 @@ export default function App() {
     const chDone = isDone(progress, ch.id, difficulty)
     if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium)) {
       track('limit_hit')
-      setLimitKind('chapters')
+      setLimitKind(limitReason(activeChild))
       setLimitOpen(true)
       return false
     }
-    if (!hasPremium && !chDone && !todayIds(activeChild).includes(ch.id)) {
+    if (!hasPremium && !chDone && !todayIds(activeChild).includes(ch.id) && !freeIds(activeChild).includes(ch.id)) {
       const daily = { date: todayKey(), ids: [...todayIds(activeChild), ch.id] }
-      patchChild({ daily }, () => saveChildDaily(user.uid, activeChild.id, daily))
+      const free = [...freeIds(activeChild), ch.id]
+      patchChild({ daily, freeIds: free }, () => saveChildDaily(user.uid, activeChild.id, daily, free))
     }
     if (!Object.keys(progress.done || {}).length) track('first_story', { once: true })
     setChapterIdx(idx)

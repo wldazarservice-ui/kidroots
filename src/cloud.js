@@ -89,8 +89,8 @@ export async function saveChildDifficulty(uid, childId, difficulty) {
 }
 
 // Limite gratuite : chapitres commences aujourd'hui
-export async function saveChildDaily(uid, childId, daily) {
-  await updateDoc(doc(db, 'users', uid, 'children', childId), { daily })
+export async function saveChildDaily(uid, childId, daily, freeIds) {
+  await updateDoc(doc(db, 'users', uid, 'children', childId), { daily, ...(freeIds && { freeIds }) })
 }
 
 // Remise à zéro de la progression d'un enfant (histoires, XP, passeport, jeux). Les statistiques de temps sont gardées.

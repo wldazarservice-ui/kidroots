@@ -6,7 +6,7 @@ import MusicButton from './MusicButton'
 import NotificationCenter from './NotificationCenter'
 import SpeakButton from './SpeakButton'
 import { TText } from '../useTranslated'
-import { PLANS, DAILY_FREE_CHAPTERS, todayIds } from '../premium'
+import { PLANS, DAILY_FREE_CHAPTERS, todayIds, FREE_CHAPTERS_TOTAL, freeIds } from '../premium'
 import LegalFooter from './LegalFooter'
 import StoryBanners from './StoryBanners'
 import { LEVELS, isDone } from '../levels'
@@ -109,6 +109,11 @@ export default function HomeScreen({ lang, changeLang, progress, nav, activeChil
                       {Array.from({ length: DAILY_FREE_CHAPTERS }, (_, i) => (
                         <span key={i} style={{ width: 16, height: 16, borderRadius: '50%', background: i < DAILY_FREE_CHAPTERS - usedToday ? 'linear-gradient(145deg,#FFD54F,#FF9800)' : '#E3EAF2' }} />
                       ))}
+                    </div>
+                  )}
+                  {!premium && (
+                    <div style={{ marginTop: 6, fontSize: 12, fontWeight: 900, color: '#78909C' }}>
+                      📖 {t(lang, 'free_total', { n: String(Math.min(FREE_CHAPTERS_TOTAL, freeIds(activeChild).length)), max: String(FREE_CHAPTERS_TOTAL) })}
                     </div>
                   )}
                 </div>
