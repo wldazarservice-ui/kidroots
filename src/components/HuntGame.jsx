@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { t } from '../i18n'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { shuffle } from '../explore'
-import { countryName } from '../names'
+import { countryName, countryWithArticle } from '../names'
 import { TText } from '../useTranslated'
 import WorldMap from './WorldMap'
 import ExploreHeader from './ExploreHeader'
@@ -11,6 +11,7 @@ import { RoundDots } from './GameBits'
 
 const INK = '#1A2A4F'
 const ROUNDS = 8
+const CONTINENT_COLORS = { africa: '#FFCC80', europe: '#CE93D8', asia: '#F48FB1', americas: '#A5D6A7', oceania: '#FFF59D' }
 
 // Chasse au trésor : retrouver un pays sur la carte (3 essais, l'indice du continent arrive après une erreur)
 export default function HuntGame({ onRound, lang, onBack, onFinish }) {
@@ -41,16 +42,17 @@ export default function HuntGame({ onRound, lang, onBack, onFinish }) {
     }
     const n = tries + 1
     setTries(n); setWrong((w) => [...w, code])
-    setMsg(t(lang, 'hunt_wrong', { c: countryName(code, lang) }))
+    setMsg(t(lang, 'hunt_wrong', { c: countryWithArticle(code, lang) }))
     if (n >= 3) { setStatus('reveal'); setMsg(t(lang, 'hunt_reveal')); setResults((x) => { const y = [...x]; y[round] = false; return y }) }
   }
   const next = () => { setRound((r) => r + 1); setTries(0); setWrong([]); setStatus('play'); setMsg('') }
   const again = () => { setGame((g) => g + 1); setRound(0); setTries(0); setWrong([]); setStatus('play'); setMsg(''); setStars(0); setResults([]) }
 
+  // Couleurs vives par continent sur une mer bleue : les enfants reperent mieux les pays
   const fill = (code) => {
-    if (status !== 'play' && code === target) return '#43C27A'
-    if (wrong.includes(code)) return '#FFAB91'
-    return COUNTRIES[code] ? '#FFFFFF' : '#ECEFF1'
+    if (status !== 'play' && code === target) return '#2E9E5B'
+    if (wrong.includes(code)) return '#FF7043'
+    return CONTINENT_COLORS[COUNTRIES[code]?.region] || '#ECEFF1'
   }
   const c = target && COUNTRIES[target]
 
@@ -68,7 +70,7 @@ export default function HuntGame({ onRound, lang, onBack, onFinish }) {
               <span className="hunt-flag">{c.flag}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 12, fontWeight: 900, color: 'rgba(255,255,255,.9)', letterSpacing: 1, textTransform: 'uppercase' }}>🧭 {t(lang, 'round', { n: String(round + 1), t: String(ROUNDS) })}</div>
-                <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: 'white', lineHeight: 1.15 }}>{t(lang, 'hunt_find')} {countryName(target, lang)} !</div>
+                <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 24, fontWeight: 700, color: 'white', lineHeight: 1.15 }}>{t(lang, 'hunt_find')} {countryWithArticle(target, lang)}{lang === 'fr' ? '\u00a0!' : '!'}</div>
                 {tries > 0 && status === 'play' && (
                   <div style={{ display: 'inline-block', marginTop: 4, background: 'rgba(255,255,255,.95)', color: '#1565C0', borderRadius: 999, padding: '3px 10px', fontSize: 13, fontWeight: 900 }}>💡 {t(lang, 'hunt_hint', { r: '' })}<TText text={REGIONS[c.region].name} lang={lang} /></div>
                 )}
@@ -82,7 +84,7 @@ export default function HuntGame({ onRound, lang, onBack, onFinish }) {
           {msg && <div className={status === 'play' ? 'anim-shake' : 'anim-pop'} key={msg + tries} style={{ textAlign: 'center', fontWeight: 900, fontSize: 17, color: status === 'right' ? '#2E9E5B' : status === 'reveal' ? '#1E88E5' : '#E65100', margin: '2px 0 8px' }}>{status === 'right' ? '🎉 ' : ''}{msg}</div>}
           <div className="game-board" style={{ padding: 8 }}>
             <WorldMap fill={fill} onPick={pick} highlight={status !== 'play' ? target : null} focus={status === 'reveal' ? target : (status === 'play' && tries === 0 ? null : undefined)}
-              onBBoxes={setBoxes} height={Math.min(560, Math.round(window.innerHeight * 0.58))} />
+              onBBoxes={setBoxes} sea="linear-gradient(180deg,#4FB0E6,#86CDF2)" height={Math.min(560, Math.round(window.innerHeight * 0.58))} />
           </div>
         </div>
       )}

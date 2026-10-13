@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 let MAP_CACHE = null
 const loadMap = () => (MAP_CACHE ||= import('../data/worldmap.gen.js'))
 
-export default function WorldMap({ fill, onPick, highlight, focus, onBBoxes, height = 420, stroke = '#FFFFFF' }) {
+export default function WorldMap({ fill, onPick, highlight, focus, onBBoxes, height = 420, stroke = '#FFFFFF', sea = 'linear-gradient(180deg,#BEE6FB,#D9F1FD)' }) {
   const [data, setData] = useState(null)
   const svg = useRef(null)
   const paths = useRef({})
@@ -96,7 +96,7 @@ export default function WorldMap({ fill, onPick, highlight, focus, onBBoxes, hei
 
   const btn = { width: 40, height: 40, borderRadius: 14, border: 'none', background: 'white', fontSize: 22, fontWeight: 900, color: '#1A2A4F', boxShadow: '0 3px 10px rgba(26,42,79,0.18)', cursor: 'pointer' }
   return (
-    <div style={{ ...box, position: 'relative', borderRadius: 24, overflow: 'hidden', background: 'linear-gradient(180deg,#BEE6FB,#D9F1FD)', touchAction: 'none' }}>
+    <div style={{ ...box, position: 'relative', borderRadius: 24, overflow: 'hidden', background: sea, touchAction: 'none' }}>
       <svg ref={svg} viewBox={vb.join(' ')} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab' }}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
         onWheel={(e) => zoom(e.deltaY > 0 ? 1.2 : 0.83, e.clientX, e.clientY)}>
