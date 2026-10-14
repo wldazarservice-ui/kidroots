@@ -7,6 +7,7 @@ import { loadWorld } from './data/world/load'
 import { useAuth } from './auth.jsx'
 import {
   ensureUserDoc,
+  addFamilyFreeChapter,
   listChildren,
   createChild,
   setActiveChild,
@@ -197,6 +198,7 @@ export default function App() {
         setLimits(ud)
         if (ud.isNew) track('signup')
         if (!cancelled) setPremium(!!ud.premium)
+        if (!cancelled) setFamUsed((ud.freeChapters || []).length)
         // Etat verifie par le serveur (acces offert, abonnement, acces a vie)
         fetchAccountStatus(user).then((st) => {
           if (cancelled) return
@@ -417,14 +419,16 @@ export default function App() {
 
   const hasPremium = premium || !PAYWALL_ENABLED
 
+  // Chapitres gratuits deja ouverts par toute la famille (plafond FREE_CHAPTERS_FAMILY)
+  const [famUsed, setFamUsed] = useState(0)
   // Limite gratuite : 3 nouveaux chapitres par jour et par enfant (rejouer un chapitre fini reste libre)
   const openChapter = (idx) => {
     const ch = country?.chapters[idx]
     if (!ch) return false
     const chDone = isDone(progress, ch.id, difficulty)
-    if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium)) {
+    if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium, famUsed)) {
       track('limit_hit')
-      setLimitKind(limitReason(activeChild))
+      setLimitKind(limitReason(activeChild, famUsed))
       setLimitOpen(true)
       return false
     }
@@ -432,6 +436,7 @@ export default function App() {
       const daily = { date: todayKey(), ids: [...todayIds(activeChild), ch.id] }
       const free = [...freeIds(activeChild), ch.id]
       patchChild({ daily, freeIds: free }, () => saveChildDaily(user.uid, activeChild.id, daily, free))
+      if (user) { setFamUsed((n) => n + 1); addFamilyFreeChapter(user.uid, activeChild.id, ch.id).catch(console.error) }
     }
     if (!Object.keys(progress.done || {}).length) track('first_story', { once: true })
     setChapterIdx(idx)

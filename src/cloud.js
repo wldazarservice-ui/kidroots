@@ -8,8 +8,7 @@ import {
   collection,
   getDocs,
   serverTimestamp,
-  deleteDoc,
-} from 'firebase/firestore'
+  deleteDoc, arrayUnion } from 'firebase/firestore'
 import { db } from './firebase'
 
 const LEGACY_PROGRESS_KEY = 'kidroots_v3_progress'
@@ -163,4 +162,9 @@ export async function setEmailOptIn(uid, on) {
 export async function getEmailOptIn(uid) {
   const snap = await getDoc(doc(db, 'users', uid))
   return snap.data()?.emailOptIn === true
+}
+
+// Compteur de chapitres gratuits de la famille (sur le doc parent) : une entree unique par chapitre ouvert gratuitement
+export async function addFamilyFreeChapter(uid, childId, chapterId) {
+  await updateDoc(doc(db, 'users', uid), { freeChapters: arrayUnion(`${childId}:${chapterId}:${Date.now()}`) })
 }

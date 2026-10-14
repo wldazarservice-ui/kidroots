@@ -90,7 +90,7 @@ Ameriques : BR (Bresil), MX (Mexique)
 - Regions : africa, europe, asia, americas, oceania (une region sans pays est masquee).
 
 ## Modele economique (freemium + Formule Famille)
-- Gratuit : tous les pays, 30 NOUVEAUX chapitres gratuits au total par enfant (`FREE_CHAPTERS_TOTAL`, liste `freeIds` sur le doc enfant, gardee apres reinitialisation) et 3 par jour maximum ; jeux illimites depuis le 13/10/2026 (`DAILY_FREE_GAMES = Infinity`, `gameDaily` garde pour les stats) (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
+- Gratuit : tous les pays, 30 NOUVEAUX chapitres gratuits au total par enfant (`FREE_CHAPTERS_TOTAL`, liste `freeIds` sur le doc enfant, gardee apres reinitialisation), 60 par famille (`FREE_CHAPTERS_FAMILY`, liste `freeChapters` sur users/{uid}) et 3 par jour maximum ; jeux illimites depuis le 13/10/2026 (`DAILY_FREE_GAMES = Infinity`, `gameDaily` garde pour les stats) (`DAILY_FREE_CHAPTERS`, `canOpenChapter` dans `src/premium.js`; compteur `daily` sur le doc enfant). Rejouer un chapitre fini reste libre. Ecran `DailyLimit.jsx`.
 - Essai sans compte : profil local `kidroots_guest` (`src/guest.js`), progression recopiee dans `kidroots_v3_progress` pour etre transferee a la creation du compte.
 - Formule Famille : abonnement Stripe 1,99 €/mois ou 14,99 €/an (`PLANS` dans `src/premium.js` ET `netlify/lib/shared.mjs`). Anciens achats « a vie » conserves (premium sans subscriptionId).
 - Essai gratuit 3 jours (`TRIAL_DAYS`, `trialEligible`, `guardTrial` dans `netlify/lib/shared.mjs`) : 1 fois par compte ET par carte (empreinte `trialCards/{fingerprint}`), pas cumulable avec le parrainage.

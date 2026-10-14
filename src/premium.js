@@ -26,6 +26,9 @@ export const todayIds = (child) => (child?.daily?.date === todayKey() ? child.da
 // Plafond gratuit : 30 nouveaux chapitres au total par enfant (depuis le 13/10/2026), toujours 3 par jour maximum.
 // freeIds = chapitres ouverts gratuitement (liste gardee meme apres « Reinitialiser la progression »).
 export const FREE_CHAPTERS_TOTAL = 30
+// Plafond par famille (compte parent) : supprimer puis recreer un profil ne remet pas les compteurs a zero.
+// famFree = liste gardee sur users/{uid}.freeChapters (une entree par chapitre gratuit ouvert, tous enfants confondus).
+export const FREE_CHAPTERS_FAMILY = 60
 export const freeIds = (child) => child?.freeIds || []
 export const freeLeft = (child, premium) =>
   !PAYWALL_ENABLED || premium ? Infinity : Math.max(0, FREE_CHAPTERS_TOTAL - freeIds(child).length)
@@ -37,11 +40,11 @@ export const chaptersLeft = (child, premium) =>
 export const DAILY_FREE_GAMES = Infinity
 export const gamesPlayedToday = (child) => (child?.gameDaily?.date === todayKey() ? child.gameDaily.n || 0 : 0)
 export const gamesLeft = () => Infinity
-export const canOpenChapter = (child, chapterId, isDone, premium) =>
+export const canOpenChapter = (child, chapterId, isDone, premium, famUsed = 0) =>
   !PAYWALL_ENABLED || premium || isDone || todayIds(child).includes(chapterId) || freeIds(child).includes(chapterId)
-  || (todayIds(child).length < DAILY_FREE_CHAPTERS && freeIds(child).length < FREE_CHAPTERS_TOTAL)
+  || (todayIds(child).length < DAILY_FREE_CHAPTERS && freeIds(child).length < FREE_CHAPTERS_TOTAL && famUsed < FREE_CHAPTERS_FAMILY)
 // Pourquoi un chapitre est bloque : 'total' (30 chapitres gratuits utilises) ou 'chapters' (3 du jour)
-export const limitReason = (child) => (freeIds(child).length >= FREE_CHAPTERS_TOTAL ? 'total' : 'chapters')
+export const limitReason = (child, famUsed = 0) => (freeIds(child).length >= FREE_CHAPTERS_TOTAL || famUsed >= FREE_CHAPTERS_FAMILY ? 'total' : 'chapters')
 
 async function call(path, user, body) {
   const token = await user.getIdToken()
