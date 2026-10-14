@@ -33,7 +33,7 @@ const TXT = {
     h1: "L'histoire du monde, racontée aux enfants",
     h1_sub: 'Des histoires vraies, des quiz et une voix qui lit tout à voix haute. {n} pays, 3 niveaux de lecture, de 4 à 12 ans.',
     try: '▶ Commencer gratuitement',
-    try_note: 'Compte parent gratuit en 1 clic · sans carte bancaire · 30 chapitres offerts',
+    try_note: '🎁 30 chapitres offerts · 🎮 jeux en illimité',
     have_account: "J'ai déjà un compte → Se connecter",
     reassure: ['🎁 Gratuit : 30 chapitres par enfant (3 par jour), et les jeux en illimité', '⭐ Tout illimité avec la Formule Famille : 1,99 €/mois ou 14,99 €/an'],
     demo_btn: '🎧 Écouter une histoire, sans compte',
@@ -96,7 +96,7 @@ const TXT = {
       ['Faut-il un compte pour essayer ?', 'Vous pouvez écouter une histoire de démonstration sans compte. Pour jouer, il suffit d’un compte parent gratuit, créé en 1 clic avec Google ou avec votre e-mail, sans carte bancaire. Il garde la progression de chaque enfant sur tous vos appareils.'],
     ],
     final_title: 'Prêt pour le voyage ?',
-    final_sub: 'Le premier voyage est gratuit, tous les jours.',
+    final_sub: 'Crée ton compte parent en 1 minute : les 30 premiers chapitres sont offerts.',
     guest_title: 'Qui va explorer ?',
     guest_name: "Prénom de l'enfant",
     guest_age: 'Âge',
@@ -110,7 +110,7 @@ const TXT = {
     h1: 'World history, told for kids',
     h1_sub: 'True stories, quizzes and a voice that reads everything aloud. {n} countries, 3 reading levels, ages 4 to 12.',
     try: '▶ Start for free',
-    try_note: 'Free parent account in 1 click · no card · 30 free chapters',
+    try_note: '🎁 30 free chapters · 🎮 unlimited games',
     have_account: 'I already have an account → Sign in',
     reassure: ['🎁 Free: 30 chapters per child (3 a day), plus unlimited games', '⭐ Unlimited with the Family plan: €1.99/month or €14.99/year'],
     demo_btn: '🎧 Listen to a story, no account needed',
@@ -173,7 +173,7 @@ const TXT = {
       ['Do I need an account to try?', 'You can listen to a demo story without an account. To play, all you need is a free parent account, created in 1 click with Google or with your e-mail, no card needed. It keeps each child’s progress on all your devices.'],
     ],
     final_title: 'Ready for the journey?',
-    final_sub: 'The first journey is free, every day.',
+    final_sub: 'Create your parent account in 1 minute: the first 30 chapters are free.',
     guest_title: 'Who is exploring?',
     guest_name: 'Child’s first name',
     guest_age: 'Age',
@@ -187,7 +187,7 @@ const TXT = {
     h1: 'Die Geschichte der Welt, für Kinder erzählt',
     h1_sub: 'Wahre Geschichten, Quizze und eine Stimme, die alles vorliest. {n} Länder, 3 Lesestufen, von 4 bis 12 Jahren.',
     try: '▶ Kostenlos starten',
-    try_note: 'Kostenloses Elternkonto mit 1 Klick · ohne Karte · 3 Gratis-Kapitel pro Tag',
+    try_note: '🎁 30 Gratis-Kapitel · 🎮 Spiele unbegrenzt',
     have_account: 'Ich habe schon ein Konto → Anmelden',
     reassure: ['🎁 Kostenlos: 30 Kapitel pro Kind (3 pro Tag), Spiele unbegrenzt', '⭐ Alles unbegrenzt mit dem Familien-Abo: 1,99 €/Monat oder 14,99 €/Jahr'],
     demo_btn: '🎧 Eine Geschichte anhören, ohne Konto',
@@ -250,7 +250,7 @@ const TXT = {
       ['Brauche ich zum Testen ein Konto?', 'Eine Demo-Geschichte können Sie ohne Konto anhören. Zum Spielen genügt ein kostenloses Elternkonto – mit 1 Klick über Google oder mit Ihrer E-Mail, ohne Karte. Es speichert den Fortschritt jedes Kindes auf all Ihren Geräten.'],
     ],
     final_title: 'Bereit für die Reise?',
-    final_sub: 'Die erste Reise ist kostenlos, jeden Tag.',
+    final_sub: 'Elternkonto in 1 Minute erstellen: die ersten 30 Kapitel sind gratis.',
     guest_title: 'Wer geht auf Entdeckungsreise?',
     guest_name: 'Vorname des Kindes',
     guest_age: 'Alter',
@@ -264,7 +264,7 @@ const TXT = {
     h1: 'A história do mundo, contada às crianças',
     h1_sub: 'Histórias verdadeiras, quizzes e uma voz que lê tudo em voz alta. {n} países, 3 níveis de leitura, dos 4 aos 12 anos.',
     try: '▶ Começar grátis',
-    try_note: 'Conta de pais grátis em 1 clique · sem cartão · 30 capítulos grátis',
+    try_note: '🎁 30 capítulos grátis · 🎮 jogos ilimitados',
     have_account: 'Já tenho conta → Entrar',
     reassure: ['🎁 Grátis: 30 capítulos por criança (3 por dia), e jogos ilimitados', '⭐ Tudo ilimitado com o Plano Família: 1,99 €/mês ou 14,99 €/ano'],
     demo_btn: '🎧 Ouvir uma história, sem conta',
@@ -327,7 +327,7 @@ const TXT = {
       ['Preciso de conta para experimentar?', 'Podes ouvir uma história de demonstração sem conta. Para jogar, basta uma conta de pais grátis, criada em 1 clique com Google ou com o teu e-mail, sem cartão. Guarda o progresso de cada criança em todos os teus dispositivos.'],
     ],
     final_title: 'Pronto para a viagem?',
-    final_sub: 'A primeira viagem é grátis, todos os dias.',
+    final_sub: 'Cria a tua conta de pais em 1 minuto: os 30 primeiros capítulos são grátis.',
     guest_title: 'Quem vai explorar?',
     guest_name: 'Nome da criança',
     guest_age: 'Idade',
@@ -341,7 +341,7 @@ const TXT = {
     h1: 'تاريخ العالم، يُحكى للأطفال',
     h1_sub: 'قصص حقيقية واختبارات وصوت يقرأ كل شيء بصوت عالٍ. {n} دولة، 3 مستويات للقراءة، من 4 إلى 12 سنة.',
     try: '▶ ابدأ مجانًا',
-    try_note: 'حساب أولياء أمور مجاني بنقرة واحدة · بدون بطاقة · 30 فصلًا مجانيًا',
+    try_note: '🎁 30 فصلًا مجانيًا · 🎮 ألعاب بلا حدود',
     have_account: 'لدي حساب بالفعل ← تسجيل الدخول',
     reassure: ['🎁 مجانًا: 30 فصلًا لكل طفل (3 يوميًا)، والألعاب بلا حدود', '⭐ كل شيء بلا حدود مع باقة العائلة: 1,99 € شهريًا أو 14,99 € سنويًا'],
     demo_btn: '🎧 استمع إلى قصة، بدون حساب',
@@ -404,7 +404,7 @@ const TXT = {
       ['هل أحتاج إلى حساب للتجربة؟', 'يمكنك الاستماع إلى قصة تجريبية دون حساب. وللعب يكفي حساب أولياء أمور مجاني يُنشأ بنقرة واحدة مع Google أو ببريدك الإلكتروني، دون بطاقة. يحفظ تقدّم كل طفل على كل أجهزتك.'],
     ],
     final_title: 'مستعد للرحلة؟',
-    final_sub: 'الرحلة الأولى مجانية، كل يوم.',
+    final_sub: 'أنشئ حساب الأولياء في دقيقة واحدة: أول 30 فصلًا مجانية.',
     guest_title: 'من سيستكشف؟',
     guest_name: 'اسم الطفل',
     guest_age: 'العمر',
@@ -607,18 +607,15 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
               <button className="btn-kid soft" onClick={() => { track('demo_click'); playDemo() }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
             </div>
-            {/* Ce qui est gratuit et ce qui est payant, dit clairement */}
-            <div style={{ marginTop: 14, background: 'rgba(255,255,255,0.88)', borderRadius: 18, padding: '10px 14px', display: 'grid', gap: 4, fontSize: 14, fontWeight: 800, color: '#37474F', lineHeight: 1.45 }}>
-              {T.reassure.map((r) => <div key={r}>{r}</div>)}
-            </div>
-            <button onClick={onLogin} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#1565C0', fontFamily: 'inherit', fontWeight: 800, fontSize: 14, cursor: 'pointer', textDecoration: 'underline' }}>{T.have_account}</button>
+            <div className="lp-note">{T.try_note}</div>
+            <button className="lp-have" onClick={onLogin} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#1565C0', fontFamily: 'inherit', fontWeight: 800, fontSize: 14, cursor: 'pointer', textDecoration: 'underline' }}>{T.have_account}</button>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 18 }} className="lp-proof">
               {T.proof.map((p) => (
                 <span key={p} style={{ background: 'rgba(255,255,255,0.85)', borderRadius: 999, padding: '6px 12px', fontSize: 13, fontWeight: 900, color: '#2E7D4F' }}>{p}</span>
               ))}
             </div>
           </div>
-          <PhoneMockup T={T} lang={lang} />
+          <div className="lp-mock-wrap"><PhoneMockup T={T} lang={lang} /></div>
         </div>
       </section>
       <DemoStory lang={lang} onSignup={onSignup} />

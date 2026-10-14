@@ -570,3 +570,22 @@ body {
 .first-flag-emoji { font-size: 38px; line-height: 1; }
 .first-flag-name { font-weight: 900; font-size: 16px; color: #1A2A4F; max-width: 100%; overflow-wrap: anywhere; }
 .first-flag-go { margin-top: 2px; border-radius: 999px; background: var(--c); color: white; font-size: 12px; font-weight: 900; padding: 3px 12px; }
+
+/* Page de presentation sur telephone : heros centre et court, la demo remplace la maquette */
+.lp-note { margin-top: 12px; font-size: 13.5px; font-weight: 900; color: #37474F; }
+@media (max-width: 699px) {
+  .lp-hero-text { text-align: center; }
+  .lp-kids { justify-content: center; gap: 8px; margin-top: 14px; flex-wrap: nowrap; }
+  .lp-kid { width: 50px; height: 50px; font-size: 29px; }
+  .lp-h1 { font-size: 31px !important; margin: 14px 0 10px !important; }
+  .lp-hero-text > p { font-size: 16px !important; margin-bottom: 18px !important; }
+  .lp-ctas .btn-kid { width: 100%; }
+  .lp-ctas .btn-kid:first-child { font-size: 19px !important; }
+  .lp-proof { justify-content: center; }
+  .lp-have { display: block; margin: 12px auto 0 !important; }
+}
+@media (max-width: 959px) { .lp-mock-wrap { display: none; } }
+@media (max-width: 699px) {
+  .lp-proof { display: grid !important; grid-template-columns: 1fr 1fr; }
+  .lp-proof span { display: flex; align-items: center; justify-content: center; text-align: center; }
+}
