@@ -21,6 +21,7 @@ const FUNNEL = [
   ['paywall_open', '🔓 Offre affichée'],
   ['checkout_start', '💳 Paiement commencé'],
   ['trial', '🎁 Essais 3 jours'],
+  ['fiche_dl', '📄 Fiches pédagogiques téléchargées'],
   ['school_request', '🏫 Demandes écoles'],
   ['support', '💬 Messages support'],
   ['gift_purchase', '🎁 Cartes cadeaux vendues'],

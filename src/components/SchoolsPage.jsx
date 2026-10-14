@@ -1,8 +1,17 @@
 import { isProEmail } from '../proEmail'
 import { useState } from 'react'
 import { PLANS, SCHOOL_FROM } from '../premium'
+import { track } from '../track'
 
 const INK = '#1A2A4F'
+// Fiches PDF generees par marketing/ecoles/fiches.mjs (public/ecoles/)
+const FICHES = [
+  ['gaulois', '🇫🇷', 'La Gaule et les Gaulois', 'CM1'],
+  ['moyen-age', '🇫🇷', 'Rois, châteaux et cathédrales', 'CM1'],
+  ['revolution', '🇫🇷', 'La Révolution française', 'CM2'],
+  ['mali', '🇲🇱', 'L’empire du Mali et Mansa Moussa', 'CM1 – 5e'],
+  ['egypte', '🇪🇬', 'L’Égypte des pharaons', '6e'],
+]
 const FONT_TITLE = 'Fredoka, Nunito, sans-serif'
 
 const TXT = {
@@ -15,6 +24,8 @@ const TXT = {
     s_name: 'École', s_from: 'à partir de', s_for: 'Tous les enseignants · jusqu’à 300 élèves · 330 appareils',
     s_items: ['Paiement par virement sur facture (30 jours)', 'Mise en place accompagnée', 'Tarif selon le nombre d’élèves'],
     form_title: 'Demander un devis pour votre école',
+    c_title: 'Une séance type de 45 minutes', c_steps: [['🗺️', 'Découvrir', 'On situe le pays sur la carte du monde, projetée au tableau.'], ['🔊', 'Écouter', 'On écoute les histoires vraies du chapitre avec la voix off, même les non-lecteurs suivent.'], ['🎯', 'Vérifier', 'Quiz collectif, activité et trace écrite prête à coller dans le cahier.']],
+    f_title: '📄 Fiches pédagogiques gratuites', f_sub: 'Alignées sur les programmes du cycle 3 et de la 6e. Libres de reproduction pour la classe.', f_dl: 'Télécharger',
     f_school: 'Nom de l’école *', f_name: 'Votre nom *', f_email: 'E-mail professionnel *', f_city: 'Ville', f_students: 'Nombre d’élèves', f_msg: 'Message (facultatif)',
     f_send: 'Envoyer la demande', f_wait: 'Envoi…', f_ok: '✅ Merci ! Nous vous répondons sous 48 heures avec un devis.', f_err: 'L’envoi a échoué. Écrivez-nous à bonjour@mokalibo.com',
     f_privacy: 'Vos coordonnées servent uniquement à répondre à votre demande.', privacy: 'Confidentialité',
@@ -28,6 +39,8 @@ const TXT = {
     s_name: 'School', s_from: 'from', s_for: 'All teachers · up to 300 pupils · 330 devices',
     s_items: ['Pay by bank transfer on invoice (30 days)', 'Guided setup', 'Price based on the number of pupils'],
     form_title: 'Request a quote for your school',
+    c_title: 'A typical 45-minute lesson', c_steps: [['🗺️', 'Discover', 'Find the country on the world map, shown on the board.'], ['🔊', 'Listen', 'Listen to the chapter’s true stories with the voice-over; even non-readers can follow.'], ['🎯', 'Check', 'Class quiz, an activity and a short summary for the exercise book.']],
+    f_title: '📄 Free lesson sheets', f_sub: 'Currently in French, for 8 to 12-year-olds. Free to copy for your class.', f_dl: 'Download',
     f_school: 'School name *', f_name: 'Your name *', f_email: 'Work e-mail *', f_city: 'City', f_students: 'Number of pupils', f_msg: 'Message (optional)',
     f_send: 'Send request', f_wait: 'Sending…', f_ok: '✅ Thank you! We will reply within 48 hours with a quote.', f_err: 'Sending failed. Write to us at bonjour@mokalibo.com',
     f_privacy: 'Your details are only used to answer your request.', privacy: 'Privacy',
@@ -41,6 +54,8 @@ const TXT = {
     s_name: 'Schule', s_from: 'ab', s_for: 'Alle Lehrkräfte · bis zu 300 Schüler · 330 Geräte',
     s_items: ['Zahlung per Überweisung auf Rechnung (30 Tage)', 'Begleitete Einrichtung', 'Preis nach Schülerzahl'],
     form_title: 'Angebot für Ihre Schule anfragen',
+    c_title: 'Eine typische Stunde (45 Minuten)', c_steps: [['🗺️', 'Entdecken', 'Das Land auf der Weltkarte zeigen, am Whiteboard.'], ['🔊', 'Zuhören', 'Die wahren Geschichten des Kapitels mit Vorlesefunktion hören, auch Nicht-Leser folgen.'], ['🎯', 'Überprüfen', 'Klassenquiz, eine Aktivität und ein Merktext fürs Heft.']],
+    f_title: '📄 Kostenlose Unterrichtsblätter', f_sub: 'Derzeit auf Französisch, für 8- bis 12-Jährige. Frei kopierbar für Ihre Klasse.', f_dl: 'Herunterladen',
     f_school: 'Name der Schule *', f_name: 'Ihr Name *', f_email: 'Dienstliche E-Mail *', f_city: 'Ort', f_students: 'Anzahl Schüler', f_msg: 'Nachricht (optional)',
     f_send: 'Anfrage senden', f_wait: 'Wird gesendet…', f_ok: '✅ Danke! Wir melden uns innerhalb von 48 Stunden mit einem Angebot.', f_err: 'Senden fehlgeschlagen. Schreiben Sie uns: bonjour@mokalibo.com',
     f_privacy: 'Ihre Angaben werden nur zur Beantwortung Ihrer Anfrage verwendet.', privacy: 'Datenschutz',
@@ -79,6 +94,32 @@ export default function SchoolsPage({ lang, onSignup, h2, primary }) {
         <p style={{ textAlign: 'center', fontSize: 17, fontWeight: 700, color: '#455A64', lineHeight: 1.55, maxWidth: 640, margin: '0 auto 18px' }}>{T.sub}</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginBottom: 26 }}>
           {T.points.map((p) => <span key={p} style={{ background: 'white', borderRadius: 999, padding: '7px 13px', fontSize: 14, fontWeight: 900, color: '#2E7D4F' }}>{p}</span>)}
+        </div>
+
+        {/* Mokalibo en classe : une seance type + fiches pedagogiques a telecharger */}
+        <div style={{ ...card, marginBottom: 26 }}>
+          <div style={{ fontFamily: FONT_TITLE, fontSize: 24, fontWeight: 700, textAlign: 'center', marginBottom: 14 }}>🧑‍🏫 {T.c_title}</div>
+          <div className="lp-grid3" style={{ gap: 12 }}>
+            {T.c_steps.map(([e, h, d], i) => (
+              <div key={h} style={{ background: '#F4F7FB', borderRadius: 20, padding: '16px 14px', textAlign: 'center' }}>
+                <div style={{ fontSize: 34 }}>{e}</div>
+                <div style={{ fontWeight: 900, color: '#00796B', margin: '4px 0' }}>{i + 1}. {h}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#455A64', lineHeight: 1.5 }}>{d}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontFamily: FONT_TITLE, fontSize: 21, fontWeight: 700, margin: '22px 0 4px' }}>{T.f_title}</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#607D8B', marginBottom: 10 }}>{T.f_sub}</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {FICHES.map(([slug, flag, title, lvl]) => (
+              <a key={slug} href={`/ecoles/fiche-${slug}.pdf`} target="_blank" rel="noopener" onClick={() => track('fiche_dl')}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#FFF8E1', borderRadius: 16, padding: '11px 14px', textDecoration: 'none', color: INK }}>
+                <span style={{ fontSize: 26 }}>{flag}</span>
+                <span style={{ flex: 1, minWidth: 0, fontWeight: 900 }}>{title} <span style={{ color: '#90A4AE', fontWeight: 800, fontSize: 13 }}>· {lvl}</span></span>
+                <span style={{ fontWeight: 900, color: '#E65100', fontSize: 14, whiteSpace: 'nowrap' }}>⬇ {T.f_dl}</span>
+              </a>
+            ))}
+          </div>
         </div>
 
         <div className="lp-grid2 reveal-stagger">
