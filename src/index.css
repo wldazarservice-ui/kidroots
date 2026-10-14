@@ -137,10 +137,11 @@ body {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
 }
+/* La carte n'est jamais invisible au depart : sur certains telephones (Safari iOS, mode economie d'energie)
+   l'animation peut rester figee a sa 1re image ; avec opacity 0 la page restait blanche jusqu'a un nouveau toucher */
 @keyframes cardFlipIn {
-  0% { transform: rotateY(90deg) scale(0.9); opacity: 0; }
-  60% { transform: rotateY(-8deg) scale(1.02); }
-  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+  0% { transform: translateX(18px) scale(0.97); opacity: 0.55; }
+  100% { transform: none; opacity: 1; }
 }
 @keyframes slideInUp {
   from { transform: translateY(32px); opacity: 0; }
@@ -164,7 +165,7 @@ body {
   50% { box-shadow: 0 0 0 10px rgba(255,214,0,0); }
 }
 .float { animation: floatY 2.5s ease-in-out infinite; }
-.anim-card-flip { animation: cardFlipIn 0.5s cubic-bezier(.36,.07,.19,.97) forwards; }
+.anim-card-flip { animation: cardFlipIn 0.32s ease-out; }
 .anim-slide-up { animation: slideInUp 0.38s cubic-bezier(0.22,1,0.36,1) forwards; }
 .anim-correct { animation: correctPop 0.4s ease forwards; }
 .anim-wrong { animation: wrongShake 0.45s ease forwards; }
@@ -302,7 +303,7 @@ body {
 
 /* ── Animations du site ─────────────────────────────── */
 /* Transition entre les écrans de l'app */
-@keyframes screenIn { from { opacity: 0; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
+@keyframes screenIn { from { opacity: .55; transform: translateY(14px) scale(0.99); } to { opacity: 1; transform: none; } }
 .screen-enter { animation: screenIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
 
 /* Apparition au défilement (page de présentation) */
@@ -331,6 +332,7 @@ body {
 .pop-in { animation: popIn2 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 
 @media (prefers-reduced-motion: reduce) {
+  .anim-card-flip, .book { animation: none !important; }
   .screen-enter, .plane, .pop-in, .shine::after { animation: none !important; }
   .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
@@ -511,7 +513,7 @@ body {
 .book-pageno { display: none; }
 @media (min-width: 900px) and (orientation: landscape), (min-width: 1100px) {
   .screen-narrow:has(.book) > *:not([aria-hidden]) { max-width: 1040px; }
-  .book { display: grid; grid-template-columns: 1fr 1.25fr; padding: 0 !important; border-width: 6px !important; border-radius: 26px !important; background: #FFFDF7 !important; min-height: 460px; animation: bookOpen .55s ease both !important; }
+  .book { display: grid; grid-template-columns: 1fr 1.25fr; padding: 0 !important; border-width: 6px !important; border-radius: 26px !important; background: #FFFDF7 !important; min-height: 460px; animation: bookOpen .32s ease-out !important; }
   .book::after { content: ""; position: absolute; top: 0; bottom: 0; left: calc(44.4% - 14px); width: 28px; background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.10) 45%, rgba(0,0,0,.18) 50%, rgba(0,0,0,.10) 55%, rgba(0,0,0,0) 100%); pointer-events: none; }
   .book-left { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 30px 40px; position: relative;
     background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--l) 85%, #fff), #FFFDF7 72%); border-radius: 20px 0 0 20px; }
@@ -523,7 +525,7 @@ body {
   .book-right .read-text { font-size: 20px !important; line-height: 1.7 !important; }
   .screen-narrow:has(.book) .btn-kid { max-width: 460px; }
 }
-@keyframes bookOpen { from { opacity: 0; transform: perspective(1400px) rotateY(-14deg) scale(.97); transform-origin: left center; } to { opacity: 1; transform: none; } }
+@keyframes bookOpen { from { opacity: .55; transform: translateX(18px) scale(.98); } to { opacity: 1; transform: none; } }
 .dest-kicker { white-space: nowrap; }
 @media (min-width: 700px) { .dest-kicker { font-size: 12px; padding: 6px 12px; } }
 @media (max-width: 430px) { .fr-logo { display: none; } }

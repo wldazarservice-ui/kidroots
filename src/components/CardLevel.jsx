@@ -17,6 +17,7 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
     setRevealed(false)
     setIdx(idx + 1)
     setAnimKey(k => k + 1)
+    window.scrollTo(0, 0) // la nouvelle page commence en haut (sinon on restait sur du vide en bas d'une page plus courte)
   }
 
   if (idx >= ch.cards.length) return (
