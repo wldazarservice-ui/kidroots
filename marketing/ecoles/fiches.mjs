@@ -10,7 +10,7 @@ const OUT = path.join(dir, '../../public/ecoles')
 const FICHES = [
   {
     slug: 'gaulois', flag: '🇫🇷', color: '#0D47A1', title: 'La Gaule et les Gaulois', niveau: 'CM1 · Cycle 3',
-    programme: 'Histoire, thème 1 : « Et avant la France ? » — Celtes, Gaulois, Grecs et Romains.',
+    programme: 'Histoire CM1, thème 1 : « Et avant la France ? » — Celtes, Gaulois, Grecs et Romains.',
     chemin: 'France → chapitre 1 « La Gaule et les Gaulois »',
     objectifs: ['Situer la Gaule dans le temps et sur une carte.', 'Connaître le mode de vie des Gaulois (villages, druides, artisans).', 'Comprendre la conquête romaine et le rôle de Vercingétorix.'],
     histoires: ['La grotte de Lascaux', 'Marseille, la plus vieille ville', 'Les Gaulois et les druides', 'Vercingétorix et Alésia', 'La Gaule romaine'],
@@ -20,7 +20,7 @@ const FICHES = [
   },
   {
     slug: 'moyen-age', flag: '🇫🇷', color: '#6A1B9A', title: 'Rois, châteaux et cathédrales', niveau: 'CM1 · Cycle 3',
-    programme: 'Histoire, thème 2 : « Le temps des rois » — Charlemagne, la vie au Moyen Âge.',
+    programme: 'Histoire CM1, thème 1 : « Et avant la France ? » (Clovis et Charlemagne) et thème 2 : « Le temps des rois ».',
     chemin: 'France → chapitre 2 « Le Moyen Âge »',
     objectifs: ['Connaître Clovis et Charlemagne.', 'Décrire un château fort et son rôle.', 'Comprendre la construction des cathédrales.'],
     histoires: ['Le baptême de Clovis', 'Charlemagne, empereur', 'Les châteaux forts', 'Notre-Dame de Paris', 'Le Mont-Saint-Michel'],
@@ -29,8 +29,8 @@ const FICHES = [
     trace: 'Au Moyen Âge, les rois gouvernent avec l\'aide des seigneurs. Charlemagne est couronné empereur en 800. Les seigneurs construisent des châteaux forts pour se protéger, et les habitants bâtissent de grandes cathédrales, comme Notre-Dame de Paris.',
   },
   {
-    slug: 'revolution', flag: '🇫🇷', color: '#C62828', title: 'La Révolution française', niveau: 'CM2 · Cycle 3',
-    programme: 'Histoire, thème 1 (CM2) : « Le temps de la Révolution et de l\'Empire ».',
+    slug: 'revolution', flag: '🇫🇷', color: '#C62828', title: 'La Révolution française', niveau: 'CM1 · Cycle 3',
+    programme: 'Histoire CM1, thème 3 : « Le temps de la Révolution et de l\'Empire ».',
     chemin: 'France → chapitre 4 « La Révolution »',
     objectifs: ['Connaître les grandes dates : 14 juillet et 26 août 1789.', 'Comprendre la Déclaration des droits de l\'homme.', 'Connaître l\'origine de la Marseillaise et de la devise.'],
     histoires: ['La prise de la Bastille', 'Les droits de l\'homme', 'La Marseillaise', 'Le mètre et le système métrique', 'Napoléon Bonaparte'],
@@ -39,8 +39,8 @@ const FICHES = [
     trace: 'En 1789, les Français se révoltent contre le pouvoir absolu du roi. Le 14 juillet, le peuple prend la Bastille. Le 26 août, la Déclaration des droits de l\'homme et du citoyen affirme que les hommes naissent libres et égaux en droits.',
   },
   {
-    slug: 'mali', flag: '🇲🇱', color: '#C8600A', title: 'L\'empire du Mali et Mansa Moussa', niveau: 'CM1 – 5e',
-    programme: 'Ouverture sur l\'histoire de l\'Afrique (5e : « L\'Afrique, l\'Orient et l\'Europe », routes commerciales et empires africains).',
+    slug: 'mali', flag: '🇲🇱', color: '#C8600A', title: 'L\'empire du Mali et Mansa Moussa', niveau: 'CM1 – collège',
+    programme: 'Ouverture sur l\'histoire de l\'Afrique et des grands empires médiévaux : utile en CM1, au collège et dans les écoles d\'Afrique francophone.',
     chemin: 'Mali → chapitre 3 « L\'Empire du Mali »',
     objectifs: ['Situer l\'empire du Mali sur une carte de l\'Afrique.', 'Connaître Soundiata Keïta et Mansa Moussa.', 'Comprendre le rôle de l\'or, du sel et des griots.'],
     histoires: ['L\'enfant qui ne marchait pas', 'La bataille de Kirina', 'La charte du Manden', 'Le voyage en or de Mansa Moussa', 'Les griots, mémoire du peuple'],

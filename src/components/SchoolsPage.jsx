@@ -8,8 +8,8 @@ const INK = '#1A2A4F'
 const FICHES = [
   ['gaulois', '🇫🇷', 'La Gaule et les Gaulois', 'CM1'],
   ['moyen-age', '🇫🇷', 'Rois, châteaux et cathédrales', 'CM1'],
-  ['revolution', '🇫🇷', 'La Révolution française', 'CM2'],
-  ['mali', '🇲🇱', 'L’empire du Mali et Mansa Moussa', 'CM1 – 5e'],
+  ['revolution', '🇫🇷', 'La Révolution française', 'CM1'],
+  ['mali', '🇲🇱', 'L’empire du Mali et Mansa Moussa', 'CM1 – collège'],
   ['egypte', '🇪🇬', 'L’Égypte des pharaons', '6e'],
 ]
 const FONT_TITLE = 'Fredoka, Nunito, sans-serif'
