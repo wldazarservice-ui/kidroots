@@ -128,6 +128,14 @@ export default function App() {
     try { sessionStorage.setItem('kidroots_nav', JSON.stringify({ screen, countryCode, regionKey, countryFrom })) } catch {}
   }, [screen, countryCode, regionKey, countryFrom])
   const [backTick, setBackTick] = useState(0)
+  // Page en cours dans un chapitre, gardee dans l'appareil : en rouvrant l'app on reprend au meme document
+  const [startIdx, setStartIdx] = useState(0)
+  const resumeKey = () => `kidroots_resume:${activeChild?.id || 'guest'}`
+  const readResume = () => { try { return JSON.parse(localStorage.getItem(resumeKey()) || 'null') } catch { return null } }
+  const saveResume = (stepName, idx = 0) => {
+    if (!chapter) return
+    try { localStorage.setItem(resumeKey(), JSON.stringify({ code: countryCode, chapterId: chapter.id, difficulty, step: stepName, idx, at: Date.now() })) } catch {}
+  }
   const [newStamp, setNewStamp] = useState(null)
   // Temps d'écran du jour (limite réglée par les parents)
   const [screenSecs, setScreenSecs] = useState(0)
@@ -440,7 +448,10 @@ export default function App() {
     }
     if (!Object.keys(progress.done || {}).length) track('first_story', { once: true })
     setChapterIdx(idx)
-    setStep('intro')
+    const r = readResume()
+    const resume = r && r.chapterId === ch.id && r.difficulty === difficulty && Date.now() - r.at < 60 * 864e5
+    setStartIdx(resume && r.step === 'cards' ? r.idx || 0 : 0)
+    setStep(resume ? r.step : 'intro')
     setQuizScore(0)
     setScreen('chapter')
     return true
@@ -476,17 +487,23 @@ export default function App() {
   }
 
   // Premiere minute : un tap sur un drapeau de l'accueil ouvre directement le 1er chapitre du pays (une fois charge)
-  const [autoStart, setAutoStart] = useState(null)
+  // Meme mecanisme pour reprendre une histoire la ou l'enfant s'etait arrete (accueil, ou rechargement en plein chapitre)
+  const [autoStart, setAutoStart] = useState(() => (savedNav?.screen === 'chapter' && savedNav.countryCode ? { code: savedNav.countryCode, resume: true } : null))
   useEffect(() => {
-    if (!autoStart || autoStart !== countryCode || screen !== 'country' || !worldReady || (needsExpert && !expertReady)) return
+    if (!autoStart || autoStart.code !== countryCode || screen !== 'country' || !worldReady || (needsExpert && !expertReady) || !activeChild) return
     if (!country?.chapters?.[0]?.cards?.[0]) return
     setAutoStart(null)
-    openChapter(0)
+    const r = readResume()
+    const i = autoStart.resume ? country.chapters.findIndex((c) => c.id === r?.chapterId && r?.code === countryCode) : 0
+    if (i >= 0) openChapter(i)
   }) // eslint-disable-line react-hooks/exhaustive-deps
 
   const nav = {
     goHome: () => setScreen('home'),
-    goFirstStory: (code) => { nav.goCountry(code); setAutoStart(code) },
+    goFirstStory: (code) => { nav.goCountry(code); setAutoStart({ code }) },
+    // Bouton « Continuer » de l'accueil : rouvre directement la page ou l'enfant s'est arrete
+    hasResume: (code) => readResume()?.code === code,
+    continueStory: (code) => { nav.goCountry(code); if (readResume()?.code === code) setAutoStart({ code, resume: true }) },
     goRegions: (key) => { if (typeof key === 'string') setRegionKey(key); setScreen('regions') },
     goCountry: (code) => {
       if (code !== countryCode || screen !== 'country') trackCountryVisit(user?.uid, activeChild?.id, code)
@@ -500,8 +517,9 @@ export default function App() {
       else if (screen === 'chapter' || screen === 'result') setScreen('country')
     },
     startChapter: (idx) => { openChapter(idx) },
-    startCards: () => setStep('cards'),
-    startQuiz: () => setStep('quiz'),
+    startCards: () => { setStartIdx(0); setStep('cards'); saveResume('cards', 0) },
+    startQuiz: () => { setStep('quiz'); saveResume('quiz') },
+    cardIdx: (i) => saveResume('cards', i),
     finishChapter: (score) => {
       if (!Object.keys(progress.done || {}).length) track('first_story_done', { once: true })
       const xp = chapter.cards.length * 20 + chapter.quiz.length * 30
@@ -510,6 +528,7 @@ export default function App() {
       const after = countryState({ ...progress, done: { ...progress.done, [doneKey(chapter.id, difficulty)]: true } }, countryCode).stamp
       if (after && !before) setTimeout(() => setNewStamp(countryCode), 900)
       addXP(xp, chapter.id)
+      try { localStorage.removeItem(resumeKey()) } catch {}
       setQuizScore(score)
       setScreen('result')
     },
@@ -680,7 +699,7 @@ export default function App() {
         <ChapterIntro chapter={chapter} country={country} {...shared} />
       )}
       {screen === 'chapter' && chapter && step === 'cards' && (
-        <CardLevel chapter={chapter} country={country} {...shared} onDone={nav.startQuiz} />
+        <CardLevel chapter={chapter} country={country} {...shared} startIdx={startIdx} onIdx={nav.cardIdx} onDone={nav.startQuiz} />
       )}
       {screen === 'chapter' && chapter && step === 'quiz' && (
         <QuizLevel chapter={chapter} country={country} {...shared} onDone={nav.finishChapter} />

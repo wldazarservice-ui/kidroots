@@ -5,10 +5,10 @@ import AutoReadChip from './AutoReadChip'
 import { ttsStop } from '../tts'
 import { useTranslatedObj } from '../useTranslated'
 
-export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, onDone }) {
+export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, onDone, startIdx = 0, onIdx }) {
   const ch = useTranslatedObj(chRaw, lang)
   const c = useTranslatedObj(cRaw, lang)
-  const [idx, setIdx] = useState(0)
+  const [idx, setIdx] = useState(() => Math.min(startIdx, chRaw.cards.length - 1))
   const [revealed, setRevealed] = useState(false)
   const [animKey, setAnimKey] = useState(0)
 
@@ -16,6 +16,7 @@ export default function CardLevel({ chapter: chRaw, country: cRaw, lang, nav, on
     ttsStop()
     setRevealed(false)
     setIdx(idx + 1)
+    if (idx + 1 < ch.cards.length) onIdx?.(idx + 1)
     setAnimKey(k => k + 1)
     window.scrollTo(0, 0) // la nouvelle page commence en haut (sinon on restait sur du vide en bas d'une page plus courte)
   }

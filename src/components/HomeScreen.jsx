@@ -243,9 +243,9 @@ function Destination({ lang, nav, progress, difficulty, childId }) {
           {c.chapters.map((ch, i) => <span key={ch.id} className={isDone(progress, ch.id, difficulty) ? 'on' : ''} />)}
           <em>{done} / {c.chapters.length}</em>
         </div>
-        <button className="btn-kid soft play-btn shine" onClick={() => (finished ? nav.goRegions() : nav.goCountry(code))}
+        <button className="btn-kid soft play-btn shine" onClick={() => (finished ? nav.goRegions() : nav.continueStory(code))}
           style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '17px 20px', fontSize: 21, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 12px 24px rgba(255,196,0,0.4)' }}>
-          {finished ? '🧭 ' + t(lang, 'trip_pick_next') : '▶ ' + t(lang, done ? 'trip_go_cont' : 'trip_go_start')}
+          {finished ? '🧭 ' + t(lang, 'trip_pick_next') : '▶ ' + t(lang, done || nav.hasResume?.(code) ? 'trip_go_cont' : 'trip_go_start')}
         </button>
         {!finished && (
           <button className="btn-kid soft" onClick={() => nav.goRegions()}
