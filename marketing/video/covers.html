@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="noto-emoji.css" rel="stylesheet">
+<style>
+  /* Couvertures des Reels : 1080x1920, tout le contenu dans la zone 3:4 du centre (y 240 a 1680) visible dans la grille du profil */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: 'Nunito', sans-serif; -webkit-font-smoothing: antialiased; color: #1A2A4F; position: relative; }
+  .e { font-family: 'Noto Color Emoji'; line-height: 1; }
+  .fr { font-family: 'Fredoka', sans-serif; font-weight: 700; }
+  #bg { position: absolute; inset: 0; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+  .dot { position: absolute; border-radius: 50%; background: rgba(255,255,255,.5); }
+  #safe { position: absolute; left: 0; right: 0; top: 240px; height: 1440px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 80px; text-align: center; gap: 46px; }
+  .badge { background: #FFD600; border-radius: 999px; padding: 22px 56px; font-size: 64px; box-shadow: 0 10px 0 rgba(0,0,0,.10); white-space: nowrap; }
+  .pic { width: 420px; height: 420px; border-radius: 50%; background: rgba(255,255,255,.92); display: flex; align-items: center; justify-content: center; font-size: 250px; box-shadow: 0 24px 60px rgba(0,0,0,.18); position: relative; }
+  .pic .mini { position: absolute; right: -10px; bottom: 6px; font-size: 130px; }
+  .q { background: #fff; border-radius: 56px; padding: 46px 54px; font-size: 76px; line-height: 1.15; box-shadow: 0 16px 0 rgba(0,0,0,.08), 0 30px 60px rgba(0,0,0,.2); }
+  .logo { font-size: 74px; background: #fff; border-radius: 999px; padding: 10px 44px; box-shadow: 0 10px 30px rgba(0,0,0,.15); }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="safe"></div>
+<script>
+// Memes donnees et memes couleurs que reel2.html (« Devine ! ») et reel.html (« Le savais-tu ? »)
+const QUIZ = [
+  ['🇦🇺', '🎲', 'Quel animal fait des crottes… en forme de cube ?', ['#FF8A65', '#BF360C']],
+  ['🇲🇳', '🐎', 'Dans quel pays y a-t-il plus de chevaux que d’habitants ?', ['#42A5F5', '#1565C0']],
+  ['🇻🇦', '⛪', 'Quel est le plus petit pays du monde ?', ['#FFCA28', '#F57F17']],
+  ['🇺🇾', '⚽', 'Qui a gagné la toute première Coupe du monde de foot ?', ['#4FC3F7', '#0277BD']],
+  ['🇳🇵', '🚩', 'Quel pays a un drapeau qui n’est pas rectangulaire ?', ['#EF5350', '#B71C1C']],
+  ['🇾🇪', '☕', 'D’où vient le mot « moka » ?', ['#A1887F', '#5D4037']],
+  ['🇰🇮', '🎆', 'Quel pays fête le Nouvel An en premier ?', ['#7E57C2', '#311B92']],
+  ['🇧🇹', '😊', 'Quel pays mesure le bonheur de ses habitants ?', ['#FFA726', '#E65100']],
+  ['🇨🇦', '🏞️', 'Quel pays a le plus de lacs au monde ?', ['#66BB6A', '#1B5E20']],
+  ['🇪🇬', '🐪', 'Quel âge a la Grande Pyramide de Gizeh ?', ['#FFB300', '#E65100']],
+]
+const FACT = [
+  ['🇲🇱', '👑', 'Le roi le plus riche de toute l’histoire', ['#FFB300', '#E65100']],
+  ['🇻🇦', '⛪', 'Un pays entier… dans une ville !', ['#FFD54F', '#F9A825']],
+  ['🇲🇳', '🐎', 'Plus de chevaux que d’habitants !', ['#42A5F5', '#1565C0']],
+  ['🇾🇪', '☕', 'D’où vient le mot « moka » ?', ['#A1887F', '#5D4037']],
+  ['🇺🇾', '⚽', 'La toute première Coupe du monde', ['#4FC3F7', '#0277BD']],
+  ['🇰🇮', '🎆', 'Le 1er pays à fêter le Nouvel An', ['#7E57C2', '#311B92']],
+  ['🇧🇹', '😊', 'Le pays qui mesure le bonheur', ['#FFA726', '#D84315']],
+  ['🇦🇺', '🎲', 'Des crottes… en forme de cube !', ['#FF8A65', '#BF360C']],
+  ['🇳🇵', '🚩', 'Le seul drapeau pas rectangulaire', ['#EF5350', '#B71C1C']],
+  ['🇨🇦', '🏞️', 'Plus de lacs que le monde entier !', ['#66BB6A', '#1B5E20']],
+]
+const P = new URLSearchParams(location.search)
+const kind = P.get('k') || 'quiz', i = +(P.get('i') || 0)
+const [flag, emoji, text, [c1, c2]] = (kind === 'quiz' ? QUIZ : FACT)[i]
+const bg = document.getElementById('bg')
+bg.style.background = `linear-gradient(160deg, ${c1}, ${c2})`
+bg.innerHTML = `<div class="blob" style="width:900px;height:900px;left:-300px;top:-200px;background:${c1};opacity:.8"></div><div class="blob" style="width:760px;height:760px;right:-260px;bottom:-160px;background:#fff;opacity:.18"></div>`
+  + Array.from({ length: 26 }, (_, k) => { const s = 6 + (k * 7) % 12; return `<div class="dot" style="width:${s}px;height:${s}px;left:${(k * 137) % 1060}px;top:${(k * 293) % 1900}px"></div>` }).join('')
+document.getElementById('safe').innerHTML = `
+  <div class="badge fr">${kind === 'quiz' ? '<span class="e">🤔</span> Devine !' : '<span class="e">💡</span> Le savais-tu ?'}</div>
+  <div class="pic"><span class="e">${emoji}</span><span class="e mini">${flag}</span></div>
+  <div class="q fr">${text}</div>
+  <div class="logo fr"><span style="color:#FF7A00">Moka</span><span style="color:#1E88E5">libo</span></div>`
+</script>
+</body>
+</html>
