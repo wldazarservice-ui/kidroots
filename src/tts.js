@@ -48,7 +48,7 @@ const pickVoice = (lang) => {
     const ok = voices.filter(v => v.lang?.toLowerCase().replace('_', '-').startsWith(code.toLowerCase()))
     if (ok.length) return ok.sort((a, b) => voiceScore(b) - voiceScore(a))[0]
   }
-  return voices[0] || null
+  return null // pas de voix de cette langue : on laisse le navigateur choisir avec u.lang (jamais une voix d'une autre langue)
 }
 
 // Decoupe le texte en phrases : les longues lectures ne se coupent plus (bug de Chrome apres ~15 s)

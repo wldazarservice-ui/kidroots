@@ -4,6 +4,7 @@ import { loadWorld } from '../data/world/load'
 import { countryName } from '../names'
 import { useTranslatedObj } from '../useTranslated'
 import { ttsAvailable, ttsSpeak, ttsStop } from '../tts'
+import { speakable } from '../translator'
 import { track } from '../track'
 
 const INK = '#1A2A4F'
@@ -50,7 +51,7 @@ export default function DemoStory({ lang, onSignup }) {
     if (!k || !ttsAvailable()) return
     track('demo_listen', { once: true })
     setSpeaking(true)
-    ttsSpeak([k.title, k.text].join('. '), { lang, onEnd: () => setSpeaking(false), onError: () => setSpeaking(false) })
+    speakable([k.title, k.text], lang).then((s) => ttsSpeak(s.text, { lang: s.lang, onEnd: () => setSpeaking(false), onError: () => setSpeaking(false) }))
   }
   const stop = () => { ttsStop(); setSpeaking(false) }
   const open = () => track('demo_open', { once: true })

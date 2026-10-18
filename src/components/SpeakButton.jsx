@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ttsAvailable, ttsSpeak, ttsStop, getTTSEnabled, setTTSEnabled } from '../tts'
+import { speakable } from '../translator'
 
 // Bouton "haut-parleur" : lit le texte fourni a voix haute.
 // Props: text (string|string[]), lang, color, size, autoPlay, settings
@@ -15,17 +16,24 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
 
   const fullText = Array.isArray(text) ? text.filter(Boolean).join('. ') : text
 
-  const start = () => {
+  const reqRef = useRef(0)
+  const start = async () => {
     if (!ttsAvailable() || !fullText) return
+    const req = ++reqRef.current
+    ttsStop()
     setSpeaking(true)
-    ttsSpeak(fullText, {
-      lang,
+    // Toujours lire dans la langue choisie (jamais le texte francais avec une voix anglaise)
+    const s = await speakable(Array.isArray(text) ? text : [text], lang)
+    if (req !== reqRef.current || !mountedRef.current) return
+    ttsSpeak(s.text, {
+      lang: s.lang,
       onEnd: () => mountedRef.current && setSpeaking(false),
       onError: () => mountedRef.current && setSpeaking(false),
     })
   }
 
   const stop = () => {
+    reqRef.current++
     ttsStop()
     setSpeaking(false)
   }
@@ -42,9 +50,9 @@ export default function SpeakButton({ text, lang, color = '#FF6B35', size = 44, 
     if (autoPlay && enabled && fullText) {
       // petit delai pour laisser le rendu se faire
       const id = setTimeout(start, 200)
-      return () => { clearTimeout(id); ttsStop() }
+      return () => { clearTimeout(id); reqRef.current++; ttsStop() }
     }
-    return () => { ttsStop() }
+    return () => { reqRef.current++; ttsStop() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullText, lang, autoPlay])
 

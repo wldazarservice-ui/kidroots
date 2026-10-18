@@ -56,6 +56,37 @@ function scheduleSave() {
 
 const inflight = new Map()
 
+// Textes deja dans la langue cible (valeurs du cache) : la voix off sait ainsi si un texte est encore en francais
+const reverse = new Map()
+function translatedSet(dst) {
+  if (!reverse.has(dst)) {
+    loadCache()
+    const set = new Set()
+    for (const [k, v] of Object.entries(cache)) if (k.startsWith(dst + '|')) set.add(v)
+    reverse.set(dst, set)
+  }
+  return reverse.get(dst)
+}
+
+// Voix off : renvoie le texte a lire dans la langue de l'enfant. Un texte encore en francais
+// (traduction en cours ou echouee) est traduit d'abord ; si la traduction est impossible,
+// on le lit avec une voix francaise plutot qu'avec un accent etranger incomprehensible.
+export async function speakable(parts, dst) {
+  const list = (Array.isArray(parts) ? parts : [parts]).filter((x) => typeof x === 'string' && x.trim())
+  if (!isTranslatable(dst)) return { text: list.join('. '), lang: dst }
+  const done = translatedSet(dst)
+  let failed = false
+  const out = await Promise.all(list.map(async (p) => {
+    if (done.has(p) || !/[a-zàâçéèêëîïôûùüÿœ]{2}/i.test(p)) return p
+    const known = () => !!cache[`${dst}|${p}`]
+    let r = await translateString(p, dst)
+    if (!known()) r = await translateString(p, dst) // 2e essai (reseau capricieux)
+    if (!known()) failed = true // traduction impossible (un nom propre identique dans les 2 langues reste valable)
+    return r
+  }))
+  return { text: out.join('. '), lang: failed ? SRC_LANG : dst }
+}
+
 export function isTranslatable(lang) {
   return lang && lang !== SRC_LANG && !UNSUPPORTED.has(lang)
 }
@@ -97,6 +128,7 @@ export async function translateString(text, dst) {
       const out = decode(raw)
       if (!out) return text
       cache[key] = out
+      reverse.get(dst)?.add(out)
       scheduleSave()
       return out
     } catch {
