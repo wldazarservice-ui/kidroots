@@ -30,7 +30,7 @@ export default function GamesScreen({ lang, nav, activeChild, premium }) {
         {GAMES.map(([key, emoji, title, desc, grad]) => (
           <button key={key} className="btn-kid lift" onClick={() => nav.openGame(key)}
             style={{ background: `linear-gradient(150deg, ${grad[0]}, ${grad[1]})`, color: 'white', borderRadius: 26, padding: '20px 18px', textAlign: 'left', display: 'flex', alignItems: 'center', gap: 16, boxShadow: `0 7px 0 ${grad[1]}55, 0 12px 24px ${grad[1]}40`, minHeight: 120 }}>
-            <span className="float" style={{ fontSize: 54 }}>{emoji}</span>
+            <span className="float" style={{ fontSize: 54, width: 66, textAlign: "center", flexShrink: 0 }}>{emoji}</span>
             <span style={{ flex: 1 }}>
               <span style={{ display: 'block', fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 22, fontWeight: 700 }}>{t(lang, title)}</span>
               <span style={{ display: 'block', fontSize: 14, fontWeight: 800, opacity: 0.95 }}>{t(lang, desc)}</span>
