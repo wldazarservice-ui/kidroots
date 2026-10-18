@@ -19,6 +19,7 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
   const [turn, setTurn] = useState(0)
   const [scores, setScores] = useState([0, 0])
   const [streak, setStreak] = useState(false)
+  const [foundBy, setFoundBy] = useState({}) // a deux : qui a trouve chaque paire (visible sur la carte et a la fin)
   const duo = mode === 'duo'
   const pName = (i) => names[i].trim() || t(lang, i ? 'mem_p2' : 'mem_p1')
   const pairs = difficulty === 'mini' ? 6 : 8
@@ -41,7 +42,7 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
       const [a, b] = next.map((id) => cards.find((c) => c.id === id))
       if (a.code === b.code) {
         setFound((f) => [...f, a.code]); setOpen([])
-        if (duo) { setScores((sc) => sc.map((v, i) => (i === turn ? v + 1 : v))); setStreak(true) }
+        if (duo) { setScores((sc) => sc.map((v, i) => (i === turn ? v + 1 : v))); setFoundBy((f) => ({ ...f, [a.code]: turn })); setStreak(true) }
       } else {
         setLock(true)
         setTimeout(() => { setOpen([]); setLock(false); if (duo) { setTurn((x) => 1 - x); setStreak(false) } }, 900)
@@ -50,7 +51,7 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
   }
   const done = found.length === pairs
   const stars = moves <= pairs + 3 ? 3 : moves <= pairs * 2 ? 2 : 1
-  const again = () => { setGame((g) => g + 1); setOpen([]); setFound([]); setMoves(0); setScores([0, 0]); setTurn(0); setStreak(false) }
+  const again = () => { setGame((g) => g + 1); setOpen([]); setFound([]); setMoves(0); setScores([0, 0]); setTurn(0); setStreak(false); setFoundBy({}) }
   // A deux : le joueur 1 (le profil de l'enfant) gagne 3 etoiles s'il gagne, 2 sinon
   const duoStars = scores[0] > scores[1] ? 3 : 2
   const winner = scores[0] === scores[1] ? -1 : scores[0] > scores[1] ? 0 : 1
@@ -101,7 +102,8 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
                   <div style={{ fontSize: 30 }}>{P_EMOJI[i]}{i === winner ? '👑' : ''}</div>
                   <div style={{ fontWeight: 900, color: INK, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pName(i)}</div>
                   <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontSize: 34, fontWeight: 700, color: P_COLORS[i] }}>{scores[i]}</div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: '#78909C' }}>{t(lang, 'mem_pairs', { n: String(scores[i]) })}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#78909C' }}>{t(lang, scores[i] === 1 ? 'mem_pair_one' : 'mem_pairs', { n: String(scores[i]) })}</div>
+                  <div style={{ fontSize: 22, lineHeight: 1.3, marginTop: 4, wordBreak: 'break-all' }}>{found.filter((c) => foundBy[c] === i).map((c) => COUNTRIES[c].flag).join(' ')}</div>
                 </div>
               ))}
             </div>
@@ -128,7 +130,7 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
                 </div>
               ))}
               <div className="mem-turn" style={{ color: P_COLORS[turn] }} aria-live="polite">
-                {streak ? '🎉 ' + t(lang, 'mem_again_turn') : '👉 ' + t(lang, 'mem_turn', { name: pName(turn) })}
+                {streak ? `🎉 ${t(lang, 'mem_again_turn', { name: pName(turn) })}` : `👉 ${t(lang, 'mem_turn', { name: pName(turn) })}`}
               </div>
             </div>
           )}
@@ -148,13 +150,14 @@ export default function MemoryGame({ onRound, lang, difficulty, onBack, onFinish
                 const ok = found.includes(card.code)
                 return (
                   <button key={card.id} onClick={() => flip(card)} aria-label={shown ? countryName(card.code, lang) : '?'}
-                    className={`mem-card${shown ? ' is-open' : ''}${ok ? ' is-ok' : ''}`}>
+                    className={`mem-card${shown ? ' is-open' : ''}${ok ? ' is-ok' : ''}`}
+                    style={duo && ok ? { '--pc': P_COLORS[foundBy[card.code]] } : undefined}>
                     <span className="mem-inner">
                       <span className="mem-face mem-back"><span className="mem-globe">🌍</span></span>
                       <span className="mem-face mem-front">
                         <span className="mem-flag">{COUNTRIES[card.code].flag}</span>
                         <span className="mem-name">{countryName(card.code, lang)}</span>
-                        {ok && <span className="mem-check">✓</span>}
+                        {ok && <span className="mem-check">{duo ? P_EMOJI[foundBy[card.code]] : '✓'}</span>}
                       </span>
                     </span>
                   </button>

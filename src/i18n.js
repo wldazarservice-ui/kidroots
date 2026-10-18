@@ -10,7 +10,7 @@ export const isLang = (l) => !!LANGUAGES[l]
 
 export const UI = {
   fr: {
-    mem_mode: "Comment veux-tu jouer ?", mem_solo: "Seul", mem_solo_sub: "Trouve toutes les paires", mem_duo: "À deux", mem_duo_sub: "Avec papa, maman, un frère ou une amie", mem_p1: "Joueur 1", mem_p2: "Joueur 2", mem_go: "C'est parti !", mem_turn: "À toi, {name} !", mem_again_turn: "Bravo ! Encore à toi", mem_wins: "{name} gagne !", mem_tie: "Égalité !", mem_pairs: "{n} paires",
+    mem_mode: "Comment veux-tu jouer ?", mem_solo: "Seul", mem_solo_sub: "Trouve toutes les paires", mem_duo: "À deux", mem_duo_sub: "Avec papa, maman, un frère ou une amie", mem_p1: "Joueur 1", mem_p2: "Joueur 2", mem_go: "C'est parti !", mem_turn: "À toi, {name} !", mem_again_turn: "Bravo {name} ! Une paire : rejoue", mem_wins: "{name} gagne !", mem_tie: "Égalité !", mem_pairs: "{n} paires", mem_pair_one: "1 paire",
     tagline: 'Découvre l\'histoire des pays du monde',
     play: 'Partir en expédition ! 🚀',
     progress: 'PROGRESSION GLOBALE',
@@ -337,7 +337,7 @@ export const UI = {
     gift_banner: "🎁 Tu as reçu une carte cadeau ! Crée ton compte parent (gratuit) pour l'activer.",
   },
   en: {
-    mem_mode: "How do you want to play?", mem_solo: "Alone", mem_solo_sub: "Find all the pairs", mem_duo: "Two players", mem_duo_sub: "With mum, dad, a brother or a friend", mem_p1: "Player 1", mem_p2: "Player 2", mem_go: "Let's go!", mem_turn: "Your turn, {name}!", mem_again_turn: "Well done! Go again", mem_wins: "{name} wins!", mem_tie: "It's a tie!", mem_pairs: "{n} pairs",
+    mem_mode: "How do you want to play?", mem_solo: "Alone", mem_solo_sub: "Find all the pairs", mem_duo: "Two players", mem_duo_sub: "With mum, dad, a brother or a friend", mem_p1: "Player 1", mem_p2: "Player 2", mem_go: "Let's go!", mem_turn: "Your turn, {name}!", mem_again_turn: "Well done {name}! A pair: play again", mem_wins: "{name} wins!", mem_tie: "It's a tie!", mem_pairs: "{n} pairs", mem_pair_one: "1 pair",
     tagline: 'Discover the history of countries around the world',
     play: 'Start the expedition! 🚀',
     progress: 'OVERALL PROGRESS',
@@ -664,7 +664,7 @@ export const UI = {
     gift_banner: "🎁 You received a gift card! Create your free parent account to activate it.",
   },
   de: {
-    mem_mode: "Wie möchtest du spielen?", mem_solo: "Allein", mem_solo_sub: "Finde alle Paare", mem_duo: "Zu zweit", mem_duo_sub: "Mit Mama, Papa, Bruder oder Freundin", mem_p1: "Spieler 1", mem_p2: "Spieler 2", mem_go: "Los geht's!", mem_turn: "Du bist dran, {name}!", mem_again_turn: "Super! Nochmal du", mem_wins: "{name} gewinnt!", mem_tie: "Unentschieden!", mem_pairs: "{n} Paare",
+    mem_mode: "Wie möchtest du spielen?", mem_solo: "Allein", mem_solo_sub: "Finde alle Paare", mem_duo: "Zu zweit", mem_duo_sub: "Mit Mama, Papa, Bruder oder Freundin", mem_p1: "Spieler 1", mem_p2: "Spieler 2", mem_go: "Los geht's!", mem_turn: "Du bist dran, {name}!", mem_again_turn: "Super, {name}! Ein Paar: nochmal du", mem_wins: "{name} gewinnt!", mem_tie: "Unentschieden!", mem_pairs: "{n} Paare", mem_pair_one: "1 Paar",
     tagline: 'Entdecke die Geschichte der Länder der Welt',
     play: 'Expedition starten! 🚀',
     progress: 'GESAMTFORTSCHRITT',
@@ -1049,7 +1049,7 @@ export const UI = {
     reading_level: "Kalan dakan",
   },
   ar: {
-    mem_mode: "كيف تريد أن تلعب؟", mem_solo: "وحدي", mem_solo_sub: "اعثر على كل الأزواج", mem_duo: "لاعبان", mem_duo_sub: "مع أبي أو أمي أو أخ أو صديقة", mem_p1: "اللاعب 1", mem_p2: "اللاعب 2", mem_go: "لنبدأ!", mem_turn: "دورك يا {name}!", mem_again_turn: "أحسنت! العب مرة أخرى", mem_wins: "{name} يفوز!", mem_tie: "تعادل!", mem_pairs: "{n} أزواج",
+    mem_mode: "كيف تريد أن تلعب؟", mem_solo: "وحدي", mem_solo_sub: "اعثر على كل الأزواج", mem_duo: "لاعبان", mem_duo_sub: "مع أبي أو أمي أو أخ أو صديقة", mem_p1: "اللاعب 1", mem_p2: "اللاعب 2", mem_go: "لنبدأ!", mem_turn: "دورك يا {name}!", mem_again_turn: "أحسنت يا {name}! زوج: العب مرة أخرى", mem_wins: "{name} يفوز!", mem_tie: "تعادل!", mem_pairs: "{n} أزواج", mem_pair_one: "زوج واحد",
     crash_title: "عفوًا، البوصلة تاهت قليلًا!",
     crash_sub: "لم تُحمَّل هذه الشاشة بشكل صحيح. لقد تم إبلاغنا. أعد تحميل الصفحة لمتابعة المغامرة.",
     crash_btn: "إعادة التحميل",
@@ -1182,7 +1182,7 @@ export const UI = {
     dons_link: "تبرعاتنا",
   },
   pt: {
-    mem_mode: "Como queres jogar?", mem_solo: "Sozinho", mem_solo_sub: "Encontra todos os pares", mem_duo: "A dois", mem_duo_sub: "Com o pai, a mãe, um irmão ou uma amiga", mem_p1: "Jogador 1", mem_p2: "Jogador 2", mem_go: "Vamos lá!", mem_turn: "É a tua vez, {name}!", mem_again_turn: "Boa! Joga outra vez", mem_wins: "{name} ganha!", mem_tie: "Empate!", mem_pairs: "{n} pares",
+    mem_mode: "Como queres jogar?", mem_solo: "Sozinho", mem_solo_sub: "Encontra todos os pares", mem_duo: "A dois", mem_duo_sub: "Com o pai, a mãe, um irmão ou uma amiga", mem_p1: "Jogador 1", mem_p2: "Jogador 2", mem_go: "Vamos lá!", mem_turn: "É a tua vez, {name}!", mem_again_turn: "Boa, {name}! Um par: joga outra vez", mem_wins: "{name} ganha!", mem_tie: "Empate!", mem_pairs: "{n} pares", mem_pair_one: "1 par",
     crash_title: "Ups, a bússola ficou confusa!",
     crash_sub: "Um ecrã não carregou bem. Já fomos avisados. Recarrega a página para continuar a aventura.",
     crash_btn: "Recarregar",

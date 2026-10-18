@@ -606,3 +606,7 @@ body {
 .mem-player-name { flex: 1; min-width: 0; font-weight: 900; color: #1A2A4F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mem-player-pts { font: 700 26px Fredoka, Nunito, sans-serif; color: var(--pc); }
 .mem-turn { grid-column: 1 / -1; text-align: center; font-weight: 900; font-size: 16px; }
+/* Memory a deux : la paire prend la couleur (et l'animal) du joueur qui l'a trouvee */
+.mem-card.is-ok[style*="--pc"] .mem-front { border-color: var(--pc); background: #fff; }
+.mem-card.is-ok[style*="--pc"] .mem-check { background: #fff; border: 2px solid var(--pc); font-size: 15px; }
+.mem-player.on .mem-player-pts { animation: memPop .5s ease; }
