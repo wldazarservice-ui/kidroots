@@ -79,7 +79,6 @@ export default function ChildPickerScreen({ changeLang, user, kids, onPick, onCr
           <div style={{ fontFamily: 'Fredoka, Nunito, sans-serif', fontWeight: 700, fontSize: 26, lineHeight: 1 }}>
             <span style={{ color: '#FF6F00' }}>Moka</span><span style={{ color: '#1E88E5' }}>libo</span>
           </div>
-          <div style={{ fontSize: 12, color: '#78909C', fontWeight: 700, marginTop: 2 }}>{user.email || tr('Compte parent')}</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {changeLang && <LangPicker lang={lang} onChange={changeLang} compact />}
