@@ -691,7 +691,7 @@ export default function App() {
       {screen === 'map'     && <MapScreen {...shared} />}
       {screen === 'games'   && <GamesScreen {...shared} />}
       {screen === 'game' && gameKey === 'hunt' && <HuntGame onRound={takeGameRound} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
-      {screen === 'game' && gameKey === 'memory' && <MemoryGame onRound={takeGameRound} lang={lang} difficulty={difficulty} onBack={nav.openGames} onFinish={addGameResult} />}
+      {screen === 'game' && gameKey === 'memory' && <MemoryGame onRound={takeGameRound} lang={lang} difficulty={difficulty} onBack={nav.openGames} onFinish={addGameResult} childName={activeChild?.name?.split(' ')[0]} />}
       {screen === 'game' && (gameKey === 'animals' || gameKey === 'riddles') && <ChoiceGame key={gameKey} onRound={takeGameRound} kind={gameKey} lang={lang} onBack={nav.openGames} onFinish={addGameResult} />}
       {screen === 'regions' && <RegionScreen {...shared} regionKey={regionKey} onRegion={setRegionKey} />}
       {screen === 'country' && country && <CountryScreen country={country} code={countryCode} {...shared} />}

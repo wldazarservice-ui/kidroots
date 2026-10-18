@@ -591,3 +591,18 @@ body {
   .lp-proof { display: grid !important; grid-template-columns: 1fr 1fr; }
   .lp-proof span { display: flex; align-items: center; justify-content: center; text-align: center; }
 }
+
+/* Memory a deux : choix du mode et tableau des scores */
+.mem-mode { display: flex; align-items: center; gap: 12px; width: 100%; background: white; border-radius: 24px; padding: 16px 18px; margin-bottom: 12px; text-align: left; color: #1A2A4F; box-shadow: 0 8px 22px rgba(26,42,79,.10); font-family: inherit; }
+.mem-mode b { display: block; font-size: 19px; font-weight: 900; }
+.mem-mode small { display: block; font-size: 14px; font-weight: 800; color: #607D8B; }
+.mem-mode-duo { display: block; border: 3px solid #FFE082; }
+.mem-mode-ico { font-size: 40px; width: 62px; height: 62px; border-radius: 20px; background: #FFF3D6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mem-name-in { display: flex; align-items: center; gap: 10px; border: 3px solid; border-radius: 16px; padding: 6px 12px; background: #FFFDF7; }
+.mem-name-in input { flex: 1; min-width: 0; border: none; background: none; outline: none; font: 900 17px Nunito, sans-serif; color: #1A2A4F; }
+.mem-score { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 12px; }
+.mem-player { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,.85); border: 3px solid transparent; border-radius: 18px; padding: 8px 10px; opacity: .65; transition: all .25s; min-width: 0; }
+.mem-player.on { opacity: 1; border-color: var(--pc); background: white; box-shadow: 0 6px 16px rgba(26,42,79,.12); transform: scale(1.03); }
+.mem-player-name { flex: 1; min-width: 0; font-weight: 900; color: #1A2A4F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mem-player-pts { font: 700 26px Fredoka, Nunito, sans-serif; color: var(--pc); }
+.mem-turn { grid-column: 1 / -1; text-align: center; font-weight: 900; font-size: 16px; }
