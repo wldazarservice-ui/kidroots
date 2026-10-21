@@ -2,6 +2,25 @@ import LegalFooter from './LegalFooter'
 import { useState } from 'react'
 import { signIn, signUp, googleSignIn, resetPassword } from '../auth'
 
+// Navigateurs integres (Instagram, Facebook, TikTok...) : Google y refuse la connexion (« disallowed_useragent »)
+const IN_APP = typeof navigator !== 'undefined' && /Instagram|FBAN|FBAV|FB_IAB|musical_ly|TikTok|Snapchat|\bLine\//i.test(navigator.userAgent || '')
+
+function InAppNotice() {
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try { await navigator.clipboard.writeText('https://mokalibo.com'); setCopied(true) } catch { /* rien */ }
+  }
+  return (
+    <div style={{ background: '#FFF8E1', border: '2px solid #FFE082', borderRadius: 16, padding: '12px 14px', marginBottom: 14, fontSize: 14, fontWeight: 800, color: '#5D4037', lineHeight: 1.55 }}>
+      📱 Tu es dans l'application Instagram (ou Facebook) : la connexion Google n'y fonctionne pas.<br />
+      👉 Utilise ton <b>e-mail</b> ci-dessous, ou ouvre Mokalibo dans ton navigateur : menu <b>⋯</b> en haut à droite, puis « Ouvrir dans le navigateur ».
+      <button type="button" onClick={copy} style={{ display: 'block', marginTop: 8, background: 'white', border: '2px solid #FFE082', borderRadius: 12, padding: '6px 12px', fontFamily: 'inherit', fontWeight: 900, color: '#E65100', cursor: 'pointer' }}>
+        {copied ? '✅ Lien copié' : '🔗 Copier le lien mokalibo.com'}
+      </button>
+    </div>
+  )
+}
+
 export default function AuthScreen({ initialMode = 'signin', onBack }) {
   const [mode, setMode] = useState(initialMode) // 'signin' | 'signup'
   const [info, setInfo] = useState('')
@@ -96,6 +115,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
           </div>
         )}
         {isSignup ? (<>
+        {IN_APP ? <InAppNotice /> : (<>
         <button type="button" className="btn-kid" onClick={google} disabled={busy}
           style={{ width: '100%', background: 'white', color: '#3c4043', padding: '16px', fontSize: 17, fontWeight: 900, border: '3px solid #4285F4', boxShadow: '0 5px 0 #D2E3FC', borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, opacity: busy ? 0.6 : 1 }}>
           <span style={{ fontSize: 18, fontWeight: 900, color: '#4285F4' }}>G</span>
@@ -106,6 +126,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
           OU AVEC TON E-MAIL
           <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
         </div>
+        </>)}
         <form onSubmit={submit}>
           <input type="email" placeholder="Email du parent" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email"
             style={{ ...input, marginBottom: 10 }} />
@@ -171,6 +192,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
             {busy ? '...' : isSignup ? '✨ Créer mon compte' : '🚀 Se connecter'}
           </button>
         </form>
+        {IN_APP ? <div style={{ marginTop: 14 }}><InAppNotice /></div> : (<>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 14px', color: '#8DB39A', fontSize: 12, fontWeight: 900 }}>
           <div style={{ flex: 1, height: 2, borderRadius: 1, background: '#E8F8EA' }} />
           OU
@@ -181,6 +203,7 @@ export default function AuthScreen({ initialMode = 'signin', onBack }) {
           <span style={{ fontSize: 18, fontWeight: 900, color: '#4285F4' }}>G</span>
           Continuer avec Google
         </button>
+        </>)}
         </>)}
 
         <div style={{ marginTop: 16, fontSize: 12, color: '#6B8F77', textAlign: 'center', fontWeight: 800, lineHeight: 1.6 }}>
