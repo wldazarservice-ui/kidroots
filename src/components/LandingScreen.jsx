@@ -7,6 +7,35 @@ import LegalFooter from './LegalFooter'
 import SchoolsPage from './SchoolsPage'
 import { openGift, pendingGift } from './Gift'
 
+// Page « À venir » : ce qui marche aujourd'hui et ce sur quoi on travaille, dit en toute transparence
+const SOON_TXT = {
+  fr: { title: 'Ce qui arrive bientôt', intro: 'Nous construisons Mokalibo avec les familles. Voici, en toute transparence, ce qui fonctionne aujourd’hui et ce sur quoi nous travaillons.', now: 'En cours', planned: 'Prévu', idea: 'Avec vous',
+    voice_t: '🔊 Une vraie voix de conteur', voice: 'Aujourd’hui, la lecture à voix haute utilise la voix installée sur votre téléphone, votre tablette ou votre ordinateur. Sa qualité dépend donc de l’appareil : sur certains, elle peut sembler un peu robotique. Nous travaillons à une voix plus humaine et agréable, la même sur tous les appareils.',
+    voice_tip: '💡 En attendant, sur iPhone ou iPad : installez une voix « Améliorée » (Réglages → Accessibilité → Contenu énoncé → Voix → Français). Mokalibo la choisit automatiquement.',
+    terr_t: '🗺️ Les territoires et les îles du monde', terr: 'Groenland, Polynésie, La Réunion, Taïwan… les territoires marqués « Bientôt » sur la carte auront aussi leurs histoires.',
+    ideas_t: '💬 Vos idées', ideas: 'Un pays à ajouter, une idée, quelque chose qui ne marche pas ? Écrivez-nous : nous lisons chaque message.', ideas_btn: 'Nous écrire' },
+  en: { title: 'Coming soon', intro: 'We are building Mokalibo together with families. Here is, in full transparency, what works today and what we are working on.', now: 'In progress', planned: 'Planned', idea: 'With you',
+    voice_t: '🔊 A real storyteller voice', voice: 'Today, reading aloud uses the voice installed on your phone, tablet or computer. Its quality depends on the device: on some, it may sound a little robotic. We are working on a more human and pleasant voice, the same on every device.',
+    voice_tip: '💡 Meanwhile, on iPhone or iPad: install an “Enhanced” voice (Settings → Accessibility → Spoken Content → Voices). Mokalibo picks it automatically.',
+    terr_t: '🗺️ Territories and islands of the world', terr: 'Greenland, Polynesia, Réunion, Taiwan… the territories marked “Soon” on the map will get their stories too.',
+    ideas_t: '💬 Your ideas', ideas: 'A country to add, an idea, something that doesn’t work? Write to us: we read every message.', ideas_btn: 'Write to us' },
+  de: { title: 'Was bald kommt', intro: 'Wir entwickeln Mokalibo gemeinsam mit Familien. Hier ganz offen: was heute funktioniert und woran wir arbeiten.', now: 'In Arbeit', planned: 'Geplant', idea: 'Mit euch',
+    voice_t: '🔊 Eine echte Erzählerstimme', voice: 'Zum Vorlesen nutzt Mokalibo heute die Stimme, die auf eurem Handy, Tablet oder Computer installiert ist. Die Qualität hängt also vom Gerät ab: Auf manchen klingt sie etwas roboterhaft. Wir arbeiten an einer menschlicheren, angenehmen Stimme, die auf allen Geräten gleich klingt.',
+    voice_tip: '💡 Bis dahin auf iPhone oder iPad: eine „Erweiterte“ Stimme installieren (Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen). Mokalibo wählt sie automatisch.',
+    terr_t: '🗺️ Gebiete und Inseln der Welt', terr: 'Grönland, Polynesien, Réunion, Taiwan… die Gebiete, die auf der Karte mit „Bald“ markiert sind, bekommen auch ihre Geschichten.',
+    ideas_t: '💬 Eure Ideen', ideas: 'Ein Land, das fehlt, eine Idee, etwas funktioniert nicht? Schreibt uns: Wir lesen jede Nachricht.', ideas_btn: 'Schreibt uns' },
+  pt: { title: 'O que vem aí', intro: 'Construímos o Mokalibo com as famílias. Aqui, com toda a transparência, o que funciona hoje e aquilo em que estamos a trabalhar.', now: 'Em curso', planned: 'Previsto', idea: 'Convosco',
+    voice_t: '🔊 Uma verdadeira voz de contador de histórias', voice: 'Hoje, a leitura em voz alta usa a voz instalada no telemóvel, tablet ou computador. A qualidade depende do aparelho: em alguns, pode soar um pouco robótica. Estamos a trabalhar numa voz mais humana e agradável, igual em todos os aparelhos.',
+    voice_tip: '💡 Entretanto, no iPhone ou iPad: instale uma voz “Melhorada” (Definições → Acessibilidade → Conteúdo falado → Vozes). O Mokalibo escolhe-a automaticamente.',
+    terr_t: '🗺️ Os territórios e as ilhas do mundo', terr: 'Gronelândia, Polinésia, Reunião, Taiwan… os territórios marcados “Em breve” no mapa também terão as suas histórias.',
+    ideas_t: '💬 As vossas ideias', ideas: 'Um país a acrescentar, uma ideia, algo que não funciona? Escrevam-nos: lemos todas as mensagens.', ideas_btn: 'Escrever-nos' },
+  ar: { title: 'ما سيأتي قريبًا', intro: 'نبني Mokalibo مع العائلات. إليكم بكل شفافية ما يعمل اليوم وما نعمل عليه.', now: 'قيد العمل', planned: 'مخطط', idea: 'معكم',
+    voice_t: '🔊 صوت راوٍ حقيقي', voice: 'اليوم، تستخدم القراءة بصوت عالٍ الصوت المثبّت على هاتفكم أو جهازكم اللوحي أو حاسوبكم. لذلك تختلف الجودة حسب الجهاز، وقد يبدو الصوت آليًا قليلًا على بعضها. نعمل على صوت أكثر إنسانية ولطفًا، هو نفسه على كل الأجهزة.',
+    voice_tip: '💡 في الأثناء، على iPhone أو iPad: ثبّتوا صوتًا «محسّنًا» (الإعدادات ← تسهيلات الاستخدام ← المحتوى المنطوق ← الأصوات). يختاره Mokalibo تلقائيًا.',
+    terr_t: '🗺️ أقاليم وجزر العالم', terr: 'غرينلاند، بولينيزيا، لا ريونيون، تايوان… الأقاليم المعلَّمة «قريبًا» على الخريطة ستحصل أيضًا على قصصها.',
+    ideas_t: '💬 أفكاركم', ideas: 'دولة تريدون إضافتها، فكرة، أو شيء لا يعمل؟ راسلونا: نقرأ كل رسالة.', ideas_btn: 'راسلونا' },
+}
+
 const GIFT_TXT = {
   fr: { title: 'Offrir Mokalibo', sub: 'Un cadeau qui dure toute l’année : 195 pays, des histoires vraies lues à voix haute, des quiz et des jeux. Pour les enfants de 4 à 12 ans, sans publicité.', points: ['🎁 1 an de Formule Famille (jusqu’à 5 enfants) · 14,99 €', '⚡ Code cadeau reçu tout de suite après le paiement', '🖨️ Jolie carte à imprimer ou à envoyer par WhatsApp', '👵 Idéal pour les grands-parents, parrains et marraines', '💛 5 % vont à la protection de l’enfance'], cta: '🎁 Offrir Mokalibo · 14,99 €', note: 'Paiement unique, sans abonnement · valable 3 ans' },
   en: { title: 'Give Mokalibo', sub: 'A gift that lasts all year: 195 countries, true stories read aloud, quizzes and games. For children aged 4 to 12, no ads.', points: ['🎁 1 year of the Family Plan (up to 5 children) · €14.99', '⚡ Gift code right after payment', '🖨️ A lovely card to print or send on WhatsApp', '👵 Perfect for grandparents and godparents', '💛 5% goes to child protection'], cta: '🎁 Give Mokalibo · €14.99', note: 'One-time payment, no subscription · valid for 3 years' },
@@ -485,13 +514,13 @@ function PhoneMockup({ T, lang }) {
 
 
 // Menu de la page de presentation : une page par sujet (adresse #pricing etc., le bouton retour marche)
-const PAGES = ['home', 'discover', 'countries', 'pricing', 'offrir', 'ecoles', 'faq']
+const PAGES = ['home', 'discover', 'countries', 'pricing', 'offrir', 'ecoles', 'faq', 'avenir']
 const NAV = {
-  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', offrir: '🎁 Offrir', ecoles: 'Écoles', faq: 'FAQ', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: '🎁 Offrir Mokalibo →', offrir: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
-  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', offrir: '🎁 Gift', ecoles: 'Schools', faq: 'FAQ', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: '🎁 Give Mokalibo →', offrir: 'Teachers and schools →', ecoles: 'FAQ →' }, all_countries: 'All countries', dons: 'See our donation report' },
-  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', offrir: '🎁 Schenken', ecoles: 'Schulen', faq: 'FAQ', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: '🎁 Mokalibo verschenken →', offrir: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
-  pt: { home: 'Início', discover: 'Descobrir', countries: 'Os países', pricing: 'Preços', offrir: '🎁 Oferecer', ecoles: 'Escolas', faq: 'FAQ', menu: 'Menu', next: { home: 'Descobrir a app →', discover: 'Ver os países →', countries: 'Ver os preços →', pricing: '🎁 Oferecer Mokalibo →', offrir: 'Professores e escolas →', ecoles: 'Perguntas frequentes →' }, all_countries: 'Todos os países', dons: '' },
-  ar: { home: 'الرئيسية', discover: 'اكتشف', countries: 'الدول', pricing: 'الأسعار', offrir: '🎁 أهدِ', ecoles: 'المدارس', faq: 'أسئلة', menu: 'القائمة', next: { home: 'اكتشف التطبيق ←', discover: 'شاهد الدول ←', countries: 'شاهد الأسعار ←', pricing: '🎁 أهدِ Mokalibo ←', offrir: 'المعلّمون والمدارس ←', ecoles: 'أسئلة شائعة ←' }, all_countries: 'كل الدول', dons: '' },
+  fr: { home: 'Accueil', discover: 'Découvrir', countries: 'Les pays', pricing: 'Tarifs', offrir: '🎁 Offrir', ecoles: 'Écoles', faq: 'FAQ', avenir: '🚀 À venir', menu: 'Menu', next: { home: 'Découvrir l’app →', discover: 'Voir les pays →', countries: 'Voir les tarifs →', pricing: '🎁 Offrir Mokalibo →', offrir: 'Enseignants et écoles →', ecoles: 'Questions fréquentes →' , faq: '🚀 Ce qui arrive bientôt →' }, all_countries: 'Tous les pays', dons: 'Voir le bilan de nos dons' },
+  en: { home: 'Home', discover: 'Discover', countries: 'Countries', pricing: 'Pricing', offrir: '🎁 Gift', ecoles: 'Schools', faq: 'FAQ', avenir: '🚀 Coming soon', menu: 'Menu', next: { home: 'Discover the app →', discover: 'See the countries →', countries: 'See pricing →', pricing: '🎁 Give Mokalibo →', offrir: 'Teachers and schools →', ecoles: 'FAQ →' , faq: '🚀 Coming soon →' }, all_countries: 'All countries', dons: 'See our donation report' },
+  de: { home: 'Start', discover: 'Entdecken', countries: 'Länder', pricing: 'Preise', offrir: '🎁 Schenken', ecoles: 'Schulen', faq: 'FAQ', avenir: '🚀 Demnächst', menu: 'Menü', next: { home: 'App entdecken →', discover: 'Länder ansehen →', countries: 'Preise ansehen →', pricing: '🎁 Mokalibo verschenken →', offrir: 'Lehrkräfte und Schulen →', ecoles: 'Häufige Fragen →' , faq: '🚀 Was bald kommt →' }, all_countries: 'Alle Länder', dons: 'Unsere Spenden ansehen' },
+  pt: { home: 'Início', discover: 'Descobrir', countries: 'Os países', pricing: 'Preços', offrir: '🎁 Oferecer', ecoles: 'Escolas', faq: 'FAQ', avenir: '🚀 Em breve', menu: 'Menu', next: { home: 'Descobrir a app →', discover: 'Ver os países →', countries: 'Ver os preços →', pricing: '🎁 Oferecer Mokalibo →', offrir: 'Professores e escolas →', ecoles: 'Perguntas frequentes →' , faq: '🚀 O que vem aí →' }, all_countries: 'Todos os países', dons: '' },
+  ar: { home: 'الرئيسية', discover: 'اكتشف', countries: 'الدول', pricing: 'الأسعار', offrir: '🎁 أهدِ', ecoles: 'المدارس', faq: 'أسئلة', avenir: '🚀 قريبًا', menu: 'القائمة', next: { home: 'اكتشف التطبيق ←', discover: 'شاهد الدول ←', countries: 'شاهد الأسعار ←', pricing: '🎁 أهدِ Mokalibo ←', offrir: 'المعلّمون والمدارس ←', ecoles: 'أسئلة شائعة ←' , faq: '🚀 ما سيأتي قريبًا ←' }, all_countries: 'كل الدول', dons: '' },
 }
 const pageFromHash = () => {
   const h = (typeof window !== 'undefined' ? window.location.hash : '').replace('#', '')
@@ -779,6 +808,29 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
       </section>
 
       </>)}
+      {page === 'avenir' && (() => {
+        const S = SOON_TXT[lang] || (lang === 'bm' ? SOON_TXT.fr : SOON_TXT.en)
+        const items = [[S.voice_t, S.voice, S.now, '#E65100', S.voice_tip], [S.terr_t, S.terr, S.planned, '#1565C0'], [S.ideas_t, S.ideas, S.idea, '#2E7D4F', null, true]]
+        return (
+          <section style={{ padding: '56px 16px' }}>
+            <div className="lp-wrap" style={{ maxWidth: 780 }}>
+              <h2 style={h2}>{S.title}</h2>
+              <p style={{ fontSize: 17, fontWeight: 700, color: '#455A64', lineHeight: 1.6, textAlign: 'center', margin: '-8px auto 24px', maxWidth: 620 }}>{S.intro}</p>
+              {items.map(([title, text, badge, color, tip, contact]) => (
+                <div key={title} style={{ background: 'white', borderRadius: 24, padding: '20px 20px', marginBottom: 14, boxShadow: '0 8px 22px rgba(26,42,79,0.07)', borderLeft: `6px solid ${color}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 8 }}>
+                    <div style={{ fontFamily: FONT_TITLE, fontSize: 21, fontWeight: 700, color: INK, flex: 1, minWidth: 200 }}>{title}</div>
+                    <span style={{ background: color, color: 'white', borderRadius: 999, padding: '4px 12px', fontSize: 13, fontWeight: 900 }}>{badge}</span>
+                  </div>
+                  <p style={{ fontSize: 15.5, fontWeight: 700, color: '#455A64', lineHeight: 1.65, margin: 0 }}>{text}</p>
+                  {tip && <div style={{ marginTop: 12, background: '#FFF8E1', borderRadius: 14, padding: '10px 14px', fontSize: 14, fontWeight: 800, color: '#5D4037', lineHeight: 1.55 }}>{tip}</div>}
+                  {contact && <button className="btn-kid soft" onClick={() => openSupport({ where: 'avenir' })} style={{ marginTop: 12, background: 'white', color: '#1565C0', padding: '11px 18px', fontSize: 15, borderRadius: 16, border: '2px solid #BBDEFB' }}>✉️ {S.ideas_btn}</button>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      })()}
       {nextBtn}
       </main>
 
