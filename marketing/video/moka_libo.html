@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@800;900&display=block" rel="stylesheet">
+<link href="noto-emoji.css" rel="stylesheet">
+<style>
+  /* Moka & Libo : episodes animes (9:16, 1080x1920). window.render(t) dessine l'image a l'instant t (secondes). */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: Nunito, sans-serif; color: #1A2A4F; position: relative; -webkit-font-smoothing: antialiased; }
+  .e { font-family: 'Noto Color Emoji'; line-height: 1; }
+  .fr { font-family: Fredoka, sans-serif; font-weight: 700; }
+  .abs { position: absolute; }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .bubble { position: absolute; background: #fff; border-radius: 44px; padding: 30px 40px; font-size: 54px; line-height: 1.2; box-shadow: 0 14px 0 rgba(0,0,0,.08), 0 24px 50px rgba(0,0,0,.18); text-align: center; }
+  .bubble::after { content: ''; position: absolute; width: 50px; height: 50px; background: #fff; transform: rotate(45deg); }
+  .bubble.down::after { bottom: -20px; left: var(--tail, 50%); margin-left: -25px; }
+  .card { position: absolute; left: 70px; right: 70px; background: #fff; border-radius: 56px; padding: 44px 50px; box-shadow: 0 18px 0 rgba(0,0,0,.08), 0 30px 60px rgba(0,0,0,.2); text-align: center; }
+  .opt { position: absolute; left: 110px; right: 110px; height: 130px; border-radius: 40px; background: #fff; display: flex; align-items: center; gap: 28px; padding: 0 36px; font-size: 58px; box-shadow: 0 10px 0 rgba(0,0,0,.08); }
+  .opt b { width: 84px; height: 84px; border-radius: 24px; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 50px; flex-shrink: 0; }
+  .petal { position: absolute; width: 26px; height: 18px; border-radius: 60% 0 60% 0; background: #FFB7C9; }
+</style>
+</head>
+<body>
+<div id="sky" class="abs" style="inset:0"></div>
+<div id="clouds" class="abs" style="inset:0"></div>
+
+<!-- Decor du Japon -->
+<svg id="japan" class="abs" style="left:0;top:0;opacity:0" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <circle cx="790" cy="430" r="150" fill="#E53935" opacity=".9"/>
+  <polygon points="80,1500 540,640 1000,1500" fill="#5C6BC0"/>
+  <polygon points="420,865 540,640 660,865 610,830 570,880 540,835 505,880 470,830" fill="#fff"/>
+  <rect x="0" y="1480" width="1080" height="440" fill="#81C784"/>
+  <rect x="0" y="1480" width="1080" height="40" fill="#66BB6A"/>
+  <g transform="translate(700,1180)">
+    <rect x="-150" y="0" width="300" height="34" rx="10" fill="#C62828"/>
+    <rect x="-180" y="-34" width="360" height="40" rx="14" fill="#D32F2F"/>
+    <rect x="-110" y="34" width="34" height="290" fill="#C62828"/>
+    <rect x="76" y="34" width="34" height="290" fill="#C62828"/>
+    <rect x="-130" y="90" width="260" height="24" fill="#C62828"/>
+  </g>
+</svg>
+<div id="petals" class="abs" style="inset:0;opacity:0"></div>
+
+<!-- Montgolfiere (voyage) -->
+<svg id="balloon" class="abs" width="420" height="640" viewBox="0 0 420 640" style="left:0;top:0;opacity:0">
+  <path d="M210 20 C 90 20 30 110 30 210 C 30 320 140 380 175 430 L 245 430 C 280 380 390 320 390 210 C 390 110 330 20 210 20 Z" fill="#FF7A00"/>
+  <path d="M210 20 C 160 60 140 140 140 210 C 140 300 175 380 185 430 L 235 430 C 245 380 280 300 280 210 C 280 140 260 60 210 20 Z" fill="#1E88E5"/>
+  <path d="M210 20 C 195 80 190 150 190 210 C 190 300 200 380 203 430 L 217 430 C 220 380 230 300 230 210 C 230 150 225 80 210 20 Z" fill="#FFD54F"/>
+  <line x1="180" y1="430" x2="160" y2="520" stroke="#6D4C41" stroke-width="6"/>
+  <line x1="240" y1="430" x2="260" y2="520" stroke="#6D4C41" stroke-width="6"/>
+  <rect x="140" y="510" width="140" height="100" rx="18" fill="#A1887F"/>
+  <rect x="140" y="530" width="140" height="14" fill="#8D6E63"/>
+</svg>
+
+<!-- Moka -->
+<svg id="moka" class="abs" width="320" height="480" viewBox="0 0 200 300" style="left:0;top:0;opacity:0">
+  <g id="mokaBody">
+    <rect x="74" y="230" width="20" height="50" rx="9" fill="#8D5524"/>
+    <rect x="106" y="230" width="20" height="50" rx="9" fill="#8D5524"/>
+    <rect x="66" y="270" width="34" height="18" rx="9" fill="#37474F"/>
+    <rect x="100" y="270" width="34" height="18" rx="9" fill="#37474F"/>
+    <rect x="66" y="200" width="68" height="44" rx="12" fill="#1565C0"/>
+    <rect x="58" y="138" width="84" height="80" rx="30" fill="#FF7A00"/>
+    <rect x="40" y="150" width="22" height="58" rx="11" fill="#8D5524" transform="rotate(12 51 150)"/>
+    <g id="mokaArm"><rect x="138" y="150" width="22" height="58" rx="11" fill="#8D5524"/></g>
+    <circle cx="100" cy="88" r="58" fill="#8D5524"/>
+    <g fill="#2B1B12">
+      <circle cx="58" cy="62" r="20"/><circle cx="76" cy="42" r="22"/><circle cx="100" cy="34" r="23"/><circle cx="124" cy="42" r="22"/><circle cx="142" cy="62" r="20"/><circle cx="150" cy="84" r="13"/><circle cx="50" cy="84" r="13"/>
+    </g>
+    <g id="mokaEyes">
+      <ellipse cx="80" cy="92" rx="11" ry="13" fill="#fff"/><ellipse cx="120" cy="92" rx="11" ry="13" fill="#fff"/>
+      <circle cx="82" cy="94" r="7" fill="#1A2A4F"/><circle cx="122" cy="94" r="7" fill="#1A2A4F"/>
+      <circle cx="84" cy="91" r="2.5" fill="#fff"/><circle cx="124" cy="91" r="2.5" fill="#fff"/>
+    </g>
+    <circle cx="66" cy="112" r="9" fill="#FF8A80" opacity=".55"/><circle cx="134" cy="112" r="9" fill="#FF8A80" opacity=".55"/>
+    <path d="M84 118 Q100 134 116 118" stroke="#3E2723" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <rect x="62" y="150" width="76" height="12" rx="6" fill="#FFD54F"/>
+  </g>
+</svg>
+
+<!-- Libo -->
+<svg id="libo" class="abs" width="230" height="230" viewBox="0 0 120 120" style="left:0;top:0;opacity:0">
+  <path d="M40 92 L22 116 L36 112 L30 120 L50 100 Z" fill="#1565C0"/>
+  <ellipse cx="58" cy="72" rx="30" ry="34" fill="#1E88E5"/>
+  <ellipse cx="62" cy="80" rx="18" ry="22" fill="#FFD54F"/>
+  <g id="liboWing"><ellipse cx="44" cy="70" rx="13" ry="24" fill="#1565C0"/></g>
+  <circle cx="64" cy="36" r="22" fill="#1E88E5"/>
+  <ellipse cx="56" cy="16" rx="5" ry="12" fill="#FF7A00" transform="rotate(-25 56 16)"/>
+  <ellipse cx="64" cy="13" rx="5" ry="13" fill="#E53935"/>
+  <ellipse cx="72" cy="16" rx="5" ry="12" fill="#FFD54F" transform="rotate(25 72 16)"/>
+  <circle cx="72" cy="34" r="8" fill="#fff"/><circle id="liboPupil" cx="74" cy="35" r="4.5" fill="#1A2A4F"/>
+  <path d="M82 40 Q100 44 86 56 Q84 48 78 46 Z" fill="#FF9800"/>
+  <circle cx="58" cy="44" r="4" fill="#FF8A80" opacity=".6"/>
+</svg>
+
+<div id="title" class="abs" style="left:0;right:0;top:300px;text-align:center;opacity:0">
+  <div class="fr" style="font-size:150px;line-height:1;color:#fff;text-shadow:0 10px 0 rgba(0,0,0,.12),0 20px 40px rgba(0,0,0,.25)"><span style="color:#FF7A00">Moka</span> <span style="font-size:110px">&amp;</span> <span style="color:#FFD54F">Libo</span></div>
+  <div class="fr" style="display:inline-block;margin-top:40px;background:#fff;border-radius:999px;padding:20px 50px;font-size:58px">Épisode 1 · Le Japon <span class="e">🇯🇵</span></div>
+</div>
+
+<div id="b1" class="bubble down fr" style="opacity:0"></div>
+<div id="card" class="card" style="top:300px;opacity:0"></div>
+<div id="quiz" class="abs" style="inset:0;opacity:0">
+  <div class="card fr" style="top:240px;font-size:64px;line-height:1.15"><span class="e" style="font-size:90px">🤔</span><br>Devine ! Comment dit-on<br>« bonjour » en japonais ?</div>
+  <div class="opt fr" id="o0" style="top:760px"><b style="background:#FF7A00">A</b>Konnichiwa</div>
+  <div class="opt fr" id="o1" style="top:920px"><b style="background:#1E88E5">B</b>Ni hao</div>
+  <div class="opt fr" id="o2" style="top:1080px"><b style="background:#43A047">C</b>Annyeong</div>
+</div>
+<div id="outro" class="abs" style="left:0;right:0;top:220px;text-align:center;opacity:0">
+  <div class="fr" style="font-size:84px;line-height:1.1;color:#fff;text-shadow:0 8px 0 rgba(0,0,0,.12),0 18px 40px rgba(0,0,0,.25)">Continue l’aventure<br>avec Moka et Libo !</div>
+  <div class="fr" style="display:inline-block;margin-top:40px;background:#FFD600;border-radius:36px;padding:26px 54px;font-size:66px;box-shadow:0 12px 0 #E6A100">mokalibo.com</div>
+  <div class="fr" style="margin-top:30px;font-size:46px;color:#fff">195 pays · histoires lues à voix haute</div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id)
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x))
+const ease = (x) => { x = clamp(x); return x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2 }
+const back = (x) => { x = clamp(x); const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2) }
+const seg = (t, a, b) => clamp((t - a) / (b - a))
+const fade = (t, a, b, f = .4) => clamp(Math.min((t - a) / f, (b - t) / f)) // apparition puis disparition
+const place = (el, x, y, s = 1, r = 0, o = 1) => { el.style.transform = `translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`; el.style.opacity = o }
+
+// Nuages et petales fixes (positions pseudo-aleatoires stables)
+$('clouds').innerHTML = Array.from({ length: 7 }, (_, i) => `<div class="abs e" data-i="${i}" style="font-size:${120 + (i % 3) * 50}px;opacity:.9">☁️</div>`).join('')
+$('petals').innerHTML = Array.from({ length: 26 }, (_, i) => `<div class="petal" data-i="${i}"></div>`).join('')
+
+// Scenes (secondes) : titre 0-3.5, voyage 3.5-7.5, arrivee 7.5-12, samourais 12-17, riz 17-22, quiz 22-28, fin 28-32
+const SCENES = { title: [0, 3.6], travel: [3.4, 7.6], japan: [7.4, 28.2], quiz: [22, 28.2], outro: [27.9, 32.5] }
+const SAY = [
+  [8.2, 11.8, 'Konnichiwa ! On est au Japon ! 🇯🇵', 'moka'],
+  [12.2, 16.8, null, 'card1'],
+  [17.2, 21.8, null, 'card2'],
+]
+
+window.ready = async () => { await document.fonts.ready; await document.fonts.load('60px "Noto Color Emoji"', '☁️🇯🇵⚔️🍚🤔🌸✅') }
+
+window.render = function (t) {
+  const inJapan = t >= 7.4 && t < 28
+  // Ciel : jour bleu, puis couleur du Japon, puis fin
+  const skyTop = t < 7.4 ? '#4FC3F7' : t < 28 ? '#FFE0E9' : '#FF9A1F'
+  const skyBot = t < 7.4 ? '#B3E5FC' : t < 28 ? '#FFF6E5' : '#FF6F00'
+  $('sky').style.background = `linear-gradient(180deg, ${skyTop}, ${skyBot})`
+
+  // Nuages qui defilent (plus vite pendant le voyage)
+  const speed = t > 3.4 && t < 7.6 ? 260 : 40
+  document.querySelectorAll('#clouds > div').forEach((c) => {
+    const i = +c.dataset.i
+    const x = ((i * 337 + t * speed * (1 + (i % 3) * .3)) % 1500) - 300
+    c.style.transform = `translate(${1080 - x}px, ${120 + i * 230}px)`
+    c.style.opacity = inJapan ? .35 : t >= 28 ? .35 : .9
+  })
+
+  // Titre
+  const tt = fade(t, 0, SCENES.title[1], .5)
+  place($('title'), 0, (1 - back(seg(t, 0, .8))) * -200, 1, 0, tt)
+
+  // Voyage en montgolfiere (Moka dans la nacelle, Libo vole a cote)
+  const tv = seg(t, 3.4, 7.6)
+  const bx = -380 + tv * 1500, by = 900 - Math.sin(tv * Math.PI) * 350 + Math.sin(t * 3) * 14
+  place($('balloon'), bx, by, 1, Math.sin(t * 2) * 3, fade(t, 3.4, 7.6, .3))
+
+  // Decor japonais + petales
+  const tj = fade(t, 7.4, 28.2, .6)
+  $('japan').style.opacity = tj
+  $('japan').style.transform = `translateY(${(1 - ease(seg(t, 7.4, 8.4))) * 300}px)`
+  $('petals').style.opacity = tj
+  document.querySelectorAll('#petals > div').forEach((p) => {
+    const i = +p.dataset.i
+    const y = ((i * 211 + t * (90 + (i % 5) * 25)) % 2100) - 100
+    const x = (i * 157) % 1080 + Math.sin(t * 1.5 + i) * 40
+    p.style.transform = `translate(${x}px, ${y}px) rotate(${t * 90 + i * 30}deg)`
+  })
+
+  // Moka : titre (au centre), nacelle (voyage), puis au sol au Japon, puis fin
+  const blink = (t % 3.1) < .12 ? .1 : 1
+  $('mokaEyes').style.transformOrigin = '100px 92px'
+  $('mokaEyes').style.transform = `scaleY(${blink})`
+  const wave = Math.sin(t * 9) * 25 - 20
+  $('mokaArm').style.transformOrigin = '149px 152px'
+  if (t < 3.6) {
+    $('mokaArm').style.transform = `rotate(${-150 + Math.sin(t * 9) * 25}deg)`
+    place($('moka'), 170, 1160 + (1 - back(seg(t, .3, 1.1))) * 600 + Math.sin(t * 4) * 8, 1.5, 0, tt)
+  } else if (t < 7.6) {
+    $('mokaArm').style.transform = `rotate(${-150 + Math.sin(t * 9) * 25}deg)`
+    place($('moka'), bx + 70, by + 290, .62, 0, fade(t, 3.4, 7.6, .3))
+  } else if (t < 28) {
+    const arm = (t > 8.2 && t < 11.8) ? -150 + Math.sin(t * 9) * 25 : 0
+    $('mokaArm').style.transform = `rotate(${arm}deg)`
+    place($('moka'), 130 + (1 - ease(seg(t, 7.6, 8.6))) * -500, 1250 + Math.abs(Math.sin(t * 4)) * -10, 1.45, 0, t < 22 ? tj : clamp((22.4 - t) / .4))
+  } else {
+    $('mokaArm').style.transform = `rotate(${-150 + Math.sin(t * 9) * 25}deg)`
+    place($('moka'), 200, 1200 + (1 - back(seg(t, 28, 28.8))) * 500, 1.5, 0, clamp((t - 28) / .3))
+  }
+
+  // Libo : battement d'ailes, vol en 8
+  $('liboWing').style.transformOrigin = '44px 60px'
+  $('liboWing').style.transform = `rotate(${Math.sin(t * 22) * 35}deg)`
+  let lx, ly, ls = 1, lo = 1
+  if (t < 3.6) { lx = 640 + Math.sin(t * 2) * 60; ly = 1120 + Math.sin(t * 4) * 50; ls = 1.45; lo = tt }
+  else if (t < 7.6) { lx = bx + 330; ly = by + 120 + Math.sin(t * 5) * 30; ls = .8; lo = fade(t, 3.4, 7.6, .3) }
+  else if (t < 22.4) { lx = 600 + Math.sin(t * 1.6) * 90; ly = 1250 + Math.sin(t * 3.2) * 40; ls = 1.4; lo = t < 22 ? tj : clamp((22.4 - t) / .4) }
+  else if (t < 28) { lx = 760 + Math.sin(t * 2) * 50; ly = 1420 + Math.sin(t * 4) * 30; ls = 1.3; lo = clamp((t - 22.2) / .4) * clamp((28.2 - t) / .3) }
+  else { lx = 640 + Math.sin(t * 2) * 40; ly = 1150 + Math.sin(t * 4) * 40; ls = 1.45; lo = clamp((t - 28.2) / .3) }
+  place($('libo'), lx, ly, ls * 1.1, Math.sin(t * 3) * 6, lo)
+
+  // Bulle de Moka a l'arrivee
+  const b = $('b1')
+  const sb = fade(t, 8.2, 11.8, .3)
+  b.innerHTML = 'Konnichiwa !<br>On est au Japon ! <span class="e">🇯🇵</span>'
+  b.style.left = '140px'; b.style.width = '800px'; b.style.top = '930px'; b.style.setProperty('--tail', '28%')
+  b.style.opacity = sb; b.style.transform = `scale(${.8 + .2 * back(seg(t, 8.2, 8.6))})`
+  b.style.fontSize = '58px'
+
+  // Cartes « Le savais-tu ? » presentees par Libo
+  const c = $('card')
+  const c1 = fade(t, 12.2, 16.8, .35), c2 = fade(t, 17.2, 21.8, .35)
+  if (c1 > 0) c.innerHTML = '<div class="e" style="font-size:150px">⚔️</div><div class="fr" style="font-size:44px;color:#E65100;margin:14px 0">Le savais-tu ?</div><div class="fr" style="font-size:62px;line-height:1.18">Il y a plus de 800 ans, les <span style="color:#C62828">samouraïs</span> protégeaient le Japon !</div>'
+  else if (c2 > 0) c.innerHTML = '<div class="e" style="font-size:150px">🍚</div><div class="fr" style="font-size:44px;color:#E65100;margin:14px 0">Le savais-tu ?</div><div class="fr" style="font-size:62px;line-height:1.18">Au Japon, le mot « repas » veut aussi dire <span style="color:#C62828">« riz cuit »</span> !</div>'
+  const co = Math.max(c1, c2), cs = c1 > 0 ? seg(t, 12.2, 12.7) : seg(t, 17.2, 17.7)
+  c.style.opacity = co; c.style.transform = `translateY(${(1 - back(cs)) * 120}px)`
+
+  // Quiz
+  const q = fade(t, 22.2, 28.2, .4)
+  $('quiz').style.opacity = q
+  ;[0, 1, 2].forEach((i) => {
+    const el = $('o' + i)
+    const show = back(seg(t, 22.8 + i * .25, 23.3 + i * .25))
+    const reveal = t > 26.2
+    el.style.transform = `translateX(${(1 - show) * (i % 2 ? 900 : -900)}px) scale(${reveal && i === 0 ? 1.06 : 1})`
+    el.style.background = reveal ? (i === 0 ? '#C8F7C5' : '#fff') : '#fff'
+    el.style.opacity = reveal && i !== 0 ? .45 : 1
+    el.innerHTML = el.innerHTML.replace(/ <span class="e">✅<\/span>$/, '') + (reveal && i === 0 ? ' <span class="e">✅</span>' : '')
+  })
+
+  // Fin
+  const to = clamp((t - 28) / .4)
+  place($('outro'), 0, (1 - back(seg(t, 28, 28.8))) * -150, 1, 0, to)
+}
+</script>
+</body>
+</html>
