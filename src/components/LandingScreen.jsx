@@ -47,7 +47,6 @@ const GIFT_TXT = {
 import { TText } from '../useTranslated'
 import { useReveal } from '../useReveal'
 import { referralCode, fromSocial } from '../track'
-import DemoStory, { playDemo } from './DemoStory'
 import { REVIEWS } from '../data/reviews'
 import { t } from '../i18n'
 import { openSupport } from '../support'
@@ -66,7 +65,6 @@ const TXT = {
     try_note: '🎁 30 chapitres offerts · 🎮 jeux en illimité',
     have_account: "J'ai déjà un compte → Se connecter",
     reassure: ['🎁 Gratuit : 30 chapitres par enfant (3 par jour), et les jeux en illimité', '⭐ Tout illimité avec la Formule Famille : 1,99 €/mois ou 14,99 €/an'],
-    demo_btn: '🎧 Écouter une histoire, sans compte',
     rev_kicker: 'Ils ont essayé',
     rev_title: 'Ce qu’en disent les parents',
     rev_voice: '🎙️ Message vocal retranscrit',
@@ -144,7 +142,6 @@ const TXT = {
     try_note: '🎁 30 free chapters · 🎮 unlimited games',
     have_account: 'I already have an account → Sign in',
     reassure: ['🎁 Free: 30 chapters per child (3 a day), plus unlimited games', '⭐ Unlimited with the Family plan: €1.99/month or €14.99/year'],
-    demo_btn: '🎧 Listen to a story, no account needed',
     rev_kicker: 'They tried it',
     rev_title: 'What parents say',
     rev_voice: '🎙️ Transcribed voice message',
@@ -222,7 +219,6 @@ const TXT = {
     try_note: '🎁 30 Gratis-Kapitel · 🎮 Spiele unbegrenzt',
     have_account: 'Ich habe schon ein Konto → Anmelden',
     reassure: ['🎁 Kostenlos: 30 Kapitel pro Kind (3 pro Tag), Spiele unbegrenzt', '⭐ Alles unbegrenzt mit dem Familien-Abo: 1,99 €/Monat oder 14,99 €/Jahr'],
-    demo_btn: '🎧 Eine Geschichte anhören, ohne Konto',
     rev_kicker: 'Sie haben es ausprobiert',
     rev_title: 'Das sagen Eltern',
     rev_voice: '🎙️ Abgeschriebene Sprachnachricht',
@@ -300,7 +296,6 @@ const TXT = {
     try_note: '🎁 30 capítulos grátis · 🎮 jogos ilimitados',
     have_account: 'Já tenho conta → Entrar',
     reassure: ['🎁 Grátis: 30 capítulos por criança (3 por dia), e jogos ilimitados', '⭐ Tudo ilimitado com o Plano Família: 1,99 €/mês ou 14,99 €/ano'],
-    demo_btn: '🎧 Ouvir uma história, sem conta',
     rev_kicker: 'Já experimentaram',
     rev_title: 'O que dizem os pais',
     rev_voice: '🎙️ Mensagem de voz transcrita',
@@ -378,7 +373,6 @@ const TXT = {
     try_note: '🎁 30 فصلًا مجانيًا · 🎮 ألعاب بلا حدود',
     have_account: 'لدي حساب بالفعل ← تسجيل الدخول',
     reassure: ['🎁 مجانًا: 30 فصلًا لكل طفل (3 يوميًا)، والألعاب بلا حدود', '⭐ كل شيء بلا حدود مع باقة العائلة: 1,99 € شهريًا أو 14,99 € سنويًا'],
-    demo_btn: '🎧 استمع إلى قصة، بدون حساب',
     rev_kicker: 'لقد جرّبوه',
     rev_title: 'ماذا يقول الآباء والأمهات',
     rev_voice: '🎙️ رسالة صوتية مكتوبة',
@@ -684,7 +678,6 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
             <p style={{ fontSize: 17, fontWeight: 700, color: '#37474F', lineHeight: 1.55, margin: '0 0 20px' }}>{T.h1_sub}</p>
             <div className="lp-ctas">
               <button className="btn-kid soft anim-glow" onClick={tryNow} style={primary}>{tryLabel}</button>
-              <button className="btn-kid soft" onClick={() => { track('demo_click'); playDemo() }} style={{ ...secondary, color: '#1565C0', marginTop: 10 }}>{T.demo_btn}</button>
             </div>
             <div className="lp-note">{T.try_note}</div>
             <button className="lp-have" onClick={onLogin} style={{ marginTop: 10, background: 'none', border: 'none', padding: 0, color: '#1565C0', fontFamily: 'inherit', fontWeight: 800, fontSize: 14, cursor: 'pointer', textDecoration: 'underline' }}>{T.have_account}</button>
@@ -697,7 +690,6 @@ export default function LandingScreen({ lang, changeLang, guest, onStartGuest, o
           <div className="lp-mock-wrap"><PhoneMockup T={T} lang={lang} /></div>
         </div>
       </section>
-      <DemoStory lang={lang} onSignup={tryNow} />
       <Reviews T={T} lang={lang} />
 
       {/* ── Histoire du createur ── */}
