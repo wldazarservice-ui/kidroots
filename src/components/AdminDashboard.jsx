@@ -93,9 +93,11 @@ export default function AdminDashboard({ user, onClose }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 14 }}>
               {tile('💶 Encaissé', euro(sum('revenueCents')), '#2E9E5B')}
               {tile('⭐ Nouveaux abonnés', sum('purchase'), '#FF7A00')}
-              {tile('🎁 Essais 3 jours', sum('trial'), '#8E24AA')}
+              {tile('🚀 Essais démarrés', sum('trial'), '#8E24AA')}
               {tile('👨‍💻 Comptes (total)', data.totals.users)}
-              {tile('💳 Payants (total)', data.totals.premium, '#1E88E5')}
+              {tile('💳 Abonnés payants', data.totals.paying ?? data.totals.premium, '#1E88E5')}
+              {data.totals.trials !== undefined && tile('⏳ Essais en cours', data.totals.trials, '#E65100')}
+              {data.totals.offered !== undefined && tile('🎁 Accès offerts', data.totals.offered + (data.totals.gifts || 0), '#8E24AA')}
               {tile('🔁 Résiliations', sum('cancel'), '#C62828')}
               {tile('📅 Annuels / mensuels', `${sum('plan_year')} / ${sum('plan_month')}`)}
             </div>
