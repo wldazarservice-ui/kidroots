@@ -73,6 +73,7 @@ const ChoiceGame = lazyP(() => import('./components/ChoiceGame'))
 const StampToast = lazyP(() => import('./components/StampToast'))
 const DailyLimit = lazyP(() => import('./components/DailyLimit'))
 const AdminDashboard = lazyP(() => import('./components/AdminDashboard'))
+const GuestWall = lazyP(() => import('./components/GuestWall'))
 const LAZY = [HomeScreen, RegionScreen, CountryScreen, ChapterIntro, CardLevel, QuizLevel, ResultScreen, ChildPickerScreen, LevelPicker, Paywall, DevicesManager, ScreenTimeLock, ParentStats, PassportScreen, MapScreen, GamesScreen, HuntGame, MemoryGame, ChoiceGame, StampToast, DailyLimit, AdminDashboard]
 
 function Spinner({ msg = 'Chargement...' }) {
@@ -145,8 +146,9 @@ export default function App() {
   const [adminOpen, setAdminOpen] = useState(false)
   // Visiteur sans compte : page de presentation, essai (profil local) ou ecran de connexion
   const [guest, setGuest] = useState(loadGuest)
-  // Mode demo (developpement uniquement, ?demo=1) : profil local pour les captures marketing
+  // Essai sans compte (1 chapitre complet) ; ?demo=1 en developpement pour les captures marketing
   const [guestPlaying, setGuestPlaying] = useState(() => import.meta.env.DEV && new URLSearchParams(window.location.search).has('demo'))
+  const [guestWall, setGuestWall] = useState(null) // 'done' (1er chapitre fini) | 'more' (veut un 2e chapitre)
   const [authMode, setAuthMode] = useState(() => (isStandalone() ? 'signin' : null)) // null = page de presentation
 
   const difficulty = activeChild?.difficulty || 'explorer'
@@ -434,6 +436,13 @@ export default function App() {
     const ch = country?.chapters[idx]
     if (!ch) return false
     const chDone = isDone(progress, ch.id, difficulty)
+    // Essai sans compte : un seul chapitre (rejouable), le suivant demande le compte parent
+    if (isGuest && activeChild.guestChapter && activeChild.guestChapter !== ch.id) {
+      track('guest_wall')
+      setGuestWall('more')
+      return false
+    }
+    if (isGuest && !activeChild.guestChapter) patchChild({ guestChapter: ch.id })
     if (!canOpenChapter(activeChild, ch.id, chDone, hasPremium, famUsed)) {
       track('limit_hit')
       setLimitKind(limitReason(activeChild, famUsed))
@@ -529,6 +538,7 @@ export default function App() {
       if (after && !before) setTimeout(() => setNewStamp(countryCode), 900)
       addXP(xp, chapter.id)
       try { localStorage.removeItem(resumeKey()) } catch {}
+      if (isGuest) setTimeout(() => setGuestWall('done'), 2600)
       setQuizScore(score)
       setScreen('result')
     },
@@ -593,7 +603,9 @@ export default function App() {
       return <AuthScreen initialMode={authMode} onBack={() => setAuthMode(null)} />
     }
     return (
-      <LandingScreen lang={lang} changeLang={changeLang}
+      <LandingScreen lang={lang} changeLang={changeLang} guest={guest}
+        onStartGuest={(g) => { saveGuest(g); setGuest({ ...g, id: 'guest' }); setGuestPlaying(true); setScreen('home'); track('guest_start') }}
+        onResumeGuest={() => { setGuestPlaying(true); setScreen('home') }}
         onLogin={() => setAuthMode('signin')}
         onSignup={() => { setAuthMode('signup'); track('signup_view') }} />
     )
@@ -675,6 +687,12 @@ export default function App() {
         <Paywall lang={lang} user={user} account={account} audience={paywallAudience} onClose={() => { setPaywallOpen(false); setPaywallAudience('family') }}
           onAlreadyPremium={() => { setPremium(true); setPaywallOpen(false) }}
           onNeedAccount={() => { setPaywallOpen(false); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }} />
+      )}
+      {guestWall && isGuest && (
+        <GuestWall lang={lang} kind={guestWall} stars={progress.xp}
+          onSignup={() => { setGuestWall(null); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signup'); track('signup_view') }}
+          onLogin={() => { setGuestWall(null); setGuestPlaying(false); setActiveChildState(null); setAuthMode('signin') }}
+          onClose={() => setGuestWall(null)} />
       )}
       {limitOpen && (
         <DailyLimit lang={lang} kind={limitKind} onGames={() => { setLimitOpen(false); setScreen('games') }} onClose={() => { setLimitOpen(false); if (screen === 'chapter' || screen === 'result') setScreen('country'); if (screen === 'game') setScreen('games') }}

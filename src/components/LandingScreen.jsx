@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { COUNTRIES, REGIONS } from '../data/countries'
 import { PLANS, DAILY_FREE_CHAPTERS } from '../premium'
 import { track } from '../track'
+import { defaultLevelForAge } from '../levels'
 import LangPicker from './LangPicker'
 import LegalFooter from './LegalFooter'
 import SchoolsPage from './SchoolsPage'
@@ -130,6 +131,7 @@ const TXT = {
     guest_name: "Prénom de l'enfant",
     guest_age: 'Âge',
     guest_go: "C'est parti ! 🚀",
+    guest_note: '🎁 1 histoire complète offerte, sans compte',
     m_hello: 'Salut Lina !',
     m_story: 'Les samouraïs du Japon',
     m_bravo: 'Bravo ! +30 XP',
@@ -207,6 +209,7 @@ const TXT = {
     guest_name: 'Child’s first name',
     guest_age: 'Age',
     guest_go: "Let's go! 🚀",
+    guest_note: '🎁 1 full story free, no account needed',
     m_hello: 'Hi Lina!',
     m_story: 'The samurai of Japan',
     m_bravo: 'Well done! +30 XP',
@@ -284,6 +287,7 @@ const TXT = {
     guest_name: 'Vorname des Kindes',
     guest_age: 'Alter',
     guest_go: 'Los geht’s! 🚀',
+    guest_note: '🎁 1 ganze Geschichte gratis, ohne Konto',
     m_hello: 'Hallo Lina!',
     m_story: 'Die Samurai Japans',
     m_bravo: 'Super! +30 XP',
@@ -361,6 +365,7 @@ const TXT = {
     guest_name: 'Nome da criança',
     guest_age: 'Idade',
     guest_go: 'Vamos! 🚀',
+    guest_note: '🎁 1 história completa grátis, sem conta',
     m_hello: 'Olá Lina!',
     m_story: 'Os samurais do Japão',
     m_bravo: 'Boa! +30 XP',
@@ -438,6 +443,7 @@ const TXT = {
     guest_name: 'اسم الطفل',
     guest_age: 'العمر',
     guest_go: 'هيا بنا! 🚀',
+    guest_note: '🎁 قصة كاملة مجانًا، بدون حساب',
     m_hello: 'مرحبًا لينا!',
     m_story: 'ساموراي اليابان',
     m_bravo: 'أحسنت! +30 XP',
@@ -528,7 +534,49 @@ const pageFromHash = () => {
 }
 
 // Page de presentation (visiteurs non connectes) : decouverte, prix, FAQ. Jouer demande un compte parent (gratuit).
-export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
+const AVATARS = ['🦊', '🐼', '🦁', '🐨', '🐸']
+
+// Essai sans compte : prenom + age (le niveau de lecture en decoule), puis l'enfant joue 1 chapitre complet
+function GuestSheet({ T, onClose, onStart }) {
+  const [name, setName] = useState('')
+  const [age, setAge] = useState(6)
+  const [avatar, setAvatar] = useState(AVATARS[0])
+  const go = (e) => {
+    e.preventDefault()
+    if (!name.trim()) return
+    onStart({ name: name.trim(), age, avatar, difficulty: defaultLevelForAge(age), xp: 0, level: 1, done: {} })
+  }
+  return (
+    <div onClick={onClose} className="sheet-backdrop" style={{ position: 'fixed', inset: 0, background: 'rgba(26,42,79,0.5)', zIndex: 600, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+      <form onSubmit={go} onClick={(e) => e.stopPropagation()} className="anim-slide-up sheet green-bg"
+        style={{ width: '100%', maxWidth: 420, borderRadius: '28px 28px 0 0', padding: '22px 18px 26px', fontFamily: 'Nunito, sans-serif' }}>
+        <div style={{ textAlign: 'center', fontFamily: FONT_TITLE, fontSize: 26, fontWeight: 700, color: INK, marginBottom: 14 }}>{T.guest_title}</div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 14 }}>
+          {AVATARS.map((a) => (
+            <button key={a} type="button" onClick={() => setAvatar(a)} aria-pressed={avatar === a}
+              style={{ fontSize: 30, width: 54, height: 54, borderRadius: 16, cursor: 'pointer', border: `3px solid ${avatar === a ? '#FF9800' : 'white'}`, background: avatar === a ? '#FFF3E0' : 'white' }}>{a}</button>
+          ))}
+        </div>
+        <input autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={20} placeholder={T.guest_name}
+          style={{ width: '100%', padding: '14px 16px', borderRadius: 16, border: '3px solid #D6EEDC', background: 'white', color: INK, fontSize: 18, fontFamily: 'inherit', fontWeight: 800, outline: 'none', marginBottom: 14 }} />
+        <div style={{ fontSize: 12, fontWeight: 900, color: '#3E6B4F', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>{T.guest_age}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: 5, marginBottom: 18 }}>
+          {[4, 5, 6, 7, 8, 9, 10, 11, 12].map((a) => (
+            <button key={a} type="button" onClick={() => setAge(a)} aria-pressed={age === a}
+              style={{ padding: '10px 0', borderRadius: 12, border: 'none', background: age === a ? '#2E9E5B' : 'white', color: age === a ? 'white' : INK, fontSize: 15, fontWeight: 900, cursor: 'pointer', fontFamily: 'inherit' }}>{a}</button>
+          ))}
+        </div>
+        <button type="submit" className="btn-kid soft" disabled={!name.trim()}
+          style={{ width: '100%', background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '16px', fontSize: 19, borderRadius: 22, boxShadow: '0 6px 0 #E6A100', opacity: name.trim() ? 1 : 0.5 }}>
+          {T.guest_go}
+        </button>
+        <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800, color: '#3E6B4F', marginTop: 10 }}>{T.guest_note}</div>
+      </form>
+    </div>
+  )
+}
+
+export default function LandingScreen({ lang, changeLang, guest, onStartGuest, onResumeGuest, onLogin, onSignup }) {
   const N = String(Object.keys(COUNTRIES).length)
   const T = useMemo(() => JSON.parse(JSON.stringify(TXT[lang] || (lang === 'bm' ? TXT.fr : TXT.en)).replaceAll('{n}', N)), [lang, N])
   const [openFaq, setOpenFaq] = useState(0)
@@ -545,8 +593,10 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
   useEffect(() => { window.scrollTo(0, 0) }, [page])
   useReveal([lang, page])
 
-  const tryNow = () => { track('cta_click'); onSignup() }
-  const tryLabel = T.try
+  // « Commencer » : l'enfant joue tout de suite 1 chapitre sans compte (le compte parent est demande ensuite)
+  const [sheet, setSheet] = useState(false)
+  const tryNow = () => { track('cta_click'); if (guest) onResumeGuest(); else setSheet(true) }
+  const tryLabel = guest ? T.cont.replace('{name}', guest.name) : T.try
 
   const primary = { background: 'linear-gradient(180deg,#FFE04D,#FFC400)', color: INK, padding: '18px 26px', fontSize: 20, borderRadius: 24, boxShadow: '0 7px 0 #E6A100, 0 14px 28px rgba(255,196,0,0.35)' }
   const secondary = { background: 'white', color: '#2E7D4F', padding: '14px 22px', fontSize: 16, borderRadius: 20, boxShadow: '0 4px 14px rgba(46,158,91,0.15)' }
@@ -647,7 +697,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
           <div className="lp-mock-wrap"><PhoneMockup T={T} lang={lang} /></div>
         </div>
       </section>
-      <DemoStory lang={lang} onSignup={onSignup} />
+      <DemoStory lang={lang} onSignup={tryNow} />
       <Reviews T={T} lang={lang} />
 
       {/* ── Histoire du createur ── */}
@@ -761,7 +811,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
               <div style={{ fontSize: 14, fontWeight: 900, opacity: 0.95 }}>{T.or_month.replace('{p}', PLANS.month.label)}</div>
               <div style={{ fontSize: 13, fontWeight: 800, opacity: 0.9, marginBottom: 12 }}>✓ {T.once}</div>
               {T.full_items.map((it) => <div key={it} style={{ fontSize: 15, fontWeight: 800, padding: '5px 0' }}>✓ {it}</div>)}
-              <button className="btn-kid soft" onClick={tryNow} style={{ ...primary, marginTop: 16, fontSize: 18 }}>{T.full_cta}</button>
+              <button className="btn-kid soft" onClick={() => { track('cta_click'); onSignup() }} style={{ ...primary, marginTop: 16, fontSize: 18 }}>{T.full_cta}</button>
               <div style={{ fontSize: 12, fontWeight: 800, opacity: 0.9, marginTop: 10, textAlign: 'center' }}>{T.full_note}</div>
               <div style={{ fontSize: 12, fontWeight: 900, marginTop: 8, textAlign: 'center' }}>💛 {T.mission_slogan}</div>
             </div>
@@ -842,6 +892,7 @@ export default function LandingScreen({ lang, changeLang, onLogin, onSignup }) {
         <button className="btn-kid soft" onClick={tryNow} style={primary}>{tryLabel}</button>
         <LegalFooter lang={lang} gate={false} />
       </section>
+      {sheet && <GuestSheet T={T} onClose={() => setSheet(false)} onStart={(g) => { setSheet(false); onStartGuest(g) }} />}
     </div>
   )
 }

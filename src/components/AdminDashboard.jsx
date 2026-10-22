@@ -13,6 +13,8 @@ const FUNNEL = [
   ['demo_listen', '🔊 Démo écoutée à voix haute'],
   ['cta_click', '👆 Clic « Commencer »'],
   ['demo_cta', '👆 Clic après la démo'],
+  ['guest_start', '🧒 Essai sans compte commencé'],
+  ['guest_wall', '🚪 Demande de compte après l’essai'],
   ['signup_view', '📝 Écran d’inscription vu'],
   ['signup', '✍️ Comptes créés'],
   ['first_story', '🚀 1re histoire ouverte'],
