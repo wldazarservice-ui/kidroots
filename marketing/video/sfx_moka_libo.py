@@ -153,41 +153,115 @@ def mystery(t, d=2.2, vol=.14):
     add(t, s * env(n, .4, .8), vol)
 
 
+def rustle(t, d=0.5, vol=.15):
+    """Papyrus qui se deroule : petits froissements."""
+    k = t
+    while k < t + d:
+        n = int(.03 * SR)
+        x = noise(.03)
+        x = x - np.convolve(x, np.ones(4) / 4, mode='same')
+        add(k, x * env(n, .002, .02), vol)
+        k += 0.045 + 0.03 * rng.random()
+
+
+def grunt(t, vol=.35):
+    """Le chameau : un « blrrr » grave et drole."""
+    n = int(.6 * SR)
+    tt = np.arange(n) / SR
+    s = np.sin(2 * np.pi * (140 - 50 * tt) * tt) * (0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 28 * tt)))
+    add(t, s * env(n, .02, .2), vol)
+
+
+def steps(t0, t1, vol=.25):
+    k = t0
+    while k < t1:
+        n = int(.12 * SR)
+        tt = np.arange(n) / SR
+        add(k, np.sin(2 * np.pi * 70 * tt) * np.exp(-tt * 30), vol)
+        k += 0.3
+
+
 # ── Partition de l'episode 1 (memes instants que moka_libo_ep01.html) ──
-pop(.25)
-snore(1.0)
-chirp(2.85, 2, 2000)
-bandsweep(3.6, .5, 600, 2500, .12); chirp(3.7, 3)
-ratchet(4.6, 6.4)
-ding(6.42)
-pop(6.7); oh(6.75)
-pop(7.6); chirp(7.65, 4, 2400)
-babble(7.85, [0, 4, 7, 12], .3)
-boing(7.9); boing(8.45)
-bandsweep(8.6, 1.0, 300, 4000, .3)
-chirp(9.9, 3, 2500); babble(10.4, [7, 9, 12, 9, 12], .26)
-chirp(12.6, 2, 2100)
-bandsweep(14.5, .9, 4000, 400, .26)
-babble(15.7, [0, 2, 4, 7], .26); chirp(16.1, 3)
-pop(16.9); chirp(16.95, 2, 2800)
-pop(18.0); babble(18.05, [4, 2, 7], .3, .11)
-munch(19.0, 20.4, .22)
-munch(20.5, 21.4, .16, 2.0); chirp(21.45, 3, 2600)
-sparkle(20.8)
-bandsweep(23.15, .45, 2500, 500, .14); pop(23.65, .35)
-babble(23.85, [0, 7, 12], .32, .1)
-pop(24.0); chirp(24.05, 2, 1800, .35, up=False)
-pop(28.0); babble(28.05, [7, 4, 0], .3); chirp(28.6, 2)
-bandsweep(29.85, .7, 400, 3500, .2)
-bandsweep(30.35, .4, 1200, 300, .1)
-thud(31.6)
-sparkle(31.7, .22)
-babble(31.95, [0, 4, 7, 12, 16], .3); trill(32.0)
-bandsweep(34.45, .8, 400, 3500, .2)
-mystery(35.0)
-pop(36.2); babble(36.25, [0, 3, 7, 10], .3)  # question qui monte
-sparkle(37.6); chirp(37.7, 3, 2500)
-babble(38.4, [12, 7, 12], .28)
+def ep01():
+    pop(.25)
+    snore(1.0)
+    chirp(2.85, 2, 2000)
+    bandsweep(3.6, .5, 600, 2500, .12); chirp(3.7, 3)
+    ratchet(4.6, 6.4)
+    ding(6.42)
+    pop(6.7); oh(6.75)
+    pop(7.6); chirp(7.65, 4, 2400)
+    babble(7.85, [0, 4, 7, 12], .3)
+    boing(7.9); boing(8.45)
+    bandsweep(8.6, 1.0, 300, 4000, .3)
+    chirp(9.9, 3, 2500); babble(10.4, [7, 9, 12, 9, 12], .26)
+    chirp(12.6, 2, 2100)
+    bandsweep(14.5, .9, 4000, 400, .26)
+    babble(15.7, [0, 2, 4, 7], .26); chirp(16.1, 3)
+    pop(16.9); chirp(16.95, 2, 2800)
+    pop(18.0); babble(18.05, [4, 2, 7], .3, .11)
+    munch(19.0, 20.4, .22)
+    munch(20.5, 21.4, .16, 2.0); chirp(21.45, 3, 2600)
+    sparkle(20.8)
+    bandsweep(23.15, .45, 2500, 500, .14); pop(23.65, .35)
+    babble(23.85, [0, 7, 12], .32, .1)
+    pop(24.0); chirp(24.05, 2, 1800, .35, up=False)
+    pop(28.0); babble(28.05, [7, 4, 0], .3); chirp(28.6, 2)
+    bandsweep(29.85, .7, 400, 3500, .2)
+    bandsweep(30.35, .4, 1200, 300, .1)
+    thud(31.6)
+    sparkle(31.7, .22)
+    babble(31.95, [0, 4, 7, 12, 16], .3); trill(32.0)
+    bandsweep(34.45, .8, 400, 3500, .2)
+    mystery(35.0)
+    pop(36.2); babble(36.25, [0, 3, 7, 10], .3)  # question qui monte
+    sparkle(37.6); chirp(37.7, 3, 2500)
+    babble(38.4, [12, 7, 12], .28)
+
+
+
+# ── Episode 2 : l'Egypte (meme deroule ; papyrus et chameau a la place de l'onigiri et du casque) ──
+def ep02():
+    pop(.25)
+    snore(1.0)
+    chirp(2.85, 2, 2000)
+    bandsweep(3.6, .5, 600, 2500, .12); chirp(3.7, 3)
+    ratchet(4.6, 6.4)
+    ding(6.42)
+    pop(6.7); oh(6.75)
+    pop(7.6); chirp(7.65, 4, 2400)
+    babble(7.85, [0, 4, 7, 12], .3)
+    boing(7.9); boing(8.45)
+    bandsweep(8.6, 1.0, 300, 4000, .3)
+    chirp(9.9, 3, 2500); babble(10.4, [7, 9, 12, 9, 12], .26)
+    chirp(12.6, 2, 2100)
+    bandsweep(14.5, .9, 4000, 400, .26)
+    babble(15.7, [0, 2, 4, 7], .26); chirp(17.0, 3)
+    pop(16.9); chirp(16.95, 2, 1900, .3, up=False)
+    pop(18.0); rustle(18.1, .6)
+    oh(19.05); babble(19.5, [4, 7, 11], .28)
+    pop(21.0); trill(21.05, .5, .28)
+    sparkle(20.8)
+    steps(23.0, 24.6)
+    grunt(24.7)
+    pop(24.9); chirp(24.95, 4, 2600)
+    babble(25.3, [0, 4, 7, 4, 12], .28)
+    pop(28.0); babble(28.05, [7, 4, 0], .3); chirp(28.6, 2)
+    bandsweep(29.85, .7, 400, 3500, .2)
+    bandsweep(30.35, .4, 1200, 300, .1)
+    thud(31.6)
+    sparkle(31.7, .22)
+    babble(31.95, [0, 4, 7, 12, 16], .3); trill(32.0)
+    bandsweep(34.45, .8, 400, 3500, .2)
+    mystery(35.0)
+    pop(36.2); babble(36.25, [0, 3, 7, 10], .3)
+    pop(36.6); trill(36.65, .8, .32)
+    sparkle(37.6); chirp(37.7, 3, 2500)
+    babble(38.4, [12, 7, 12], .28)
+
+
+EP = sys.argv[1] if len(sys.argv) > 1 else 'ep01'
+{'ep01': ep01, 'ep02': ep02}[EP]()
 
 # ── Musique (basse) + mixage ──
 with wave.open('out/mokalibo_theme.wav') as w:
@@ -204,8 +278,7 @@ mix = music * 0.32 * fade + out
 mix = np.tanh(mix * 1.1) * 0.9
 pcm = (np.clip(mix, -1, 1) * 32767).astype(np.int16)
 stereo = np.repeat(pcm[:, None], 2, axis=1)
-ep = sys.argv[1] if len(sys.argv) > 1 else 'ep01'
-with wave.open(f'out/moka_libo/moka_libo_{ep}_audio.wav', 'wb') as w:
+with wave.open(f'out/moka_libo/moka_libo_{EP}_audio.wav', 'wb') as w:
     w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes(stereo.tobytes())
 print('OK', len(pcm) / SR, 's')
